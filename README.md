@@ -1,0 +1,2 @@
+# inventory-middle
+inventory
