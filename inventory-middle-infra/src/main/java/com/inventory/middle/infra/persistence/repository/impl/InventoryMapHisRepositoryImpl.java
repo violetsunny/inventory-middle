@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  *
  * @author kll
  * @email kll@job.cn
- * @date 2023-03-13 19:42:24
+ * @date 2023-03-13 20:32:11
  */
 @Repository
 public class InventoryMapHisRepositoryImpl extends ServiceImpl<InventoryMapHisMapper, InventoryMapHisDo> implements InventoryMapHisRepository, IService<InventoryMapHisDo> {

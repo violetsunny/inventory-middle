@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author kll
  * @email kll@job.cn
- * @date 2023-03-13 19:42:21
+ * @date 2023-03-13 20:32:09
  */
 @Mapper
 public interface InventoryMonitorRuleMapper extends BaseMapper<InventoryMonitorRuleDo> {

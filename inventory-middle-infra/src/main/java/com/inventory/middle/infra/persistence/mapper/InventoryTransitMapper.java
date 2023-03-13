@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author kll
  * @email kll@job.cn
- * @date 2023-03-13 19:42:23
+ * @date 2023-03-13 20:32:10
  */
 @Mapper
 public interface InventoryTransitMapper extends BaseMapper<InventoryTransitDo> {

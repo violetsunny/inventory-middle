@@ -70,10 +70,10 @@
         FROM
         code_generator_cfg
         <where>
-                        <if test="params.id != null">
+            <if test="params.id != null">
                 AND id = #{params.id}
             </if>
-        </where>
+                                                                                                                                                                                                                                                                                                                                                                                                </where>
     </select>
 
     <select id="queryList" parameterType="Map"
@@ -83,10 +83,10 @@
         FROM
         code_generator_cfg
         <where>
-                        <if test="params.id != null">
+            <if test="params.id != null">
                 AND id = #{params.id}
             </if>
-        </where>
+                                                                                                                                                                                                                                                                                                                                                                                                </where>
     </select>
 
     <select id="findById"
@@ -96,5 +96,5 @@
         FROM
         code_generator_cfg
         where id = #{id}
-    </select>
+                                                        </select>
 </mapper>

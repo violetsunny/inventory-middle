@@ -96,10 +96,11 @@
         FROM
         inventory_transit
         <where>
-                        <if test="params.id != null">
+            <if test="params.id != null">
                 AND id = #{params.id}
             </if>
-        </where>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        AND deleted = 0
+                                                                </where>
     </select>
 
     <select id="queryList" parameterType="Map"
@@ -109,10 +110,11 @@
         FROM
         inventory_transit
         <where>
-                        <if test="params.id != null">
+            <if test="params.id != null">
                 AND id = #{params.id}
             </if>
-        </where>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        AND deleted = 0
+                                                                </where>
     </select>
 
     <select id="findById"
@@ -122,5 +124,6 @@
         FROM
         inventory_transit
         where id = #{id}
-    </select>
+                                                                                    AND deleted = 0
+            </select>
 </mapper>

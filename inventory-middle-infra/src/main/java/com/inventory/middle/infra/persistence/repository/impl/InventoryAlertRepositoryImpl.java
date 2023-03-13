@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  *
  * @author kll
  * @email kll@job.cn
- * @date 2023-03-13 19:42:21
+ * @date 2023-03-13 20:32:09
  */
 @Repository
 public class InventoryAlertRepositoryImpl extends ServiceImpl<InventoryAlertMapper, InventoryAlertDo> implements InventoryAlertRepository, IService<InventoryAlertDo> {
