@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventoryAlertMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            monitor_rule_id,
+                            material_code,
+                            logical_plant_no,
+                            deviate,
+                            action,
+                            alert_date,
+                            status,
+                            create_time,
+                            creator_id,
+                            update_time,
+                            updator_id,
+                            deleted,
+                            tenant_id
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryAlertDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_alert
+        <where>
+                                                                                                                            <if test="params.monitorRuleId != null and params.monitorRuleId !=''">
+                AND monitor_rule_id = #{params.monitorRuleId}
+            </if>
+                                                                                            <if test="params.materialCode != null and params.materialCode !=''">
+                AND material_code = #{params.materialCode}
+            </if>
+                                                                                            <if test="params.logicalPlantNo != null and params.logicalPlantNo !=''">
+                AND logical_plant_no = #{params.logicalPlantNo}
+            </if>
+                                                                                            <if test="params.deviate != null and params.deviate !=''">
+                AND deviate = #{params.deviate}
+            </if>
+                                                                                            <if test="params.action != null and params.action !=''">
+                AND action = #{params.action}
+            </if>
+                                                                                            <if test="params.alertDate != null and params.alertDate !=''">
+                AND alert_date = #{params.alertDate}
+            </if>
+                                                                                            <if test="params.status != null and params.status !=''">
+                AND status = #{params.status}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                    <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                                                                                                <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                AND deleted = 0
+                                                                                                                <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                        </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryAlertDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_alert
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryAlertDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_alert
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryAlertDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_alert
+        where id = #{id}
+    </select>
+</mapper>

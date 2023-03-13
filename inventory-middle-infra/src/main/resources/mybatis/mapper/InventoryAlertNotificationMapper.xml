@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventoryAlertNotificationMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            alert_id,
+                            notification_mode,
+                            notification_address,
+                            content,
+                            url,
+                            status,
+                            create_time,
+                            creator_id,
+                            update_time,
+                            updator_id,
+                            deleted
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryAlertNotificationDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_alert_notification
+        <where>
+                                                                                                                            <if test="params.alertId != null and params.alertId !=''">
+                AND alert_id = #{params.alertId}
+            </if>
+                                                                                            <if test="params.notificationMode != null and params.notificationMode !=''">
+                AND notification_mode = #{params.notificationMode}
+            </if>
+                                                                                            <if test="params.notificationAddress != null and params.notificationAddress !=''">
+                AND notification_address = #{params.notificationAddress}
+            </if>
+                                                                                            <if test="params.content != null and params.content !=''">
+                AND content = #{params.content}
+            </if>
+                                                                                            <if test="params.url != null and params.url !=''">
+                AND url = #{params.url}
+            </if>
+                                                                                            <if test="params.status != null and params.status !=''">
+                AND status = #{params.status}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                    <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                                                                                                <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                AND deleted = 0
+                                                                            </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryAlertNotificationDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_alert_notification
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryAlertNotificationDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_alert_notification
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryAlertNotificationDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_alert_notification
+        where id = #{id}
+    </select>
+</mapper>

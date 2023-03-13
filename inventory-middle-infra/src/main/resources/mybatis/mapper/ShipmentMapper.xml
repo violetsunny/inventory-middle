@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.ShipmentMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            shipment_no,
+                            shipment_type,
+                            shipment_status,
+                            instruction_type,
+                            pick_date,
+                            pick_status,
+                            transport_route,
+                            transport_no,
+                            transport_carrier,
+                            shipment_point,
+                            transport_mode,
+                            delivery_name,
+                            delivery_phone,
+                            delivery_province,
+                            delivery_city,
+                            delivery_county,
+                            delivery_address_line,
+                            receiving_name,
+                            receiving_phone,
+                            receiving_province,
+                            receiving_city,
+                            receiving_county,
+                            receiving_address_line,
+                            planned_delivery_date,
+                            planned_receiving_date,
+                            actual_delivery_date,
+                            actual_receiving_date,
+                            create_time,
+                            creator_id,
+                            update_time,
+                            updator_id,
+                            deleted,
+                            tenant_id
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.ShipmentDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        shipment
+        <where>
+                                                                                                                            <if test="params.shipmentNo != null and params.shipmentNo !=''">
+                AND shipment_no = #{params.shipmentNo}
+            </if>
+                                                                                            <if test="params.shipmentType != null and params.shipmentType !=''">
+                AND shipment_type = #{params.shipmentType}
+            </if>
+                                                                                            <if test="params.shipmentStatus != null and params.shipmentStatus !=''">
+                AND shipment_status = #{params.shipmentStatus}
+            </if>
+                                                                                            <if test="params.instructionType != null and params.instructionType !=''">
+                AND instruction_type = #{params.instructionType}
+            </if>
+                                                                                            <if test="params.pickDate != null and params.pickDate !=''">
+                AND pick_date = #{params.pickDate}
+            </if>
+                                                                                            <if test="params.pickStatus != null and params.pickStatus !=''">
+                AND pick_status = #{params.pickStatus}
+            </if>
+                                                                                            <if test="params.transportRoute != null and params.transportRoute !=''">
+                AND transport_route = #{params.transportRoute}
+            </if>
+                                                                                            <if test="params.transportNo != null and params.transportNo !=''">
+                AND transport_no = #{params.transportNo}
+            </if>
+                                                                                            <if test="params.transportCarrier != null and params.transportCarrier !=''">
+                AND transport_carrier = #{params.transportCarrier}
+            </if>
+                                                                                            <if test="params.shipmentPoint != null and params.shipmentPoint !=''">
+                AND shipment_point = #{params.shipmentPoint}
+            </if>
+                                                                                            <if test="params.transportMode != null and params.transportMode !=''">
+                AND transport_mode = #{params.transportMode}
+            </if>
+                                                                                            <if test="params.deliveryName != null and params.deliveryName !=''">
+                AND delivery_name = #{params.deliveryName}
+            </if>
+                                                                                            <if test="params.deliveryPhone != null and params.deliveryPhone !=''">
+                AND delivery_phone = #{params.deliveryPhone}
+            </if>
+                                                                                            <if test="params.deliveryProvince != null and params.deliveryProvince !=''">
+                AND delivery_province = #{params.deliveryProvince}
+            </if>
+                                                                                            <if test="params.deliveryCity != null and params.deliveryCity !=''">
+                AND delivery_city = #{params.deliveryCity}
+            </if>
+                                                                                            <if test="params.deliveryCounty != null and params.deliveryCounty !=''">
+                AND delivery_county = #{params.deliveryCounty}
+            </if>
+                                                                                            <if test="params.deliveryAddressLine != null and params.deliveryAddressLine !=''">
+                AND delivery_address_line = #{params.deliveryAddressLine}
+            </if>
+                                                                                            <if test="params.receivingName != null and params.receivingName !=''">
+                AND receiving_name = #{params.receivingName}
+            </if>
+                                                                                            <if test="params.receivingPhone != null and params.receivingPhone !=''">
+                AND receiving_phone = #{params.receivingPhone}
+            </if>
+                                                                                            <if test="params.receivingProvince != null and params.receivingProvince !=''">
+                AND receiving_province = #{params.receivingProvince}
+            </if>
+                                                                                            <if test="params.receivingCity != null and params.receivingCity !=''">
+                AND receiving_city = #{params.receivingCity}
+            </if>
+                                                                                            <if test="params.receivingCounty != null and params.receivingCounty !=''">
+                AND receiving_county = #{params.receivingCounty}
+            </if>
+                                                                                            <if test="params.receivingAddressLine != null and params.receivingAddressLine !=''">
+                AND receiving_address_line = #{params.receivingAddressLine}
+            </if>
+                                                                                            <if test="params.plannedDeliveryDate != null and params.plannedDeliveryDate !=''">
+                AND planned_delivery_date = #{params.plannedDeliveryDate}
+            </if>
+                                                                                            <if test="params.plannedReceivingDate != null and params.plannedReceivingDate !=''">
+                AND planned_receiving_date = #{params.plannedReceivingDate}
+            </if>
+                                                                                            <if test="params.actualDeliveryDate != null and params.actualDeliveryDate !=''">
+                AND actual_delivery_date = #{params.actualDeliveryDate}
+            </if>
+                                                                                            <if test="params.actualReceivingDate != null and params.actualReceivingDate !=''">
+                AND actual_receiving_date = #{params.actualReceivingDate}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                    <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                                                                                                <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                AND deleted = 0
+                                                                                                                <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                        </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.ShipmentDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        shipment
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.ShipmentDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        shipment
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.ShipmentDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        shipment
+        where id = #{id}
+    </select>
+</mapper>

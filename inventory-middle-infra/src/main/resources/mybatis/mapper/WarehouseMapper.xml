@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.WarehouseMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            tenant_id,
+                            warehouse_no,
+                            warehouse_name,
+                            warehouse_type,
+                            owner_name,
+                            phone,
+                            address,
+                            province,
+                            city,
+                            region,
+                            remark,
+                            creator_id,
+                            updator_id,
+                            create_time,
+                            update_time,
+                            deleted
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.WarehouseDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        warehouse
+        <where>
+                                                                                                                            <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                                                            <if test="params.warehouseNo != null and params.warehouseNo !=''">
+                AND warehouse_no = #{params.warehouseNo}
+            </if>
+                                                                                            <if test="params.warehouseName != null and params.warehouseName !=''">
+                AND warehouse_name = #{params.warehouseName}
+            </if>
+                                                                                            <if test="params.warehouseType != null and params.warehouseType !=''">
+                AND warehouse_type = #{params.warehouseType}
+            </if>
+                                                                                            <if test="params.ownerName != null and params.ownerName !=''">
+                AND owner_name = #{params.ownerName}
+            </if>
+                                                                                            <if test="params.phone != null and params.phone !=''">
+                AND phone = #{params.phone}
+            </if>
+                                                                                            <if test="params.address != null and params.address !=''">
+                AND address = #{params.address}
+            </if>
+                                                                                            <if test="params.province != null and params.province !=''">
+                AND province = #{params.province}
+            </if>
+                                                                                            <if test="params.city != null and params.city !=''">
+                AND city = #{params.city}
+            </if>
+                                                                                            <if test="params.region != null and params.region !=''">
+                AND region = #{params.region}
+            </if>
+                                                                                            <if test="params.remark != null and params.remark !=''">
+                AND remark = #{params.remark}
+            </if>
+                                                                                            <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                            <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                                                                            AND deleted = 0
+                                                                            </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.WarehouseDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        warehouse
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.WarehouseDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        warehouse
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.WarehouseDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        warehouse
+        where id = #{id}
+    </select>
+</mapper>

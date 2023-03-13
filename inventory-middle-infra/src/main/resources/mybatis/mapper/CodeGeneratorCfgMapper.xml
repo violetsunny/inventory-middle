@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.CodeGeneratorCfgMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            code,
+                            name,
+                            epoch,
+                            max_value,
+                            rule,
+                            is_cache,
+                            cache_num,
+                            env_value,
+                            is_deleted,
+                            remark,
+                            create_time,
+                            update_time
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.CodeGeneratorCfgDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        code_generator_cfg
+        <where>
+                                                                                                                            <if test="params.code != null and params.code !=''">
+                AND code = #{params.code}
+            </if>
+                                                                                            <if test="params.name != null and params.name !=''">
+                AND name = #{params.name}
+            </if>
+                                                                                            <if test="params.epoch != null and params.epoch !=''">
+                AND epoch = #{params.epoch}
+            </if>
+                                                                                            <if test="params.maxValue != null and params.maxValue !=''">
+                AND max_value = #{params.maxValue}
+            </if>
+                                                                                            <if test="params.rule != null and params.rule !=''">
+                AND rule = #{params.rule}
+            </if>
+                                                                                            <if test="params.isCache != null and params.isCache !=''">
+                AND is_cache = #{params.isCache}
+            </if>
+                                                                                            <if test="params.cacheNum != null and params.cacheNum !=''">
+                AND cache_num = #{params.cacheNum}
+            </if>
+                                                                                            <if test="params.envValue != null and params.envValue !=''">
+                AND env_value = #{params.envValue}
+            </if>
+                                                                                            <if test="params.isDeleted != null and params.isDeleted !=''">
+                AND is_deleted = #{params.isDeleted}
+            </if>
+                                                                                            <if test="params.remark != null and params.remark !=''">
+                AND remark = #{params.remark}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                                                    </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.CodeGeneratorCfgDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        code_generator_cfg
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.CodeGeneratorCfgDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        code_generator_cfg
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.CodeGeneratorCfgDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        code_generator_cfg
+        where id = #{id}
+    </select>
+</mapper>

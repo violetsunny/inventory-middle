@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventoryTransitMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            material_code,
+                            logical_plant_no,
+                            storage_location_no,
+                            unrestricted,
+                            damaged,
+                            inspection,
+                            uom,
+                            product_date,
+                            due_date,
+                            price,
+                            currency,
+                            transit_type,
+                            delivery_no,
+                            create_time,
+                            creator_id,
+                            update_time,
+                            updator_id,
+                            deleted,
+                            tenant_id
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryTransitDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_transit
+        <where>
+                                                                                                                            <if test="params.materialCode != null and params.materialCode !=''">
+                AND material_code = #{params.materialCode}
+            </if>
+                                                                                            <if test="params.logicalPlantNo != null and params.logicalPlantNo !=''">
+                AND logical_plant_no = #{params.logicalPlantNo}
+            </if>
+                                                                                            <if test="params.storageLocationNo != null and params.storageLocationNo !=''">
+                AND storage_location_no = #{params.storageLocationNo}
+            </if>
+                                                                                            <if test="params.unrestricted != null and params.unrestricted !=''">
+                AND unrestricted = #{params.unrestricted}
+            </if>
+                                                                                            <if test="params.damaged != null and params.damaged !=''">
+                AND damaged = #{params.damaged}
+            </if>
+                                                                                            <if test="params.inspection != null and params.inspection !=''">
+                AND inspection = #{params.inspection}
+            </if>
+                                                                                            <if test="params.uom != null and params.uom !=''">
+                AND uom = #{params.uom}
+            </if>
+                                                                                            <if test="params.productDate != null and params.productDate !=''">
+                AND product_date = #{params.productDate}
+            </if>
+                                                                                            <if test="params.dueDate != null and params.dueDate !=''">
+                AND due_date = #{params.dueDate}
+            </if>
+                                                                                            <if test="params.price != null and params.price !=''">
+                AND price = #{params.price}
+            </if>
+                                                                                            <if test="params.currency != null and params.currency !=''">
+                AND currency = #{params.currency}
+            </if>
+                                                                                            <if test="params.transitType != null and params.transitType !=''">
+                AND transit_type = #{params.transitType}
+            </if>
+                                                                                            <if test="params.deliveryNo != null and params.deliveryNo !=''">
+                AND delivery_no = #{params.deliveryNo}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                    <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                                                                                                <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                AND deleted = 0
+                                                                                                                <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                        </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryTransitDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_transit
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryTransitDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_transit
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryTransitDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_transit
+        where id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MdocSubQuantityMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            material_doc_id,
+                            material_doc_item_id,
+                            adjust_quantity,
+                            uom,
+                            price,
+                            total_price,
+                            total_price_tax,
+                            tax_code,
+                            tax_name,
+                            tax_rate,
+                            tax,
+                            currency,
+                            exchange_rate,
+                            create_time,
+                            creator_id,
+                            update_time,
+                            updator_id,
+                            deleted,
+                            tenant_id
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubQuantityDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_quantity
+        <where>
+                                                                                                                            <if test="params.materialDocId != null and params.materialDocId !=''">
+                AND material_doc_id = #{params.materialDocId}
+            </if>
+                                                                                            <if test="params.materialDocItemId != null and params.materialDocItemId !=''">
+                AND material_doc_item_id = #{params.materialDocItemId}
+            </if>
+                                                                                            <if test="params.adjustQuantity != null and params.adjustQuantity !=''">
+                AND adjust_quantity = #{params.adjustQuantity}
+            </if>
+                                                                                            <if test="params.uom != null and params.uom !=''">
+                AND uom = #{params.uom}
+            </if>
+                                                                                            <if test="params.price != null and params.price !=''">
+                AND price = #{params.price}
+            </if>
+                                                                                            <if test="params.totalPrice != null and params.totalPrice !=''">
+                AND total_price = #{params.totalPrice}
+            </if>
+                                                                                            <if test="params.totalPriceTax != null and params.totalPriceTax !=''">
+                AND total_price_tax = #{params.totalPriceTax}
+            </if>
+                                                                                            <if test="params.taxCode != null and params.taxCode !=''">
+                AND tax_code = #{params.taxCode}
+            </if>
+                                                                                            <if test="params.taxName != null and params.taxName !=''">
+                AND tax_name = #{params.taxName}
+            </if>
+                                                                                            <if test="params.taxRate != null and params.taxRate !=''">
+                AND tax_rate = #{params.taxRate}
+            </if>
+                                                                                            <if test="params.tax != null and params.tax !=''">
+                AND tax = #{params.tax}
+            </if>
+                                                                                            <if test="params.currency != null and params.currency !=''">
+                AND currency = #{params.currency}
+            </if>
+                                                                                            <if test="params.exchangeRate != null and params.exchangeRate !=''">
+                AND exchange_rate = #{params.exchangeRate}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                    <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                                                                                                <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                AND deleted = 0
+                                                                                                                <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                        </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubQuantityDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_quantity
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubQuantityDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_quantity
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubQuantityDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_quantity
+        where id = #{id}
+    </select>
+</mapper>

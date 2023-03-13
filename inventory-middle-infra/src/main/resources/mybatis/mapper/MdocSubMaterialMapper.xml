@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MdocSubMaterialMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            material_doc_id,
+                            material_doc_item_id,
+                            material_code,
+                            material_name,
+                            material_category_code,
+                            material_weight,
+                            weight_unit,
+                            material_volume,
+                            volume_unit,
+                            valuation,
+                            remark1,
+                            remark2,
+                            create_time,
+                            creator_id,
+                            update_time,
+                            updator_id,
+                            deleted,
+                            tenant_id
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubMaterialDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_material
+        <where>
+                                                                                                                            <if test="params.materialDocId != null and params.materialDocId !=''">
+                AND material_doc_id = #{params.materialDocId}
+            </if>
+                                                                                            <if test="params.materialDocItemId != null and params.materialDocItemId !=''">
+                AND material_doc_item_id = #{params.materialDocItemId}
+            </if>
+                                                                                            <if test="params.materialCode != null and params.materialCode !=''">
+                AND material_code = #{params.materialCode}
+            </if>
+                                                                                            <if test="params.materialName != null and params.materialName !=''">
+                AND material_name = #{params.materialName}
+            </if>
+                                                                                            <if test="params.materialCategoryCode != null and params.materialCategoryCode !=''">
+                AND material_category_code = #{params.materialCategoryCode}
+            </if>
+                                                                                            <if test="params.materialWeight != null and params.materialWeight !=''">
+                AND material_weight = #{params.materialWeight}
+            </if>
+                                                                                            <if test="params.weightUnit != null and params.weightUnit !=''">
+                AND weight_unit = #{params.weightUnit}
+            </if>
+                                                                                            <if test="params.materialVolume != null and params.materialVolume !=''">
+                AND material_volume = #{params.materialVolume}
+            </if>
+                                                                                            <if test="params.volumeUnit != null and params.volumeUnit !=''">
+                AND volume_unit = #{params.volumeUnit}
+            </if>
+                                                                                            <if test="params.valuation != null and params.valuation !=''">
+                AND valuation = #{params.valuation}
+            </if>
+                                                                                            <if test="params.remark1 != null and params.remark1 !=''">
+                AND remark1 = #{params.remark1}
+            </if>
+                                                                                            <if test="params.remark2 != null and params.remark2 !=''">
+                AND remark2 = #{params.remark2}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                    <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                                                                                                <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                AND deleted = 0
+                                                                                                                <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                        </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubMaterialDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_material
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubMaterialDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_material
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubMaterialDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_material
+        where id = #{id}
+    </select>
+</mapper>

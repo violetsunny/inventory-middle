@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.StorageLocationMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            tenant_id,
+                            storage_location_no,
+                            storage_location_name,
+                            logical_plant_no,
+                            location_type,
+                            description,
+                            position,
+                            creator_id,
+                            updator_id,
+                            create_time,
+                            update_time,
+                            deleted
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.StorageLocationDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        storage_location
+        <where>
+                                                                                                                            <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                                                            <if test="params.storageLocationNo != null and params.storageLocationNo !=''">
+                AND storage_location_no = #{params.storageLocationNo}
+            </if>
+                                                                                            <if test="params.storageLocationName != null and params.storageLocationName !=''">
+                AND storage_location_name = #{params.storageLocationName}
+            </if>
+                                                                                            <if test="params.logicalPlantNo != null and params.logicalPlantNo !=''">
+                AND logical_plant_no = #{params.logicalPlantNo}
+            </if>
+                                                                                            <if test="params.locationType != null and params.locationType !=''">
+                AND location_type = #{params.locationType}
+            </if>
+                                                                                            <if test="params.description != null and params.description !=''">
+                AND description = #{params.description}
+            </if>
+                                                                                            <if test="params.position != null and params.position !=''">
+                AND position = #{params.position}
+            </if>
+                                                                                            <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                            <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                                                                            AND deleted = 0
+                                                                            </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.StorageLocationDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        storage_location
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.StorageLocationDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        storage_location
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.StorageLocationDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        storage_location
+        where id = #{id}
+    </select>
+</mapper>

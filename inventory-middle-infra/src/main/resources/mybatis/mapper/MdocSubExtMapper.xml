@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MdocSubExtMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            material_doc_id,
+                            material_doc_item_id,
+                            valid_days,
+                            produce_date,
+                            hs_code,
+                            annual_date,
+                            annual_cycle_days,
+                            tenant_id,
+                            creator_id,
+                            update_time,
+                            updator_id,
+                            create_time,
+                            deleted
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubExtDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_ext
+        <where>
+                                                                                                                            <if test="params.materialDocId != null and params.materialDocId !=''">
+                AND material_doc_id = #{params.materialDocId}
+            </if>
+                                                                                            <if test="params.materialDocItemId != null and params.materialDocItemId !=''">
+                AND material_doc_item_id = #{params.materialDocItemId}
+            </if>
+                                                                                            <if test="params.validDays != null and params.validDays !=''">
+                AND valid_days = #{params.validDays}
+            </if>
+                                                                                            <if test="params.produceDate != null and params.produceDate !=''">
+                AND produce_date = #{params.produceDate}
+            </if>
+                                                                                            <if test="params.hsCode != null and params.hsCode !=''">
+                AND hs_code = #{params.hsCode}
+            </if>
+                                                                                            <if test="params.annualDate != null and params.annualDate !=''">
+                AND annual_date = #{params.annualDate}
+            </if>
+                                                                                            <if test="params.annualCycleDays != null and params.annualCycleDays !=''">
+                AND annual_cycle_days = #{params.annualCycleDays}
+            </if>
+                                                                                            <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                                                            <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                                                                                                <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                        AND deleted = 0
+                                                                            </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubExtDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_ext
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubExtDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_ext
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubExtDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_ext
+        where id = #{id}
+    </select>
+</mapper>

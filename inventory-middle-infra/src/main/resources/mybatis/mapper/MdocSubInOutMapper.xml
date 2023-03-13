@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MdocSubInOutMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            material_doc_id,
+                            material_doc_item_id,
+                            demand,
+                            demand_sale_order_no,
+                            demand_sale_order_item_no,
+                            demand_storage_location_no,
+                            demand_storage_location_name,
+                            demand_batch_no,
+                            demand_stock_type,
+                            supply,
+                            supply_sale_order_no,
+                            supply_sale_order_item_no,
+                            supply_storage_location_no,
+                            supply_storage_location_name,
+                            supply_batch_no,
+                            supply_stock_type,
+                            adjust_type,
+                            adjust_reason,
+                            io,
+                            create_time,
+                            creator_id,
+                            update_time,
+                            updator_id,
+                            deleted,
+                            tenant_id
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubInOutDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_in_out
+        <where>
+                                                                                                                            <if test="params.materialDocId != null and params.materialDocId !=''">
+                AND material_doc_id = #{params.materialDocId}
+            </if>
+                                                                                            <if test="params.materialDocItemId != null and params.materialDocItemId !=''">
+                AND material_doc_item_id = #{params.materialDocItemId}
+            </if>
+                                                                                            <if test="params.demand != null and params.demand !=''">
+                AND demand = #{params.demand}
+            </if>
+                                                                                            <if test="params.demandSaleOrderNo != null and params.demandSaleOrderNo !=''">
+                AND demand_sale_order_no = #{params.demandSaleOrderNo}
+            </if>
+                                                                                            <if test="params.demandSaleOrderItemNo != null and params.demandSaleOrderItemNo !=''">
+                AND demand_sale_order_item_no = #{params.demandSaleOrderItemNo}
+            </if>
+                                                                                            <if test="params.demandStorageLocationNo != null and params.demandStorageLocationNo !=''">
+                AND demand_storage_location_no = #{params.demandStorageLocationNo}
+            </if>
+                                                                                            <if test="params.demandStorageLocationName != null and params.demandStorageLocationName !=''">
+                AND demand_storage_location_name = #{params.demandStorageLocationName}
+            </if>
+                                                                                            <if test="params.demandBatchNo != null and params.demandBatchNo !=''">
+                AND demand_batch_no = #{params.demandBatchNo}
+            </if>
+                                                                                            <if test="params.demandStockType != null and params.demandStockType !=''">
+                AND demand_stock_type = #{params.demandStockType}
+            </if>
+                                                                                            <if test="params.supply != null and params.supply !=''">
+                AND supply = #{params.supply}
+            </if>
+                                                                                            <if test="params.supplySaleOrderNo != null and params.supplySaleOrderNo !=''">
+                AND supply_sale_order_no = #{params.supplySaleOrderNo}
+            </if>
+                                                                                            <if test="params.supplySaleOrderItemNo != null and params.supplySaleOrderItemNo !=''">
+                AND supply_sale_order_item_no = #{params.supplySaleOrderItemNo}
+            </if>
+                                                                                            <if test="params.supplyStorageLocationNo != null and params.supplyStorageLocationNo !=''">
+                AND supply_storage_location_no = #{params.supplyStorageLocationNo}
+            </if>
+                                                                                            <if test="params.supplyStorageLocationName != null and params.supplyStorageLocationName !=''">
+                AND supply_storage_location_name = #{params.supplyStorageLocationName}
+            </if>
+                                                                                            <if test="params.supplyBatchNo != null and params.supplyBatchNo !=''">
+                AND supply_batch_no = #{params.supplyBatchNo}
+            </if>
+                                                                                            <if test="params.supplyStockType != null and params.supplyStockType !=''">
+                AND supply_stock_type = #{params.supplyStockType}
+            </if>
+                                                                                            <if test="params.adjustType != null and params.adjustType !=''">
+                AND adjust_type = #{params.adjustType}
+            </if>
+                                                                                            <if test="params.adjustReason != null and params.adjustReason !=''">
+                AND adjust_reason = #{params.adjustReason}
+            </if>
+                                                                                            <if test="params.io != null and params.io !=''">
+                AND io = #{params.io}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                    <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                                                                                                <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                AND deleted = 0
+                                                                                                                <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                        </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubInOutDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_in_out
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubInOutDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_in_out
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubInOutDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_in_out
+        where id = #{id}
+    </select>
+</mapper>

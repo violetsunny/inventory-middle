@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.ShipmentLineMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            source_order_no,
+                            source_order_type,
+                            shipment_id,
+                            shipment_no,
+                            material_code,
+                            external_code,
+                            quantity,
+                            actual_quantity,
+                            invoiced_quantity,
+                            cost_center_code,
+                            accounting_code,
+                            receiving_logical_plant_no,
+                            receiving_warehouse_no,
+                            receiving_storage_location_no,
+                            receiving_batch_no,
+                            receiving_company_code,
+                            delivery_logical_plant_no,
+                            delivery_warehouse_no,
+                            delivery_storage_location_no,
+                            delivery_batch_no,
+                            delivery_company_code,
+                            create_time,
+                            update_time,
+                            creator_id,
+                            updator_id,
+                            deleted,
+                            tenant_id
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.ShipmentLineDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        shipment_line
+        <where>
+                                                                                                                            <if test="params.sourceOrderNo != null and params.sourceOrderNo !=''">
+                AND source_order_no = #{params.sourceOrderNo}
+            </if>
+                                                                                            <if test="params.sourceOrderType != null and params.sourceOrderType !=''">
+                AND source_order_type = #{params.sourceOrderType}
+            </if>
+                                                                                            <if test="params.shipmentId != null and params.shipmentId !=''">
+                AND shipment_id = #{params.shipmentId}
+            </if>
+                                                                                            <if test="params.shipmentNo != null and params.shipmentNo !=''">
+                AND shipment_no = #{params.shipmentNo}
+            </if>
+                                                                                            <if test="params.materialCode != null and params.materialCode !=''">
+                AND material_code = #{params.materialCode}
+            </if>
+                                                                                            <if test="params.externalCode != null and params.externalCode !=''">
+                AND external_code = #{params.externalCode}
+            </if>
+                                                                                            <if test="params.quantity != null and params.quantity !=''">
+                AND quantity = #{params.quantity}
+            </if>
+                                                                                            <if test="params.actualQuantity != null and params.actualQuantity !=''">
+                AND actual_quantity = #{params.actualQuantity}
+            </if>
+                                                                                            <if test="params.invoicedQuantity != null and params.invoicedQuantity !=''">
+                AND invoiced_quantity = #{params.invoicedQuantity}
+            </if>
+                                                                                            <if test="params.costCenterCode != null and params.costCenterCode !=''">
+                AND cost_center_code = #{params.costCenterCode}
+            </if>
+                                                                                            <if test="params.accountingCode != null and params.accountingCode !=''">
+                AND accounting_code = #{params.accountingCode}
+            </if>
+                                                                                            <if test="params.receivingLogicalPlantNo != null and params.receivingLogicalPlantNo !=''">
+                AND receiving_logical_plant_no = #{params.receivingLogicalPlantNo}
+            </if>
+                                                                                            <if test="params.receivingWarehouseNo != null and params.receivingWarehouseNo !=''">
+                AND receiving_warehouse_no = #{params.receivingWarehouseNo}
+            </if>
+                                                                                            <if test="params.receivingStorageLocationNo != null and params.receivingStorageLocationNo !=''">
+                AND receiving_storage_location_no = #{params.receivingStorageLocationNo}
+            </if>
+                                                                                            <if test="params.receivingBatchNo != null and params.receivingBatchNo !=''">
+                AND receiving_batch_no = #{params.receivingBatchNo}
+            </if>
+                                                                                            <if test="params.receivingCompanyCode != null and params.receivingCompanyCode !=''">
+                AND receiving_company_code = #{params.receivingCompanyCode}
+            </if>
+                                                                                            <if test="params.deliveryLogicalPlantNo != null and params.deliveryLogicalPlantNo !=''">
+                AND delivery_logical_plant_no = #{params.deliveryLogicalPlantNo}
+            </if>
+                                                                                            <if test="params.deliveryWarehouseNo != null and params.deliveryWarehouseNo !=''">
+                AND delivery_warehouse_no = #{params.deliveryWarehouseNo}
+            </if>
+                                                                                            <if test="params.deliveryStorageLocationNo != null and params.deliveryStorageLocationNo !=''">
+                AND delivery_storage_location_no = #{params.deliveryStorageLocationNo}
+            </if>
+                                                                                            <if test="params.deliveryBatchNo != null and params.deliveryBatchNo !=''">
+                AND delivery_batch_no = #{params.deliveryBatchNo}
+            </if>
+                                                                                            <if test="params.deliveryCompanyCode != null and params.deliveryCompanyCode !=''">
+                AND delivery_company_code = #{params.deliveryCompanyCode}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                                                                                        <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                            <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                AND deleted = 0
+                                                                                                                <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                        </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.ShipmentLineDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        shipment_line
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.ShipmentLineDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        shipment_line
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.ShipmentLineDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        shipment_line
+        where id = #{id}
+    </select>
+</mapper>

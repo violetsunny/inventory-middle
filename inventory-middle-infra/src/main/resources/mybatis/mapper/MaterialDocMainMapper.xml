@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MaterialDocMainMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            material_doc_no,
+                            doc_category,
+                            doc_group_no,
+                            doc_type,
+                            publish_date,
+                            posting_date,
+                            original_no,
+                            original_no_type,
+                            deliver_no,
+                            owner,
+                            adjust_type,
+                            supply_logical_plant_no,
+                            demand_logical_plant_no,
+                            map_code,
+                            create_time,
+                            creator_id,
+                            update_time,
+                            updator_id,
+                            deleted,
+                            tenant_id,
+                            remark,
+                            unique_no,
+                            app_key
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MaterialDocMainDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        material_doc_main
+        <where>
+                                                                                                                            <if test="params.materialDocNo != null and params.materialDocNo !=''">
+                AND material_doc_no = #{params.materialDocNo}
+            </if>
+                                                                                            <if test="params.docCategory != null and params.docCategory !=''">
+                AND doc_category = #{params.docCategory}
+            </if>
+                                                                                            <if test="params.docGroupNo != null and params.docGroupNo !=''">
+                AND doc_group_no = #{params.docGroupNo}
+            </if>
+                                                                                            <if test="params.docType != null and params.docType !=''">
+                AND doc_type = #{params.docType}
+            </if>
+                                                                                            <if test="params.publishDate != null and params.publishDate !=''">
+                AND publish_date = #{params.publishDate}
+            </if>
+                                                                                            <if test="params.postingDate != null and params.postingDate !=''">
+                AND posting_date = #{params.postingDate}
+            </if>
+                                                                                            <if test="params.originalNo != null and params.originalNo !=''">
+                AND original_no = #{params.originalNo}
+            </if>
+                                                                                            <if test="params.originalNoType != null and params.originalNoType !=''">
+                AND original_no_type = #{params.originalNoType}
+            </if>
+                                                                                            <if test="params.deliverNo != null and params.deliverNo !=''">
+                AND deliver_no = #{params.deliverNo}
+            </if>
+                                                                                            <if test="params.owner != null and params.owner !=''">
+                AND owner = #{params.owner}
+            </if>
+                                                                                            <if test="params.adjustType != null and params.adjustType !=''">
+                AND adjust_type = #{params.adjustType}
+            </if>
+                                                                                            <if test="params.supplyLogicalPlantNo != null and params.supplyLogicalPlantNo !=''">
+                AND supply_logical_plant_no = #{params.supplyLogicalPlantNo}
+            </if>
+                                                                                            <if test="params.demandLogicalPlantNo != null and params.demandLogicalPlantNo !=''">
+                AND demand_logical_plant_no = #{params.demandLogicalPlantNo}
+            </if>
+                                                                                            <if test="params.mapCode != null and params.mapCode !=''">
+                AND map_code = #{params.mapCode}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                    <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                                                                                                <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                AND deleted = 0
+                                                                                                                <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                                                            <if test="params.remark != null and params.remark !=''">
+                AND remark = #{params.remark}
+            </if>
+                                                                                            <if test="params.uniqueNo != null and params.uniqueNo !=''">
+                AND unique_no = #{params.uniqueNo}
+            </if>
+                                                                                            <if test="params.appKey != null and params.appKey !=''">
+                AND app_key = #{params.appKey}
+            </if>
+                                                        </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MaterialDocMainDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        material_doc_main
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MaterialDocMainDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        material_doc_main
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.MaterialDocMainDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        material_doc_main
+        where id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MaterialDocItemMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            material_doc_id,
+                            material_code,
+                            batch_no,
+                            item_category,
+                            create_time,
+                            creator_id,
+                            update_time,
+                            updator_id,
+                            deleted,
+                            tenant_id
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MaterialDocItemDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        material_doc_item
+        <where>
+                                                                                                                            <if test="params.materialDocId != null and params.materialDocId !=''">
+                AND material_doc_id = #{params.materialDocId}
+            </if>
+                                                                                            <if test="params.materialCode != null and params.materialCode !=''">
+                AND material_code = #{params.materialCode}
+            </if>
+                                                                                            <if test="params.batchNo != null and params.batchNo !=''">
+                AND batch_no = #{params.batchNo}
+            </if>
+                                                                                            <if test="params.itemCategory != null and params.itemCategory !=''">
+                AND item_category = #{params.itemCategory}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                    <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                                                                                                <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                AND deleted = 0
+                                                                                                                <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                        </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MaterialDocItemDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        material_doc_item
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MaterialDocItemDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        material_doc_item
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.MaterialDocItemDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        material_doc_item
+        where id = #{id}
+    </select>
+</mapper>

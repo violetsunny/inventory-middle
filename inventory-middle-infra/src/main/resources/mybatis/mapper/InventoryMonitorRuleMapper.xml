@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventoryMonitorRuleMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            monitor_rule_code,
+                            monitor_send_mode,
+                            monitor_send_address,
+                            monitor_type,
+                            monitor_dimension,
+                            monitor_interval,
+                            monitor_enable_status,
+                            create_time,
+                            creator_id,
+                            update_time,
+                            updator_id,
+                            deleted,
+                            tenant_id
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryMonitorRuleDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_monitor_rule
+        <where>
+                                                                                                                            <if test="params.monitorRuleCode != null and params.monitorRuleCode !=''">
+                AND monitor_rule_code = #{params.monitorRuleCode}
+            </if>
+                                                                                            <if test="params.monitorSendMode != null and params.monitorSendMode !=''">
+                AND monitor_send_mode = #{params.monitorSendMode}
+            </if>
+                                                                                            <if test="params.monitorSendAddress != null and params.monitorSendAddress !=''">
+                AND monitor_send_address = #{params.monitorSendAddress}
+            </if>
+                                                                                            <if test="params.monitorType != null and params.monitorType !=''">
+                AND monitor_type = #{params.monitorType}
+            </if>
+                                                                                            <if test="params.monitorDimension != null and params.monitorDimension !=''">
+                AND monitor_dimension = #{params.monitorDimension}
+            </if>
+                                                                                            <if test="params.monitorInterval != null and params.monitorInterval !=''">
+                AND monitor_interval = #{params.monitorInterval}
+            </if>
+                                                                                            <if test="params.monitorEnableStatus != null and params.monitorEnableStatus !=''">
+                AND monitor_enable_status = #{params.monitorEnableStatus}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                    <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                                                                                                <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                                                AND deleted = 0
+                                                                                                                <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                        </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryMonitorRuleDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_monitor_rule
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryMonitorRuleDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_monitor_rule
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.InventoryMonitorRuleDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        inventory_monitor_rule
+        where id = #{id}
+    </select>
+</mapper>

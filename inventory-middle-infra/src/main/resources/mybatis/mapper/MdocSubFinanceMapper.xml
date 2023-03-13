@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MdocSubFinanceMapper">
+    <sql id="Base_Column_List">
+                    id,
+                            material_doc_id,
+                            material_doc_item_id,
+                            assert_tag,
+                            sub_assert_tag,
+                            profit_center_name,
+                            profit_center_code,
+                            cost_center_name,
+                            cost_center_code,
+                            product_line,
+                            trade_partner,
+                            supply_name,
+                            supply_code,
+                            customer_name,
+                            customer_code,
+                            settlement_type,
+                            marketing_no,
+                            budget_no,
+                            internal_order_no,
+                            remark,
+                            deleted,
+                            tenant_id,
+                            create_time,
+                            creator_id,
+                            update_time,
+                            updator_id
+                </sql>
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubFinanceDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_finance
+        <where>
+                                                                                                                            <if test="params.materialDocId != null and params.materialDocId !=''">
+                AND material_doc_id = #{params.materialDocId}
+            </if>
+                                                                                            <if test="params.materialDocItemId != null and params.materialDocItemId !=''">
+                AND material_doc_item_id = #{params.materialDocItemId}
+            </if>
+                                                                                            <if test="params.assertTag != null and params.assertTag !=''">
+                AND assert_tag = #{params.assertTag}
+            </if>
+                                                                                            <if test="params.subAssertTag != null and params.subAssertTag !=''">
+                AND sub_assert_tag = #{params.subAssertTag}
+            </if>
+                                                                                            <if test="params.profitCenterName != null and params.profitCenterName !=''">
+                AND profit_center_name = #{params.profitCenterName}
+            </if>
+                                                                                            <if test="params.profitCenterCode != null and params.profitCenterCode !=''">
+                AND profit_center_code = #{params.profitCenterCode}
+            </if>
+                                                                                            <if test="params.costCenterName != null and params.costCenterName !=''">
+                AND cost_center_name = #{params.costCenterName}
+            </if>
+                                                                                            <if test="params.costCenterCode != null and params.costCenterCode !=''">
+                AND cost_center_code = #{params.costCenterCode}
+            </if>
+                                                                                            <if test="params.productLine != null and params.productLine !=''">
+                AND product_line = #{params.productLine}
+            </if>
+                                                                                            <if test="params.tradePartner != null and params.tradePartner !=''">
+                AND trade_partner = #{params.tradePartner}
+            </if>
+                                                                                            <if test="params.supplyName != null and params.supplyName !=''">
+                AND supply_name = #{params.supplyName}
+            </if>
+                                                                                            <if test="params.supplyCode != null and params.supplyCode !=''">
+                AND supply_code = #{params.supplyCode}
+            </if>
+                                                                                            <if test="params.customerName != null and params.customerName !=''">
+                AND customer_name = #{params.customerName}
+            </if>
+                                                                                            <if test="params.customerCode != null and params.customerCode !=''">
+                AND customer_code = #{params.customerCode}
+            </if>
+                                                                                            <if test="params.settlementType != null and params.settlementType !=''">
+                AND settlement_type = #{params.settlementType}
+            </if>
+                                                                                            <if test="params.marketingNo != null and params.marketingNo !=''">
+                AND marketing_no = #{params.marketingNo}
+            </if>
+                                                                                            <if test="params.budgetNo != null and params.budgetNo !=''">
+                AND budget_no = #{params.budgetNo}
+            </if>
+                                                                                            <if test="params.internalOrderNo != null and params.internalOrderNo !=''">
+                AND internal_order_no = #{params.internalOrderNo}
+            </if>
+                                                                                            <if test="params.remark != null and params.remark !=''">
+                AND remark = #{params.remark}
+            </if>
+                                                                                AND deleted = 0
+                                                                                                                <if test="params.tenantId != null and params.tenantId !=''">
+                AND tenant_id = #{params.tenantId}
+            </if>
+                                                                                                                    <if test="params.createTimeStart != null ">
+                AND create_time &gt;= #{params.createTimeStart}
+            </if>
+            <if test="params.createTimeEnd != null ">
+                AND create_time &lt;= #{params.createTimeEnd}
+            </if>
+                                                                    <if test="params.creatorId != null and params.creatorId !=''">
+                AND creator_id = #{params.creatorId}
+            </if>
+                                                                                                                                                                <if test="params.updatorId != null and params.updatorId !=''">
+                AND updator_id = #{params.updatorId}
+            </if>
+                                                        </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubFinanceDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_finance
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubFinanceDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_finance
+        <where>
+                        <if test="params.id != null">
+                AND id = #{params.id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.MdocSubFinanceDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mdoc_sub_finance
+        where id = #{id}
+    </select>
+</mapper>
