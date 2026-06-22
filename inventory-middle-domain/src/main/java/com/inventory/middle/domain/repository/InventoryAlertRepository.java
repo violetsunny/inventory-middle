@@ -54,4 +54,10 @@ public interface InventoryAlertRepository {
      * @param ids
      */
     boolean delete(List<InventoryAlertId> ids);
+
+    /** 批量保存预警记录 */
+    boolean batchStore(List<InventoryAlert> alerts);
+
+    /** 按 ID 列表批量删除 */
+    boolean batchDeleteByIds(List<Long> ids);
 }

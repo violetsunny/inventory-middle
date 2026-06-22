@@ -1,8 +1,9 @@
+package com.inventory.middle.client.enums;
+
 /**
  * kll Inc.
  * Copyright (c) 2021 All Rights Reserved.
  */
-package com.inventory.middle.client.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

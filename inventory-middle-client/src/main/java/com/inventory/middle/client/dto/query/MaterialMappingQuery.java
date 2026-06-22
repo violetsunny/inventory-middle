@@ -1,8 +1,9 @@
+package com.inventory.middle.client.dto.query;
+
 /**
  * kanglele Inc.
  * Copyright (c) 2021 All Rights Reserved.
  */
-package com.inventory.middle.client.dto.query;
 
 import lombok.Data;
 import top.kdla.framework.dto.Query;

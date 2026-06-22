@@ -34,4 +34,12 @@ public enum LogicalPlantTypeEnum implements IEnum<Integer> {
         LogicalPlantTypeEnum logicalPlantTypeEnum = getByCode(code);
         return Objects.nonNull(logicalPlantTypeEnum) ? logicalPlantTypeEnum.getMark() : "";
     }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

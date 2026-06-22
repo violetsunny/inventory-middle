@@ -11,8 +11,8 @@ import java.util.List;
  * @date 2021/6/11
  */
 @Data
-public class MaterialMappingDto implements Serializable {
+public class MaterialMappingDTO implements Serializable {
 
-    private List<MaterialDocCategoryMappingDto> mappings;
+    private List<MaterialDocCategoryMappingDTO> mappings;
 
 }

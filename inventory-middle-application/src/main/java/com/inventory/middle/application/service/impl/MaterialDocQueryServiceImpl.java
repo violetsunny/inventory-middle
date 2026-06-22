@@ -6,10 +6,10 @@ package com.inventory.middle.application.service.impl;
 
 import com.google.common.collect.Lists;
 import com.inventory.middle.application.service.MaterialDocQueryService;
-import com.inventory.middle.client.dto.material.BusinessTypeMappingDto;
-import com.inventory.middle.client.dto.material.MaterialBatchNoResDto;
-import com.inventory.middle.client.dto.material.MaterialDocCategoryMappingDto;
-import com.inventory.middle.client.dto.material.MaterialMappingDto;
+import com.inventory.middle.client.dto.material.BusinessTypeMappingDTO;
+import com.inventory.middle.client.dto.material.QueryMaterialBatchNoResDTO;
+import com.inventory.middle.client.dto.material.MaterialDocCategoryMappingDTO;
+import com.inventory.middle.client.dto.material.MaterialMappingDTO;
 import com.inventory.middle.client.dto.query.MaterialBatchNoQuery;
 import com.inventory.middle.client.dto.query.MaterialMappingQuery;
 import com.inventory.middle.domain.model.enums.*;
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.sequence.CommandVisitor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import top.kdla.framework.dto.EnumResponse;
+import com.inventory.middle.client.dto.material.EnumMappingDTO;
 import top.kdla.framework.validator.CommonValidator;
 
 import javax.annotation.Resource;
@@ -38,27 +38,27 @@ public class MaterialDocQueryServiceImpl implements MaterialDocQueryService {
     private CommonValidator commonValidator;
 
     @Override
-    public MaterialMappingDto queryMaterialTypeMapping(MaterialMappingQuery req) {
+    public MaterialMappingDTO queryMaterialTypeMapping(MaterialMappingQuery req) {
         Map<MaterialDocCategoryEnum, List<BusinessTypeEnum>> materialTypeEnumListMap = getMaterialTypeMapping(req);
-        MaterialMappingDto materialMapping = new MaterialMappingDto();
-        List<MaterialDocCategoryMappingDto> materialDocCategoryMappings = Lists.newArrayList();
+        MaterialMappingDTO materialMapping = new MaterialMappingDTO();
+        List<MaterialDocCategoryMappingDTO> materialDocCategoryMappings = Lists.newArrayList();
         for (Map.Entry<MaterialDocCategoryEnum, List<BusinessTypeEnum>> entry : materialTypeEnumListMap.entrySet()) {
-            MaterialDocCategoryMappingDto materialDocCategoryMapping = new MaterialDocCategoryMappingDto();
+            MaterialDocCategoryMappingDTO materialDocCategoryMapping = new MaterialDocCategoryMappingDTO();
 
-            EnumResponse materialType = EnumResponse.builder().code(String.valueOf(entry.getKey().getCode()))
-                    .desc(entry.getKey().getDesc()).build();
-            List<BusinessTypeMappingDto> businessTypes = Lists.newArrayList();
+            EnumMappingDTO materialType = EnumMappingDTO.builder().key(String.valueOf(entry.getKey().getCode()))
+                    .value(entry.getKey().getDesc()).build();
+            List<BusinessTypeMappingDTO> businessTypes = Lists.newArrayList();
 
             if (!CollectionUtils.isEmpty(entry.getValue())) {
                 for (BusinessTypeEnum businessTypeEnum : entry.getValue()) {
-                    BusinessTypeMappingDto businessTypeMapping = new BusinessTypeMappingDto();
+                    BusinessTypeMappingDTO businessTypeMapping = new BusinessTypeMappingDTO();
 
-                    EnumResponse businessType =
-                            EnumResponse.builder().code(businessTypeEnum.getCode()).desc(businessTypeEnum.getDesc()).build();
+                    EnumMappingDTO businessType =
+                            EnumMappingDTO.builder().key(businessTypeEnum.getCode()).value(businessTypeEnum.getDesc()).build();
                     businessTypeMapping.setBusinessType(businessType);
 
-                    EnumResponse adjustType = EnumResponse.builder().code(businessTypeEnum.getAdjustTypeEnum().getCode())
-                            .desc(businessTypeEnum.getAdjustTypeEnum().getDesc()).build();
+                    EnumMappingDTO adjustType = EnumMappingDTO.builder().key(businessTypeEnum.getAdjustTypeEnum().getCode())
+                            .value(businessTypeEnum.getAdjustTypeEnum().getDesc()).build();
                     businessTypeMapping.setAdjustType(adjustType);
 
                     businessTypeMapping.setIo(businessTypeEnum.getIo());
@@ -81,7 +81,7 @@ public class MaterialDocQueryServiceImpl implements MaterialDocQueryService {
         return materialMapping;
     }
 
-    private void fillMaterialRefInfo(MaterialAdjustTypeEnum adjustTypeEnum, BusinessTypeMappingDto businessTypeMapping) {
+    private void fillMaterialRefInfo(MaterialAdjustTypeEnum adjustTypeEnum, BusinessTypeMappingDTO businessTypeMapping) {
         if (null == adjustTypeEnum) {
             return;
         }
@@ -96,11 +96,11 @@ public class MaterialDocQueryServiceImpl implements MaterialDocQueryService {
         if (MaterialDocRefTypeEnum.ALL.getCode().equals(refTypeEnum.getCode())) {
             businessTypeMapping.setRefTypeList(Arrays.stream(MaterialDocRefTypeEnum.values())
                     .filter(e -> !MaterialDocRefTypeEnum.ALL.getCode().equals(e.getCode()))
-                    .map(e -> EnumResponse.builder().code(e.getCode().toString()).desc(e.getDesc()).build())
+                    .map(e -> EnumMappingDTO.builder().key(e.getCode().toString()).value(e.getDesc()).build())
                     .collect(Collectors.toList()));
         } else {
             businessTypeMapping.getRefTypeList()
-                    .add(EnumResponse.builder().code(refTypeEnum.getCode().toString()).desc(refTypeEnum.getDesc()).build());
+                    .add(EnumMappingDTO.builder().key(refTypeEnum.getCode().toString()).value(refTypeEnum.getDesc()).build());
         }
     }
 
@@ -113,7 +113,7 @@ public class MaterialDocQueryServiceImpl implements MaterialDocQueryService {
     }
 
     @Override
-    public MaterialBatchNoResDto queryMaterialBatchNo(MaterialBatchNoQuery query) {
+    public QueryMaterialBatchNoResDTO queryMaterialBatchNo(MaterialBatchNoQuery query) {
 
         return null;
     }

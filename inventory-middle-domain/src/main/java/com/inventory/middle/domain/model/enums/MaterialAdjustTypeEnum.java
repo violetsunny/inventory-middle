@@ -3,16 +3,12 @@ package com.inventory.middle.domain.model.enums;
 import java.util.Arrays;
 import java.util.Objects;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import top.kdla.framework.dto.IEnum;
 
 /**
  * @author kll 物料凭证移动类型枚举
  *         <p>
  */
-@AllArgsConstructor
-@Getter
 public enum MaterialAdjustTypeEnum implements IEnum<String> {
     OQC101(MaterialDocGroupEnum.QC0, "OQC101", "期初库存同步", true, true, "materialDocInAddHandleChain", "OQC102", null,
         MaterialDocRefTypeEnum.NO, null),
@@ -219,6 +215,55 @@ public enum MaterialAdjustTypeEnum implements IEnum<String> {
      */
     private MaterialDocRefOrderTypeEnum materialDocRefOrderTypeEnum;
 
+    MaterialAdjustTypeEnum(MaterialDocGroupEnum materialDocGroupEnum, String code, String desc,
+                           boolean calMAP, boolean triggerFinanceVoucher, String beanName,
+                           String reverseCode, MaterialDocCategoryEnum materialDocCategoryEnum,
+                           MaterialDocRefTypeEnum materialDocRefTypeEnum,
+                           MaterialDocRefOrderTypeEnum materialDocRefOrderTypeEnum) {
+        this.materialDocGroupEnum = materialDocGroupEnum;
+        this.code = code;
+        this.desc = desc;
+        this.calMAP = calMAP;
+        this.triggerFinanceVoucher = triggerFinanceVoucher;
+        this.beanName = beanName;
+        this.reverseCode = reverseCode;
+        this.materialDocCategoryEnum = materialDocCategoryEnum;
+        this.materialDocRefTypeEnum = materialDocRefTypeEnum;
+        this.materialDocRefOrderTypeEnum = materialDocRefOrderTypeEnum;
+    }
+
+    public MaterialDocGroupEnum getMaterialDocGroupEnum() {
+        return materialDocGroupEnum;
+    }
+
+    public boolean isCalMAP() {
+        return calMAP;
+    }
+
+    public boolean isTriggerFinanceVoucher() {
+        return triggerFinanceVoucher;
+    }
+
+    public String getBeanName() {
+        return beanName;
+    }
+
+    public String getReverseCode() {
+        return reverseCode;
+    }
+
+    public MaterialDocCategoryEnum getMaterialDocCategoryEnum() {
+        return materialDocCategoryEnum;
+    }
+
+    public MaterialDocRefTypeEnum getMaterialDocRefTypeEnum() {
+        return materialDocRefTypeEnum;
+    }
+
+    public MaterialDocRefOrderTypeEnum getMaterialDocRefOrderTypeEnum() {
+        return materialDocRefOrderTypeEnum;
+    }
+
     public static String valueByCode(String code) {
         if (code == null) {
             return "";
@@ -269,4 +314,12 @@ public enum MaterialAdjustTypeEnum implements IEnum<String> {
         return isValidEnum(code);
     }
 
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

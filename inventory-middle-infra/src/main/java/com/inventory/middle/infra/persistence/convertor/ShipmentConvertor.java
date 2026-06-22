@@ -19,14 +19,8 @@ import java.util.Objects;
 @Mapper(componentModel = "spring")
 public interface ShipmentConvertor {
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	Shipment toShipment(ShipmentDo shipmentDo);
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	ShipmentDo fromShipment(Shipment shipment);
 
 	default ShipmentId id2id(Long id) {

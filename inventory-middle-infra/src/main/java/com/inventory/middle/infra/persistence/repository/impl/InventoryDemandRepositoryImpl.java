@@ -72,4 +72,10 @@ public class InventoryDemandRepositoryImpl extends ServiceImpl<InventoryDemandMa
 		return this.removeByIds(tempIds);
 	}
 
+	@Override
+	public List<com.inventory.middle.domain.model.bo.inventory.InventoryDemandByDayRespBO> queryDemandByDay(
+			com.inventory.middle.domain.model.bo.inventory.InventoryDemandByDayQueryBO query) {
+		return baseMapper.queryInventoryDemandByDay(query);
+	}
+
 }

@@ -31,4 +31,12 @@ public enum MaterialItemCategoryEnum implements IEnum<Integer> {
         }
         return Arrays.asList(values()).stream().filter(e->code.equals(e.getCode())).map(MaterialItemCategoryEnum::getDesc).findFirst().orElse("");
     }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

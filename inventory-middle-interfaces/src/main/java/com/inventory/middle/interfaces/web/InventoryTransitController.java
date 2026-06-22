@@ -1,103 +1,83 @@
 package com.inventory.middle.interfaces.web;
 
-
-import top.kdla.framework.dto.SingleResponse;
-import top.kdla.framework.dto.PageResponse;
-import top.kdla.framework.dto.MultiResponse;
-import top.kdla.framework.catchlog.CatchAndLog;
-import top.kdla.framework.validator.group.AddGroup;
-import top.kdla.framework.validator.group.UpdateGroup;
-import com.inventory.middle.application.service.InventoryTransitQueryService;
 import com.inventory.middle.application.service.InventoryTransitApplicationService;
+import com.inventory.middle.application.service.InventoryTransitQueryService;
 import com.inventory.middle.client.dto.InventoryTransitDto;
 import com.inventory.middle.client.dto.command.InventoryTransitCommand;
 import com.inventory.middle.client.dto.query.InventoryTransitPageQuery;
-import com.inventory.middle.application.convertor.InventoryTransitDtoConvertor;
+import com.inventory.middle.interfaces.support.UserContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
-import java.util.*;
+import org.springframework.web.bind.annotation.*;
+import top.kdla.framework.dto.PageResponse;
+import top.kdla.framework.dto.SingleResponse;
+
 import javax.annotation.Resource;
+import java.util.List;
+import top.kdla.framework.log.catchlog.CatchAndLog;
 
 
 /**
- * 库存-在途Controller
+ * 在途库存 Controller（从 inventory-center-bff InTransitStockController 迁移）
+ * BFF 路径 /inTransitStock → 统一至 /inTransitStock（与 BFF 保持一致）
  *
- * @author kll
- * @email kll@job.cn
- * @date 2023-03-13 19:56:27
+ * 注意：BFF 原实现在分页结果中额外调用 remoteProductCenterRemoteService.getUnitById()
+ * 填充单位名称。inventory-middle 本地 DB 中 uom 字段存储单位编码，
+ * 单位名称填充待接入 ProductExternalService。
  */
-@Tag(name = " 库存-在途管理")
-@RestController
-@RequestMapping("/inventorytransit")
-@Slf4j
+@Tag(name = "在途库存管理")
 @CatchAndLog
+@RestController
+@RequestMapping("/inTransitStock")
+@Slf4j
 public class InventoryTransitController {
 
     @Resource
-    private InventoryTransitApplicationService inventorytransitApplicationService;
+    private InventoryTransitQueryService inventoryTransitQueryService;
     @Resource
-    private  InventoryTransitQueryService inventorytransitQueryService;
-    @Resource
-    private InventoryTransitDtoConvertor  inventorytransitDtoConvertor;
+    private InventoryTransitApplicationService inventoryTransitApplicationService;
 
+    @Operation(summary = "分页查询在途库存信息")
+    @PostMapping("/page/query")
+    public PageResponse<InventoryTransitDto> queryInTransitStockPage(@RequestBody InventoryTransitPageQuery pageQuery) {
+        pageQuery.setTenantId(UserContextHolder.getTenantId());
+        PageResponse<InventoryTransitDto> result = inventoryTransitQueryService.queryPage(pageQuery);
+        // TODO: 待接入 ProductExternalService.getUnitById(uom) 填充单位名称
+        return result;
+    }
 
-    /**
-     * 库存-在途分页查询
-     */
-    @Operation(summary="库存-在途分页查询")
+    @Operation(summary = "在途库存分页查询（内部路径）")
     @PostMapping("/page")
-    public PageResponse<InventoryTransitDto> page(@RequestBody InventoryTransitPageQuery inventorytransitPageQuery) {
-        return inventorytransitQueryService.queryPage(inventorytransitPageQuery);
+    public PageResponse<InventoryTransitDto> page(@RequestBody InventoryTransitPageQuery pageQuery) {
+        pageQuery.setTenantId(UserContextHolder.getTenantId());
+        return inventoryTransitQueryService.queryPage(pageQuery);
     }
 
-    /**
-     * 库存-在途list查询
-     */
-    @Operation(summary="库存-在途list查询")
-    @PostMapping("/list")
-            public MultiResponse<InventoryTransitDto> list() {
-        //TODO list query
-        return MultiResponse.buildSuccess(null);
-    }
-
-    /**
-     * 库存-在途信息
-     */
-    @Operation(summary="库存-在途信息")
+    @Operation(summary = "在途库存详情")
     @GetMapping("/find/{id}")
     public SingleResponse<InventoryTransitDto> findById(@PathVariable("id") Long id) {
-        return SingleResponse.buildSuccess(inventorytransitQueryService.findById(id));
+        return SingleResponse.buildSuccess(inventoryTransitQueryService.findById(id));
     }
 
-    /**
-     * 保存库存-在途
-     */
-    @Operation(summary="保存库存-在途")
+    @Operation(summary = "保存在途库存")
     @PostMapping("/save")
-    public SingleResponse<Boolean> save(@Validated(AddGroup.class) @RequestBody InventoryTransitCommand inventorytransitCommand) {
-        return SingleResponse.buildSuccess(inventorytransitApplicationService.add(inventorytransitCommand));
-
+    public SingleResponse<Boolean> save(@RequestBody InventoryTransitCommand command) {
+        command.setTenantId(UserContextHolder.getTenantId());
+        command.setCreatorId(UserContextHolder.getUserId());
+        return SingleResponse.buildSuccess(inventoryTransitApplicationService.add(command));
     }
 
-    /**
-     * 修改库存-在途
-     */
-    @Operation(summary="修改库存-在途")
+    @Operation(summary = "更新在途库存")
     @PostMapping("/update")
-    public SingleResponse<Boolean> update(@Validated(UpdateGroup.class) @RequestBody InventoryTransitCommand inventorytransitCommand) {
-        return SingleResponse.buildSuccess(inventorytransitApplicationService.update(inventorytransitCommand));
+    public SingleResponse<Boolean> update(@RequestBody InventoryTransitCommand command) {
+        command.setUpdatorId(UserContextHolder.getUserId());
+        return SingleResponse.buildSuccess(inventoryTransitApplicationService.update(command));
     }
 
-    /**
-     * 删除库存-在途
-     */
-    @Operation(summary="删除库存-在途")
+    @Operation(summary = "删除在途库存")
     @PostMapping("/delete")
     public SingleResponse<Boolean> delete(@RequestBody List<Long> ids) {
-        return SingleResponse.buildSuccess(inventorytransitApplicationService.deleteBatch(ids));
+        return SingleResponse.buildSuccess(inventoryTransitApplicationService.deleteBatch(ids));
     }
-
 }

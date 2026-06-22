@@ -4,6 +4,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 /**
@@ -11,6 +13,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author yueweifeng
  */
 @SpringBootApplication(scanBasePackages = {"top.kdla.framework" , "com.inventory.middle" })
+@EnableFeignClients(basePackages = "com.inventory.middle")
+@EnableScheduling
 public class ProviderApplication implements ApplicationRunner {
 
     public static void main(String[] args) {

@@ -1,7 +1,7 @@
 package com.inventory.middle.interfaces.facade;
 
 
-import top.kdla.framework.catchlog.CatchAndLog;
+import top.kdla.framework.log.catchlog.CatchAndLog;
 import top.kdla.framework.dto.SingleResponse;
 import top.kdla.framework.dto.PageResponse;
 import top.kdla.framework.dto.MultiResponse;

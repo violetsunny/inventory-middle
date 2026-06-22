@@ -11,9 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
+import com.inventory.middle.infra.integration.push.RemoteUniformPushService;
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import top.kdla.framework.common.aspect.watch.StopWatchWrapper;
 
 /**
  * 库存报警通知记录ApplicationServiceImpl
@@ -31,6 +35,9 @@ public class InventoryAlertNotificationApplicationServiceImpl implements Invento
 
 	@Resource
 	private InventoryAlertNotificationDtoConvertor dtoConvertor;
+
+	@Resource
+	private RemoteUniformPushService remoteUniformPushService;
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -54,7 +61,20 @@ public class InventoryAlertNotificationApplicationServiceImpl implements Invento
 		ids.forEach(id -> {
 			tempIds.add(new InventoryAlertNotificationId(id));
 		});
-		return  inventoryalertnotificationRepository.delete(tempIds);
+		return inventoryalertnotificationRepository.delete(tempIds);
+	}
+
+	@Override
+	@StopWatchWrapper(logHead = "AlertNotificationApp", msg = "sendAlertNotification")
+	public void sendAlertNotification(com.inventory.middle.domain.model.bo.mq.InventoryAlertMessageBO alertMessageBO) {
+		if (alertMessageBO == null) {
+			log.warn("InventoryAlertNotificationApplicationServiceImpl.sendAlertNotification: null message, skip");
+			return;
+		}
+		Map<String, Object> pushDTO = new HashMap<>();
+		pushDTO.put("monitorRuleId", alertMessageBO.getMonitorRuleId());
+		boolean pushed = remoteUniformPushService.push(pushDTO);
+		log.info("预警通知推送结果: monitorRuleId={} pushed={}", alertMessageBO.getMonitorRuleId(), pushed);
 	}
 }
 

@@ -59,7 +59,12 @@ public class LogicalPlantDto extends BaseModel {
      * 该逻辑仓所属的物理仓no
      */
     private String warehouseNo;
-    
+
+    /**
+     * 该逻辑仓所属的物理仓名称（plan 迁移补充）
+     */
+    private String warehouseName;
+
     /**
      * 省
      */

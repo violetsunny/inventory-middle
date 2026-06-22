@@ -19,14 +19,8 @@ import java.util.Objects;
 @Mapper(componentModel = "spring")
 public interface MaterialDocItemConvertor {
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	MaterialDocItem toMaterialDocItem(MaterialDocItemDo materialdocitemDo);
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	MaterialDocItemDo fromMaterialDocItem(MaterialDocItem materialdocitem);
 
 	default MaterialDocItemId id2id(Long id) {

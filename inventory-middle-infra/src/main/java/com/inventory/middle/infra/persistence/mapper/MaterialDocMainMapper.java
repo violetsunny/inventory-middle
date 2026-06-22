@@ -50,4 +50,40 @@ public interface MaterialDocMainMapper extends BaseMapper<MaterialDocMainDo> {
      * @return
      */
     MaterialDocMainDo findById(@Param("id") Long id);
+
+    /**
+     * 根据物料凭证号查询
+     */
+    MaterialDocMainDo queryByMaterialDocNo(@Param("materialDocNo") String materialDocNo);
+
+    /**
+     * 根据原始单据号和类型查询
+     */
+    MaterialDocMainDo queryByOriginalNoAndCate(@Param("originalNo") String originalNo,
+                                               @Param("materialDocCategory") String materialDocCategory);
+
+    /**
+     * 根据原始单号查询
+     */
+    MaterialDocMainDo queryByMaterialDocByOriginalNo(@Param("originalNo") String originalNo);
+
+    /**
+     * 分页查询物料凭证（带参数）
+     */
+    List<MaterialDocMainDo> pageListByParams(@Param("params") Map<String, Object> params);
+
+    /**
+     * 导出列表查询
+     */
+    List<MaterialDocMainDo> exportListByParams(@Param("params") Map<String, Object> params);
+
+    /**
+     * 批量查询物料凭证
+     */
+    List<MaterialDocMainDo> listMaterialDocByIds(@Param("list") List<Long> materialDocIds);
+
+    /**
+     * 查询 uniqueNo 是否存在
+     */
+    String queryByUniqueNo(@Param("uniqueNo") String uniqueNo, @Param("appKey") String appKey);
 }

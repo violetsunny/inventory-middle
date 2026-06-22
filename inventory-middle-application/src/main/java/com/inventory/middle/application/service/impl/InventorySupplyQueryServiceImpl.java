@@ -48,5 +48,39 @@ public class InventorySupplyQueryServiceImpl implements InventorySupplyQueryServ
 		return dtoConvertor.fromInventorySupply(inventorysupplyRepository.findById(new InventorySupplyId(id)));
 	}
 
+	@Override
+	public java.util.Map<java.time.LocalDate, java.math.BigDecimal> querySupplyByDay(
+			com.inventory.middle.domain.model.bo.inventory.InventorySupplyByDayQueryBO query) {
+		java.util.List<com.inventory.middle.domain.model.bo.inventory.InventorySupplyByDayRespBO> list =
+				inventorysupplyRepository.querySupplyByDay(query);
+		java.util.Map<java.time.LocalDate, java.math.BigDecimal> result = new java.util.LinkedHashMap<>();
+		if (list != null) {
+			for (com.inventory.middle.domain.model.bo.inventory.InventorySupplyByDayRespBO item : list) {
+				if (item.getDueDate() != null) {
+					java.time.LocalDate date = item.getDueDate().toInstant()
+							.atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+					result.put(date, item.getUnrestricted() != null ? item.getUnrestricted() : java.math.BigDecimal.ZERO);
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public java.math.BigDecimal queryOverdueSupplyTotal(
+			com.inventory.middle.domain.model.bo.inventory.InventorySupplyByDayQueryBO query) {
+		java.util.List<com.inventory.middle.domain.model.bo.inventory.InventorySupplyByDayRespBO> list =
+				inventorysupplyRepository.querySupplyByDay(query);
+		java.math.BigDecimal total = java.math.BigDecimal.ZERO;
+		if (list != null) {
+			for (com.inventory.middle.domain.model.bo.inventory.InventorySupplyByDayRespBO item : list) {
+				if (item.getUnrestricted() != null) {
+					total = total.add(item.getUnrestricted());
+				}
+			}
+		}
+		return total;
+	}
+
 }
 

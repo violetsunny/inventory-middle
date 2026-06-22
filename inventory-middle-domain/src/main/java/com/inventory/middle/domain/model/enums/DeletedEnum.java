@@ -24,4 +24,12 @@ public enum DeletedEnum implements IEnum<Integer> {
     private Integer code;
     private Boolean deleted;
     private String desc;
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

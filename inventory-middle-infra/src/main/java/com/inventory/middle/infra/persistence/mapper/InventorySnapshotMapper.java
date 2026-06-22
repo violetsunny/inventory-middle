@@ -50,4 +50,29 @@ public interface InventorySnapshotMapper extends BaseMapper<InventorySnapshotDo>
      * @return
      */
     InventorySnapshotDo findById(@Param("id") Long id);
+
+    /**
+     * 上调库存数量
+     */
+    Integer adjustUp(InventorySnapshotDo inventorySnapshot);
+
+    /**
+     * 下调库存数量
+     */
+    Integer adjustDown(InventorySnapshotDo inventorySnapshot);
+
+    /**
+     * 按ID禁用快照
+     */
+    Integer disableById(InventorySnapshotDo inventorySnapshot);
+
+    /**
+     * 查询物料合计（按监控维度）
+     */
+    List<InventorySnapshotDo> queryMaterialTotal(@Param("params") Map<String, Object> params);
+
+    /**
+     * 根据物料编码和逻辑仓查询
+     */
+    List<InventorySnapshotDo> queryByMaterialAndLogical(@Param("params") Map<String, Object> params);
 }

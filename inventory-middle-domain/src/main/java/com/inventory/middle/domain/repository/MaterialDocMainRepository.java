@@ -54,4 +54,20 @@ public interface MaterialDocMainRepository {
      * @param ids
      */
     boolean delete(List<MaterialDocMainId> ids);
+
+    /**
+     * 通过原始单号查询物料凭证
+     *
+     * @param originalNo 原始单据号
+     * @return
+     */
+    MaterialDocMain findByOriginalNo(String originalNo);
+
+    /**
+     * 导出列表查询（不分页）
+     *
+     * @param params 查询参数
+     * @return
+     */
+    List<MaterialDocMain> exportList(Map<String, Object> params);
 }

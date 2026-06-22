@@ -5,53 +5,37 @@ import com.inventory.middle.domain.model.types.InventorySnapshotId;
 import top.kdla.framework.dto.PageQuery;
 import top.kdla.framework.dto.PageResponse;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 库存快照-实时Repository
- *
- * @author kll
- * @email kll@job.cn
- * @date 2023-03-13 18:25:32
  */
 public interface InventorySnapshotRepository {
 
-    /**
-    * 分页查询
-    *
-    * @param pageQuery
-    * @param params
-    * @return
-    */
     PageResponse<InventorySnapshot> queryPage(PageQuery pageQuery, Map<String, Object> params);
 
-    /**
-     * 通过ID获取库存快照-实时
-     *
-     * @param id
-     * @return
-     */
-     InventorySnapshot findById(InventorySnapshotId id);
+    InventorySnapshot findById(InventorySnapshotId id);
 
-    /**
-     * 保存
-     *
-     * @param inventorysnapshot
-     */
+    /** 按物料合计维度查询（对应 Mapper.queryMaterialTotal） */
+    List<InventorySnapshot> queryMaterialTotal(Map<String, Object> params);
+
+    /** 按物料+逻辑仓库查询（对应 Mapper.queryByMaterialAndLogical） */
+    List<InventorySnapshot> queryByMaterialAndLogical(Map<String, Object> params);
+
+    /** 按 params 批量查询列表 */
+    List<InventorySnapshot> queryList(Map<String, Object> params);
+
     boolean store(InventorySnapshot inventorysnapshot);
 
-    /**
-     * 更新
-     *
-     * @param inventorysnapshot
-     */
     boolean update(InventorySnapshot inventorysnapshot);
 
-    /**
-     * 删除
-     *
-     * @param ids
-     */
     boolean delete(List<InventorySnapshotId> ids);
+
+    /** 按 ID 禁用快照（deleted=1） */
+    boolean disableById(Long id);
+
+    /** 扣减库存数量，stockType 对应 StockTypeEnum.code：1=良品 2=残次品 3=质检品 */
+    boolean adjustDown(Long id, BigDecimal number, Integer stockType);
 }

@@ -10,48 +10,19 @@ import java.util.Map;
 
 /**
  * 移动平均价Repository
- *
- * @author kll
- * @email kll@job.cn
- * @date 2023-03-13 18:25:32
  */
 public interface InventoryMapRepository {
 
-    /**
-    * 分页查询
-    *
-    * @param pageQuery
-    * @param params
-    * @return
-    */
     PageResponse<InventoryMap> queryPage(PageQuery pageQuery, Map<String, Object> params);
 
-    /**
-     * 通过ID获取移动平均价
-     *
-     * @param id
-     * @return
-     */
-     InventoryMap findById(InventoryMapId id);
+    InventoryMap findById(InventoryMapId id);
 
-    /**
-     * 保存
-     *
-     * @param inventorymap
-     */
+    /** 按 skuCode + logicalPlantNo + tenantId 查询当前 MAP（精确匹配，取最新一条） */
+    InventoryMap findBySkuAndPlant(String skuCode, String logicalPlantNo, String tenantId);
+
     boolean store(InventoryMap inventorymap);
 
-    /**
-     * 更新
-     *
-     * @param inventorymap
-     */
     boolean update(InventoryMap inventorymap);
 
-    /**
-     * 删除
-     *
-     * @param ids
-     */
     boolean delete(List<InventoryMapId> ids);
 }

@@ -4,7 +4,7 @@ package com.inventory.middle.interfaces.web;
 import top.kdla.framework.dto.SingleResponse;
 import top.kdla.framework.dto.PageResponse;
 import top.kdla.framework.dto.MultiResponse;
-import top.kdla.framework.catchlog.CatchAndLog;
+import top.kdla.framework.log.catchlog.CatchAndLog;
 import top.kdla.framework.validator.group.AddGroup;
 import top.kdla.framework.validator.group.UpdateGroup;
 import com.inventory.middle.application.service.ShipmentLineQueryService;

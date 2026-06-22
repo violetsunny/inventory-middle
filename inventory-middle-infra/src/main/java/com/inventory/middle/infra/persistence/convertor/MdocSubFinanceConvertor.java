@@ -19,14 +19,8 @@ import java.util.Objects;
 @Mapper(componentModel = "spring")
 public interface MdocSubFinanceConvertor {
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	MdocSubFinance toMdocSubFinance(MdocSubFinanceDo mdocsubfinanceDo);
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	MdocSubFinanceDo fromMdocSubFinance(MdocSubFinance mdocsubfinance);
 
 	default MdocSubFinanceId id2id(Long id) {

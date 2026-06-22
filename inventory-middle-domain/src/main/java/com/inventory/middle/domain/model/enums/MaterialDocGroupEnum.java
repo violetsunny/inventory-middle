@@ -58,4 +58,12 @@ public enum MaterialDocGroupEnum implements IEnum<String> {
     public static boolean checkByCode(String code) {
         return Objects.nonNull(enumByCode(code));
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

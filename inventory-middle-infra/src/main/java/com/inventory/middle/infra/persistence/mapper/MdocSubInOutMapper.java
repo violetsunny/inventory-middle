@@ -50,4 +50,19 @@ public interface MdocSubInOutMapper extends BaseMapper<MdocSubInOutDo> {
      * @return
      */
     MdocSubInOutDo findById(@Param("id") Long id);
+
+    /**
+     * 根据物料凭证项ID查询
+     */
+    MdocSubInOutDo queryByItemId(@Param("materialDocItemId") Long materialDocItemId);
+
+    /**
+     * 根据物料凭证ID查询列表
+     */
+    List<MdocSubInOutDo> listByDocId(@Param("materialDocId") Long materialDocId);
+
+    /**
+     * 批量插入
+     */
+    Integer insertBatch(@Param("list") List<MdocSubInOutDo> list);
 }

@@ -17,6 +17,14 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
+        <!-- client 模块（BO 类引用 client DTO/enums）-->
+        <dependency>
+            <groupId>com.inventory.middle</groupId>
+            <artifactId>inventory-middle-client</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
@@ -39,6 +47,11 @@
 
         <dependency>
             <groupId>top.kdla.framework</groupId>
+            <artifactId>kdla-component-model</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>top.kdla.framework</groupId>
             <artifactId>kdla-component-dal</artifactId>
         </dependency>
 
@@ -50,6 +63,11 @@
         <dependency>
             <groupId>top.kdla.framework</groupId>
             <artifactId>kdla-component-validator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>top.kdla.framework</groupId>
+            <artifactId>kdla-component-log</artifactId>
         </dependency>
 
         <dependency>

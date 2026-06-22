@@ -48,5 +48,22 @@ public class StorageLocationQueryServiceImpl implements StorageLocationQueryServ
 		return dtoConvertor.fromStorageLocation(storagelocationRepository.findById(new StorageLocationId(id)));
 	}
 
-}
 
+        @Override
+        public java.util.List<StorageLocationDto> listByQuery(StorageLocationPageQuery pageQuery) {
+                // 全量查询：强制覆盖 pageSize，防止默认 10 条截断
+                pageQuery.setPageSize(Integer.MAX_VALUE);
+                pageQuery.setPageNum(1);
+                java.util.Map<String, Object> params = cn.hutool.core.bean.BeanUtil.beanToMap(pageQuery);
+                top.kdla.framework.dto.PageResponse<com.inventory.middle.domain.model.entity.StorageLocation> page =
+                        storagelocationRepository.queryPage(pageQuery, params);
+                return page.getData().stream().map(dtoConvertor::fromStorageLocation).collect(java.util.stream.Collectors.toList());
+        }
+
+        @Override
+        public StorageLocationDto findByNo(String storageLocationNo) {
+                com.inventory.middle.domain.model.entity.StorageLocation e = storagelocationRepository.findByStorageLocationNo(storageLocationNo);
+                return e == null ? null : dtoConvertor.fromStorageLocation(e);
+        }
+
+}

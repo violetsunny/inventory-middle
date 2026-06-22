@@ -4,8 +4,8 @@
  */
 package com.inventory.middle.application.service;
 
-import com.inventory.middle.client.dto.material.MaterialBatchNoResDto;
-import com.inventory.middle.client.dto.material.MaterialMappingDto;
+import com.inventory.middle.client.dto.material.QueryMaterialBatchNoResDTO;
+import com.inventory.middle.client.dto.material.MaterialMappingDTO;
 import com.inventory.middle.client.dto.query.MaterialBatchNoQuery;
 import com.inventory.middle.client.dto.query.MaterialMappingQuery;
 
@@ -20,13 +20,13 @@ public interface MaterialDocQueryService {
      * @param req
      * @return
      */
-    MaterialMappingDto queryMaterialTypeMapping(MaterialMappingQuery req);
+    MaterialMappingDTO queryMaterialTypeMapping(MaterialMappingQuery req);
 
     /**
      * 查询物料批次
      * @param query
      * @return
      */
-    MaterialBatchNoResDto queryMaterialBatchNo(MaterialBatchNoQuery query);
+    QueryMaterialBatchNoResDTO queryMaterialBatchNo(MaterialBatchNoQuery query);
 
 }

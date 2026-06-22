@@ -19,14 +19,8 @@ import java.util.Objects;
 @Mapper(componentModel = "spring")
 public interface InventoryTransitConvertor {
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	InventoryTransit toInventoryTransit(InventoryTransitDo inventorytransitDo);
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	InventoryTransitDo fromInventoryTransit(InventoryTransit inventorytransit);
 
 	default InventoryTransitId id2id(Long id) {

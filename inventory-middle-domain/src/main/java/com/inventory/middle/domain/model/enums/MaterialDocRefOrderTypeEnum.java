@@ -71,4 +71,12 @@ public enum MaterialDocRefOrderTypeEnum implements IEnum<Integer> {
         //只有非空的时候才校验数值是否正确 || 空为true
         return Objects.isNull(code) || Arrays.stream(values()).anyMatch(v -> v.getCode().equals(code));
     }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

@@ -31,4 +31,8 @@ public interface WarehouseQueryService {
      */
     WarehouseDto findById(Long id);
 
+
+    /** 不分页全量列表 */
+    java.util.List<WarehouseDto> list(WarehousePageQuery pageQuery);
+
 }

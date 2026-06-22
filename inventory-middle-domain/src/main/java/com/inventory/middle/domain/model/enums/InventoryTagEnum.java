@@ -35,4 +35,12 @@ public enum InventoryTagEnum implements IEnum<String> {
 
     private String code;
 
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

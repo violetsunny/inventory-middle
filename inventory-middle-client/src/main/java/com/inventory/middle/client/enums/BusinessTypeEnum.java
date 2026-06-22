@@ -1,8 +1,9 @@
+package com.inventory.middle.client.enums;
+
 /**
  * OYO.com Inc.
  * Copyright (c) 2017-2019 All Rights Reserved.
  */
-package com.inventory.middle.client.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

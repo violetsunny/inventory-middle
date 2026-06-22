@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  * @version $Id: MaterialCodeBatchNoVO, v 0.1 2021/6/18 17:30 Exp $
  */
 @Data
-public class MaterialBatchNoDto implements Serializable {
+public class MaterialBatchNoDTO implements Serializable {
     /**
      * 物料code
      */

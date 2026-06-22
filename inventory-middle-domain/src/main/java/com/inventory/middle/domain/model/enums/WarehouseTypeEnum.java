@@ -30,4 +30,12 @@ public enum WarehouseTypeEnum implements IEnum<Integer> {
      * 描述
      */
     private String desc;
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

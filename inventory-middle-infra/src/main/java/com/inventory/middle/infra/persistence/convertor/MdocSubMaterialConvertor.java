@@ -19,14 +19,8 @@ import java.util.Objects;
 @Mapper(componentModel = "spring")
 public interface MdocSubMaterialConvertor {
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	MdocSubMaterial toMdocSubMaterial(MdocSubMaterialDo mdocsubmaterialDo);
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	MdocSubMaterialDo fromMdocSubMaterial(MdocSubMaterial mdocsubmaterial);
 
 	default MdocSubMaterialId id2id(Long id) {

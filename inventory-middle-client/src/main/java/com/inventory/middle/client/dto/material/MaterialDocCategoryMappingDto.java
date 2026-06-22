@@ -1,7 +1,6 @@
 package com.inventory.middle.client.dto.material;
 
 import lombok.Data;
-import top.kdla.framework.dto.EnumResponse;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,10 +11,21 @@ import java.util.List;
  * @version $Id: MaterialTypeMapping, v 0.1 2019-11-04 18:31 Exp $
  */
 @Data
-public class MaterialDocCategoryMappingDto implements Serializable {
+public class MaterialDocCategoryMappingDTO implements Serializable {
 
-    private EnumResponse<String> materialDocCategory;
+    private EnumMappingDTO materialDocCategory;
 
-    private List<BusinessTypeMappingDto> businessTypes;
+    private List<BusinessTypeMappingDTO> businessTypes;
 
+    /**
+     * @deprecated 弃用 使用 businessTypes.originalNoNeed
+     */
+    @Deprecated
+    private Boolean originalNoRequired = false;
+
+    /**
+     * @deprecated 弃用 使用 businessTypes.updateData
+     */
+    @Deprecated
+    private Boolean operateData = true;
 }

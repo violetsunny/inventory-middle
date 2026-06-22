@@ -1,63 +1,54 @@
 package com.inventory.middle.domain.common.exception;
 
 import com.inventory.middle.domain.common.constants.ResponseCodeEnum;
-import lombok.Getter;
-import lombok.Setter;
+import top.kdla.framework.exception.BizException;
 
-@Getter
-@Setter
-public class BusinessException  extends RuntimeException {
-
-    private String code;
-
-    private String msg;
+/**
+ * 业务异常 — 继承 KDLA BizException，确保被 @CatchAndLog 切面正确识别。
+ * CatchLogAspect 会将 BizException 以 warn 级别记录并返回业务错误码，
+ * 而非降级为 UNKNOWN_ERROR + error 日志。
+ */
+public class BusinessException extends BizException {
 
     public BusinessException(ResponseCodeEnum responseCodeEnum) {
-        if (responseCodeEnum == null) {
-            responseCodeEnum = ResponseCodeEnum.FAILED;
-        }
-        this.code = responseCodeEnum.getCode();
-        this.msg = responseCodeEnum.getDesc();
+        super(responseCodeEnum == null
+                        ? ResponseCodeEnum.FAILED.getCode()
+                        : responseCodeEnum.getCode(),
+                responseCodeEnum == null
+                        ? ResponseCodeEnum.FAILED.getDesc()
+                        : responseCodeEnum.getDesc());
     }
 
     public BusinessException(ResponseCodeEnum responseCodeEnum, String message) {
-        if (responseCodeEnum == null) {
-            responseCodeEnum = ResponseCodeEnum.FAILED;
-        }
-        this.code = responseCodeEnum.getCode();
-        this.msg = responseCodeEnum.getDesc() + "," + message;
+        super(responseCodeEnum == null
+                        ? ResponseCodeEnum.FAILED.getCode()
+                        : responseCodeEnum.getCode(),
+                (responseCodeEnum == null
+                        ? ResponseCodeEnum.FAILED.getDesc()
+                        : responseCodeEnum.getDesc()) + "," + message);
     }
 
     public BusinessException(String msg) {
-        super(msg);
-        this.code = ResponseCodeEnum.FAILED.getCode();
-        this.msg = msg;
+        super(ResponseCodeEnum.FAILED.getCode(), msg);
     }
 
     public BusinessException(String code, String msg) {
-        super(msg);
-        this.code = code;
-        this.msg = msg;
+        super(code, msg);
     }
 
-    public BusinessException(String code, String errorInfo, Object... args){
-        super(String.format(errorInfo, args));
-        this.code = code;
-        this.msg = String.format(errorInfo, args);
+    public BusinessException(String code, String errorInfo, Object... args) {
+        super(code, String.format(errorInfo, args));
     }
 
     public BusinessException(String msg, Throwable e) {
-        super(msg, e);
-        this.code = ResponseCodeEnum.FAILED.getCode();
-        this.msg = msg;
+        super(ResponseCodeEnum.FAILED.getCode(), msg, e);
     }
 
-
-    @Override
-    public String toString() {
-        return "BusinessException{" +
-                "code='" + code + '\'' +
-                ", msg='" + msg + '\'' +
-                '}';
+    /**
+     * 兼容旧代码 e.getMsg() 调用，委托给标准 getMessage()。
+     * BaseException 通过 super(message) 保存 message，可直接取用。
+     */
+    public String getMsg() {
+        return getMessage();
     }
 }

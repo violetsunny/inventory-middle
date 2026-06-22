@@ -54,4 +54,14 @@ public interface InventorySupplyRepository {
      * @param ids
      */
     boolean delete(List<InventorySupplyId> ids);
+
+    /** 批量创建在途库存记录 */
+    boolean batchStore(List<InventorySupply> supplyList);
+
+    /** 批量更新在途库存（按 entity id upsert） */
+    boolean batchUpdateBySourceOrderNo(List<InventorySupply> supplyList);
+
+    /** 按天聚合供给数量（plan迁移：querySupplyInventory / queryOverdueSupplyInventory） */
+    List<com.inventory.middle.domain.model.bo.inventory.InventorySupplyByDayRespBO> querySupplyByDay(
+            com.inventory.middle.domain.model.bo.inventory.InventorySupplyByDayQueryBO query);
 }

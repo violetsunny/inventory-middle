@@ -48,4 +48,12 @@ public enum MaterialDocCategoryEnum implements IEnum<Integer> {
         }
         return Arrays.asList(values()).stream().filter(e -> code.equals(e.getCode())).findFirst().orElse(null);
     }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

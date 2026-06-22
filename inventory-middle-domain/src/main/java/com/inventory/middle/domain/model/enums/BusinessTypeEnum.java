@@ -198,4 +198,12 @@ public enum BusinessTypeEnum implements IEnum<String> {
         }
         return Arrays.stream(values()).filter(d -> d.getMaterialDocCategoryEnum().equals(materialDocCategoryEnum)).collect(Collectors.toList());
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

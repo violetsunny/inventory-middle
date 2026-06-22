@@ -19,14 +19,8 @@ import java.util.Objects;
 @Mapper(componentModel = "spring")
 public interface WarehouseConvertor {
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	Warehouse toWarehouse(WarehouseDo warehouseDo);
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	WarehouseDo fromWarehouse(Warehouse warehouse);
 
 	default WarehouseId id2id(Long id) {

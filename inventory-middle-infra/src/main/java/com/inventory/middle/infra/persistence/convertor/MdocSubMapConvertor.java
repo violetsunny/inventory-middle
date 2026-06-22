@@ -19,14 +19,8 @@ import java.util.Objects;
 @Mapper(componentModel = "spring")
 public interface MdocSubMapConvertor {
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	MdocSubMap toMdocSubMap(MdocSubMapDo mdocsubmapDo);
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	MdocSubMapDo fromMdocSubMap(MdocSubMap mdocsubmap);
 
 	default MdocSubMapId id2id(Long id) {

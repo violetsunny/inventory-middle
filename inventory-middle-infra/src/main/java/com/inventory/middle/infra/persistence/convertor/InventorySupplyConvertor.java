@@ -19,14 +19,8 @@ import java.util.Objects;
 @Mapper(componentModel = "spring")
 public interface InventorySupplyConvertor {
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	InventorySupply toInventorySupply(InventorySupplyDo inventorysupplyDo);
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	InventorySupplyDo fromInventorySupply(InventorySupply inventorysupply);
 
 	default InventorySupplyId id2id(Long id) {

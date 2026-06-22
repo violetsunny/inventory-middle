@@ -1,103 +1,91 @@
 package com.inventory.middle.interfaces.web;
 
-
-import top.kdla.framework.dto.SingleResponse;
-import top.kdla.framework.dto.PageResponse;
-import top.kdla.framework.dto.MultiResponse;
-import top.kdla.framework.catchlog.CatchAndLog;
-import top.kdla.framework.validator.group.AddGroup;
-import top.kdla.framework.validator.group.UpdateGroup;
 import com.inventory.middle.application.service.InventorySnapshotQueryService;
-import com.inventory.middle.application.service.InventorySnapshotApplicationService;
 import com.inventory.middle.client.dto.InventorySnapshotDto;
-import com.inventory.middle.client.dto.command.InventorySnapshotCommand;
 import com.inventory.middle.client.dto.query.InventorySnapshotPageQuery;
-import com.inventory.middle.application.convertor.InventorySnapshotDtoConvertor;
+import com.inventory.middle.interfaces.support.UserContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
-import java.util.*;
+import org.springframework.web.bind.annotation.*;
+import top.kdla.framework.dto.PageResponse;
+import top.kdla.framework.dto.SingleResponse;
+
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import top.kdla.framework.log.catchlog.CatchAndLog;
+import com.alibaba.excel.EasyExcel;
+import java.util.List;
+
 
 
 /**
- * 库存快照-实时Controller
- *
- * @author kll
- * @email kll@job.cn
- * @date 2023-03-13 19:56:27
+ * 库存快照 Controller（从 inventory-center-bff 迁移）
+ * 路径与 BFF 保持一致：/inventorySnapshot
  */
-@Tag(name = " 库存快照-实时管理")
-@RestController
-@RequestMapping("/inventorysnapshot")
-@Slf4j
+@Tag(name = "库存快照查询")
 @CatchAndLog
+@RestController
+@RequestMapping("/inventorySnapshot")
+@Slf4j
 public class InventorySnapshotController {
 
     @Resource
-    private InventorySnapshotApplicationService inventorysnapshotApplicationService;
-    @Resource
-    private  InventorySnapshotQueryService inventorysnapshotQueryService;
-    @Resource
-    private InventorySnapshotDtoConvertor  inventorysnapshotDtoConvertor;
+    private InventorySnapshotQueryService inventorySnapshotQueryService;
 
-
-    /**
-     * 库存快照-实时分页查询
-     */
-    @Operation(summary="库存快照-实时分页查询")
-    @PostMapping("/page")
-    public PageResponse<InventorySnapshotDto> page(@RequestBody InventorySnapshotPageQuery inventorysnapshotPageQuery) {
-        return inventorysnapshotQueryService.queryPage(inventorysnapshotPageQuery);
+    @Operation(summary = "分页查询库存信息")
+    @PostMapping("/page/query")
+    public PageResponse<InventorySnapshotDto> queryInventorySnapshotPage(@RequestBody InventorySnapshotPageQuery pageQuery) {
+        pageQuery.setTenantId(UserContextHolder.getTenantId());
+        return inventorySnapshotQueryService.queryPage(pageQuery);
     }
 
-    /**
-     * 库存快照-实时list查询
-     */
-    @Operation(summary="库存快照-实时list查询")
-    @PostMapping("/list")
-            public MultiResponse<InventorySnapshotDto> list() {
-        //TODO list query
-        return MultiResponse.buildSuccess(null);
+    @Operation(summary = "分页查询库存信息-城燃")
+    @PostMapping("/city-gas/page/query")
+    public PageResponse<InventorySnapshotDto> queryCityGasPage(@RequestBody InventorySnapshotPageQuery pageQuery) {
+        pageQuery.setTenantId(UserContextHolder.getTenantId());
+        return inventorySnapshotQueryService.pageListCityGas(pageQuery);
     }
 
-    /**
-     * 库存快照-实时信息
-     */
-    @Operation(summary="库存快照-实时信息")
-    @GetMapping("/find/{id}")
-    public SingleResponse<InventorySnapshotDto> findById(@PathVariable("id") Long id) {
-        return SingleResponse.buildSuccess(inventorysnapshotQueryService.findById(id));
+    @Operation(summary = "库存详情查询")
+    @PostMapping("/detail/query")
+    public SingleResponse<InventorySnapshotDto> queryDetail(@RequestBody InventorySnapshotPageQuery pageQuery) {
+        if (pageQuery.getId() != null) {
+            return SingleResponse.buildSuccess(inventorySnapshotQueryService.findById(pageQuery.getId()));
+        }
+        return SingleResponse.buildSuccess(null);
     }
 
-    /**
-     * 保存库存快照-实时
-     */
-    @Operation(summary="保存库存快照-实时")
-    @PostMapping("/save")
-    public SingleResponse<Boolean> save(@Validated(AddGroup.class) @RequestBody InventorySnapshotCommand inventorysnapshotCommand) {
-        return SingleResponse.buildSuccess(inventorysnapshotApplicationService.add(inventorysnapshotCommand));
-
+    @Operation(summary = "导出库存信息")
+    @PostMapping("/export")
+    public void export(@RequestBody InventorySnapshotPageQuery pageQuery, HttpServletResponse response) {
+        try {
+            pageQuery.setTenantId(UserContextHolder.getTenantId());
+            List<InventorySnapshotDto> list = inventorySnapshotQueryService.exportList(pageQuery);
+            response.setHeader("Access-Control-Expose-Headers", "Content-disposition");
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Content-disposition", "attachment;filename=InventorySnapshot.xlsx");
+            EasyExcel.write(response.getOutputStream(), InventorySnapshotDto.class)
+                    .sheet("sheet1").doWrite(list);
+        } catch (Exception e) {
+            log.error("inventorySnapshot export failed", e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try { response.getWriter().write("{\"code\":500,\"msg\":\"导出失败\"}"); } catch (java.io.IOException ignored) {}
+        }
     }
 
-    /**
-     * 修改库存快照-实时
-     */
-    @Operation(summary="修改库存快照-实时")
-    @PostMapping("/update")
-    public SingleResponse<Boolean> update(@Validated(UpdateGroup.class) @RequestBody InventorySnapshotCommand inventorysnapshotCommand) {
-        return SingleResponse.buildSuccess(inventorysnapshotApplicationService.update(inventorysnapshotCommand));
+    @Operation(summary = "根据批次号查询库存信息")
+    @PostMapping("/queryByBatchNo")
+    public PageResponse<InventorySnapshotDto> queryByBatchNo(@RequestBody InventorySnapshotPageQuery pageQuery) {
+        pageQuery.setTenantId(UserContextHolder.getTenantId());
+        return inventorySnapshotQueryService.queryByBatchNo(pageQuery);
     }
 
-    /**
-     * 删除库存快照-实时
-     */
-    @Operation(summary="删除库存快照-实时")
-    @PostMapping("/delete")
-    public SingleResponse<Boolean> delete(@RequestBody List<Long> ids) {
-        return SingleResponse.buildSuccess(inventorysnapshotApplicationService.deleteBatch(ids));
+    @Operation(summary = "查询实时库存")
+    @PostMapping("/queryCurrentInventory")
+    public PageResponse<InventorySnapshotDto> queryCurrentInventory(@RequestBody InventorySnapshotPageQuery pageQuery) {
+        pageQuery.setTenantId(UserContextHolder.getTenantId());
+        return inventorySnapshotQueryService.queryCurrentInventory(pageQuery);
     }
-
 }

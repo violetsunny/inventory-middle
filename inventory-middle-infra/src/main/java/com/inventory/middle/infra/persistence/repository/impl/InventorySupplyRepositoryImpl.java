@@ -72,4 +72,33 @@ public class InventorySupplyRepositoryImpl extends ServiceImpl<InventorySupplyMa
 		return this.removeByIds(tempIds);
 	}
 
+	@Override
+	public boolean batchStore(List<InventorySupply> supplyList) {
+		if (CollectionUtils.isEmpty(supplyList)) {
+			return true;
+		}
+		List<InventorySupplyDo> doList = supplyList.stream()
+				.map(e -> convertor.fromInventorySupply(e))
+				.collect(Collectors.toList());
+		return this.saveBatch(doList);
+	}
+
+	@Override
+	public boolean batchUpdateBySourceOrderNo(List<InventorySupply> supplyList) {
+		if (CollectionUtils.isEmpty(supplyList)) {
+			return true;
+		}
+		for (InventorySupply e : supplyList) {
+			InventorySupplyDo doObj = convertor.fromInventorySupply(e);
+			this.saveOrUpdate(doObj);
+		}
+		return true;
+	}
+
+	@Override
+	public List<com.inventory.middle.domain.model.bo.inventory.InventorySupplyByDayRespBO> querySupplyByDay(
+			com.inventory.middle.domain.model.bo.inventory.InventorySupplyByDayQueryBO query) {
+		return baseMapper.queryInventorySupplyByDay(query);
+	}
+
 }

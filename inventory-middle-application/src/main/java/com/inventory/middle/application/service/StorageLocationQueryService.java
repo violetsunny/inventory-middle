@@ -31,4 +31,11 @@ public interface StorageLocationQueryService {
      */
     StorageLocationDto findById(Long id);
 
+
+    /** 不分页全量（按调整类型等条件） */
+    java.util.List<StorageLocationDto> listByQuery(StorageLocationPageQuery pageQuery);
+
+    /** 按编码查询库位详情 */
+    StorageLocationDto findByNo(String storageLocationNo);
+
 }

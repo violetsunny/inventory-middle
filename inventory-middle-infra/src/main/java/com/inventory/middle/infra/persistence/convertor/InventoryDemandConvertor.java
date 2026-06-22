@@ -19,14 +19,8 @@ import java.util.Objects;
 @Mapper(componentModel = "spring")
 public interface InventoryDemandConvertor {
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	InventoryDemand toInventoryDemand(InventoryDemandDo inventorydemandDo);
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	InventoryDemandDo fromInventoryDemand(InventoryDemand inventorydemand);
 
 	default InventoryDemandId id2id(Long id) {

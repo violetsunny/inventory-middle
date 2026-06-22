@@ -1,6 +1,19 @@
 package com.inventory.middle.application.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.inventory.middle.domain.model.entity.MaterialDocMain;
+import com.inventory.middle.domain.handles.HandleMessage;
+import com.inventory.middle.domain.handles.IHandleChain;
+import com.inventory.middle.client.dto.material.MaterialDocumentDTO;
+import com.inventory.middle.domain.model.bo.material.MaterialDocumentBO;
+import org.springframework.beans.BeanUtils;
+
+import com.inventory.middle.domain.model.bo.mq.sub.MaterialDocCancelMessage;
+import com.inventory.middle.domain.model.bo.mq.sub.MaterialDocInMessage;
+import top.kdla.framework.domain.ApplicationContextHelp;
+import com.inventory.middle.domain.service.MaterialDocDomainService;
+import com.inventory.middle.domain.service.material.model.MaterialDocInvRes;
+import top.kdla.framework.dto.SingleResponse;
 import com.inventory.middle.domain.model.types.MaterialDocMainId;
 import com.inventory.middle.domain.repository.MaterialDocMainRepository;
 import com.inventory.middle.domain.specification.MaterialDocMainUpdateSpecification;
@@ -14,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import top.kdla.framework.common.aspect.watch.StopWatchWrapper;
 
 /**
  * 物料凭证主表ApplicationServiceImpl
@@ -31,6 +45,8 @@ public class MaterialDocMainApplicationServiceImpl implements MaterialDocMainApp
 
 	@Resource
 	private MaterialDocMainDtoConvertor dtoConvertor;
+	@Resource
+	private MaterialDocDomainService materialDocDomainService;
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -56,5 +72,93 @@ public class MaterialDocMainApplicationServiceImpl implements MaterialDocMainApp
 		});
 		return  materialdocmainRepository.delete(tempIds);
 	}
-}
 
+        @Override
+        @StopWatchWrapper(logHead = "MaterialDocApp", msg = "createMaterialDocIn")
+        public SingleResponse<MaterialDocInvRes> createMaterialDocIn(MaterialDocumentBO materialDocument) {
+                log.info("MaterialDocMainApplicationServiceImpl.createMaterialDocIn cmd={}", JSON.toJSONString(materialDocument));
+                MaterialDocInvRes res = materialDocDomainService.createMaterialDoc(materialDocument);
+                return SingleResponse.of(res);
+        }
+
+        @Override
+        @StopWatchWrapper(logHead = "MaterialDocApp", msg = "createMaterialDocOut")
+        public SingleResponse<MaterialDocInvRes> createMaterialDocOut(MaterialDocumentBO materialDocument) {
+                log.info("MaterialDocMainApplicationServiceImpl.createMaterialDocOut cmd={}", JSON.toJSONString(materialDocument));
+                MaterialDocInvRes res = materialDocDomainService.outboundMaterialDoc(materialDocument);
+                return SingleResponse.of(res);
+        }
+
+        @Override
+        public SingleResponse<MaterialDocInvRes> createMaterialDocOutIn(MaterialDocumentBO materialDocument) {
+                log.info("MaterialDocMainApplicationServiceImpl.createMaterialDocOutIn cmd={}", JSON.toJSONString(materialDocument));
+                MaterialDocInvRes res = materialDocDomainService.outInboundMaterialDoc(materialDocument);
+                return SingleResponse.of(res);
+        }
+
+        @Override
+        @StopWatchWrapper(logHead = "MaterialDocApp", msg = "reverseMaterialDoc")
+        public SingleResponse<MaterialDocInvRes> reverseMaterialDoc(MaterialDocumentBO materialDocument) {
+                log.info("MaterialDocMainApplicationServiceImpl.reverseMaterialDoc cmd={}", JSON.toJSONString(materialDocument));
+                MaterialDocInvRes res = materialDocDomainService.reverseMaterialDoc(materialDocument);
+                return SingleResponse.of(res);
+        }
+
+        @Override
+        public SingleResponse<MaterialDocInvRes> createMaterialDocFromMessage(MaterialDocInMessage message) {
+                log.info("MaterialDocMainApplicationServiceImpl.createMaterialDocFromMessage channel={}", message.getChannel());
+                try {
+                        IHandleChain handleChain = ApplicationContextHelp.getBean("snMaterialDocInBuilderHandleChain", IHandleChain.class);
+                        HandleMessage msg = new HandleMessage();
+                        msg.setT(message);
+                        handleChain.doProcess(msg);
+                        MaterialDocumentDTO documentDTO = (MaterialDocumentDTO) msg.getE();
+                        MaterialDocumentBO documentBO = new MaterialDocumentBO();
+                        BeanUtils.copyProperties(documentDTO, documentBO);
+                        MaterialDocInvRes res = materialDocDomainService.createMaterialDoc(documentBO);
+                        return SingleResponse.of(res);
+                } catch (Exception e) {
+                        log.error("createMaterialDocFromMessage failed", e);
+                        throw e;
+                }
+        }
+
+        @Override
+        public SingleResponse<MaterialDocInvRes> reverseMaterialDocFromMessage(MaterialDocCancelMessage message) {
+                log.info("MaterialDocMainApplicationServiceImpl.reverseMaterialDocFromMessage materialDocNo={}", message.getMaterialDocNo());
+                try {
+                        IHandleChain handleChain = ApplicationContextHelp.getBean("snMaterialDocCancelBuilderHandleChain", IHandleChain.class);
+                        HandleMessage msg = new HandleMessage();
+                        msg.setT(message);
+                        handleChain.doProcess(msg);
+                        MaterialDocumentDTO documentDTO = (MaterialDocumentDTO) msg.getE();
+                        MaterialDocumentBO documentBO = new MaterialDocumentBO();
+                        BeanUtils.copyProperties(documentDTO, documentBO);
+                        MaterialDocInvRes res = materialDocDomainService.reverseMaterialDoc(documentBO);
+                        return SingleResponse.of(res);
+                } catch (Exception e) {
+                        log.error("reverseMaterialDocFromMessage failed", e);
+                        throw e;
+                }
+        }
+
+        @Override
+        public String getMaterialDocId() {
+                return java.util.UUID.randomUUID().toString().replace("-", "");
+        }
+
+        @Override
+        public boolean checkMaterialDoc(com.inventory.middle.domain.model.bo.material.MaterialDocumentBO bo) {
+                if (bo == null) {
+                        throw new com.inventory.middle.domain.common.exception.BusinessException("物料凭证请求体不能为空");
+                }
+                if (org.apache.commons.lang3.StringUtils.isBlank(bo.getTenantId())) {
+                        throw new com.inventory.middle.domain.common.exception.BusinessException("租户ID不能为空");
+                }
+                if (bo.getMaterialDocumentItems() == null || bo.getMaterialDocumentItems().isEmpty()) {
+                        throw new com.inventory.middle.domain.common.exception.BusinessException("物料凭证明细不能为空");
+                }
+                return true;
+        }
+
+}

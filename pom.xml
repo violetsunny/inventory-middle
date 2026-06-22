@@ -47,8 +47,8 @@
         <commons-io.version>2.11.0</commons-io.version>
         <hutool.version>5.7.16</hutool.version>
         <logback.version>1.2.11</logback.version>
-        <kdla.framework.version>1.0.0-SNAPSHOT</kdla.framework.version>
-        <lombok.version>1.18.24</lombok.version>
+        <kdla.framework.version>1.0.1-SNAPSHOT</kdla.framework.version>
+        <lombok.version>1.18.30</lombok.version>
         <fastjson.version>2.0.23</fastjson.version>
         <netty.version>4.1.87.Final</netty.version>
         <guava.version>20.0</guava.version>
@@ -59,29 +59,15 @@
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
         <transmittable.version>2.14.2</transmittable.version>
         <jakarta.version>2.0.1</jakarta.version>
+        <zxing.version>3.5.0</zxing.version>
+        <pagehelper.version>1.4.6</pagehelper.version>
+        <jdom2.version>2.0.6</jdom2.version>
+        <!-- Spring Cloud OpenFeign -->
+        <spring-cloud-openfeign.version>3.1.5</spring-cloud-openfeign.version>
+        <!-- Redisson & RocketMQ -->
+        <redisson.version>3.17.7</redisson.version>
+        <rocketmq.spring.version>2.2.3</rocketmq.spring.version>
     </properties>
-
-    <distributionManagement>
-        <repository>
-            <id>maven-releases</id>
-            <url>http://nexus.enncloud.cn/repository/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>maven-snapshots</id>
-            <url>http://nexus.enncloud.cn/repository/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
-
-    <repositories>
-        <repository>
-            <id>maven-releases</id>
-            <url>http://nexus.enncloud.cn/repository/releases/</url>
-        </repository>
-        <repository>
-            <id>maven-snapshots</id>
-            <url>http://nexus.enncloud.cn/repository/snapshots/</url>
-        </repository>
-    </repositories>
 
     <dependencyManagement>
         <dependencies>
@@ -89,6 +75,11 @@
             <dependency>
                 <groupId>top.kdla.framework</groupId>
                 <artifactId>kdla-component-common</artifactId>
+                <version>${kdla.framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.kdla.framework</groupId>
+                <artifactId>kdla-component-model</artifactId>
                 <version>${kdla.framework.version}</version>
             </dependency>
             <dependency>
@@ -113,12 +104,17 @@
             </dependency>
             <dependency>
                 <groupId>top.kdla.framework</groupId>
+                <artifactId>kdla-component-log</artifactId>
+                <version>${kdla.framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.kdla.framework</groupId>
                 <artifactId>kdla-component-supplement</artifactId>
                 <version>${kdla.framework.version}</version>
             </dependency>
             <dependency>
                 <groupId>top.kdla.framework</groupId>
-                <artifactId>kdla-component-supplement-dingding</artifactId>
+                <artifactId>kdla-component-supplement-cache</artifactId>
                 <version>${kdla.framework.version}</version>
             </dependency>
             <!-- kdla end  -->
@@ -349,11 +345,6 @@
                 <version>${zxing.version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons-io.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-jsr310</artifactId>
                 <version>2.10.3</version>
@@ -398,6 +389,27 @@
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
                 <version>4.9.0</version>
+            </dependency>
+
+            <!-- Spring Cloud OpenFeign -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${spring-cloud-openfeign.version}</version>
+            </dependency>
+
+            <!-- Redisson 分布式锁 -->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+
+            <!-- RocketMQ Spring Boot Starter -->
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq.spring.version}</version>
             </dependency>
 
         </dependencies>

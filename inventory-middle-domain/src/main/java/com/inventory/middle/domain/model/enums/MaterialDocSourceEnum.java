@@ -38,4 +38,12 @@ public enum MaterialDocSourceEnum implements IEnum<String> {
         return Arrays.asList(values()).stream().filter(e -> code.equals(e.getCode())).findFirst().orElse(null);
     }
 
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

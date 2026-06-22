@@ -42,4 +42,12 @@ public enum MaterialDocTypeEnum implements IEnum<Integer> {
     public static boolean checkByCode(Integer code){
         return StringUtils.isNotBlank(valueByCode(code));
     }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

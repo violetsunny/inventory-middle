@@ -62,4 +62,9 @@ public class CommonConstant {
 
     public static final String TEXT_BOX = "textbox";
     public static final String POSITIVE_INTEGER_REG = "^\\d+$";
+    public static final String BATCH_TIME = "batchTime";
+    public static final String PRODUCE_DATE = "produceDate";
+    public static final String APP_KEY_INVENTORY_CENTER = "inventory-center";
+    public static final String ORDER_BY_ID_DESC = "id desc";
+    public static final String UNIT_BIZ_CODE = "enn";
 }

@@ -1,32 +1,185 @@
 spring:
-  #Redis配置
+  application:
+    name: inventory-middle
+  # 数据源配置（本地开发，从 Apollo RDFA.db 迁移）
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/inventory?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      test-on-borrow: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+  # Redis 配置（从 Apollo RDFA.redis 迁移）
   redis:
     host: 127.0.0.1
     port: 6379
     password:
-    lettuce: # 这里标明使用lettuce配置
+    database: 0
+    lettuce:
       pool:
-        max-active: 8   #连接池最大连接数（使用负值表示没有限制）
-        max-wait: -1ms  #连接池最大阻塞等待时间（使用负值表示没有限制）
-        max-idle: 5     #连接池中的最大空闲连接
-        min-idle: 0     #连接池中的最小空闲连接
-    timeout: 10000ms    #连接超时时间（毫秒）
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 5
+        min-idle: 0
+    timeout: 10000ms
 
 server:
-  address:
   port: 8081
   servlet:
     context-path: /inventory
   tomcat:
     uri-encoding: UTF-8
 
-dubbo:
-  application:
-    name: inventory-provider
-  registry:
-    address: nacos://127.0.0.1:8848
-  scan:
-    base-packages: com.inventory.remote.service
-  protocol:
-    name: dubbo
-    port: 20880
+# MyBatis Plus 配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.inventory.middle.infra.persistence.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# OpenFeign 配置
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 10000
+
+# 日志配置
+logging:
+  level:
+    com.inventory.middle: DEBUG
+    com.baomidou.mybatisplus: INFO
+
+# RocketMQ 配置（本地占位，实际部署时修改）
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: inventory-middle-producer
+  topic: inventory-topic
+  consumer:
+    inventory-change:
+      topic: inventory-topic
+      group: inventory-change-consumer-group
+      tag: "*"
+    sn-material-doc-in:
+      topic: inventory-topic
+      group: sn-material-doc-in-consumer-group
+      tag: MATERIAL_DOC_IN
+    sn-material-doc-cancel:
+      topic: inventory-topic
+      group: sn-material-doc-cancel-consumer-group
+      tag: MATERIAL_DOC_CANCEL
+    monitor-rule:
+      topic: inventory-monitor-topic
+      group: monitor-rule-consumer-group
+      tag: "*"
+    inventory-bff:
+      topic: inventory-bff-topic
+      group: inventory-bff-consumer-group
+      tag: "*"
+
+    inventory-alert:
+      topic: stock-inventory-center-topic
+      group: monitorAlert
+      tag: inventoryAlertCreateTag
+    monitor-inoutbound:
+      topic: stock-inventory-center-topic
+      group: inOrOutBound
+      tag: "*"
+    # Plan 模块 Consumer 配置（topic/group 以原 Nacos 实际值为准，以下为占位符）
+    plan-demand:
+      topic: ${rocketmq.plan.demand.topic:scm-plan-demand-topic}
+      group: ${rocketmq.plan.demand.consumer.group:scm-plan-management-demand-consumer}
+    plan-inventory:
+      topic: ${rocketmq.plan.inventory.topic:scm-plan-inventory-topic}
+      group: ${rocketmq.plan.inventory.consumer.group:scm-plan-management-inventory-consumer}
+  # Plan 模块 MQ topic/group 原始值（供 @RocketMQMessageListener 引用）
+  plan:
+    demand:
+      topic: scm-plan-demand-topic
+      consumer:
+        group: scm-plan-management-demand-consumer
+    inventory:
+      topic: scm-plan-inventory-topic
+      consumer:
+        group: scm-plan-management-inventory-consumer
+
+# 移动平均价相关配置
+inventory:
+  map:
+    enabled: true
+  task:
+    annual-inspection:
+      cron: "0 0 2 * * ?"
+  product:
+    special:
+      token: ""
+  code:
+    create:
+      number:
+        limit:
+          line: 200
+          total: 1000
+
+remote:
+  product:
+    center:
+      url: ${PRODUCT_CENTER_URL:http://localhost:8082/product}
+  uniformPush:
+    url: ${UNIFORM_PUSH_URL:}
+    tenantId: ""
+    templateCode: ""
+    emailContentKey: ""
+
+alert:
+  interval:
+    minute: 60
+
+# KDLA 框架配置
+kdla:
+  # 统一异常处理（UnifiedExceptionControllerAdvice）
+  # BizException → 业务错误码 + warn 日志；SysException/未知异常 → error 日志
+  exception:
+    handler:
+      enabled: true
+  # @CatchAndLog + @StopWatchWrapper + @MdcDot 切面（全部统一在 kdla.config.* 下）
+  config:
+    catch-log:
+      enabled: true   # @CatchAndLog：方法入参/出参/耗时 + BizException/SysException 处理
+    stop-watch:
+      enabled: true   # @StopWatchWrapper（logHead/msg 参数）：方法耗时监控
+    mdc:
+      enabled: true   # @MdcDot（bizCode 参数）：链路 traceId 注入
+
+# 城燃项目配置（plan 迁移：UrbanGasProjectController）
+urbanGasProject:
+  standardLeadTime: 25
+  changeBufferTime: 5
+
+# Plan 定时任务 cron 配置（以原 Apollo/Nacos 实际值为准，以下为占位符）
+plan:
+  job:
+    generate:
+      cron: "0 0 1 * * ?"
+    demandPlanDetailGenerate:
+      cron: "0 0 2 * * ?"
+    demandSupplyStockGenerate:
+      cron: "0 30 1 * * ?"
+    planOrderOverdueCheck:
+      cron: "0 0 3 * * ?"
+    planRedisOperate:
+      cron: "0 0 4 * * ?"

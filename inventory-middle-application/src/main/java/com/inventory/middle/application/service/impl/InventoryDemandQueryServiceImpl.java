@@ -48,5 +48,39 @@ public class InventoryDemandQueryServiceImpl implements InventoryDemandQueryServ
 		return dtoConvertor.fromInventoryDemand(inventorydemandRepository.findById(new InventoryDemandId(id)));
 	}
 
+	@Override
+	public java.util.Map<java.time.LocalDate, java.math.BigDecimal> queryDemandByDay(
+			com.inventory.middle.domain.model.bo.inventory.InventoryDemandByDayQueryBO query) {
+		java.util.List<com.inventory.middle.domain.model.bo.inventory.InventoryDemandByDayRespBO> list =
+				inventorydemandRepository.queryDemandByDay(query);
+		java.util.Map<java.time.LocalDate, java.math.BigDecimal> result = new java.util.LinkedHashMap<>();
+		if (list != null) {
+			for (com.inventory.middle.domain.model.bo.inventory.InventoryDemandByDayRespBO item : list) {
+				if (item.getDeadlineDate() != null) {
+					java.time.LocalDate date = item.getDeadlineDate().toInstant()
+							.atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+					result.put(date, item.getUnrestricted() != null ? item.getUnrestricted() : java.math.BigDecimal.ZERO);
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public java.math.BigDecimal queryOverdueDemandTotal(
+			com.inventory.middle.domain.model.bo.inventory.InventoryDemandByDayQueryBO query) {
+		java.util.List<com.inventory.middle.domain.model.bo.inventory.InventoryDemandByDayRespBO> list =
+				inventorydemandRepository.queryDemandByDay(query);
+		java.math.BigDecimal total = java.math.BigDecimal.ZERO;
+		if (list != null) {
+			for (com.inventory.middle.domain.model.bo.inventory.InventoryDemandByDayRespBO item : list) {
+				if (item.getUnrestricted() != null) {
+					total = total.add(item.getUnrestricted());
+				}
+			}
+		}
+		return total;
+	}
+
 }
 

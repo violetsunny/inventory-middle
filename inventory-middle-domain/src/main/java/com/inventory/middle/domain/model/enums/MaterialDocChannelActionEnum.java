@@ -24,4 +24,12 @@ public enum MaterialDocChannelActionEnum implements IEnum<String> {
     private String code;
     private String desc;
 
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

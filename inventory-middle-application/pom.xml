@@ -34,25 +34,17 @@
             <artifactId>knife4j-springdoc-ui</artifactId>
         </dependency>
 
+        <!-- PageHelper for BOM paged queries -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+        </dependency>
 
-        <!-- Dubbo Begin -->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.dubbo</groupId>-->
-<!--            <artifactId>dubbo-spring-boot-starter</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.dubbo</groupId>-->
-<!--            <artifactId>dubbo-registry-nacos</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.nacos</groupId>-->
-<!--            <artifactId>nacos-spring-context</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.nacos</groupId>-->
-<!--            <artifactId>nacos-client</artifactId>-->
-<!--        </dependency>-->
-        <!--Dubbo End-->
+        <!-- fastjson for BOM Redis caching -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
 
     </dependencies>
 

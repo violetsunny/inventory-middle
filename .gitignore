@@ -24,3 +24,11 @@
 hs_err_pid*
 
 target/
+
+.classpath
+.factorypath
+.project
+.settings/
+
+## AI 相关文件
+

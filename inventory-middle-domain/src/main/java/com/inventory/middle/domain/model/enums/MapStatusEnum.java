@@ -32,4 +32,12 @@ public enum MapStatusEnum implements IEnum<Integer> {
         }
         return Arrays.asList(values()).stream().filter(e->code.equals(e.getCode())).map(MapStatusEnum::getDesc).findFirst().orElse("");
     }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

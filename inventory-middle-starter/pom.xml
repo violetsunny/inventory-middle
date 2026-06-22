@@ -28,6 +28,11 @@
             <groupId>com.inventory.middle</groupId>
             <artifactId>inventory-middle-application</artifactId>
         </dependency>
+        <!-- OpenFeign（@EnableFeignClients 需要） -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

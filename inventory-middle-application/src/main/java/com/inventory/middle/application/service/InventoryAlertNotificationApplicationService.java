@@ -2,6 +2,7 @@ package com.inventory.middle.application.service;
 
 
 import com.inventory.middle.client.dto.command.InventoryAlertNotificationCommand;
+import com.inventory.middle.domain.model.bo.mq.InventoryAlertMessageBO;
 
 import java.util.List;
 
@@ -35,5 +36,12 @@ public interface InventoryAlertNotificationApplicationService {
      * @param ids
      */
     boolean deleteBatch(List<Long> ids);
+
+    /**
+     * 处理预警通知消息（MQ触发，发送邮件/钉钉通知）
+     *
+     * @param alertMessageBO 预警消息体
+     */
+    void sendAlertNotification(InventoryAlertMessageBO alertMessageBO);
 
 }

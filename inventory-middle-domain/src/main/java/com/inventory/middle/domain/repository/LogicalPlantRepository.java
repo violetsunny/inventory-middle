@@ -10,48 +10,28 @@ import java.util.Map;
 
 /**
  * 逻辑仓库表Repository
- *
- * @author kll
- * @email kll@job.cn
- * @date 2023-03-13 18:25:32
  */
 public interface LogicalPlantRepository {
 
-    /**
-    * 分页查询
-    *
-    * @param pageQuery
-    * @param params
-    * @return
-    */
     PageResponse<LogicalPlant> queryPage(PageQuery pageQuery, Map<String, Object> params);
 
-    /**
-     * 通过ID获取逻辑仓库表
-     *
-     * @param id
-     * @return
-     */
-     LogicalPlant findById(LogicalPlantId id);
+    LogicalPlant findById(LogicalPlantId id);
 
-    /**
-     * 保存
-     *
-     * @param logicalplant
-     */
+    /** 按逻辑仓库编码查询 */
+    LogicalPlant findByLogicalPlantNo(String logicalPlantNo);
+
+    /** 按 idList / noList 批量查询 */
+    List<LogicalPlant> listByIdsOrNos(String tenantId, List<Long> idList, List<String> noList);
+
     boolean store(LogicalPlant logicalplant);
 
-    /**
-     * 更新
-     *
-     * @param logicalplant
-     */
     boolean update(LogicalPlant logicalplant);
 
-    /**
-     * 删除
-     *
-     * @param ids
-     */
     boolean delete(List<LogicalPlantId> ids);
+
+    /** 按物理仓库编码查询逻辑仓列表 */
+    List<LogicalPlant> listByWarehouseNo(String warehouseNo);
+
+    /** 按外部仓库编码查询逻辑仓（plan 迁移：queryLogicalPlantByOutPlantNo） */
+    LogicalPlant findByOutPlantNo(String outPlantNo, String tenantId);
 }

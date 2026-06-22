@@ -54,4 +54,8 @@ public interface InventoryDemandRepository {
      * @param ids
      */
     boolean delete(List<InventoryDemandId> ids);
+
+    /** 按天聚合需求数量（plan迁移：queryDemandInventory / queryOverdueDemandInventory） */
+    List<com.inventory.middle.domain.model.bo.inventory.InventoryDemandByDayRespBO> queryDemandByDay(
+            com.inventory.middle.domain.model.bo.inventory.InventoryDemandByDayQueryBO query);
 }

@@ -51,4 +51,12 @@ public enum StockTypeEnum implements IEnum<Integer> {
         return Arrays.stream(StockTypeEnum.values()).anyMatch(v -> v.getCode().equals(code));
     }
 
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

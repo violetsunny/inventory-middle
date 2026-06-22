@@ -52,4 +52,12 @@ public enum BatchNoEnum implements IEnum<String> {
         return Stream.of(BatchNoEnum.values()).filter(d -> d.getMaterialAdjustTypeEnum().equals(materialAdjustTypeEnum)).findFirst().orElse(BatchNoEnum.DEFAULT)
             .getCode();
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

@@ -2,12 +2,14 @@ package com.inventory.middle.infra.persistence.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.inventory.middle.domain.model.bo.inventory.InventorySupplyByDayQueryBO;
+import com.inventory.middle.domain.model.bo.inventory.InventorySupplyByDayRespBO;
 import com.inventory.middle.infra.persistence.entity.InventorySupplyDo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 库存-供给Mapper
@@ -19,35 +21,14 @@ import java.util.List;
 @Mapper
 public interface InventorySupplyMapper extends BaseMapper<InventorySupplyDo> {
 
-    /**
-     * 分页查询
-     *
-     * @param page
-     * @param params
-     * @return
-     */
     IPage<InventorySupplyDo> queryPage(IPage<InventorySupplyDo> page, @Param("params") Map<String, Object> params);
 
-    /**
-     * 查询
-     *
-     * @param params
-     * @return
-     */
     InventorySupplyDo queryEntity(@Param("params") Map<String, Object> params);
 
-    /**
-     * 查询
-     *
-     * @param params
-     * @return
-     */
     List<InventorySupplyDo> queryList(@Param("params") Map<String, Object> params);
 
-    /**
-     * 根据ID查询
-     * @param id
-     * @return
-     */
     InventorySupplyDo findById(@Param("id") Long id);
+
+    /** 按天聚合供给数量（plan迁移：querySupplyInventory / queryOverdueSupplyInventory） */
+    List<InventorySupplyByDayRespBO> queryInventorySupplyByDay(InventorySupplyByDayQueryBO query);
 }

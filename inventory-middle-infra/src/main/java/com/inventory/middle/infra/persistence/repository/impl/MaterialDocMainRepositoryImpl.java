@@ -72,4 +72,19 @@ public class MaterialDocMainRepositoryImpl extends ServiceImpl<MaterialDocMainMa
 		return this.removeByIds(tempIds);
 	}
 
+	@Override
+	public MaterialDocMain findByOriginalNo(String originalNo) {
+		MaterialDocMainDo doObj = baseMapper.queryByMaterialDocByOriginalNo(originalNo);
+		return convertor.toMaterialDocMain(doObj);
+	}
+
+	@Override
+	public List<MaterialDocMain> exportList(Map<String, Object> params) {
+		List<MaterialDocMainDo> doList = baseMapper.exportListByParams(params);
+		if (CollectionUtils.isEmpty(doList)) {
+			return new ArrayList<>();
+		}
+		return doList.stream().map(convertor::toMaterialDocMain).collect(Collectors.toList());
+	}
+
 }

@@ -1,7 +1,6 @@
 package com.inventory.middle.client.dto.material;
 
 import lombok.Data;
-import top.kdla.framework.dto.EnumResponse;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,17 +11,17 @@ import java.util.List;
  * @date 2021/6/11
  */
 @Data
-public class BusinessTypeMappingDto implements Serializable {
+public class BusinessTypeMappingDTO implements Serializable {
 
     /**
      * 业务类型
      */
-    private EnumResponse businessType;
+    private EnumMappingDTO businessType;
 
     /**
      * 移动类型
      */
-    private EnumResponse adjustType;
+    private EnumMappingDTO adjustType;
 
     /**
      * 出入标识符
@@ -32,7 +31,7 @@ public class BusinessTypeMappingDto implements Serializable {
     /**
      * 是否参考单据下拉集合
      */
-    private List<EnumResponse> refTypeList;
+    private List<EnumMappingDTO> refTypeList;
 
     /**
      * 参考单据类型

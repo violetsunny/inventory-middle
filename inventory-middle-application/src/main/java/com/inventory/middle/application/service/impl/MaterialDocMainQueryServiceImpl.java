@@ -13,7 +13,9 @@ import com.inventory.middle.client.dto.MaterialDocMainDto;
 import com.inventory.middle.client.dto.query.MaterialDocMainPageQuery;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
+
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,5 +50,21 @@ public class MaterialDocMainQueryServiceImpl implements MaterialDocMainQueryServ
 		return dtoConvertor.fromMaterialDocMain(materialdocmainRepository.findById(new MaterialDocMainId(id)));
 	}
 
+	@Override
+	public MaterialDocMainDto getByOriginalNo(String originalNo) {
+		return dtoConvertor.fromMaterialDocMain(materialdocmainRepository.findByOriginalNo(originalNo));
+	}
+
+	@Override
+	public List<MaterialDocMainDto> exportList(MaterialDocMainPageQuery pageQuery) {
+		Map<String, Object> params = BeanUtil.beanToMap(pageQuery);
+		List<MaterialDocMain> doList = materialdocmainRepository.exportList(params);
+		if (doList == null) {
+			return Collections.emptyList();
+		}
+		return doList.stream().map(dtoConvertor::fromMaterialDocMain).collect(Collectors.toList());
+	}
+
 }
+
 

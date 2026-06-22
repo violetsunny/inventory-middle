@@ -1,103 +1,105 @@
 package com.inventory.middle.interfaces.web;
 
-
-import top.kdla.framework.dto.SingleResponse;
-import top.kdla.framework.dto.PageResponse;
-import top.kdla.framework.dto.MultiResponse;
-import top.kdla.framework.catchlog.CatchAndLog;
-import top.kdla.framework.validator.group.AddGroup;
-import top.kdla.framework.validator.group.UpdateGroup;
-import com.inventory.middle.application.service.LogicalPlantQueryService;
 import com.inventory.middle.application.service.LogicalPlantApplicationService;
+import com.inventory.middle.application.service.LogicalPlantQueryService;
 import com.inventory.middle.client.dto.LogicalPlantDto;
 import com.inventory.middle.client.dto.command.LogicalPlantCommand;
 import com.inventory.middle.client.dto.query.LogicalPlantPageQuery;
-import com.inventory.middle.application.convertor.LogicalPlantDtoConvertor;
+import com.inventory.middle.interfaces.support.UserContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
-import java.util.*;
+import org.springframework.web.bind.annotation.*;
+import top.kdla.framework.dto.MultiResponse;
+import top.kdla.framework.dto.PageResponse;
+import top.kdla.framework.dto.SingleResponse;
+
 import javax.annotation.Resource;
+import java.util.List;
+import top.kdla.framework.log.catchlog.CatchAndLog;
+import com.inventory.middle.domain.model.enums.LogicalPlantTypeEnum;
+import lombok.Data;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 
 
 /**
- * 逻辑仓库表Controller
- *
- * @author kll
- * @email kll@job.cn
- * @date 2023-03-13 19:56:27
+ * 逻辑仓库 Controller（从 inventory-center-bff 迁移）
+ * 路径与 BFF 保持一致：/logicalPlant
  */
-@Tag(name = " 逻辑仓库表管理")
-@RestController
-@RequestMapping("/logicalplant")
-@Slf4j
+@Tag(name = "逻辑仓库管理")
 @CatchAndLog
+@RestController
+@RequestMapping("/logicalPlant")
+@Slf4j
 public class LogicalPlantController {
 
     @Resource
-    private LogicalPlantApplicationService logicalplantApplicationService;
+    private LogicalPlantApplicationService logicalPlantApplicationService;
     @Resource
-    private  LogicalPlantQueryService logicalplantQueryService;
-    @Resource
-    private LogicalPlantDtoConvertor  logicalplantDtoConvertor;
+    private LogicalPlantQueryService logicalPlantQueryService;
 
+    @Operation(summary = "逻辑仓库类型枚举")
+    @GetMapping("/types")
+    public SingleResponse<List<Map<String, Object>>> types() {
+        List<Map<String, Object>> list = Arrays.stream(LogicalPlantTypeEnum.values())
+                .map(e -> {
+                    Map<String, Object> m = new java.util.LinkedHashMap<>();
+                    m.put("code", e.getCode());
+                    m.put("mark", e.getMark());
+                    m.put("desc", e.getDesc());
+                    return m;
+                }).collect(Collectors.toList());
+        return SingleResponse.buildSuccess(list);
+    }
 
-    /**
-     * 逻辑仓库表分页查询
-     */
-    @Operation(summary="逻辑仓库表分页查询")
+    @Operation(summary = "逻辑仓库分页查询")
     @PostMapping("/page")
-    public PageResponse<LogicalPlantDto> page(@RequestBody LogicalPlantPageQuery logicalplantPageQuery) {
-        return logicalplantQueryService.queryPage(logicalplantPageQuery);
+    public PageResponse<LogicalPlantDto> page(@RequestBody LogicalPlantPageQuery pageQuery) {
+        pageQuery.setTenantId(UserContextHolder.getTenantId());
+        return logicalPlantQueryService.queryPage(pageQuery);
     }
 
-    /**
-     * 逻辑仓库表list查询
-     */
-    @Operation(summary="逻辑仓库表list查询")
+    @Operation(summary = "逻辑仓库列表查询")
     @PostMapping("/list")
-            public MultiResponse<LogicalPlantDto> list() {
-        //TODO list query
-        return MultiResponse.buildSuccess(null);
+    public MultiResponse<LogicalPlantDto> list(@RequestBody LogicalPlantPageQuery pageQuery) {
+        pageQuery.setTenantId(UserContextHolder.getTenantId());
+        return MultiResponse.buildSuccess(logicalPlantQueryService.list(pageQuery));
     }
 
-    /**
-     * 逻辑仓库表信息
-     */
-    @Operation(summary="逻辑仓库表信息")
-    @GetMapping("/find/{id}")
-    public SingleResponse<LogicalPlantDto> findById(@PathVariable("id") Long id) {
-        return SingleResponse.buildSuccess(logicalplantQueryService.findById(id));
+    @Operation(summary = "逻辑仓库列表查询（body）")
+    @PostMapping("/list/query")
+    public MultiResponse<LogicalPlantDto> queryList(@RequestBody LogicalPlantPageQuery pageQuery) {
+        pageQuery.setTenantId(UserContextHolder.getTenantId());
+        return MultiResponse.buildSuccess(logicalPlantQueryService.list(pageQuery));
     }
 
-    /**
-     * 保存逻辑仓库表
-     */
-    @Operation(summary="保存逻辑仓库表")
-    @PostMapping("/save")
-    public SingleResponse<Boolean> save(@Validated(AddGroup.class) @RequestBody LogicalPlantCommand logicalplantCommand) {
-        return SingleResponse.buildSuccess(logicalplantApplicationService.add(logicalplantCommand));
-
+    @Operation(summary = "创建逻辑仓库")
+    @PostMapping("/create")
+    public SingleResponse<Boolean> create(@RequestBody LogicalPlantCommand command) {
+        command.setTenantId(UserContextHolder.getTenantId());
+        command.setCreatorId(UserContextHolder.getUserId());
+        return SingleResponse.buildSuccess(logicalPlantApplicationService.add(command));
     }
 
-    /**
-     * 修改逻辑仓库表
-     */
-    @Operation(summary="修改逻辑仓库表")
+    @Operation(summary = "更新逻辑仓库")
     @PostMapping("/update")
-    public SingleResponse<Boolean> update(@Validated(UpdateGroup.class) @RequestBody LogicalPlantCommand logicalplantCommand) {
-        return SingleResponse.buildSuccess(logicalplantApplicationService.update(logicalplantCommand));
+    public SingleResponse<Boolean> update(@RequestBody LogicalPlantCommand command) {
+        command.setUpdatorId(UserContextHolder.getUserId());
+        return SingleResponse.buildSuccess(logicalPlantApplicationService.update(command));
     }
 
-    /**
-     * 删除逻辑仓库表
-     */
-    @Operation(summary="删除逻辑仓库表")
-    @PostMapping("/delete")
-    public SingleResponse<Boolean> delete(@RequestBody List<Long> ids) {
-        return SingleResponse.buildSuccess(logicalplantApplicationService.deleteBatch(ids));
+    @Operation(summary = "逻辑仓库详情")
+    @PostMapping("/detail")
+    public SingleResponse<LogicalPlantDto> detail(@RequestBody LogicalPlantPageQuery query) {
+        if (query.getId() != null) {
+            return SingleResponse.buildSuccess(logicalPlantQueryService.findById(query.getId()));
+        }
+        if (query.getLogicalPlantNo() != null && !query.getLogicalPlantNo().isEmpty()) {
+            return SingleResponse.buildSuccess(logicalPlantQueryService.findByNo(query.getLogicalPlantNo()));
+        }
+        return SingleResponse.buildSuccess(null);
     }
-
 }

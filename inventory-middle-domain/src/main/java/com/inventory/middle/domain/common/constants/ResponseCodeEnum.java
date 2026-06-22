@@ -89,4 +89,12 @@ public enum ResponseCodeEnum {
         return null;
     }
 
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

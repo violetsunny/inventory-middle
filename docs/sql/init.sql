@@ -82,6 +82,17 @@ PRIMARY KEY (`id`),
 UNIQUE KEY `uk_key` (`code`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流水号配置表';
 
+INSERT INTO code_generator_cfg(code, rule, is_cache, cache_num) VALUES
+('WAREHOUSE_NO',      'WH+yyyyMMdd+6',   1, 100),
+('LOGICAL_PLANT_NO',  'LP+yyyyMMdd+6',   1, 100),
+('MONITOR_RULE_NO',   'MR+yyyyMMdd+6',   1, 100),
+('MATERIAL_DOC_NO',   'INV+yyyyMMdd+6',  1, 100),
+('MATERIAL_BATCH_NO', 'MB+yyyyMMdd+6',   1, 100),
+('MAP_CODE',          'MAP+yyyyMMdd+6',  1, 100),
+('MAP_SUB_CODE',      'MAPS+yyyyMMdd+6', 1, 100);
+-- STORAGE_LOCATION_NO 按实际 locationTypeMark 值各插一行，如：
+-- ('STORAGE_LOCATION_NO_RACK', 'RACK+yyyyMMdd+6', 1, 100)
+
 
 CREATE TABLE `inventory_demand` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '需求id',
@@ -606,3 +617,21 @@ CREATE TABLE `shipment_line` (
  PRIMARY KEY (`id`),
  KEY `idx_shipment_id` (`shipment_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='交运单明细';
+
+-- -------------------------------------------------------
+-- product-center 本地沉淀：SKU 批次数据
+-- -------------------------------------------------------
+CREATE TABLE `product_sku_batch` (
+  `id`          bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `sku_code`    varchar(64)  NOT NULL DEFAULT '' COMMENT 'SKU 编码',
+  `batch_code`  varchar(64)  NOT NULL DEFAULT '' COMMENT '批次编码',
+  `tenant_id`   varchar(32)  NOT NULL DEFAULT '' COMMENT '租户 ID',
+  `ext`         text                  DEFAULT NULL COMMENT '扩展信息（JSON）',
+  `updator_id`  varchar(32)  NOT NULL DEFAULT '' COMMENT '操作人',
+  `deleted`     tinyint(1)   NOT NULL DEFAULT '0' COMMENT '逻辑删除（0=正常,1=已删除）',
+  `create_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_sku_batch_tenant` (`sku_code`, `batch_code`, `tenant_id`),
+  KEY `idx_tenant_sku` (`tenant_id`, `sku_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SKU 批次数据（product-center 本地沉淀）';

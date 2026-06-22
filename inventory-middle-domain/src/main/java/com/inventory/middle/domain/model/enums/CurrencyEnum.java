@@ -4,13 +4,11 @@ import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
 
-import lombok.Getter;
 import top.kdla.framework.dto.IEnum;
 
 /**
  * 币种枚举类
  */
-@Getter
 public enum CurrencyEnum implements IEnum<String> {
     CNY("CNY", 2, "人民币"),
     USD("USD", 2, "美元"),
@@ -52,5 +50,17 @@ public enum CurrencyEnum implements IEnum<String> {
             return Boolean.FALSE;
         }
         return Arrays.stream(CurrencyEnum.values()).anyMatch(v -> StringUtils.equals(v.getCode(),code));
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public Integer getDigits() {
+        return digits;
+    }
+
+    public String getDesc() {
+        return desc;
     }
 }

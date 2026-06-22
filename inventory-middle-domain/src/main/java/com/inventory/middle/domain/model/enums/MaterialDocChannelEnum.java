@@ -50,4 +50,12 @@ public enum MaterialDocChannelEnum implements IEnum<Integer> {
         return Objects.nonNull(getByCode(code));
     }
 
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

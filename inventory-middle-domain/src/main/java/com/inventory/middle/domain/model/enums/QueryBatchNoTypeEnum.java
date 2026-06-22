@@ -23,4 +23,12 @@ public enum QueryBatchNoTypeEnum implements IEnum<Integer> {
 
     private Integer code;
     private String desc;
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 }

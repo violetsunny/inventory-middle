@@ -19,14 +19,8 @@ import java.util.Objects;
 @Mapper(componentModel = "spring")
 public interface InventoryMonitorRuleLineConvertor {
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	InventoryMonitorRuleLine toInventoryMonitorRuleLine(InventoryMonitorRuleLineDo inventorymonitorrulelineDo);
 
-	@Mappings({
-			@Mapping(source = "id", target = "id")
-	})
 	InventoryMonitorRuleLineDo fromInventoryMonitorRuleLine(InventoryMonitorRuleLine inventorymonitorruleline);
 
 	default InventoryMonitorRuleLineId id2id(Long id) {

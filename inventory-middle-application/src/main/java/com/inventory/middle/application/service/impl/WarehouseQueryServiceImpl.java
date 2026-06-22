@@ -48,5 +48,16 @@ public class WarehouseQueryServiceImpl implements WarehouseQueryService {
 		return dtoConvertor.fromWarehouse(warehouseRepository.findById(new WarehouseId(id)));
 	}
 
-}
 
+        @Override
+        public java.util.List<WarehouseDto> list(WarehousePageQuery pageQuery) {
+                // 全量查询：强制覆盖 pageSize，防止默认 10 条截断
+                pageQuery.setPageSize(Integer.MAX_VALUE);
+                pageQuery.setPageNum(1);
+                java.util.Map<String, Object> params = cn.hutool.core.bean.BeanUtil.beanToMap(pageQuery);
+                top.kdla.framework.dto.PageResponse<com.inventory.middle.domain.model.entity.Warehouse> page =
+                        warehouseRepository.queryPage(pageQuery, params);
+                return page.getData().stream().map(dtoConvertor::fromWarehouse).collect(java.util.stream.Collectors.toList());
+        }
+
+}

@@ -10,48 +10,22 @@ import java.util.Map;
 
 /**
  * 存储地点表Repository
- *
- * @author kll
- * @email kll@job.cn
- * @date 2023-03-13 18:25:32
  */
 public interface StorageLocationRepository {
 
-    /**
-    * 分页查询
-    *
-    * @param pageQuery
-    * @param params
-    * @return
-    */
     PageResponse<StorageLocation> queryPage(PageQuery pageQuery, Map<String, Object> params);
 
-    /**
-     * 通过ID获取存储地点表
-     *
-     * @param id
-     * @return
-     */
-     StorageLocation findById(StorageLocationId id);
+    StorageLocation findById(StorageLocationId id);
 
-    /**
-     * 保存
-     *
-     * @param storagelocation
-     */
+    /** 按存储地点编码查询 */
+    StorageLocation findByStorageLocationNo(String storageLocationNo);
+
+    /** 按逻辑仓库ID查询列表 */
+    List<StorageLocation> listByLogicalPlantId(Long logicalPlantId);
+
     boolean store(StorageLocation storagelocation);
 
-    /**
-     * 更新
-     *
-     * @param storagelocation
-     */
     boolean update(StorageLocation storagelocation);
 
-    /**
-     * 删除
-     *
-     * @param ids
-     */
     boolean delete(List<StorageLocationId> ids);
 }

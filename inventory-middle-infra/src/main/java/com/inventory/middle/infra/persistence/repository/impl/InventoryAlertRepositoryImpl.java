@@ -72,4 +72,23 @@ public class InventoryAlertRepositoryImpl extends ServiceImpl<InventoryAlertMapp
 		return this.removeByIds(tempIds);
 	}
 
+	@Override
+	public boolean batchStore(List<InventoryAlert> alerts) {
+		if (CollectionUtils.isEmpty(alerts)) {
+			return true;
+		}
+		List<InventoryAlertDo> doList = alerts.stream()
+				.map(e -> convertor.fromInventoryAlert(e))
+				.collect(Collectors.toList());
+		return this.saveBatch(doList);
+	}
+
+	@Override
+	public boolean batchDeleteByIds(List<Long> ids) {
+		if (CollectionUtils.isEmpty(ids)) {
+			return true;
+		}
+		return this.removeByIds(ids);
+	}
+
 }
