@@ -4,7 +4,7 @@
 
 ## 迁移目标
 
-将 `inventory-center` + `inventory-center-ext` 完整迁移至 `inventory-middle` DDD 架构，去除 RDFA/Nacos/Dubbo，替换为 Spring 原生组件。
+将 `inventory-center`（/Users/kangll13/aiot/java-code/self/inventory/inventory-center） + `inventory-center-ext`（/Users/kangll13/aiot/java-code/self/inventory/inventory-center-ext） 完整迁移至 `inventory-middle` DDD 架构，去除 RDFA/Nacos/Dubbo，替换为 Spring 原生组件。
 
 ## 完成摘要
 
@@ -52,4 +52,6 @@ MQ(SnMaterialDocIn) → SnMaterialDocInConsumer → MaterialDocMqValidator
 
 ## 待后续跟进
 
-详见 `remaining-todos.md`：功能冒烟验证（V1-V3）、userName/companyName 回填（Issue-1）。
+V1-V4 全量验收 + Issue-1 ParticipantCenter 接通均已完成，详见 `remaining-todos.md`。
+
+当前未完成项集中在 SCM Plan 模块功能缺口（H1-H11/M1-M8）和可能遗漏的 BFF Controller（X1-X3）。

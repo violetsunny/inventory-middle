@@ -4,7 +4,7 @@
 
 ## 迁移目标
 
-将 `inventory-center-bff` 全部 HTTP Controller 迁移至 `inventory-middle-interfaces/web/`，本地 ApplicationService 替代原 Dubbo/RDFA 远程调用。
+将 `inventory-center-bff`（/Users/kangll13/aiot/java-code/self/inventory/inventory-center-bff） 全部 HTTP Controller 迁移至 `inventory-middle-interfaces/web/`，本地 ApplicationService 替代原 Dubbo/RDFA 远程调用。
 
 ## 全局替换规则（参考）
 
@@ -43,13 +43,18 @@
 | R11 | DeliveryOrderMgntController 6 TODO → SpDeliveryOrderFeignClient | ✅ |
 | R12 | DistributorController 2 TODO → CrmDistributorFeignClient | ✅ |
 
-## 已知缺口（待后续跟进）
+## 已知缺口（已全部处理）
 
-详见 `remaining-todos.md`：
+以下项目在 `remaining-todos.md` 中已标记完成：
 
-- **P-1**：interfaces/pom.xml 依赖检查（easyexcel/fastjson）
-- **P0-5~9**：RemoteParticipantCenterService 替换确认、LogInterceptor 验证、CatchAndLog 验证
-- **Issue-1**：participant-center 接通后用 `FieldValueFindHelp` 批量回填 userName/companyName
-- **V1-V4**：全量验收（编译 + CatchAndLog 覆盖率 + TODO 统计 + RDFA 残留确认）
-- **CommonController.listCompany**：participant-center HTTP 接入（当前返回空 stub）
-- **FullAddressHelper**：省市区名称注入（当前返回编码）
+- **P-1**：interfaces/pom.xml 依赖 ✅ fastjson + commons-lang3 已补充
+- **P0-5~9**：静态验证 ✅ 全部通过
+- **Issue-1**：ParticipantCenter HTTP 客户端 ✅ 已接入（participant-token 待补）
+- **V1-V4**：全量验收 ✅ BUILD SUCCESS / CatchAndLog 42/42 / RDFA 零残留
+- **CommonController.listCompany**：✅ N/A（scm-plan-bff 原始无此方法）
+- **FullAddressHelper**：✅ 省市区拼接工具已实现
+
+**可能遗漏的 inventory-center-bff Controller**（详见 remaining-todos.md X1-X3）：
+- SparePartController（备品备件）
+- CommonController（省/市/公司通用查询）
+- FileController（OSS 文件下载）

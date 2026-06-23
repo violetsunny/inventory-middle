@@ -1,13 +1,13 @@
 # SCM Plan 迁移计划（scm-plan-management + scm-plan-bff → inventory-middle）
 
-> **状态：✅ 代码迁移 + 全量编译已完成（2026-06-22）。剩余：冒烟验证 + 路由检查 + git commit（组 O 步骤 2-4）。**
+> **状态：✅ 代码迁移 + 全量编译 + mock 验证已完成（2026-06-23）。详见 remaining-todos.md 中的未完成项（H1-H11/M1-M8）。**
 
 ## 迁移目标
 
-将 `scm-plan-management` + `scm-plan-bff` 迁移进 `inventory-middle` 现有各模块，以 `plan` 子包并列。
+将 `scm-plan-management`（/Users/kangll13/aiot/java-code/self/inventory/scm-plan-management） + `scm-plan-bff`（/Users/kangll13/aiot/java-code/self/inventory/scm-plan-bff） 迁移进 `inventory-middle` 现有各模块，以 `plan` 子包并列。
 
 **路径：**
-- 源：`/Users/kangll13/aiot/java-code/self/inventory/scm-plan-management` 和 `scm-plan-bff`
+- 源：`/Users/kangll13/aiot/java-code/self/inventory/scm-plan-management` 和 `/Users/kangll13/aiot/java-code/self/inventory/scm-plan-bff`
 - 目标：现有 inventory-middle 各模块的 `plan` 子包
 
 ## 架构决策（速查）
@@ -64,11 +64,7 @@
   - consumer/plan 目录不存在（scm-plan-management 无 MQ Consumer，已确认）
   - task/plan 目录不存在（定时任务在 starter 层，已确认 @Scheduled 注解存在）
 
-- [ ] **步骤 4：git commit**
-  ```bash
-  git add .
-  git commit -m "feat(plan): migrate scm-plan-management + scm-plan-bff into inventory-middle plan packages"
-  ```
+- [x] **步骤 4：git commit** ✅ 已提交（f441f65 + bacbabb + 77d402d）
 
 ---
 

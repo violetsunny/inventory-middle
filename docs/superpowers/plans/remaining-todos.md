@@ -135,6 +135,127 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
 
 ---
 
+## 未完成项（2026-06-23 审计发现）
+
+> 以下为全量审计发现的遗漏/未完成项，按优先级排列。
+
+### 高优先级（功能完全不可用）
+
+- [ ] **H1：Plan 模块 MQ Consumer 缺失**
+  - `application.yml` 已配置 `rocketmq.plan.demand.*` 和 `rocketmq.plan.inventory.*` topic/group
+  - 但 `interfaces/consumer/` 下无 plan 相关 Consumer 类
+  - 需从 `scm-plan-management` 迁移 MQ 消费逻辑
+
+- [ ] **H2：Plan 模块定时任务缺失**
+  - `application.yml` 已配置 5 个 `plan.job.*.cron`，但无对应 Java 实现
+  - 缺失任务：计划生成 / 需求计划明细生成 / 供需存生成 / 计划订单逾期检查 / Redis 操作
+  - 需从 `scm-plan-management` 迁移 `@RdfaJob` → `@Scheduled`
+
+- [ ] **H3：PlanDemandSupplyStockController 3 个方法全 stub**
+  - `demandSupplyStockBoard` / `demandSupplyStockBoardDetail` / `renderBomTree` 均返回空
+  - Application 层无 `PlanDemandSupplyStockApplicationService` 实现
+  - 需创建 ApplicationService 并接入 infra 层
+
+- [ ] **H4：ProjectTaskController 3 个方法全 stub**
+  - 路径 `/projectTask`，3 个方法返回 `buildFailure("TODO", ...)`
+  - 需确认 scm-plan-management 中对应实现并迁移
+
+- [ ] **H5：ProjectTaskManageController 1 个方法 stub**
+  - 路径 `/projectTask`，管理端方法返回 `buildFailure("TODO", ...)`
+
+- [ ] **H6：DemandSupplySourceDao 2 个方法抛 UnsupportedOperationException**
+  - `infra/plan/persistence/dao/DemandSupplySourceDao.java` L16, L31, L43
+  - 调用即崩溃，需补全 MyBatis 实现
+
+- [x] **H7：InventorySupportService 接口无实现类** ✅ 已修复
+  - `InventorySupportServiceImpl` 已存在（145 行），注入 5 个依赖服务，6 个接口方法全部有实现
+
+- [ ] **H8：ProductSupportService 接口无实现类**
+  - `application/plan/support/ProductSupportService.java` 定义了产品查询接口
+  - 无 `@Service` 实现类
+
+- [ ] **H9：PlanProductStub 返回空值**
+  - `queryMaterialByCode` 返回 `null`，`queryProductMap` 返回 `emptyMap()`
+  - 需接入 `RemoteProductCenterRestService` 或创建 Feign Client
+
+- [ ] **H10：participant-token 认证未接入**
+  - `ParticipantCenterRemoteServiceImpl.get()` 方法无 auth header
+  - 所有 ParticipantCenter 远程调用在生产环境将因缺认证失败
+  - 需实现 `ParticipantTokenService` 或从网关透传 token
+
+- [ ] **H11：importDemandPlanMaterial EasyExcel 解析未接入**
+  - `DemandPlanController` 方法签名接受 JSON 而非 `MultipartFile`
+  - 缺少 EasyExcel 文件解析逻辑，前端无法通过文件上传导入物料
+
+### 中优先级（功能降级/不完整）
+
+- [ ] **M1：queryMaterialInfoByCode 物料名称/单位为空**
+  - `PlanCommonController` 中 `materialName` 用 `materialCode` 填充，`unit` 为空串
+  - 需接入 ProductCenter 查询真实物料信息
+
+- [ ] **M2：PlanOrder 下发 token 为 null**
+  - `PlanOrderWebConvertor` L73，外部下发链路未接入
+
+- [ ] **M3：PlanOrder 计划类型默认采购**
+  - `PlanOrderApplicationServiceImpl` L57，未接入 PlanConfig 计划类型查询
+
+- [ ] **M4：BomCase 序列号用时间戳**
+  - `BomCaseApplicationServiceImpl` L625/L629，需替换为 `SequenceFactory`
+
+- [ ] **M5：PlanConfigDao 未迁移**
+  - `DemandPlanMaterialDetailDao` L27/L81 中相关代码被注释
+
+- [ ] **M6：MQ 发送失败无重试**
+  - `DefaultMqProducer` L42，失败消息未落库
+
+- [ ] **M7：DemandPlanServiceImpl 物料校验被注释**
+  - L338-340 `validateImportInfo` 调用被注释
+
+- [ ] **M8：6 个外部 URL 默认值为空**
+  - `UNIFORM_PUSH_URL` / `SP_DELIVERY_URL` / `CRM_URL` / `PARTICIPANT_SEARCH_URL` / `PARTICIPANT_TENANT_URL` / `PARTICIPANT_IDENTIFY_URL`
+  - 生产环境必须配置，否则相关功能静默失效
+
+### 可能遗漏的迁移项（inventory-center-bff）
+
+- [ ] **X1：SparePartController（备品备件）**
+  - 原始路径 `/spare_part`，含分页查询 + SKU 保存
+  - inventory-middle 中无对应 Controller
+  - 需确认：备品备件业务是否已下线或归入其他系统
+
+- [ ] **X2：CommonController 省/市/公司查询（inventory-center-bff）**
+  - 原始路径 `/common`，提供省、市、公司树等通用查询
+  - inventory-middle 的 `PlanCommonController` 是 plan 模块功能集，与此不同
+  - 需确认：前端是否仍依赖这些接口
+
+- [ ] **X3：FileController OSS 文件操作**
+  - 原始路径 `/files/download`，OSS 文件下载
+  - inventory-middle 的 `FileImportController` 仅管理导入记录，不含 OSS 操作
+  - 需确认：文件下载功能是否仍需要
+
+### 低优先级（代码质量）
+
+- [ ] **L1：30 处 `//TODO list query`** — Facade + Controller 层旧 Dubbo 迁移遗留
+- [ ] **L2：10 处 Javadoc `@description: TODO`** — 各模块 DTO/BO 文档占位符
+- [ ] **L3：Domain 层依赖 infra entity** — `MaterialDocumentItemBO` L96 架构分层问题
+
+### 配置审计修复（2026-06-23）
+
+- [x] **C1：ProviderApplication 补充 @EnableAspectJAutoProxy + @MapperScan** ✅
+  - 三个原始项目均有 `@EnableAspectJAutoProxy(proxyTargetClass = true)`，inventory-middle 缺失
+  - 补充 `@MapperScan(basePackages = "com.inventory.middle.infra.**.mapper")` 显式扫描 Mapper
+- [x] **C2：RestTemplateConfig 从 infra 移到 starter/config** ✅
+  - 全局配置应集中在 starter/config，已从 `infra/config/` 移至 `starter/config/`
+- [x] **C3：ThreadPoolConfig 修复参数注入** ✅
+  - 原代码字段无 `@Value` 注入，全为 Java 默认值 0（corePoolSize=0 会导致运行时异常）
+  - 补充 `@Value` 注解 + 合理默认值（core=10, max=50, keepAlive=60s, queue=1000）
+- [x] **C4：补充 CorsConfig 跨域配置** ✅
+  - inventory-center-bff 原有 CorsConfig，inventory-middle 缺失
+  - 新建 `starter/config/CorsConfig.java`，允许所有来源/方法/头
+- [x] **C5：PlanExecutorConfig 保留在 application 层** ✅ N/A
+  - application 模块不能依赖 starter（循环依赖），plan 专用线程池保留在 `application/plan/calculate/config/`
+
+---
+
 ## plan 包路径规范（强制）
 
 ```

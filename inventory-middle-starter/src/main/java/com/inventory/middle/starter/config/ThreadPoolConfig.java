@@ -2,42 +2,40 @@ package com.inventory.middle.starter.config;
 
 import java.util.concurrent.*;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import com.alibaba.ttl.threadpool.TtlExecutors;
 
-/**
- * @author dongguo.tao
- * @date 2021-06-23
- * @description
- */
 @EnableAsync
 @Configuration
 public class ThreadPoolConfig {
 
-    private String customThreadNamePrefix;
+    @Value("${thread.pool.coreSize:10}")
     private int corePoolSize;
+
+    @Value("${thread.pool.maxSize:50}")
     private int maximumPoolSize;
+
+    @Value("${thread.pool.keepAliveSeconds:60}")
     private int keepAliveTimeInSeconds;
+
+    @Value("${thread.pool.queueSize:1000}")
     private int blockingQueueSize;
-    private RejectedExecutionHandler handler;
-    private boolean allowCoreThreadTimeOut;
-    private TimeUnit unit;
-    private ThreadFactory threadFactory;
-    private BlockingQueue<Runnable> workQueue;
 
     @Bean(name = "inventoryCenterExecutor")
     public ExecutorService initExecutorService() {
-        ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(this.corePoolSize, this.maximumPoolSize,
-            (long)this.keepAliveTimeInSeconds, this.unit, this.workQueue, this.threadFactory, this.handler);
-        poolExecutor.allowCoreThreadTimeOut(this.allowCoreThreadTimeOut);
-        return TtlExecutors.getTtlExecutorService(poolExecutor);
-    }
+        BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>(blockingQueueSize);
+        ThreadFactory threadFactory = Executors.defaultThreadFactory();
+        RejectedExecutionHandler handler = new ThreadPoolExecutor.CallerRunsPolicy();
 
-    public String toString() {
-        return "RDFAExecutor: " + this.customThreadNamePrefix + ", " + this.corePoolSize + ", " + this.maximumPoolSize
-            + ", " + this.keepAliveTimeInSeconds + ", " + this.blockingQueueSize;
+        ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(
+                corePoolSize, maximumPoolSize,
+                keepAliveTimeInSeconds, TimeUnit.SECONDS,
+                workQueue, threadFactory, handler);
+        poolExecutor.allowCoreThreadTimeOut(true);
+        return TtlExecutors.getTtlExecutorService(poolExecutor);
     }
 }
