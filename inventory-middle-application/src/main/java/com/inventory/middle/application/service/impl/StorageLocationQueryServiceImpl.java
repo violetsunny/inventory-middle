@@ -66,4 +66,12 @@ public class StorageLocationQueryServiceImpl implements StorageLocationQueryServ
                 return e == null ? null : dtoConvertor.fromStorageLocation(e);
         }
 
+        @Override
+        public java.util.List<StorageLocationDto> getByDescription(String description, String tenantId) {
+                StorageLocationPageQuery query = new StorageLocationPageQuery();
+                query.setDescription(description);
+                query.setTenantId(tenantId);
+                return listByQuery(query);
+        }
+
 }

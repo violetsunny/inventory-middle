@@ -1,7 +1,7 @@
 package com.inventory.middle.infra.plan.persistence.mapper;
 
 import com.inventory.middle.infra.plan.persistence.condition.demand.*;
-import com.inventory.middle.infra.plan.persistence.condition.plan.DemandPlanMaterialDetailReqCondition;
+import com.inventory.middle.infra.plan.persistence.condition.DemandPlanMaterialDetailReqCondition;
 import com.inventory.middle.infra.plan.persistence.result.DemandDetailResult;
 import com.inventory.middle.infra.plan.persistence.result.MaterialResult;
 import com.inventory.middle.infra.plan.persistence.result.SingleDemandResult;

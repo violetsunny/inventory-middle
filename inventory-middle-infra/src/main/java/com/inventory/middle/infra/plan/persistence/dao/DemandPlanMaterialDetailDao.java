@@ -3,7 +3,7 @@ package com.inventory.middle.infra.plan.persistence.dao;
 import com.inventory.middle.domain.plan.common.constants.PlanCommonConstants;
 import com.inventory.middle.infra.plan.util.DateUtils;
 import com.inventory.middle.infra.plan.persistence.mapper.DemandPlanMaterialDetailMapper;
-import com.inventory.middle.infra.plan.persistence.condition.plan.DemandPlanMaterialDetailReqCondition;
+import com.inventory.middle.infra.plan.persistence.condition.DemandPlanMaterialDetailReqCondition;
 import com.inventory.middle.infra.plan.persistence.entity.DemandPlanMaterialDetailPO;
 import com.inventory.middle.infra.plan.persistence.entity.PlanMaterialPO;
 import org.apache.commons.collections4.CollectionUtils;

@@ -2,7 +2,7 @@ package com.inventory.middle.application.plan.demand.convertor;
 
 import com.inventory.middle.application.plan.demand.handler.DemandPlanMaterialAmount;
 import com.inventory.middle.application.plan.demand.handler.ReverseCalculateMaterial;
-import com.inventory.middle.infra.plan.persistence.condition.plan.DemandPlanMaterialDetailReqCondition;
+import com.inventory.middle.infra.plan.persistence.condition.DemandPlanMaterialDetailReqCondition;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

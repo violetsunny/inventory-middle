@@ -94,4 +94,12 @@ public class StorageLocationController {
                 }).collect(Collectors.toList());
         return SingleResponse.buildSuccess(list);
     }
+
+    @Operation(summary = "按描述查询库位列表")
+    @GetMapping("/getByDescription")
+    public MultiResponse<StorageLocationDto> getByDescription(
+            @RequestParam(value = "description", required = false) String description) {
+        String tenantId = UserContextHolder.getTenantId();
+        return MultiResponse.buildSuccess(storageLocationQueryService.getByDescription(description, tenantId));
+    }
 }

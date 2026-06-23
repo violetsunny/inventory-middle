@@ -79,6 +79,12 @@ public class MaterialDocMainRepositoryImpl extends ServiceImpl<MaterialDocMainMa
 	}
 
 	@Override
+	public MaterialDocMain findByMaterialDocNo(String materialDocNo) {
+		MaterialDocMainDo doObj = baseMapper.queryByMaterialDocNo(materialDocNo);
+		return convertor.toMaterialDocMain(doObj);
+	}
+
+	@Override
 	public List<MaterialDocMain> exportList(Map<String, Object> params) {
 		List<MaterialDocMainDo> doList = baseMapper.exportListByParams(params);
 		if (CollectionUtils.isEmpty(doList)) {

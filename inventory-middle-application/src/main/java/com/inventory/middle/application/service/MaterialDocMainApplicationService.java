@@ -71,4 +71,9 @@ public interface MaterialDocMainApplicationService {
      */
     boolean checkMaterialDoc(com.inventory.middle.domain.model.bo.material.MaterialDocumentBO bo);
 
+    /**
+     * 更新年检时间
+     */
+    boolean updateAnnualDate(com.inventory.middle.domain.model.bo.material.UpdateMaterialAnnualDateReqBO bo);
+
 }

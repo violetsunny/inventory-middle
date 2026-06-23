@@ -10,7 +10,7 @@ import com.inventory.middle.application.plan.demand.convertor.DemandPlanAmountRe
 import com.inventory.middle.application.plan.mq.DefaultMqProducer;
 import com.inventory.middle.application.plan.demand.message.DemandPlanMessage;
 import com.inventory.middle.infra.plan.persistence.dao.DemandPlanMaterialDetailDao;
-import com.inventory.middle.infra.plan.persistence.condition.plan.DemandPlanMaterialDetailReqCondition;
+import com.inventory.middle.infra.plan.persistence.condition.DemandPlanMaterialDetailReqCondition;
 import com.inventory.middle.infra.plan.persistence.entity.DemandPlanMaterialDetailPO;
 import com.inventory.middle.infra.plan.persistence.entity.DemandPlanPO;
 import com.inventory.middle.infra.plan.persistence.entity.PlanMaterialPO;

@@ -15,6 +15,7 @@ import com.inventory.middle.client.enums.MaterialDocTypeEnum;
 import com.inventory.middle.client.file.dto.request.PageQueryFileImportRecordRequest;
 import com.inventory.middle.client.file.dto.response.FileImportRecord;
 import com.inventory.middle.domain.model.bo.material.MaterialDocumentBO;
+import com.inventory.middle.domain.model.bo.material.UpdateMaterialAnnualDateReqBO;
 import com.inventory.middle.domain.service.material.model.MaterialDocInvRes;
 import com.inventory.middle.interfaces.support.UserContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
@@ -185,10 +186,9 @@ public class MaterialDocController {
 
     @Operation(summary = "更新年检时间")
     @PostMapping("/updateMaterialAnnualDate")
-    public SingleResponse<Boolean> updateMaterialAnnualDate(@RequestBody MaterialDocumentBO bo) {
-        // TODO: 待 MaterialDocMainApplicationService 补充 updateAnnualDate(bo) 方法
-        log.warn("updateMaterialAnnualDate: 待接入");
-        return SingleResponse.buildSuccess(true);
+    public SingleResponse<Boolean> updateMaterialAnnualDate(@RequestBody UpdateMaterialAnnualDateReqBO bo) {
+        bo.setTenantId(UserContextHolder.getTenantId());
+        return SingleResponse.buildSuccess(materialDocMainApplicationService.updateAnnualDate(bo));
     }
 
     // ==================== 城燃项目 ====================
@@ -196,9 +196,8 @@ public class MaterialDocController {
     @Operation(summary = "城燃项目库存导入")
     @PostMapping("/city-gas/excel/import")
     public SingleResponse<Boolean> cityGasExcelImport(@RequestParam("uploadFile") MultipartFile file) {
-        // TODO: 待接入 FileImportApplicationService.cityGasImport(file) —— 当前 FileImportApplicationService 无城燃导入方法
-        log.warn("cityGasExcelImport: 待接入城燃导入实现");
-        return SingleResponse.buildSuccess(true);
+        String tenantId = UserContextHolder.getTenantId();
+        return fileImportApplicationService.cityGasImport(file, tenantId);
     }
 
     @Operation(summary = "城燃项目导入记录查询")

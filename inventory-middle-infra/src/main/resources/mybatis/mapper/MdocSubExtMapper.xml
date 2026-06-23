@@ -89,6 +89,12 @@
             <if test="params.id != null">
                 AND id = #{params.id}
             </if>
+            <if test="params.materialDocId != null">
+                AND material_doc_id = #{params.materialDocId}
+            </if>
+            <if test="params.materialDocItemId != null">
+                AND material_doc_item_id = #{params.materialDocItemId}
+            </if>
                                                                                                                                                                                                                                                                                                                                                                                                                             AND deleted = 0
                                     </where>
     </select>

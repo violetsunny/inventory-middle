@@ -72,4 +72,15 @@ public class InventoryMonitorRuleLineRepositoryImpl extends ServiceImpl<Inventor
 		return this.removeByIds(tempIds);
 	}
 
+	@Override
+	public boolean batchStore(List<InventoryMonitorRuleLine> lines) {
+		if (CollectionUtils.isEmpty(lines)) {
+			return true;
+		}
+		List<InventoryMonitorRuleLineDo> doList = lines.stream()
+				.map(convertor::fromInventoryMonitorRuleLine)
+				.collect(Collectors.toList());
+		return this.saveOrUpdateBatch(doList);
+	}
+
 }

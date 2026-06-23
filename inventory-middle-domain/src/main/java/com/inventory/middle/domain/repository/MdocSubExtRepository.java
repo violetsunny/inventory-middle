@@ -54,4 +54,9 @@ public interface MdocSubExtRepository {
      * @param ids
      */
     boolean delete(List<MdocSubExtId> ids);
+
+    /**
+     * 按物料凭证主键查询扩展信息列表
+     */
+    List<MdocSubExt> findByMaterialDocId(Long materialDocId);
 }

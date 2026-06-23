@@ -158,25 +158,26 @@ public class InventoryMonitorRuleController {
             @RequestParam("monitorRuleId") Long monitorRuleId,
             @RequestParam("monitorType") String monitorType,
             @RequestParam("uploadFile") MultipartFile file) {
-        // TODO: 待 InventoryMonitorRuleLineApplicationService 补充 importByExcel 方法（阶段三 R11）
-        log.warn("monitorRule/ruleLine/import: 待接入 Excel 导入");
-        return SingleResponse.buildFailure("NOT_IMPLEMENTED", "Excel 导入功能暂未开放");
+        String tenantId = UserContextHolder.getTenantId();
+        String taskKey = monitorRuleLineApplicationService.importByExcel(monitorRuleId, monitorType, file, tenantId);
+        return SingleResponse.buildSuccess(taskKey);
     }
 
     @Operation(summary = "下载导入结果详情 Excel")
     @GetMapping("/ruleLine/import/result")
     public SingleResponse<Object> importResult(@RequestParam("detailInfoKey") String detailInfoKey) {
-        // TODO: 待 InventoryMonitorRuleLineQueryService 补充 getImportResult(detailInfoKey) 方法（阶段三 R11）
-        log.warn("monitorRule/ruleLine/import/result: 待接入");
-        return SingleResponse.buildFailure("NOT_IMPLEMENTED", "导入结果查询功能暂未开放");
+        return SingleResponse.buildSuccess(monitorRuleLineQueryService.getImportResult(detailInfoKey));
     }
 
     @Operation(summary = "获取导入模板 Excel")
     @GetMapping("/ruleLine/template")
-    public SingleResponse<Object> templateExport() {
-        // TODO: 待实现模板导出（EasyExcel 写入 ImportMonitorRuleLineExcelBO 模板）（阶段三 R11）
-        log.warn("monitorRule/ruleLine/template: 待接入模板导出");
-        return SingleResponse.buildFailure("NOT_IMPLEMENTED", "模板下载功能暂未开放");
+    public void templateExport(javax.servlet.http.HttpServletResponse response) throws java.io.IOException {
+        java.util.List<com.inventory.middle.application.bo.monitor.ImportMonitorRuleLineExcelBO> templateList =
+                java.util.Collections.singletonList(
+                        new com.inventory.middle.application.bo.monitor.ImportMonitorRuleLineExcelBO());
+        new top.kdla.framework.supplement.excel.exp.KdlaExcelWrite<
+                com.inventory.middle.application.bo.monitor.ImportMonitorRuleLineExcelBO>()
+                .writeWeb(response, templateList, "库存预警规则明细导入模板.xlsx");
     }
 
     // ==================== 内部 VO ====================

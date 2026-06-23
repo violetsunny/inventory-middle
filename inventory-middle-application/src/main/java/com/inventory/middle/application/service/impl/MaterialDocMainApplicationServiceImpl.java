@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 
 import com.inventory.middle.domain.model.bo.mq.sub.MaterialDocCancelMessage;
 import com.inventory.middle.domain.model.bo.mq.sub.MaterialDocInMessage;
+import com.inventory.middle.domain.repository.MdocSubExtRepository;
 import top.kdla.framework.domain.ApplicationContextHelp;
 import com.inventory.middle.domain.service.MaterialDocDomainService;
 import com.inventory.middle.domain.service.material.model.MaterialDocInvRes;
@@ -47,6 +48,8 @@ public class MaterialDocMainApplicationServiceImpl implements MaterialDocMainApp
 	private MaterialDocMainDtoConvertor dtoConvertor;
 	@Resource
 	private MaterialDocDomainService materialDocDomainService;
+	@Resource
+	private com.inventory.middle.domain.repository.MdocSubExtRepository mdocSubExtRepository;
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -157,6 +160,32 @@ public class MaterialDocMainApplicationServiceImpl implements MaterialDocMainApp
                 }
                 if (bo.getMaterialDocumentItems() == null || bo.getMaterialDocumentItems().isEmpty()) {
                         throw new com.inventory.middle.domain.common.exception.BusinessException("物料凭证明细不能为空");
+                }
+                return true;
+        }
+
+        @Override
+        public boolean updateAnnualDate(com.inventory.middle.domain.model.bo.material.UpdateMaterialAnnualDateReqBO bo) {
+                if (bo == null || org.apache.commons.lang3.StringUtils.isBlank(bo.getMaterialDocNo())) {
+                        throw new com.inventory.middle.domain.common.exception.BusinessException("物料凭证编号不能为空");
+                }
+                com.inventory.middle.domain.model.entity.MaterialDocMain main =
+                        materialdocmainRepository.findByMaterialDocNo(bo.getMaterialDocNo());
+                if (main == null || main.getId() == null) {
+                        throw new com.inventory.middle.domain.common.exception.BusinessException(
+                                "物料凭证不存在: " + bo.getMaterialDocNo());
+                }
+                Long materialDocId = main.getId().get();
+                java.util.List<com.inventory.middle.domain.model.entity.MdocSubExt> extList =
+                        mdocSubExtRepository.findByMaterialDocId(materialDocId);
+                if (extList == null || extList.isEmpty()) {
+                        log.warn("updateAnnualDate: no MdocSubExt found for materialDocId={}", materialDocId);
+                        return false;
+                }
+                java.time.LocalDateTime now = java.time.LocalDateTime.now();
+                for (com.inventory.middle.domain.model.entity.MdocSubExt ext : extList) {
+                        ext.setAnnualDate(now);
+                        mdocSubExtRepository.update(ext);
                 }
                 return true;
         }

@@ -30,6 +30,8 @@ target/
 .project
 .settings/
 .mybatis
+.vscode
+
 
 ## AI 相关文件
 

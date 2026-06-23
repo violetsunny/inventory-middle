@@ -72,4 +72,18 @@ public class MdocSubExtRepositoryImpl extends ServiceImpl<MdocSubExtMapper, Mdoc
 		return this.removeByIds(tempIds);
 	}
 
+	@Override
+	public List<MdocSubExt> findByMaterialDocId(Long materialDocId) {
+		if (materialDocId == null) {
+			return new ArrayList<>();
+		}
+		java.util.Map<String, Object> params = new java.util.HashMap<>();
+		params.put("materialDocId", materialDocId);
+		List<MdocSubExtDo> doList = baseMapper.queryList(params);
+		if (CollectionUtils.isEmpty(doList)) {
+			return new ArrayList<>();
+		}
+		return doList.stream().map(convertor::toMdocSubExt).collect(Collectors.toList());
+	}
+
 }

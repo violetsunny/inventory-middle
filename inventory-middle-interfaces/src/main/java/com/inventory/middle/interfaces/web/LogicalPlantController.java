@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import top.kdla.framework.log.catchlog.CatchAndLog;
 import com.inventory.middle.domain.model.enums.LogicalPlantTypeEnum;
+import com.inventory.middle.client.dto.logicalPlant.ListLogicalPlantByIdListRequest;
 import lombok.Data;
 import java.util.Arrays;
 import java.util.Map;
@@ -101,5 +102,12 @@ public class LogicalPlantController {
             return SingleResponse.buildSuccess(logicalPlantQueryService.findByNo(query.getLogicalPlantNo()));
         }
         return SingleResponse.buildSuccess(null);
+    }
+
+    @Operation(summary = "按ID列表或编码列表批量查询逻辑仓")
+    @PostMapping("/listByIdList")
+    public MultiResponse<LogicalPlantDto> listByIdList(@RequestBody ListLogicalPlantByIdListRequest request) {
+        request.setTenantId(UserContextHolder.getTenantId());
+        return MultiResponse.buildSuccess(logicalPlantQueryService.listByIdList(request));
     }
 }

@@ -54,4 +54,11 @@ public interface InventoryMonitorRuleLineRepository {
      * @param ids
      */
     boolean delete(List<InventoryMonitorRuleLineId> ids);
+
+    /**
+     * 批量保存
+     *
+     * @param lines
+     */
+    boolean batchStore(List<InventoryMonitorRuleLine> lines);
 }

@@ -1,11 +1,11 @@
 package com.inventory.middle.interfaces.web.plan;
 
-import com.inventory.middle.client.plan.plan.dto.ManualPlanOrderCreateDTO;
-import com.inventory.middle.client.plan.plan.dto.PlanOrderDTO;
-import com.inventory.middle.client.plan.plan.dto.PlanOrderIssueDetailDTO;
-import com.inventory.middle.client.plan.plan.dto.PlanOrderIssueDetailPageReqDTO;
-import com.inventory.middle.client.plan.plan.dto.PlanOrderIssueReqDTO;
-import com.inventory.middle.client.plan.plan.dto.PlanOrderPageReqDTO;
+import com.inventory.middle.client.plan.config.dto.ManualPlanOrderCreateDTO;
+import com.inventory.middle.client.plan.config.dto.PlanOrderDTO;
+import com.inventory.middle.client.plan.config.dto.PlanOrderIssueDetailDTO;
+import com.inventory.middle.client.plan.config.dto.PlanOrderIssueDetailPageReqDTO;
+import com.inventory.middle.client.plan.config.dto.PlanOrderIssueReqDTO;
+import com.inventory.middle.client.plan.config.dto.PlanOrderPageReqDTO;
 import com.inventory.middle.domain.plan.common.enums.PlanMaterialParamPlanTypeEnum;
 import com.inventory.middle.domain.plan.common.enums.PlanOrderCreateTypeEnum;
 import com.inventory.middle.domain.plan.common.enums.PlanOrderStatusEnum;

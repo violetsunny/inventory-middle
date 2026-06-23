@@ -10,6 +10,7 @@ import com.inventory.middle.domain.repository.LogicalPlantRepository;
 import com.inventory.middle.application.service.LogicalPlantQueryService;
 import com.inventory.middle.application.convertor.LogicalPlantDtoConvertor;
 import com.inventory.middle.client.dto.LogicalPlantDto;
+import com.inventory.middle.client.dto.logicalPlant.ListLogicalPlantByIdListRequest;
 import com.inventory.middle.client.dto.query.LogicalPlantPageQuery;
 import com.inventory.middle.client.plan.dto.inventory.InvPlantBO;
 import org.springframework.stereotype.Service;
@@ -85,6 +86,16 @@ public class LogicalPlantQueryServiceImpl implements LogicalPlantQueryService {
         public LogicalPlantDto findByOutPlantNo(String outPlantNo, String tenantId) {
                 com.inventory.middle.domain.model.entity.LogicalPlant e = logicalplantRepository.findByOutPlantNo(outPlantNo, tenantId);
                 return e == null ? null : dtoConvertor.fromLogicalPlant(e);
+        }
+
+        @Override
+        public List<LogicalPlantDto> listByIdList(ListLogicalPlantByIdListRequest request) {
+                List<com.inventory.middle.domain.model.entity.LogicalPlant> entities =
+                        logicalplantRepository.listByIdsOrNos(request.getTenantId(), request.getIdList(), request.getNoList());
+                if (entities == null) {
+                        return java.util.Collections.emptyList();
+                }
+                return entities.stream().map(dtoConvertor::fromLogicalPlant).collect(Collectors.toList());
         }
 
 }

@@ -7,11 +7,15 @@ import com.inventory.middle.client.file.dto.request.CreateFileImportRecordReques
 import com.inventory.middle.client.file.dto.request.PageQueryFileImportRecordRequest;
 import com.inventory.middle.client.file.dto.request.UpdateFileImportRecordRequest;
 import com.inventory.middle.client.file.dto.response.FileImportRecord;
+import com.inventory.middle.client.file.enums.FileImportBusinessTypeEnum;
+import com.inventory.middle.client.file.enums.FileImportProcessStatusEnum;
+import com.inventory.middle.client.file.enums.ImplTypeEnum;
 import com.inventory.middle.infra.persistence.entity.ListFileImportRecordParam;
 import com.inventory.middle.infra.persistence.repository.impl.FileImportRecordRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import top.kdla.framework.dto.PageResponse;
 import top.kdla.framework.dto.SingleResponse;
 
@@ -81,5 +85,24 @@ public class FileImportApplicationServiceImpl implements FileImportApplicationSe
         entity.setId(request.getFileImportRecordId());
         boolean result = fileImportRecordRepository.update(entity);
         return SingleResponse.of(result);
+    }
+
+    @Override
+    public SingleResponse<Boolean> cityGasImport(MultipartFile file, String tenantId) {
+        log.info("FileImportApplicationServiceImpl.cityGasImport tenantId={}, fileName={}",
+                tenantId, file != null ? file.getOriginalFilename() : null);
+        if (file == null || file.isEmpty()) {
+            return SingleResponse.of(false);
+        }
+        com.inventory.middle.domain.model.entity.FileImportRecord entity =
+                new com.inventory.middle.domain.model.entity.FileImportRecord();
+        entity.setTenantId(tenantId);
+        entity.setFileName(file.getOriginalFilename());
+        entity.setBusinessType(FileImportBusinessTypeEnum.CITY_GAS_INVENTORY_IMPORT.getCode());
+        entity.setImplType(ImplTypeEnum.CITY_GAS.getCode());
+        entity.setProcessStatus(FileImportProcessStatusEnum.PROCESSING.getCode());
+        fileImportRecordRepository.store(entity);
+        log.info("FileImportApplicationServiceImpl.cityGasImport created record id={}", entity.getId());
+        return SingleResponse.of(true);
     }
 }

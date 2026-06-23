@@ -31,4 +31,9 @@ public interface InventoryMonitorRuleLineQueryService {
      */
     InventoryMonitorRuleLineDto findById(Long id);
 
+    /**
+     * 获取 Excel 导入结果（detailInfoKey 为 importByExcel 返回的任务 key）
+     */
+    Object getImportResult(String detailInfoKey);
+
 }

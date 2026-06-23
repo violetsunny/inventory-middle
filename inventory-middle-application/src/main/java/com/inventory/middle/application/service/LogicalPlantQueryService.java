@@ -3,6 +3,7 @@ package com.inventory.middle.application.service;
 
 import top.kdla.framework.dto.PageResponse;
 import com.inventory.middle.client.dto.LogicalPlantDto;
+import com.inventory.middle.client.dto.logicalPlant.ListLogicalPlantByIdListRequest;
 import com.inventory.middle.client.dto.query.LogicalPlantPageQuery;
 import com.inventory.middle.client.plan.dto.inventory.InvPlantBO;
 
@@ -48,5 +49,10 @@ public interface LogicalPlantQueryService {
      * 注意：原 scm-plan-management 约定用 logicalPlantName 存储外部仓编码
      */
     LogicalPlantDto findByOutPlantNo(String outPlantNo, String tenantId);
+
+    /**
+     * 按 id 列表或编码列表批量查询逻辑仓
+     */
+    List<LogicalPlantDto> listByIdList(ListLogicalPlantByIdListRequest request);
 
 }

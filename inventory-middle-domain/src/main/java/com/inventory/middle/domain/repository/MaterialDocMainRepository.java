@@ -64,6 +64,14 @@ public interface MaterialDocMainRepository {
     MaterialDocMain findByOriginalNo(String originalNo);
 
     /**
+     * 通过物料凭证编号查询
+     *
+     * @param materialDocNo 物料凭证编号
+     * @return
+     */
+    MaterialDocMain findByMaterialDocNo(String materialDocNo);
+
+    /**
      * 导出列表查询（不分页）
      *
      * @param params 查询参数

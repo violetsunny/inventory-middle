@@ -38,4 +38,7 @@ public interface StorageLocationQueryService {
     /** 按编码查询库位详情 */
     StorageLocationDto findByNo(String storageLocationNo);
 
+    /** 按描述模糊查询库位列表 */
+    java.util.List<StorageLocationDto> getByDescription(String description, String tenantId);
+
 }

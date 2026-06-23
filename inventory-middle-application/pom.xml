@@ -46,6 +46,19 @@
             <artifactId>fastjson</artifactId>
         </dependency>
 
+        <!-- EasyExcel for Excel import/export -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>3.1.5</version>
+        </dependency>
+
+        <!-- KDLA Excel 封装（KdlaExcelReadListener / KdlaExcelWrite / BaseExcel） -->
+        <dependency>
+            <groupId>top.kdla.framework</groupId>
+            <artifactId>kdla-component-supplement</artifactId>
+        </dependency>
+
     </dependencies>
 
 

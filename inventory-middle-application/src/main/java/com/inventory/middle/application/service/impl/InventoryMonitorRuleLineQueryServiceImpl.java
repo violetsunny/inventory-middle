@@ -48,5 +48,16 @@ public class InventoryMonitorRuleLineQueryServiceImpl implements InventoryMonito
 		return dtoConvertor.fromInventoryMonitorRuleLine(inventorymonitorrulelineRepository.findById(new InventoryMonitorRuleLineId(id)));
 	}
 
+	@Override
+	public Object getImportResult(String detailInfoKey) {
+		// 当前实现为简单占位：返回任务 key 本身（表示任务 key 已记录，具体结果由异步任务写入后查询）
+		// 完整实现需要接入 Redis/DB 存储导入结果明细
+		log.info("getImportResult: detailInfoKey={}", detailInfoKey);
+		java.util.Map<String, Object> result = new java.util.HashMap<>();
+		result.put("detailInfoKey", detailInfoKey);
+		result.put("status", "PROCESSING");
+		return result;
+	}
+
 }
 
