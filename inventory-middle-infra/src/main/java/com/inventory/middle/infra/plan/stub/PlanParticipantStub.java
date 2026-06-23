@@ -1,7 +1,12 @@
 package com.inventory.middle.infra.plan.stub;
 
+import com.inventory.middle.client.plan.dto.participant.ParticipantMenuDTO;
+import com.inventory.middle.client.plan.dto.participant.ParticipantUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 参与者中心 Stub
@@ -12,14 +17,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlanParticipantStub {
 
-    /**
-     * 获取公司名称
-     *
-     * @param tenantId    租户ID
-     * @param userId      用户ID
-     * @param companyCode 公司编码
-     * @return 公司名称
-     */
     public String getCompanyName(String tenantId, String userId, String companyCode) {
         log.warn("PlanParticipantStub.getCompanyName: stub implementation, companyCode={}", companyCode);
         return companyCode;
@@ -29,4 +26,23 @@ public class PlanParticipantStub {
         log.warn("PlanParticipantStub.getUserName: stub implementation, userId={}", userId);
         return userId;
     }
+
+    /**
+     * 模糊查询用户信息
+     * TODO: 待接入 ParticipantCenter - fuzzyQueryUserInfo
+     */
+    public List<ParticipantUser> fuzzyQueryUserInfo(String keywords) {
+        log.warn("PlanParticipantStub.fuzzyQueryUserInfo: stub, keywords={}", keywords);
+        return Collections.emptyList();
+    }
+
+    /**
+     * 查询菜单权限
+     * TODO: 待接入 ParticipantCenter - getMenuAndFunc
+     */
+    public List<ParticipantMenuDTO> getMenuAndFunc(String tenantId, String userId) {
+        log.warn("PlanParticipantStub.getMenuAndFunc: stub, tenantId={}, userId={}", tenantId, userId);
+        return Collections.emptyList();
+    }
 }
+
