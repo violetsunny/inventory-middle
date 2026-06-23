@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.PlanOrderIssueDetailMapper">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.PlanOrderIssueDetailPO">
+        <id column="id" property="id"/>
+        <result column="issue_no" property="issueNo"/>
+        <result column="plan_order_id" property="planOrderId"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="logical_plant_no" property="logicalPlantNo"/>
+        <result column="issue_quantity" property="issueQuantity"/>
+        <result column="finish_quantity" property="finishQuantity"/>
+        <result column="current_status" property="currentStatus"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="operator_name" property="operatorName"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="updator_id" property="updatorId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, issue_no, plan_order_id, material_code, logical_plant_no, issue_quantity, finish_quantity,
+        current_status, tenant_id, operator_name, creator_id, create_time, updator_id, update_time, deleted
+    </sql>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" useGeneratedKeys="true"
+            parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanOrderIssueDetailPO">
+        insert into pl_plan_order_issue_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="issueNo != null">issue_no,</if>
+            <if test="planOrderId != null">plan_order_id,</if>
+            <if test="materialCode != null">material_code,</if>
+            <if test="logicalPlantNo != null">logical_plant_no,</if>
+            <if test="issueQuantity != null">issue_quantity,</if>
+            <if test="finishQuantity != null">finish_quantity,</if>
+            <if test="currentStatus != null">current_status,</if>
+            <if test="tenantId != null">tenant_id,</if>
+            <if test="operatorName != null">operator_name,</if>
+            <if test="creatorId != null">creator_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updatorId != null">updator_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            deleted,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="issueNo != null">#{issueNo},</if>
+            <if test="planOrderId != null">#{planOrderId},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="logicalPlantNo != null">#{logicalPlantNo},</if>
+            <if test="issueQuantity != null">#{issueQuantity},</if>
+            <if test="finishQuantity != null">#{finishQuantity},</if>
+            <if test="currentStatus != null">#{currentStatus},</if>
+            <if test="tenantId != null">#{tenantId},</if>
+            <if test="operatorName != null">#{operatorName},</if>
+            <if test="creatorId != null">#{creatorId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updatorId != null">#{updatorId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            #{deleted},
+        </trim>
+    </insert>
+
+    <select id="pageQueryPlanOrderIssueDetail" resultMap="BaseResultMap"
+            parameterType="com.inventory.middle.infra.plan.persistence.condition.plan.PlanOrderIssueDetailPageCondition">
+        select
+        <include refid="Base_Column_List"/>
+        from pl_plan_order_issue_detail
+        where plan_order_id = #{planOrderId}
+          and tenant_id = #{tenantId}
+          and deleted = 0
+        order by create_time desc
+    </select>
+</mapper>

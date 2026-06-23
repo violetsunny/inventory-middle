@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.demand.DemandPlanMaterialPeriodMapper">
+  <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.demand.DemandPlanMaterialPeriodPO">
+    <id column="id" property="id" />
+    <result column="material_code" property="materialCode" />
+    <result column="demand_plan_id" property="demandPlanId" />
+    <result column="demand_plan_material_id" property="demandPlanMaterialId" />
+    <result column="logical_plant_no" property="logicalPlantNo" />
+    <result column="plan_period" property="planPeriod" />
+    <result column="plan_amount" property="planAmount" />
+    <result column="status" property="status" />
+    <result column="demand_type" property="demandType" />
+    <result column="ext_info" property="extInfo" />
+    <result column="is_delete" property="isDelete" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, material_code, demand_plan_id, demand_plan_material_id, logical_plant_no, plan_period, 
+    plan_amount, `status`, demand_type, ext_info, is_delete, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pl_demand_plan_material_period
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from pl_demand_plan_material_period
+    where id = #{id}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.plan.persistence.entity.demand.DemandPlanMaterialPeriodPO" useGeneratedKeys="true">
+    insert into pl_demand_plan_material_period (material_code, demand_plan_id, demand_plan_material_id, logical_plant_no, 
+      plan_period, plan_amount, `status`, demand_type, ext_info, is_delete, 
+      create_time, update_time)
+    values (#{materialCode}, #{demandPlanId}, #{demandPlanMaterialId}, #{logicalPlantNo}, 
+      #{planPeriod}, #{planAmount}, #{status}, #{demandType}, #{extInfo}, #{isDelete}, 
+      #{createTime}, #{updateTime})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.plan.persistence.entity.demand.DemandPlanMaterialPeriodPO" useGeneratedKeys="true">
+    insert into pl_demand_plan_material_period
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="materialCode != null">material_code,</if>
+      <if test="demandPlanId != null">demand_plan_id,</if>
+      <if test="demandPlanMaterialId != null">demand_plan_material_id,</if>
+      <if test="logicalPlantNo != null">logical_plant_no,</if>
+      <if test="planPeriod != null">plan_period,</if>
+      <if test="planAmount != null">plan_amount,</if>
+      <if test="status != null">`status`,</if>
+      <if test="demandType != null">demand_type,</if>
+      <if test="extInfo != null">ext_info,</if>
+      <if test="isDelete != null">is_delete,</if>
+      <if test="createTime != null">create_time,</if>
+      <if test="updateTime != null">update_time,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="materialCode != null">#{materialCode},</if>
+      <if test="demandPlanId != null">#{demandPlanId},</if>
+      <if test="demandPlanMaterialId != null">#{demandPlanMaterialId},</if>
+      <if test="logicalPlantNo != null">#{logicalPlantNo},</if>
+      <if test="planPeriod != null">#{planPeriod},</if>
+      <if test="planAmount != null">#{planAmount},</if>
+      <if test="status != null">#{status},</if>
+      <if test="demandType != null">#{demandType},</if>
+      <if test="extInfo != null">#{extInfo},</if>
+      <if test="isDelete != null">#{isDelete},</if>
+      <if test="createTime != null">#{createTime},</if>
+      <if test="updateTime != null">#{updateTime},</if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.demand.DemandPlanMaterialPeriodPO">
+    update pl_demand_plan_material_period
+    <set>
+      <if test="materialCode != null">material_code = #{materialCode},</if>
+      <if test="demandPlanId != null">demand_plan_id = #{demandPlanId},</if>
+      <if test="demandPlanMaterialId != null">demand_plan_material_id = #{demandPlanMaterialId},</if>
+      <if test="logicalPlantNo != null">logical_plant_no = #{logicalPlantNo},</if>
+      <if test="planPeriod != null">plan_period = #{planPeriod},</if>
+      <if test="planAmount != null">plan_amount = #{planAmount},</if>
+      <if test="status != null">`status` = #{status},</if>
+      <if test="demandType != null">demand_type = #{demandType},</if>
+      <if test="extInfo != null">ext_info = #{extInfo},</if>
+      <if test="isDelete != null">is_delete = #{isDelete},</if>
+      <if test="createTime != null">create_time = #{createTime},</if>
+      <if test="updateTime != null">update_time = #{updateTime},</if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.demand.DemandPlanMaterialPeriodPO">
+    update pl_demand_plan_material_period
+    set material_code = #{materialCode},
+      demand_plan_id = #{demandPlanId},
+      demand_plan_material_id = #{demandPlanMaterialId},
+      logical_plant_no = #{logicalPlantNo},
+      plan_period = #{planPeriod},
+      plan_amount = #{planAmount},
+      `status` = #{status},
+      demand_type = #{demandType},
+      ext_info = #{extInfo},
+      is_delete = #{isDelete},
+      create_time = #{createTime},
+      update_time = #{updateTime}
+    where id = #{id}
+  </update>
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert into `pl_demand_plan_material_period` (demand_plan_id, demand_plan_material_id, material_code,
+    logical_plant_no, plan_period, plan_amount, status, ext_info, demand_type)
+    values
+    <foreach collection="records" index="index" item="record" separator=",">
+      (#{record.demandPlanId},
+      #{record.demandPlanMaterialId}, #{record.materialCode},
+      #{record.logicalPlantNo}, #{record.planPeriod}, #{record.planAmount},
+      #{record.status}, #{record.extInfo}, #{record.demandType})
+    </foreach>
+  </insert>
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach close="" collection="records" index="index" item="record" open="" separator=";">
+      update pl_demand_plan_material_period
+      <set>
+        <if test="record.demandPlanId != null">demand_plan_id =#{record.demandPlanId},</if>
+        <if test="record.demandPlanMaterialId != null">demand_plan_material_id = #{record.demandPlanMaterialId},</if>
+        <if test="record.materialCode != null">material_code = #{record.materialCode},</if>
+        <if test="record.logicalPlantNo != null">logical_plant_no = #{record.logicalPlantNo},</if>
+        <if test="record.planPeriod != null">plan_period = #{record.planPeriod},</if>
+        <if test="record.planAmount != null">plan_amount = #{record.planAmount},</if>
+        <if test="record.status != null">status = #{record.status},</if>
+        <if test="record.extInfo != null">ext_info = #{record.extInfo},</if>
+        <if test="record.extInfo == null">ext_info = null,</if>
+        <if test="record.isDelete != null">is_delete = #{record.isDelete},</if>
+      </set>
+      where id = #{record.id}
+    </foreach>
+  </update>
+  <update id="deleteByCondition" parameterType="com.inventory.middle.infra.plan.persistence.entity.demand.DemandPlanMaterialPeriodPO">
+    update `pl_demand_plan_material_period`
+    set is_delete=0, status=1
+    where 1=1
+    <if test="demandPlanId != null">and demand_plan_id =#{demandPlanId}</if>
+    <if test="demandPlanMaterialId != null">and demand_plan_material_id = #{demandPlanMaterialId}</if>
+    <if test="materialCode != null">and material_code = #{materialCode}</if>
+    <if test="logicalPlantNo != null">and logical_plant_no = #{logicalPlantNo}</if>
+    <if test="planPeriod != null">and plan_period = #{planPeriod}</if>
+    <if test="planAmount != null">and plan_amount = #{planAmount}</if>
+    <if test="status != null">and status = #{status}</if>
+    <if test="isDelete != null">and is_delete = #{isDelete}</if>
+  </update>
+
+  <select id="queryByCondition" parameterType="com.inventory.middle.infra.plan.persistence.entity.demand.DemandPlanMaterialPeriodPO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `pl_demand_plan_material_period`
+    where 1=1 and is_delete=0 and status!= 2
+    <if test="demandPlanId != null">and demand_plan_id =#{demandPlanId}</if>
+    <if test="demandPlanMaterialId != null">and demand_plan_material_id = #{demandPlanMaterialId}</if>
+    <if test="materialCode != null">and material_code = #{materialCode}</if>
+    <if test="logicalPlantNo != null">and logical_plant_no = #{logicalPlantNo}</if>
+    <if test="planPeriod != null">and plan_period = #{planPeriod}</if>
+    <if test="planAmount != null">and plan_amount = #{planAmount}</if>
+    <if test="status != null">and status = #{status}</if>
+    <if test="isDelete != null">and is_delete = #{isDelete}</if>
+  </select>
+  <select id="queryByIds" parameterType="list" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `pl_demand_plan_material_period`
+    where id in
+    <foreach close=")" collection="ids" index="index" item="id" open="(" separator=",">
+      #{id}
+    </foreach>
+  </select>
+
+  <update id="updateStatusByCondition" parameterType="map">
+    update `pl_demand_plan_material_period`
+    set status = #{targetStatus}
+    where 1=1
+    <if test="record.demandPlanId != null">and demand_plan_id =#{record.demandPlanId}</if>
+    <if test="record.demandPlanMaterialId != null">and demand_plan_material_id = #{record.demandPlanMaterialId}</if>
+    <if test="record.materialCode != null">and material_code = #{record.materialCode}</if>
+    <if test="record.logicalPlantNo != null">and logical_plant_no = #{record.logicalPlantNo}</if>
+    <if test="record.planPeriod != null">and plan_period = #{record.planPeriod}</if>
+    <if test="record.planAmount != null">and plan_amount = #{record.planAmount}</if>
+    <if test="record.status != null">and status = #{record.status}</if>
+    <if test="record.isDelete != null">and is_delete = #{record.isDelete}</if>
+  </update>
+
+  <select id="querySingleByCondition" parameterType="com.inventory.middle.infra.plan.persistence.entity.demand.DemandPlanMaterialPeriodPO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `pl_demand_plan_material_period`
+    where 1=1 and is_delete=0
+    <if test="demandPlanId != null">and demand_plan_id =#{demandPlanId}</if>
+    <if test="demandPlanMaterialId != null">and demand_plan_material_id = #{demandPlanMaterialId}</if>
+    <if test="materialCode != null">and material_code = #{materialCode}</if>
+    <if test="logicalPlantNo != null">and logical_plant_no = #{logicalPlantNo}</if>
+    <if test="planPeriod != null">and plan_period = #{planPeriod}</if>
+    <if test="planAmount != null">and plan_amount = #{planAmount}</if>
+    <if test="status != null">and status = #{status}</if>
+    <if test="isDelete != null">and is_delete = #{isDelete}</if>
+  </select>
+
+  <select id="queryById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `pl_demand_plan_material_period`
+    where id = #{id}
+    and is_delete = 0
+  </select>
+
+  <select id="queryByPlanIdAndMaterialCode" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `pl_demand_plan_material_period`
+    where demand_plan_id = #{demandPlanId} and is_delete = 0
+    and material_code in
+    <foreach close=")" collection="materialCodeList" index="index" item="materialCode" open="(" separator=",">
+      #{materialCode}
+    </foreach>
+  </select>
+</mapper>

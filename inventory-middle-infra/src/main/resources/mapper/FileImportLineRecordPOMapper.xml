@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.FileImportLineRecordMapper">
+  <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.FileImportLineRecordDo">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+    <result column="file_record_id" jdbcType="BIGINT" property="fileRecordId" />
+    <result column="process_status" jdbcType="VARCHAR" property="processStatus" />
+    <result column="process_message" jdbcType="VARCHAR" property="processMessage" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator_id" jdbcType="VARCHAR" property="creatorId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="updator_id" jdbcType="VARCHAR" property="updatorId" />
+    <result column="updator" jdbcType="VARCHAR" property="updator" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.inventory.middle.infra.persistence.entity.FileImportLineRecordDo">
+    <result column="line_detail" jdbcType="LONGVARCHAR" property="lineDetail" />
+  </resultMap>
+  <sql id="Blob_Column_List">
+    line_detail
+  </sql>
+  <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity">
+    insert into file_import_line_record (id, tenant_id, file_record_id, 
+      process_status, process_message, create_time, 
+      creator_id, creator, update_time, 
+      updator_id, updator, deleted, 
+      line_detail)
+    values (#{id,jdbcType=BIGINT}, #{tenantId,jdbcType=VARCHAR}, #{fileRecordId,jdbcType=BIGINT}, 
+      #{processStatus,jdbcType=VARCHAR}, #{processMessage,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{creatorId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updatorId,jdbcType=VARCHAR}, #{updator,jdbcType=VARCHAR}, #{deleted,jdbcType=BIT}, 
+      #{lineDetail,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.inventory.middle.infra.persistence.entity">
+    insert into file_import_line_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="fileRecordId != null">
+        file_record_id,
+      </if>
+      <if test="processStatus != null">
+        process_status,
+      </if>
+      <if test="processMessage != null">
+        process_message,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updatorId != null">
+        updator_id,
+      </if>
+      <if test="updator != null">
+        updator,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+      <if test="lineDetail != null">
+        line_detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileRecordId != null">
+        #{fileRecordId,jdbcType=BIGINT},
+      </if>
+      <if test="processStatus != null">
+        #{processStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="processMessage != null">
+        #{processMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatorId != null">
+        #{updatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="updator != null">
+        #{updator,jdbcType=VARCHAR},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+      <if test="lineDetail != null">
+        #{lineDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+    <insert id="batchInsert">
+      insert into file_import_line_record (tenant_id, file_record_id,
+      process_status, process_message, create_time,
+      creator_id, creator, line_detail)
+      values
+      <foreach collection="list" separator="," item="item">
+        (#{item.tenantId,jdbcType=VARCHAR}, #{item.fileRecordId,jdbcType=BIGINT},
+        #{item.processStatus,jdbcType=VARCHAR}, #{item.processMessage,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.creatorId,jdbcType=VARCHAR}, #{item.creator,jdbcType=VARCHAR},
+        #{item.lineDetail,jdbcType=LONGVARCHAR})
+      </foreach>
+    </insert>
+</mapper>

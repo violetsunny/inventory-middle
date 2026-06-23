@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.CodeApplyOrderDetailMapper">
+
+  <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.CodeApplyOrderDetailDo">
+    <result column="id" property="id" />
+    <result column="apply_order_id" property="applyOrderId" />
+    <result column="code" property="code" />
+    <result column="inner_code" property="innerCode" />
+    <result column="material_code" property="materialCode" />
+    <result column="material_name" property="materialName" />
+    <result column="creator_id" property="creatorId" />
+    <result column="create_time" property="createTime" />
+    <result column="updator_id" property="updatorId" />
+    <result column="update_time" property="updateTime" />
+    <result column="deleted" property="deleted" />
+  </resultMap>
+  <resultMap id="DetailStatisticsMap" type="com.inventory.middle.infra.persistence.entity.CodeApplyOrderDetailDo">
+    <result column="apply_order_id" property="applyOrderId" />
+    <result column="quantity" property="quantity" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id,
+    apply_order_id,
+    `code`,
+    inner_code,
+    material_code,
+    material_name,
+    creator_id,
+    create_time,
+    updator_id,
+    update_time,
+    deleted
+  </sql>
+
+  <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.persistence.entity">
+    INSERT INTO code_apply_order_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="null != applyOrderId">
+        apply_order_id,
+      </if>
+      <if test="null != code and '' != code">
+        `code`,
+      </if>
+      <if test="null != innerCode and '' != innerCode">
+        inner_code,
+      </if>
+      <if test="null != materialCode and '' != materialCode">
+        material_code,
+      </if>
+      <if test="null != materialName and '' != materialName">
+        material_name,
+      </if>
+      <if test="null != creatorId and '' != creatorId">
+        creator_id,
+      </if>
+      <if test="null != createTime">
+        create_time,
+      </if>
+      <if test="null != updatorId and '' != updatorId">
+        updator_id,
+      </if>
+      <if test="null != updateTime">
+        update_time,
+      </if>
+      <if test="null != deleted">
+        deleted
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="null != applyOrderId">
+        #{applyOrderId},
+      </if>
+      <if test="null != code and '' != code">
+        #{code},
+      </if>
+      <if test="null != innerCode and '' != innerCode">
+        #{innerCode},
+      </if>
+      <if test="null != materialCode and '' != materialCode">
+        #{materialCode},
+      </if>
+      <if test="null != materialName and '' != materialName">
+        #{materialName},
+      </if>
+      <if test="null != creatorId and '' != creatorId">
+        #{creatorId},
+      </if>
+      <if test="null != createTime">
+        #{createTime},
+      </if>
+      <if test="null != updatorId and '' != updatorId">
+        #{updatorId},
+      </if>
+      <if test="null != updateTime">
+        #{updateTime},
+      </if>
+      <if test="null != deleted">
+        #{deleted}
+      </if>
+    </trim>
+  </insert>
+
+  <insert id="insertBatch" >
+    insert into code_apply_order_detail (
+      apply_order_id,
+      `code`,
+      inner_code,
+      material_code,
+      material_name,
+      creator_id,
+      create_time,
+      updator_id,
+      update_time,
+      deleted
+    )
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+        #{item.applyOrderId},
+        #{item.code},
+        #{item.innerCode},
+        #{item.materialCode},
+        #{item.materialName},
+        #{item.creatorId},
+        #{item.createTime},
+        #{item.updatorId},
+        #{item.updateTime},
+        #{item.deleted}
+      )
+    </foreach>
+  </insert>
+
+  <select id="queryByCondition" resultMap="BaseResultMap" parameterType="com.inventory.middle.infra.persistence.entity">
+    SELECT caod.*
+    FROM code_apply_order_detail caod LEFT JOIN code_apply_order ca ON caod.apply_order_id = ca.id
+    WHERE ca.owner_id = #{ownerId}
+      <if test="null != approvalStatusList and approvalStatusList.size() > 0">
+        AND ca.approval_status in
+        <foreach collection="approvalStatusList" item="item" index="index" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    AND ca.deleted = 0 AND caod.deleted = 0
+  </select>
+
+  <select id="listByApplyOrderId" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM code_apply_order_detail
+    WHERE apply_order_id = #{applyOrderId}
+  </select>
+
+  <select id="queryCountByOrderIds" resultMap="DetailStatisticsMap" parameterType="java.util.List">
+    SELECT COUNT(1) AS quantity, apply_order_id
+    FROM code_apply_order_detail
+    WHERE apply_order_id in
+    <foreach collection="applyOrderIdList" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    AND deleted = 0
+    GROUP BY apply_order_id
+
+
+  </select>
+
+
+</mapper>

@@ -1,0 +1,40 @@
+/**
+ * OYO.com Inc.
+ * Copyright (c) 2017-2019 All Rights Reserved.
+ */
+package com.inventory.middle.domain.model.enums;
+
+import java.util.Arrays;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+/**
+ * 物料库存类型
+ *
+ * @author dongguo.tao
+ * @version 2021-09-26 15:22:23
+ */
+@AllArgsConstructor
+@Getter
+public enum InventorySupplyTypeEnum {
+
+    IN_TRANSIT(1, "在途库存"),
+    IN_STOCK(2, "在库库存"),
+    ;
+
+    private Integer code;
+    private String desc;
+
+    public static Boolean isExist(Integer code) {
+        return Arrays.stream(InventorySupplyTypeEnum.values()).anyMatch(v -> v.getCode().equals(code));
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+}

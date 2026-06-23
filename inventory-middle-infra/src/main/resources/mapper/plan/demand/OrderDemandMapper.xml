@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.demand.OrderDemandMapper">
+
+  <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.demand.OrderDemandPO">
+    <id column="id" property="id" />
+    <result column="order_no" property="orderNo" />
+    <result column="order_type" property="orderType" />
+    <result column="material_code" property="materialCode" />
+    <result column="logical_plant_no" property="logicalPlantNo" />
+    <result column="tenant_id" property="tenantId" />
+    <result column="plan_date" property="planDate" />
+    <result column="amount" property="amount" />
+    <result column="ext_info" property="extInfo" />
+    <result column="is_delete" property="isDelete" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, order_no, order_type, material_code, logical_plant_no, tenant_id, plan_date,
+    amount, ext_info, is_delete, create_time, update_time
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from pl_order_demand
+    where id = #{id}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from pl_order_demand
+    where id = #{id}
+  </delete>
+
+  <insert id="insert" keyColumn="id" keyProperty="id"
+          parameterType="com.inventory.middle.infra.plan.persistence.entity.demand.OrderDemandPO"
+          useGeneratedKeys="true">
+    insert into pl_order_demand (order_no, order_type, material_code, logical_plant_no, tenant_id,
+      plan_date, amount, ext_info, is_delete, create_time, update_time)
+    values (#{orderNo}, #{orderType}, #{materialCode}, #{logicalPlantNo}, #{tenantId},
+      #{planDate}, #{amount}, #{extInfo}, #{isDelete}, #{createTime}, #{updateTime})
+  </insert>
+
+  <insert id="insertSelective" keyColumn="id" keyProperty="id"
+          parameterType="com.inventory.middle.infra.plan.persistence.entity.demand.OrderDemandPO"
+          useGeneratedKeys="true">
+    insert into pl_order_demand
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">order_no,</if>
+      <if test="orderType != null">order_type,</if>
+      <if test="materialCode != null">material_code,</if>
+      <if test="logicalPlantNo != null">logical_plant_no,</if>
+      <if test="tenantId != null">tenant_id,</if>
+      <if test="planDate != null">plan_date,</if>
+      <if test="amount != null">amount,</if>
+      <if test="extInfo != null">ext_info,</if>
+      <if test="isDelete != null">is_delete,</if>
+      <if test="createTime != null">create_time,</if>
+      <if test="updateTime != null">update_time,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderNo != null">#{orderNo},</if>
+      <if test="orderType != null">#{orderType},</if>
+      <if test="materialCode != null">#{materialCode},</if>
+      <if test="logicalPlantNo != null">#{logicalPlantNo},</if>
+      <if test="tenantId != null">#{tenantId},</if>
+      <if test="planDate != null">#{planDate},</if>
+      <if test="amount != null">#{amount},</if>
+      <if test="extInfo != null">#{extInfo},</if>
+      <if test="isDelete != null">#{isDelete},</if>
+      <if test="createTime != null">#{createTime},</if>
+      <if test="updateTime != null">#{updateTime},</if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.demand.OrderDemandPO">
+    update pl_order_demand
+    <set>
+      <if test="orderNo != null">order_no = #{orderNo},</if>
+      <if test="orderType != null">order_type = #{orderType},</if>
+      <if test="materialCode != null">material_code = #{materialCode},</if>
+      <if test="logicalPlantNo != null">logical_plant_no = #{logicalPlantNo},</if>
+      <if test="tenantId != null">tenant_id = #{tenantId},</if>
+      <if test="planDate != null">plan_date = #{planDate},</if>
+      <if test="amount != null">amount = #{amount},</if>
+      <if test="extInfo != null">ext_info = #{extInfo},</if>
+      <if test="isDelete != null">is_delete = #{isDelete},</if>
+      <if test="updateTime != null">update_time = #{updateTime},</if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <select id="queryByCondition" parameterType="com.inventory.middle.infra.plan.persistence.condition.demand.OrderDemandQueryCondition"
+          resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from pl_order_demand
+    where tenant_id = #{tenantId}
+    <if test="orderNo != null and orderNo != ''">
+      and order_no = #{orderNo}
+    </if>
+    <if test="orderType != null and orderType != ''">
+      and order_type = #{orderType}
+    </if>
+    <if test="null != materialCode and '' != materialCode">
+      and material_code = #{materialCode}
+    </if>
+    <if test="null != logicalPlantNo and '' != logicalPlantNo">
+      and logical_plant_no = #{logicalPlantNo}
+    </if>
+    <if test="planDate != null">
+      and plan_date = #{planDate}
+    </if>
+    and is_delete = 0
+  </select>
+
+  <update id="batchDelete" parameterType="java.util.List">
+    <foreach collection="records" item="item" separator=";">
+      update `pl_order_demand` set is_delete = 1
+      where id = #{item.id}
+    </foreach>
+  </update>
+
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert into `pl_order_demand` (order_no, order_type, material_code, logical_plant_no, tenant_id,
+    plan_date, amount, ext_info)
+    values
+    <foreach collection="records" item="record" index="index" separator=",">
+      (#{record.orderNo}, #{record.orderType},
+      #{record.materialCode}, #{record.logicalPlantNo}, #{record.tenantId},
+      #{record.planDate}, #{record.amount}, #{record.extInfo})
+    </foreach>
+  </insert>
+
+</mapper>

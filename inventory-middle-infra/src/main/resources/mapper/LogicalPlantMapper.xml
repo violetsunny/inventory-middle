@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.LogicalPlantMapper">
+  <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.LogicalPlantPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+    <result column="logical_plant_no" jdbcType="VARCHAR" property="logicalPlantNo" />
+    <result column="logical_plant_name" jdbcType="VARCHAR" property="logicalPlantName" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
+    <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="creator_id" jdbcType="VARCHAR" property="creatorId" />
+    <result column="updator_id" jdbcType="VARCHAR" property="updatorId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tenant_id, logical_plant_no, logical_plant_name, `type`, company_code, warehouse_id, 
+    province, city, region, address, creator_id, updator_id, create_time, update_time,
+    deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from logical_plant
+    where id = #{id,jdbcType=BIGINT}
+    and deleted = 0
+  </select>
+  <select id="listByTenantId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from logical_plant
+    where tenant_id = #{tenantId}
+    <if test="logicalPlantNo != null and logicalPlantNo != ''" >
+      AND logical_plant_no like concat('%',concat('/',#{logicalPlantNo},'%')) ESCAPE '/'
+    </if>
+    <if test="logicalPlantName != null and logicalPlantName != ''" >
+      AND logical_plant_name like concat('%',concat('/',#{logicalPlantName},'%')) ESCAPE '/'
+    </if>
+    and deleted = 0
+    order by update_time desc
+  </select>
+  <select id="listBy" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from logical_plant
+    where tenant_id = #{tenantId}
+    <if test="type != null">
+      and `type` = #{type}
+    </if>
+    <if test="companyCode != null and companyCode != '' ">
+      and `company_code` = #{companyCode}
+    </if>
+    <if test="logicalPlantNo != null and logicalPlantNo != ''" >
+      AND logical_plant_no like concat('%',concat('/',#{logicalPlantNo},'%')) ESCAPE '/'
+    </if>
+    <if test="logicalPlantName != null and logicalPlantName != ''" >
+      AND logical_plant_name like concat('%',concat('/',#{logicalPlantName},'%')) ESCAPE '/'
+    </if>
+    <if test="preciseLogicalPlantName != null and preciseLogicalPlantName != ''" >
+      AND logical_plant_name = #{preciseLogicalPlantName}
+    </if>
+    <if test="province != null and province != ''" >
+      AND province = #{province}
+    </if>
+    <if test="city != null and city != ''" >
+      AND city = #{city}
+    </if>
+    <if test="region != null and region != ''" >
+      AND region = #{region}
+    </if>
+
+    and deleted = 0
+    order by id
+  </select>
+  <select id="listBys" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from logical_plant
+    where tenant_id = #{tenantId}
+    <if test="null != types and types.size() > 0">
+      AND `type` IN
+      <foreach collection="types" item="type" index="index" open="(" close=")" separator=",">
+        #{type}
+      </foreach>
+    </if>
+    <if test="companyCode != null and companyCode != '' ">
+      and `company_code` = #{companyCode}
+    </if>
+    and deleted = 0
+  </select>
+  <select id="selectBy" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from logical_plant
+    <where>
+      <if test="id != null">
+        and `id` = #{id}
+      </if>
+      <if test="logicalPlantNo != null and logicalPlantNo != '' ">
+        and `logical_plant_no` = #{logicalPlantNo}
+      </if>
+    </where>
+  </select>
+
+  <select id="getByLogicalPlantNo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from logical_plant
+    where logical_plant_no = #{logicalPlantNo,jdbcType=VARCHAR}
+    and deleted = 0
+    limit 1
+  </select>
+    <select id="listByIdList" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from logical_plant
+      where
+        deleted = 0
+        <if test="tenantId != null">
+          and tenant_id = #{tenantId}
+        </if>
+        <if test="null != idList and idList.size() > 0">
+            and id in
+            <foreach collection="idList" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        <if test="null != noList and noList.size() > 0">
+            and logical_plant_no in
+            <foreach collection="noList" item="logicalPlantNo" open="(" close=")" separator=",">
+                #{logicalPlantNo}
+            </foreach>
+        </if>
+    </select>
+    <select id="selectByTenantIdAndName" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from logical_plant
+      where
+      tenant_id = #{tenantId}
+      and
+      logical_plant_name = #{logicalPlantName}
+      and deleted = 0
+    </select>
+    <select id="ListByLogicalPlantNoList" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from logical_plant
+      where logical_plant_no in
+      <foreach collection="list" item="item" separator="," open="(" close=")">
+        #{item}
+      </foreach>
+      and deleted = 0
+    </select>
+  <select id="listByParam" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from logical_plant
+    where tenant_id = #{tenantId}
+    <if test="logicalPlantNo != null and logicalPlantNo != ''" >
+      AND logical_plant_no like concat('%',concat('/',#{logicalPlantNo},'%')) ESCAPE '/'
+    </if>
+    <if test="logicalPlantName != null and logicalPlantName != ''" >
+      AND logical_plant_name like concat('%',concat('/',#{logicalPlantName},'%')) ESCAPE '/'
+    </if>
+    <if test="province != null and province != ''" >
+      AND province = #{province}
+    </if>
+    <if test="city != null and city != ''" >
+      AND city = #{city}
+    </if>
+    <if test="region != null and region != ''" >
+      AND region = #{region}
+    </if>
+    and deleted = 0
+    order by update_time desc
+  </select>
+
+  <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity.LogicalPlantPO" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    insert into logical_plant (id, tenant_id, logical_plant_no, 
+      logical_plant_name, `type`, company_code, 
+      warehouse_id, province, city, 
+      region, address, creator_id,
+      updator_id, create_time, update_time,
+      deleted)
+    values (#{id,jdbcType=BIGINT}, #{tenantId,jdbcType=VARCHAR}, #{logicalPlantNo,jdbcType=VARCHAR}, 
+      #{logicalPlantName,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{companyCode,jdbcType=VARCHAR}, 
+      #{warehouseId,jdbcType=BIGINT}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{region,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{creatorId,jdbcType=VARCHAR},
+      #{updatorId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{deleted,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.inventory.middle.infra.persistence.entity.LogicalPlantPO" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    insert into logical_plant
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="logicalPlantNo != null">
+        logical_plant_no,
+      </if>
+      <if test="logicalPlantName != null">
+        logical_plant_name,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="companyCode != null">
+        company_code,
+      </if>
+      <if test="warehouseId != null">
+        warehouse_id,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="region != null">
+        region,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="updatorId != null">
+        updator_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="logicalPlantNo != null">
+        #{logicalPlantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logicalPlantName != null">
+        #{logicalPlantName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="companyCode != null">
+        #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null">
+        #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null">
+        #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="updatorId != null">
+        #{updatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.persistence.entity.LogicalPlantPO">
+    update logical_plant
+    <set>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="logicalPlantNo != null">
+        logical_plant_no = #{logicalPlantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logicalPlantName != null">
+        logical_plant_name = #{logicalPlantName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="companyCode != null">
+        company_code = #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null">
+        warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null">
+        region = #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        creator_id = #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="updatorId != null">
+        updator_id = #{updatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.persistence.entity.LogicalPlantPO">
+    update logical_plant
+    set tenant_id = #{tenantId,jdbcType=VARCHAR},
+      logical_plant_no = #{logicalPlantNo,jdbcType=VARCHAR},
+      logical_plant_name = #{logicalPlantName,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=TINYINT},
+      company_code = #{companyCode,jdbcType=VARCHAR},
+      warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      region = #{region,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      creator_id = #{creatorId,jdbcType=VARCHAR},
+      updator_id = #{updatorId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

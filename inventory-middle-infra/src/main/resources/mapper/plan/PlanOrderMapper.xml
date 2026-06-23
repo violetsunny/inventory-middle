@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.PlanOrderMapper">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.PlanOrderPO">
+        <id column="id" property="id"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="plan_code" property="planCode"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="material_desc" property="materialDesc"/>
+        <result column="logical_plant_no" property="logicalPlantNo"/>
+        <result column="logical_plant_name" property="logicalPlantName"/>
+        <result column="plan_type" property="planType"/>
+        <result column="create_type" property="createType"/>
+        <result column="transfer_logical_plant_no" property="transferLogicalPlantNo"/>
+        <result column="forecast_inventory" property="forecastInventory"/>
+        <result column="plan_order_quantity" property="planOrderQuantity"/>
+        <result column="unit" property="unit"/>
+        <result column="issue_quantity" property="issueQuantity"/>
+        <result column="confirm_quantity" property="confirmQuantity"/>
+        <result column="finish_quantity" property="finishQuantity"/>
+        <result column="status" property="status"/>
+        <result column="plan_issue_time" property="planIssueTime"/>
+        <result column="real_issue_time" property="realIssueTime"/>
+        <result column="plan_receiving_time" property="planReceivingTime"/>
+        <result column="real_receiving_time" property="realReceivingTime"/>
+        <result column="confirm_time" property="confirmTime"/>
+        <result column="planner_name" property="plannerName"/>
+        <result column="planner_id" property="plannerId"/>
+        <result column="demand_info" property="demandInfo"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="operator_name" property="operatorName"/>
+        <result column="ext_attrs" property="extAttrs"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="updator_id" property="updatorId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, order_no, plan_code, material_code, material_desc, logical_plant_no, logical_plant_name,
+        plan_type, create_type, transfer_logical_plant_no, forecast_inventory, plan_order_quantity,
+        unit, issue_quantity, confirm_quantity, finish_quantity, `status`, plan_issue_time,
+        real_issue_time, plan_receiving_time, real_receiving_time, confirm_time, planner_name,
+        planner_id, demand_info, tenant_id, operator_name, ext_attrs, creator_id, create_time,
+        updator_id, update_time, deleted
+    </sql>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" useGeneratedKeys="true"
+            parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanOrderPO">
+        insert into pl_plan_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null">order_no,</if>
+            <if test="planCode != null">plan_code,</if>
+            <if test="materialCode != null">material_code,</if>
+            <if test="materialDesc != null">material_desc,</if>
+            <if test="logicalPlantNo != null">logical_plant_no,</if>
+            <if test="logicalPlantName != null">logical_plant_name,</if>
+            <if test="planType != null">plan_type,</if>
+            <if test="createType != null">create_type,</if>
+            <if test="transferLogicalPlantNo != null">transfer_logical_plant_no,</if>
+            <if test="forecastInventory != null">forecast_inventory,</if>
+            <if test="planOrderQuantity != null">plan_order_quantity,</if>
+            <if test="unit != null">unit,</if>
+            <if test="issueQuantity != null">issue_quantity,</if>
+            <if test="confirmQuantity != null">confirm_quantity,</if>
+            <if test="finishQuantity != null">finish_quantity,</if>
+            <if test="status != null">`status`,</if>
+            <if test="planIssueTime != null">plan_issue_time,</if>
+            <if test="realIssueTime != null">real_issue_time,</if>
+            <if test="planReceivingTime != null">plan_receiving_time,</if>
+            <if test="realReceivingTime != null">real_receiving_time,</if>
+            <if test="confirmTime != null">confirm_time,</if>
+            <if test="plannerName != null">planner_name,</if>
+            <if test="plannerId != null">planner_id,</if>
+            <if test="demandInfo != null">demand_info,</if>
+            <if test="tenantId != null">tenant_id,</if>
+            <if test="operatorName != null">operator_name,</if>
+            <if test="extAttrs != null">ext_attrs,</if>
+            <if test="creatorId != null">creator_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updatorId != null">updator_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            deleted,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null">#{orderNo},</if>
+            <if test="planCode != null">#{planCode},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="materialDesc != null">#{materialDesc},</if>
+            <if test="logicalPlantNo != null">#{logicalPlantNo},</if>
+            <if test="logicalPlantName != null">#{logicalPlantName},</if>
+            <if test="planType != null">#{planType},</if>
+            <if test="createType != null">#{createType},</if>
+            <if test="transferLogicalPlantNo != null">#{transferLogicalPlantNo},</if>
+            <if test="forecastInventory != null">#{forecastInventory},</if>
+            <if test="planOrderQuantity != null">#{planOrderQuantity},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="issueQuantity != null">#{issueQuantity},</if>
+            <if test="confirmQuantity != null">#{confirmQuantity},</if>
+            <if test="finishQuantity != null">#{finishQuantity},</if>
+            <if test="status != null">#{status},</if>
+            <if test="planIssueTime != null">#{planIssueTime},</if>
+            <if test="realIssueTime != null">#{realIssueTime},</if>
+            <if test="planReceivingTime != null">#{planReceivingTime},</if>
+            <if test="realReceivingTime != null">#{realReceivingTime},</if>
+            <if test="confirmTime != null">#{confirmTime},</if>
+            <if test="plannerName != null">#{plannerName},</if>
+            <if test="plannerId != null">#{plannerId},</if>
+            <if test="demandInfo != null">#{demandInfo},</if>
+            <if test="tenantId != null">#{tenantId},</if>
+            <if test="operatorName != null">#{operatorName},</if>
+            <if test="extAttrs != null">#{extAttrs},</if>
+            <if test="creatorId != null">#{creatorId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updatorId != null">#{updatorId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            #{deleted},
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanOrderPO">
+        update pl_plan_order
+        <set>
+            <if test="orderNo != null">order_no = #{orderNo},</if>
+            <if test="planCode != null">plan_code = #{planCode},</if>
+            <if test="materialCode != null">material_code = #{materialCode},</if>
+            <if test="materialDesc != null">material_desc = #{materialDesc},</if>
+            <if test="logicalPlantNo != null">logical_plant_no = #{logicalPlantNo},</if>
+            <if test="logicalPlantName != null">logical_plant_name = #{logicalPlantName},</if>
+            <if test="planType != null">plan_type = #{planType},</if>
+            <if test="createType != null">create_type = #{createType},</if>
+            <if test="transferLogicalPlantNo != null">transfer_logical_plant_no = #{transferLogicalPlantNo},</if>
+            <if test="forecastInventory != null">forecast_inventory = #{forecastInventory},</if>
+            <if test="planOrderQuantity != null">plan_order_quantity = #{planOrderQuantity},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="issueQuantity != null">issue_quantity = #{issueQuantity},</if>
+            <if test="confirmQuantity != null">confirm_quantity = #{confirmQuantity},</if>
+            <if test="finishQuantity != null">finish_quantity = #{finishQuantity},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="planIssueTime != null">plan_issue_time = #{planIssueTime},</if>
+            <if test="realIssueTime != null">real_issue_time = #{realIssueTime},</if>
+            <if test="planReceivingTime != null">plan_receiving_time = #{planReceivingTime},</if>
+            <if test="realReceivingTime != null">real_receiving_time = #{realReceivingTime},</if>
+            <if test="confirmTime != null">confirm_time = #{confirmTime},</if>
+            <if test="plannerName != null">planner_name = #{plannerName},</if>
+            <if test="plannerId != null">planner_id = #{plannerId},</if>
+            <if test="demandInfo != null">demand_info = #{demandInfo},</if>
+            <if test="tenantId != null">tenant_id = #{tenantId},</if>
+            <if test="operatorName != null">operator_name = #{operatorName},</if>
+            <if test="extAttrs != null">ext_attrs = #{extAttrs},</if>
+            <if test="creatorId != null">creator_id = #{creatorId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updatorId != null">updator_id = #{updatorId},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            deleted = #{deleted},
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectByIdAndTenantId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pl_plan_order
+        where id = #{id}
+        and tenant_id = #{tenantId}
+        and deleted = 0
+    </select>
+
+    <select id="pageQueryPlanOrder" resultMap="BaseResultMap"
+            parameterType="com.inventory.middle.infra.plan.persistence.condition.plan.PlanOrderPageCondition">
+        select
+        <include refid="Base_Column_List"/>
+        from pl_plan_order
+        where tenant_id = #{tenantId}
+        and deleted = 0
+        and create_type in (0, 1)
+        <if test="statusList != null and statusList.size() > 0">
+            and status in
+            <foreach close=")" collection="statusList" item="item" open="(" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="materialCode != null and materialCode != ''">and material_code = #{materialCode}</if>
+        <if test="logicalPlantNo != null and logicalPlantNo != ''">and logical_plant_no = #{logicalPlantNo}</if>
+        <if test="orderNo != null and orderNo != ''">and order_no = #{orderNo}</if>
+        <if test="maxCreateTime != null">and create_time &lt; #{maxCreateTime}</if>
+        <if test="minCreateTime != null">and create_time &gt; #{minCreateTime}</if>
+        order by create_time desc
+    </select>
+
+    <select id="listByCondition" resultMap="BaseResultMap"
+            parameterType="com.inventory.middle.infra.plan.persistence.condition.plan.PlanOrderCondition">
+        select
+        <include refid="Base_Column_List"/>
+        from pl_plan_order
+        where deleted = 0
+        <if test="tenantId != null and tenantId != ''">and tenant_id = #{tenantId}</if>
+        <if test="materialCode != null and materialCode != ''">and material_code = #{materialCode}</if>
+        <if test="logicalPlantNo != null and logicalPlantNo != ''">and logical_plant_no = #{logicalPlantNo}</if>
+        <if test="planReceivingTime != null">and plan_receiving_time = #{planReceivingTime}</if>
+        <if test="statuses != null and statuses.size() > 0">
+            and status in
+            <foreach close=")" collection="statuses" item="item" open="(" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <update id="confirmPlanOrder">
+        update pl_plan_order
+        set confirm_quantity = plan_order_quantity,
+            status = 1,
+            confirm_time = current_timestamp,
+            update_time = current_timestamp
+        where id = #{id}
+          and deleted = 0
+    </update>
+</mapper>

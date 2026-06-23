@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventoryAlertNotificationMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.InventoryAlertNotificationPO" >
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="alert_id" property="alertId" jdbcType="BIGINT"/>
+        <result column="notification_mode" property="notificationMode" jdbcType="VARCHAR"/>
+        <result column="notification_address" property="notificationAddress" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="creator_id" property="creatorId" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="updator_id" property="updatorId" jdbcType="VARCHAR"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+                alert_id,
+                notification_mode,
+                notification_address,
+                content,
+                url,
+                status,
+                create_time,
+                creator_id,
+                update_time,
+                updator_id,
+                deleted
+    </sql>
+
+    <insert id="insertBatch" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into inventory_alert_notification (
+            alert_id,
+            notification_mode,
+            notification_address,
+            content,
+            url,
+            status,
+            create_time,
+            creator_id,
+            update_time,
+            updator_id,
+            deleted
+            )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.alertId},
+            #{item.notificationMode},
+            #{item.notificationAddress},
+            #{item.content},
+            #{item.url},
+            #{item.status},
+            #{item.createTime},
+            #{item.creatorId},
+            #{item.updateTime},
+            #{item.updatorId},
+            #{item.deleted}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.persistence.entity.InventoryAlertNotificationPO">
+        INSERT INTO inventory_alert_notification
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != alertId and '' != alertId">
+                alert_id,
+            </if>
+            <if test="null != notificationMode and '' != notificationMode">
+                notification_mode,
+            </if>
+            <if test="null != notificationAddress and '' != notificationAddress">
+                notification_address,
+            </if>
+            <if test="null != content and '' != content">
+                content,
+            </if>
+            <if test="null != url and '' != url">
+                url,
+            </if>
+            <if test="null != status and '' != status">
+                status,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId ">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId ">
+                updator_id,
+            </if>
+            <if test="null != deleted ">
+                deleted
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != alertId and '' != alertId">
+                #{alertId},
+            </if>
+            <if test="null != notificationMode and '' != notificationMode">
+                #{notificationMode},
+            </if>
+            <if test="null != notificationAddress and '' != notificationAddress">
+                #{notificationAddress},
+            </if>
+            <if test="null != content and '' != content">
+                #{content},
+            </if>
+            <if test="null != url and '' != url">
+                #{url},
+            </if>
+            <if test="null != status and '' != status">
+                #{status},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId ">
+                #{updatorId},
+            </if>
+            <if test="null != deleted ">
+                #{deleted}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.InventoryAlertNotificationPO">
+        UPDATE inventory_alert_notification
+        <set>
+            <if test="null != alertId ">alert_id = #{alertId},</if>
+            <if test="null != notificationMode and '' != notificationMode">notification_mode = #{notificationMode},</if>
+            <if test="null != notificationAddress and '' != notificationAddress">notification_address = #{notificationAddress},</if>
+            <if test="null != content and '' != content">content = #{content},</if>
+            <if test="null != url and '' != url">url = #{url},</if>
+            <if test="null != status ">status = #{status},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId and '' != creatorId">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId and '' != updatorId">updator_id = #{updatorId},</if>
+            <if test="null != deleted ">deleted = #{deleted}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStatus" >
+        UPDATE inventory_alert_notification
+        <set>
+            <if test="null != status ">status = #{status},</if>
+            update_time = NOW()
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and deleted = #{deleted}
+    </update>
+
+    <update id="deleteByAlertIds">
+        UPDATE inventory_alert_notification
+        <set>
+            <if test="null != param.updateTime ">update_time = #{param.updateTime},</if>
+            <if test="null != param.updatorId ">updator_id = #{param.updatorId},</if>
+            <if test="null != param.deleted ">deleted = #{param.deleted}</if>
+        </set>
+        WHERE alert_id in
+        <foreach collection="alertIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and deleted = #{deletedStatus}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_alert_notification
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryByAlertIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_alert_notification
+        WHERE alert_id in
+        <foreach collection="alertIds" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <if test="null != status">
+          and status = #{status}
+        </if>
+        and deleted = #{deleted}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_alert_notification
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM inventory_alert_notification
+    </select>
+
+</mapper>

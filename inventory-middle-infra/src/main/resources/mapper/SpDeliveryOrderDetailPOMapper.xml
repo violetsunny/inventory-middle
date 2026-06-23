@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enn.sparepart.screw.ext.dal.mapper.SpDeliveryOrderDetailPOMapper">
+  <resultMap id="BaseResultMap" type="com.enn.sparepart.screw.ext.dal.entity.SpDeliveryOrderDetailPO">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+    <result column="manufacturer_code" jdbcType="VARCHAR" property="manufacturerCode" />
+    <result column="manufacturer_name" jdbcType="VARCHAR" property="manufacturerName" />
+    <result column="delivery_order_id" jdbcType="BIGINT" property="deliveryOrderId" />
+    <result column="item_no" jdbcType="VARCHAR" property="itemNo" />
+    <result column="material_code" jdbcType="VARCHAR" property="materialCode" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="out_material_code" jdbcType="VARCHAR" property="outMaterialCode" />
+    <result column="sn_code" jdbcType="VARCHAR" property="snCode" />
+    <result column="sn_name" jdbcType="VARCHAR" property="snName" />
+    <result column="category_code" jdbcType="VARCHAR" property="categoryCode" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="quantity" jdbcType="DECIMAL" property="quantity" />
+    <result column="identify_code" jdbcType="VARCHAR" property="identifyCode" />
+    <result column="unit_id" jdbcType="BIGINT" property="unitId" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="out_unit" jdbcType="VARCHAR" property="outUnit" />
+    <result column="stock_type" jdbcType="TINYINT" property="stockType" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="total_price_tax" jdbcType="DECIMAL" property="totalPriceTax" />
+    <result column="tax_code_name" jdbcType="VARCHAR" property="taxCodeName" />
+    <result column="tax_code" jdbcType="VARCHAR" property="taxCode" />
+    <result column="tax_rate" jdbcType="DECIMAL" property="taxRate" />
+    <result column="tax" jdbcType="DECIMAL" property="tax" />
+    <result column="exchange_rate" jdbcType="DECIMAL" property="exchangeRate" />
+    <result column="supply_code" jdbcType="VARCHAR" property="supplyCode" />
+    <result column="supply_name" jdbcType="VARCHAR" property="supplyName" />
+    <result column="customer" jdbcType="VARCHAR" property="customer" />
+    <result column="customer_code" jdbcType="VARCHAR" property="customerCode" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="creator_id" jdbcType="VARCHAR" property="creatorId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="updator_id" jdbcType="VARCHAR" property="updatorId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="TINYINT" property="deleted" />
+  </resultMap>
+
+  <resultMap id="ManufacturerResultMap" type="com.enn.sparepart.screw.ext.dal.entity.SpManufacturerInfoPO">
+    <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+    <result column="manufacturer_code" jdbcType="VARCHAR" property="manufacturerCode" />
+    <result column="manufacturer_name" jdbcType="VARCHAR" property="manufacturerName" />
+  </resultMap>
+
+  <sql id="Base_Column_Sql">
+    id, tenant_id, manufacturer_code,
+      manufacturer_name, delivery_order_id, item_no,
+      material_code, material_name, out_material_code,
+      sn_code, sn_name, category_code,
+      category_name, quantity, identify_code,
+      unit_id, unit, out_unit,
+      stock_type, price, total_price,
+      currency, total_price_tax, tax_code_name,
+      tax_code, tax_rate, tax,
+      exchange_rate, supply_code, supply_name,
+      customer, customer_code, `state`,
+      creator_id, create_time, updator_id,
+      update_time, deleted
+  </sql>
+  <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.enn.sparepart.screw.ext.dal.entity.SpDeliveryOrderDetailPO">
+    insert into sp_delivery_order_detail (id, tenant_id, manufacturer_code, 
+      manufacturer_name, delivery_order_id, item_no, 
+      material_code, material_name, out_material_code, 
+      sn_code, sn_name, category_code, 
+      category_name, quantity, identify_code, 
+      unit_id, unit, out_unit, 
+      stock_type, price, total_price, 
+      currency, total_price_tax, tax_code_name, 
+      tax_code, tax_rate, tax, 
+      exchange_rate, supply_code, supply_name, 
+      customer, customer_code, `state`, 
+      creator_id, create_time, updator_id, 
+      update_time, deleted)
+    values (#{id,jdbcType=BIGINT}, #{tenantId,jdbcType=VARCHAR}, #{manufacturerCode,jdbcType=VARCHAR}, 
+      #{manufacturerName,jdbcType=VARCHAR}, #{deliveryOrderId,jdbcType=BIGINT}, #{itemNo,jdbcType=VARCHAR}, 
+      #{materialCode,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, #{outMaterialCode,jdbcType=VARCHAR}, 
+      #{snCode,jdbcType=VARCHAR}, #{snName,jdbcType=VARCHAR}, #{categoryCode,jdbcType=VARCHAR}, 
+      #{categoryName,jdbcType=VARCHAR}, #{quantity,jdbcType=DECIMAL}, #{identifyCode,jdbcType=VARCHAR}, 
+      #{unitId,jdbcType=BIGINT}, #{unit,jdbcType=VARCHAR}, #{outUnit,jdbcType=VARCHAR}, 
+      #{stockType,jdbcType=TINYINT}, #{price,jdbcType=DECIMAL}, #{totalPrice,jdbcType=DECIMAL}, 
+      #{currency,jdbcType=VARCHAR}, #{totalPriceTax,jdbcType=DECIMAL}, #{taxCodeName,jdbcType=VARCHAR}, 
+      #{taxCode,jdbcType=VARCHAR}, #{taxRate,jdbcType=DECIMAL}, #{tax,jdbcType=DECIMAL}, 
+      #{exchangeRate,jdbcType=DECIMAL}, #{supplyCode,jdbcType=VARCHAR}, #{supplyName,jdbcType=VARCHAR}, 
+      #{customer,jdbcType=VARCHAR}, #{customerCode,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, 
+      #{creatorId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updatorId,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.enn.sparepart.screw.ext.dal.entity.SpDeliveryOrderDetailPO">
+    insert into sp_delivery_order_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="manufacturerCode != null">
+        manufacturer_code,
+      </if>
+      <if test="manufacturerName != null">
+        manufacturer_name,
+      </if>
+      <if test="deliveryOrderId != null">
+        delivery_order_id,
+      </if>
+      <if test="itemNo != null">
+        item_no,
+      </if>
+      <if test="materialCode != null">
+        material_code,
+      </if>
+      <if test="materialName != null">
+        material_name,
+      </if>
+      <if test="outMaterialCode != null">
+        out_material_code,
+      </if>
+      <if test="snCode != null">
+        sn_code,
+      </if>
+      <if test="snName != null">
+        sn_name,
+      </if>
+      <if test="categoryCode != null">
+        category_code,
+      </if>
+      <if test="categoryName != null">
+        category_name,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="identifyCode != null">
+        identify_code,
+      </if>
+      <if test="unitId != null">
+        unit_id,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="outUnit != null">
+        out_unit,
+      </if>
+      <if test="stockType != null">
+        stock_type,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="totalPriceTax != null">
+        total_price_tax,
+      </if>
+      <if test="taxCodeName != null">
+        tax_code_name,
+      </if>
+      <if test="taxCode != null">
+        tax_code,
+      </if>
+      <if test="taxRate != null">
+        tax_rate,
+      </if>
+      <if test="tax != null">
+        tax,
+      </if>
+      <if test="exchangeRate != null">
+        exchange_rate,
+      </if>
+      <if test="supplyCode != null">
+        supply_code,
+      </if>
+      <if test="supplyName != null">
+        supply_name,
+      </if>
+      <if test="customer != null">
+        customer,
+      </if>
+      <if test="customerCode != null">
+        customer_code,
+      </if>
+      <if test="state != null">
+        `state`,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updatorId != null">
+        updator_id,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturerCode != null">
+        #{manufacturerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturerName != null">
+        #{manufacturerName,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryOrderId != null">
+        #{deliveryOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="itemNo != null">
+        #{itemNo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialCode != null">
+        #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="outMaterialCode != null">
+        #{outMaterialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="snCode != null">
+        #{snCode,jdbcType=VARCHAR},
+      </if>
+      <if test="snName != null">
+        #{snName,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryCode != null">
+        #{categoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryName != null">
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=DECIMAL},
+      </if>
+      <if test="identifyCode != null">
+        #{identifyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="unitId != null">
+        #{unitId,jdbcType=BIGINT},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="outUnit != null">
+        #{outUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="stockType != null">
+        #{stockType,jdbcType=TINYINT},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPriceTax != null">
+        #{totalPriceTax,jdbcType=DECIMAL},
+      </if>
+      <if test="taxCodeName != null">
+        #{taxCodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="taxCode != null">
+        #{taxCode,jdbcType=VARCHAR},
+      </if>
+      <if test="taxRate != null">
+        #{taxRate,jdbcType=DECIMAL},
+      </if>
+      <if test="tax != null">
+        #{tax,jdbcType=DECIMAL},
+      </if>
+      <if test="exchangeRate != null">
+        #{exchangeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="supplyCode != null">
+        #{supplyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyName != null">
+        #{supplyName,jdbcType=VARCHAR},
+      </if>
+      <if test="customer != null">
+        #{customer,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCode != null">
+        #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatorId != null">
+        #{updatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="queryByOrderDetailIds" resultType="com.enn.sparepart.screw.ext.dal.entity.SpDeliveryOrderInfoPO">
+    select
+    od.id as orderDetailId, od.manufacturer_code as manufacturerCode,od.manufacturer_name as manufacturerName,
+    od.delivery_order_id as deliveryOrderId, od.item_no as itemNo,
+    od.material_code as materialCode, od.material_name as materialName, od.out_material_code as outMaterialCode,
+    od.sn_code as snCode, od.sn_name as snName,
+    od.category_code as categoryCode,od.category_name as categoryName, od.quantity as quantity,
+    od.identify_code as identifyCode,od.unit_id as unitId, od.unit as unit, od.out_unit as outUnit,
+    od.stock_type as stockType, od.price as price, od.total_price as totalPrice,
+    od.currency as currency, od.total_price_tax as totalPriceTax, od.tax_code_name as taxCodeName,
+    od.tax_code as taxCode, od.tax_rate as taxRate, od.tax as tax,
+    od.exchange_rate as exchangeRate, od.supply_code as supplyCode, od.supply_name as supplyName,
+    od.customer as customer, od.customer_code as customerCode,
+    o.tenant_id as tenantId, o.delivery_order_no as deliveryOrderNo,
+    o.delivery_type as deliveryType, o.crm_order_no as crmOrderNo, o.out_order_no as outOrderNo,
+    o.delivery_time as deliveryTime, o.distributor_id as distributorId, o.distributor_tenant_id as distributorTenantId,
+    o.distributor_name as distributorName, o.distributor_type as distributorType, o.origin_system as originSystem,
+    o.`state` as state, od.`state` as detailState
+    from sp_delivery_order_detail od left join sp_delivery_order o on od.delivery_order_id = o.id
+    where
+    od.deleted = 0 and o.deleted = 0
+    <if test="tenantId != null">
+      and od.tenant_id = #{tenantId}
+    </if>
+    <if test="null != list and list.size() > 0">
+      and od.id in
+      <foreach collection="list" item="id" open="(" close=")" separator=",">
+        #{id}
+      </foreach>
+    </if>
+  </select>
+
+  <select id="queryByDeliveryOrderId" resultMap="BaseResultMap" >
+    select
+     <include refid="Base_Column_Sql"></include>
+    from sp_delivery_order_detail
+    where
+     deleted = 0
+      and tenant_id = #{tenantId}
+      and delivery_order_id = #{deliveryOrderId}
+      and `state` in(0, 1, 3)
+      order by `state` asc
+  </select>
+
+  <select id="selectById" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_Sql"></include>
+    from sp_delivery_order_detail
+    where
+    deleted = 0
+    and tenant_id = #{tenantId}
+    and id = #{orderDetailId}
+  </select>
+
+  <update id="updateStateByOrderDetailId" >
+    update sp_delivery_order_detail
+        set state = #{state}, updator_id = #{updatorId}
+    where id = #{orderDetailId}
+      and tenant_id = #{tenantId}
+  </update>
+  
+  <select id="queryManufacturerByIds" resultMap="ManufacturerResultMap">
+    SELECT DISTINCT manufacturer_name, manufacturer_code, tenant_id
+    FROM sp_delivery_order_detail
+    WHERE tenant_id IN
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    and `state` in(0, 1, 3)
+    and  deleted = 0
+    order by id desc
+  </select>
+
+</mapper>

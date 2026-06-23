@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventorySupplyMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.InventorySupplyPO">
+        <result column="id" property="id"/>
+        <result column="material_doc_id" property="materialDocId"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="batch_no" property="batchNo"/>
+        <result column="batch_time" property="batchTime"/>
+        <result column="owner_id" property="ownerId"/>
+        <result column="logical_plant_id" property="logicalPlantId"/>
+        <result column="location_id" property="locationId"/>
+        <result column="unrestricted" property="unrestricted"/>
+        <result column="damaged" property="damaged"/>
+        <result column="inspection" property="inspection"/>
+        <result column="uom" property="uom"/>
+        <result column="eta" property="eta"/>
+        <result column="due_date" property="dueDate"/>
+        <result column="currency" property="currency"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="batch_price" property="batchPrice"/>
+        <result column="stock_type" property="stockType"/>
+        <result column="supply_type" property="supplyType"/>
+        <result column="source_order_type" property="sourceOrderType"/>
+        <result column="source_order_no" property="sourceOrderNo"/>
+        <result column="delivery_no" property="deliveryNo"/>
+        <result column="deleted" property="deleted"/>
+        <result column="create_time" property="createTime"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updator_id" property="updatorId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,
+        material_doc_id,
+        material_code,
+        batch_no,
+        batch_time,
+        owner_id,
+        logical_plant_id,
+        location_id,
+        unrestricted,
+        damaged,
+        inspection,
+        uom,
+        eta,
+        due_date,
+        currency,
+        tenant_id,
+        batch_price,
+        stock_type,
+        supply_type,
+        source_order_type,
+        source_order_no,
+        delivery_no,
+        deleted,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id
+    </sql>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into inventory_supply (
+        material_doc_id,
+        material_code,
+        batch_no,
+        batch_time,
+        owner_id,
+        logical_plant_id,
+        location_id,
+        unrestricted,
+        damaged,
+        inspection,
+        uom,
+        eta,
+        due_date,
+        currency,
+        batch_price,
+        stock_type,
+        supply_type,
+        source_order_type,
+        source_order_no,
+        delivery_no,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id,
+        deleted,
+        tenant_id
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.materialDocId},
+            #{item.materialCode},
+            #{item.batchNo},
+            #{item.batchTime},
+            #{item.ownerId},
+            #{item.logicalPlantId},
+            #{item.locationId},
+            #{item.unrestricted},
+            #{item.damaged},
+            #{item.inspection},
+            #{item.uom},
+            #{item.eta},
+            #{item.dueDate},
+            #{item.currency},
+            #{item.batchPrice},
+            #{item.stockType},
+            #{item.supplyType},
+            #{item.sourceOrderType},
+            #{item.sourceOrderNo},
+            #{item.deliveryNo},
+            #{item.createTime},
+            #{item.creatorId},
+            #{item.updateTime},
+            #{item.updatorId},
+            #{item.deleted},
+            #{item.tenantId}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insert"
+            parameterType="com.inventory.middle.infra.persistence.entity.InventorySupplyPO">
+        INSERT INTO inventory_supply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != materialDocId ">
+                material_doc_id,
+            </if>
+            <if test="null != materialCode and '' != materialCode">
+                material_code,
+            </if>
+            <if test="null != batchNo and '' != batchNo">
+                batch_no,
+            </if>
+            <if test="null != batchTime ">
+                batch_time,
+            </if>
+            <if test="null != ownerId ">
+                owner_id,
+            </if>
+            <if test="null != logicalPlantId ">
+                logical_plant_id,
+            </if>
+            <if test="null != locationId ">
+                location_id,
+            </if>
+            <if test="null != unrestricted ">
+                unrestricted,
+            </if>
+            <if test="null != damaged ">
+                damaged,
+            </if>
+            <if test="null != inspection ">
+                inspection,
+            </if>
+            <if test="null != uom and '' != uom">
+                uom,
+            </if>
+            <if test="null != eta ">
+                eta,
+            </if>
+            <if test="null != dueDate ">
+                due_date,
+            </if>
+            <if test="null != currency and '' != currency">
+                currency,
+            </if>
+            <if test="null != tenantId ">
+                tenant_id,
+            </if>
+            <if test="null != batchPrice ">
+                batch_price,
+            </if>
+            <if test="null != stockType ">
+                stock_type,
+            </if>
+            <if test="null != supplyType ">
+                supply_type,
+            </if>
+            <if test="null != sourceOrderType ">
+                source_order_type,
+            </if>
+            <if test="null != sourceOrderNo ">
+                source_order_no,
+            </if>
+            <if test="null != deliveryNo ">
+                delivery_no,
+            </if>
+            <if test="null != deleted ">
+                deleted,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId ">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId ">
+                updator_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != materialDocId ">
+                #{materialDocId},
+            </if>
+            <if test="null != materialCode and '' != materialCode">
+                #{materialCode},
+            </if>
+            <if test="null != batchNo and '' != batchNo">
+                #{batchNo},
+            </if>
+            <if test="null != batchTime ">
+                #{batchTime},
+            </if>
+            <if test="null != ownerId ">
+                #{ownerId},
+            </if>
+            <if test="null != logicalPlantId ">
+                #{logicalPlantId},
+            </if>
+            <if test="null != locationId ">
+                #{locationId},
+            </if>
+            <if test="null != unrestricted ">
+                #{unrestricted},
+            </if>
+            <if test="null != damaged ">
+                #{damaged},
+            </if>
+            <if test="null != inspection ">
+                #{inspection},
+            </if>
+            <if test="null != uom and '' != uom">
+                #{uom},
+            </if>
+            <if test="null != eta ">
+                #{eta},
+            </if>
+            <if test="null != dueDate ">
+                #{dueDate},
+            </if>
+            <if test="null != currency and '' != currency">
+                #{currency},
+            </if>
+            <if test="null != tenantId ">
+                #{tenantId},
+            </if>
+            <if test="null != batchPrice ">
+                #{batchPrice},
+            </if>
+            <if test="null != stockType ">
+                #{stockType},
+            </if>
+            <if test="null != supplyType ">
+                #{supplyType},
+            </if>
+            <if test="null != sourceOrderType ">
+                #{sourceOrderType},
+            </if>
+            <if test="null != sourceOrderNo ">
+                #{sourceOrderNo},
+            </if>
+            <if test="null != deliveryNo ">
+                #{deliveryNo},
+            </if>
+            <if test="null != deleted ">
+                #{deleted},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId ">
+                #{updatorId}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.InventorySupplyPO">
+        UPDATE inventory_supply
+        <set>
+            <if test="null != materialDocId ">material_doc_id = #{materialDocId},</if>
+            <if test="null != materialCode and '' != materialCode">material_code = #{materialCode},</if>
+            <if test="null != batchNo and '' != batchNo">batch_no = #{batchNo},</if>
+            <if test="null != batchTime ">batch_time = #{batchTime},</if>
+            <if test="null != ownerId ">owner_id = #{ownerId},</if>
+            <if test="null != logicalPlantId ">logical_plant_id = #{logicalPlantId},</if>
+            <if test="null != locationId ">location_id = #{locationId},</if>
+            <if test="null != unrestricted ">unrestricted = #{unrestricted},</if>
+            <if test="null != damaged ">damaged = #{damaged},</if>
+            <if test="null != inspection ">inspection = #{inspection},</if>
+            <if test="null != uom and '' != uom">uom = #{uom},</if>
+            <if test="null != eta ">eta = #{eta},</if>
+            <if test="null != dueDate ">due_date = #{dueDate},</if>
+            <if test="null != currency and '' != currency">currency = #{currency},</if>
+            <if test="null != tenantId ">tenant_id = #{tenantId},</if>
+            <if test="null != batchPrice ">batch_price = #{batchPrice},</if>
+            <if test="null != stockType ">stock_type = #{stockType},</if>
+            <if test="null != supplyType ">supply_type = #{supplyType},</if>
+            <if test="null != sourceOrderType ">source_order_type = #{sourceOrderType},</if>
+            <if test="null != sourceOrderNo ">source_order_no = #{sourceOrderNo},</if>
+            <if test="null != deliveryNo ">delivery_no = #{deliveryNo},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="batchUpdate" parameterType="java.util.List" >
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE inventory_supply
+            <set>
+                <if test="null != item.unrestricted ">unrestricted = #{item.unrestricted},</if>
+                <if test="null != item.damaged ">damaged = #{item.damaged},</if>
+                <if test="null != item.inspection ">inspection = #{item.inspection},</if>
+                <if test="null != item.eta ">eta = #{item.eta},</if>
+                <if test="null != item.dueDate ">due_date = #{item.dueDate},</if>
+                <if test="null != item.batchPrice ">batch_price = #{item.batchPrice},</if>
+                <if test="null != item.stockType ">stock_type = #{item.stockType},</if>
+                <if test="null != item.supplyType ">supply_type = #{item.supplyType},</if>
+                <if test="null != item.sourceOrderType ">source_order_type = #{item.sourceOrderType},</if>
+                <if test="null != item.sourceOrderNo ">source_order_no = #{item.sourceOrderNo},</if>
+                <if test="null != item.deliveryNo and item.deliveryNo != '' ">delivery_no = #{item.deliveryNo},</if>
+                <if test="null != item.deleted ">deleted = #{item.deleted},</if>
+                <if test="null != item.updateTime ">update_time = #{item.updateTime},</if>
+                <if test="null != item.updatorId ">updator_id = #{item.updatorId},</if>
+            </set>
+            WHERE id = #{item.id}
+        </foreach>
+    </update>
+
+
+    <update id="disable" parameterType="com.inventory.middle.infra.persistence.entity.InventorySupplyPO">
+        UPDATE inventory_supply
+        set deleted = 1
+        WHERE supply_type = #{supplyType}
+          and material_code = #{materialCode}
+          and batch_no = #{batchNo}
+          and tenant_id = #{tenantId}
+          and deleted = 0
+    </update>
+
+    <update id="disableById" parameterType="com.inventory.middle.infra.persistence.entity.InventorySupplyPO">
+        UPDATE inventory_supply
+        set deleted = 1
+        WHERE id = #{id}
+          and deleted = 0
+    </update>
+    <select id="load" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_supply
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryBatchNo" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_supply
+        WHERE supply_type = #{supplyType}
+        and material_code = #{materialCode}
+        and logical_plant_id = #{logicalalPlantId}
+        and location_id = #{storageLocationId}
+        and deleted = 0
+        order by createTime desc
+    </select>
+
+    <select id="find" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_supply
+        WHERE
+        1=1
+        <if test="null != supplyType ">and supply_type = #{supplyType}</if>
+        <if test="null != materialDocId ">and material_doc_id = #{materialDocId}</if>
+        and batch_no = #{batchNo}
+        and material_code = #{materialCode}
+        and tenant_id = #{tenantId}
+        <if test="null != locationId ">and location_id = #{locationId}</if>
+        <if test="null != logicalPlantId ">and logical_plant_id = #{logicalPlantId}</if>
+        and deleted = 0
+        and supply_type =2
+    </select>
+
+
+    <select id="queryInventorySupplyData" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_supply
+        WHERE supply_type = #{supplyType}
+        and material_code = #{materialCode}
+        and batch_no = #{batchNo}
+        and tenant_id = #{tenantId}
+        and deleted = 0
+    </select>
+
+
+    <select id="listByMaterialCode" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_supply
+        WHERE
+        tenant_id = #{tenantId}
+        and supply_type = #{supplyType}
+        and material_code = #{materialCode}
+        and deleted = 0
+    </select>
+
+    <select id="queryInTransitStock" parameterType="com.inventory.middle.infra.persistence.entity.TransferTransitStockPO" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_supply
+        WHERE tenant_id = #{tenantId}
+        <if test="null != materialCode and '' != materialCode">and material_code = #{materialCode}</if>
+        <if test="null != logicalPlantId ">and logical_plant_id = #{logicalPlantId}</if>
+        <if test="null != materialDocId ">and material_doc_id = #{materialDocId}</if>
+        <if test="null != locationId ">and location_id = #{locationId}</if>
+        <if test="null != stockType ">and stock_type = #{stockType}</if>
+        <if test="null != sourceOrderType ">and source_order_type = #{sourceOrderType}</if>
+        <if test="null != sourceOrderNo and '' != sourceOrderNo">and source_order_no = #{sourceOrderNo}</if>
+        <if test="null != deliveryNo and '' != deliveryNo">and delivery_no = #{deliveryNo}</if>
+        <if test="null != etaStartTime">
+            and eta  <![CDATA[ >= ]]> #{etaStartTime}
+        </if>
+        <if test="null != etaEndTime">
+            and eta  <![CDATA[ < ]]> #{etaEndTime}
+        </if>
+        and supply_type = 1
+        and deleted = 0
+        and (unrestricted > 0 or damaged > 0 or inspection > 0)
+    </select>
+
+    <select id="queryInventorySupplyByDay" parameterType="com.inventory.middle.infra.persistence.entity.inventory.InventorySupplyByDayQueryPO"
+            resultType="com.inventory.middle.infra.persistence.entity.inventory.InventorySupplyByDayRespPO">
+        SELECT
+        DATE_FORMAT(t.due_date,'%Y-%m-%d') as dueDate,
+        sum(t.unrestricted) as unrestricted
+        FROM inventory_supply t
+        WHERE t.tenant_id = #{tenantId}
+        <if test="null != materialCode and '' != materialCode">and t.material_code = #{materialCode}</if>
+        <if test="null != logicalPlantId ">and t.logical_plant_id = #{logicalPlantId}</if>
+        <if test="null != startTime ">and t.due_date &gt;= #{startTime}</if>
+        <if test="null != endTime ">and t.due_date &lt;= #{endTime}</if>
+        and t.supply_type = 1
+        and t.unrestricted > 0
+        and t.deleted = 0
+        group by DATE_FORMAT(t.due_date,'%Y-%m-%d');
+    </select>
+
+    <select id="queryInventorySupplyBatchs" resultMap="BaseResultMap">
+        SELECT
+        material_code,
+        tenant_id,
+        logical_plant_id,
+        batch_no,
+        batch_time,
+        sum(unrestricted)               unrestricted,
+        sum(damaged)                    damaged,
+        sum(inspection)                 inspection
+        FROM inventory_supply
+        WHERE batch_no in
+        <foreach collection="batchNoList" item="batchNo" open="(" close=")" separator=",">
+            #{batchNo}
+        </foreach>
+        and tenant_id = #{tenantId}
+        and supply_type = 2
+        and deleted = 0
+        group by material_code, batch_no
+    </select>
+
+
+</mapper>

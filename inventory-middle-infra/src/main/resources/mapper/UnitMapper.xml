@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.UnitMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.UnitPO" >
+        <result column="id" property="id" />
+        <result column="unit" property="unit" />
+        <result column="unit_name" property="unitName" />
+        <result column="description" property="description" />
+        <result column="biz_code" property="bizCode" />
+        <result column="creator" property="creator" />
+        <result column="modifier" property="modifier" />
+        <result column="del" property="del" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="enable" property="enable" />
+        <result column="accuracy" property="accuracy" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        unit,
+        unit_name,
+        description,
+        biz_code,
+        creator,
+        modifier,
+        del,
+        create_time,
+        update_time,
+        enable,
+        accuracy
+    </sql>
+
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into unit (
+            unit,
+            unit_name,
+            description,
+            biz_code,
+            creator,
+            modifier,
+            del,
+            create_time,
+            update_time,
+            enable,
+            accuracy
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+                #{item.unit},
+                #{item.unitName},
+                #{item.description},
+                #{item.bizCode},
+                #{item.creator},
+                #{item.modifier},
+                #{item.del},
+                #{item.createTime},
+                #{item.updateTime},
+                #{item.enable},
+                #{item.accuracy}
+            )
+        </foreach>
+    </insert>
+
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.persistence.entity.UnitPO">
+        INSERT INTO unit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != unit and '' != unit">
+                unit,
+            </if>
+            <if test="null != unitName and '' != unitName">
+                unit_name,
+            </if>
+            <if test="null != description and '' != description">
+                description,
+            </if>
+            <if test="null != bizCode and '' != bizCode">
+                biz_code,
+            </if>
+            <if test="null != creator and '' != creator">
+                creator,
+            </if>
+            <if test="null != modifier and '' != modifier">
+                modifier,
+            </if>
+            <if test="null != del ">
+                del,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != updateTime">
+                update_time,
+            </if>
+            <if test="null != enable ">
+                enable,
+            </if>
+            <if test="null != accuracy and '' != accuracy">
+                accuracy
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != unit and '' != unit">
+                #{unit},
+            </if>
+            <if test="null != unitName and '' != unitName">
+                #{unitName},
+            </if>
+            <if test="null != description and '' != description">
+                #{description},
+            </if>
+            <if test="null != bizCode and '' != bizCode">
+                #{bizCode},
+            </if>
+            <if test="null != creator and '' != creator">
+                #{creator},
+            </if>
+            <if test="null != modifier and '' != modifier">
+                #{modifier},
+            </if>
+            <if test="null != del ">
+                #{del},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != enable ">
+                #{enable},
+            </if>
+            <if test="null != accuracy and '' != accuracy">
+                #{accuracy}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.UnitPO">
+        UPDATE unit
+        <set>
+            <if test="null != unit and '' != unit">unit = #{unit},</if>
+            <if test="null != unitName and '' != unitName">unit_name = #{unitName},</if>
+            <if test="null != description and '' != description">description = #{description},</if>
+            <if test="null != bizCode and '' != bizCode">biz_code = #{bizCode},</if>
+            <if test="null != creator and '' != creator">creator = #{creator},</if>
+            <if test="null != modifier and '' != modifier">modifier = #{modifier},</if>
+            <if test="null != del ">del = #{del},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != enable ">enable = #{enable},</if>
+            <if test="null != accuracy and '' != accuracy">accuracy = #{accuracy}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM unit
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM unit
+        WHERE 1 = 1
+        <if test="null != unit and '' != unit">  AND unit = #{unit},</if>
+        <if test="null != unitName and '' != unitName">  AND unit_name = #{unitName},</if>
+        <if test="null != description and '' != description">  AND description = #{description},</if>
+        <if test="null != bizCode and '' != bizCode">  AND biz_code = #{bizCode},</if>
+        <if test="null != creator and '' != creator">  AND creator = #{creator},</if>
+        <if test="null != modifier and '' != modifier">  AND modifier = #{modifier},</if>
+        <if test="null != del ">  AND del = #{del},</if>
+        <if test="null != createTime ">  AND create_time = #{createTime},</if>
+        <if test="null != updateTime ">  AND update_time = #{updateTime},</if>
+        <if test="null != enable ">  AND enable = #{enable},</if>
+        <if test="null != accuracy and '' != accuracy">  AND accuracy = #{accuracy}</if>
+    </select>
+
+    <select id="listByIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM unit
+        WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del = 0
+    </select>
+    <select id="listByUnits" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM unit
+        WHERE unit IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND del = 0
+    </select>
+
+
+
+</mapper>

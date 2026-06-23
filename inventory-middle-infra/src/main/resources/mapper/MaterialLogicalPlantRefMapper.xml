@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MaterialLogicalPlantRefMapper">
+
+  <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.MaterialLogicalPlantRefPO" >
+    <result column="id" property="id" />
+    <result column="tenant_id" property="tenantId" />
+    <result column="material_code" property="materialCode" />
+    <result column="logical_plant_id" property="logicalPlantId" />
+    <result column="logical_plant_no" property="logicalPlantNo" />
+    <result column="creator_id" property="creatorId" />
+    <result column="create_time" property="createTime" />
+    <result column="updator_id" property="updatorId" />
+    <result column="update_time" property="updateTime" />
+    <result column="deleted" property="deleted" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id,
+    tenant_id,
+    material_code,
+    logical_plant_id,
+    logical_plant_no,
+    creator_id,
+    create_time,
+    updator_id,
+    update_time,
+    deleted
+  </sql>
+
+  <insert id="insertBatch" >
+    insert into material_logical_plant_ref (
+    tenant_id,
+    material_code,
+    logical_plant_id,
+    logical_plant_no,
+    creator_id,
+    create_time,
+    updator_id,
+    update_time,
+    deleted
+    )
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.tenantId},
+      #{item.materialCode},
+      #{item.logicalPlantId},
+      #{item.logicalPlantNo},
+      #{item.creatorId},
+      #{item.createTime},
+      #{item.updatorId},
+      #{item.updateTime},
+      #{item.deleted}
+      )
+    </foreach>
+  </insert>
+
+  <insert id="insert" useGeneratedKeys="true"  parameterType="com.inventory.middle.infra.persistence.entity.MaterialLogicalPlantRefPO">
+    INSERT INTO material_logical_plant_ref
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="null != tenantId and '' != tenantId">
+        tenant_id,
+      </if>
+      <if test="null != materialCode and '' != materialCode">
+        material_code,
+      </if>
+      <if test="null != logicalPlantId">
+        logical_plant_id,
+      </if>
+      <if test="null != logicalPlantNo and '' != logicalPlantNo">
+        logical_plant_no,
+      </if>
+      <if test="null != creatorId and '' != creatorId">
+        creator_id,
+      </if>
+      <if test="null != createTime ">
+        create_time,
+      </if>
+      <if test="null != updatorId and '' != updatorId">
+        updator_id,
+      </if>
+      <if test="null != updateTime">
+        update_time,
+      </if>
+      <if test="null != deleted">
+        deleted
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="null != tenantId and '' != tenantId">
+        #{tenantId},
+      </if>
+      <if test="null != materialCode and '' != materialCode">
+        #{materialCode},
+      </if>
+      <if test="null != logicalPlantId">
+        #{logicalPlantId},
+      </if>
+      <if test="null != logicalPlantNo and '' != logicalPlantNo">
+        #{logicalPlantNo},
+      </if>
+      <if test="null != creatorId and '' != creatorId">
+        #{creatorId},
+      </if>
+      <if test="null != createTime">
+        #{createTime},
+      </if>
+      <if test="null != updatorId and '' != updatorId">
+        #{updatorId},
+      </if>
+      <if test="null != updateTime">
+        #{updateTime},
+      </if>
+      <if test="null != deleted">
+        #{deleted}
+      </if>
+    </trim>
+  </insert>
+
+  <update id="delete">
+    update material_logical_plant_ref set deleted = 1 where id = #{id}
+  </update>
+
+  <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.MaterialLogicalPlantRefPO">
+    UPDATE material_logical_plant_ref
+    <set>
+      <if test="null != materialCode and '' != materialCode">material_code = #{materialCode},</if>
+      <if test="null != logicalPlantId ">logical_plant_id = #{logicalPlantId},</if>
+      <if test="null != logicalPlantNo and '' != logicalPlantNo">logical_plant_no = #{logicalPlantNo},</if>
+      <if test="null != updatorId and '' != updatorId">updator_id = #{updatorId},</if>
+      update_time = NOW()
+    </set>
+    WHERE id = #{id}
+  </update>
+
+
+  <select id="load" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM material_logical_plant_ref
+    WHERE id = #{id}
+  </select>
+  
+  <select id="getListByCondition" parameterType="com.inventory.middle.infra.persistence.entity.material.QueryMaterialLogicalPlantRefPO" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM material_logical_plant_ref
+    where
+      tenant_id = #{tenantId}
+      <if test="null != id">
+        and id = #{id}
+      </if>
+      <if test="null != materialCode and '' != materialCode">
+        and material_code = #{materialCode}
+      </if>
+      <if test="null != logicalPlantId">
+        and logical_plant_id = #{logicalPlantId}
+      </if>
+      <if test="null != logicalPlantNo and '' != logicalPlantNo">
+        and logical_plant_no = #{logicalPlantNo}
+      </if>
+      <if test="null != deleted">
+        and deleted = #{deleted}
+      </if>
+  </select>
+
+  <select id="getListByMaterialCodes" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM material_logical_plant_ref
+    where
+        tenant_id = #{tenantId}
+        and deleted = 0
+        <if test="null != materialCodes and materialCodes.size() > 0">
+          and material_code in
+          <foreach collection="materialCodes" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+          </foreach>
+        </if>
+  </select>
+  <select id="listBy" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM material_logical_plant_ref
+    where
+    tenant_id = #{tenantId}
+    and deleted = 0
+    <if test="null != logicalPlantNo and '' != logicalPlantNo">
+      and logical_plant_no = #{logicalPlantNo}
+    </if>
+    <if test="null != fuzzyMaterialCode and '' != fuzzyMaterialCode">
+<!--      and material_code like concat('%', #{fuzzyMaterialCode},'%')-->
+      and instr(material_code,#{fuzzyMaterialCode})
+    </if>
+  </select>
+
+</mapper>

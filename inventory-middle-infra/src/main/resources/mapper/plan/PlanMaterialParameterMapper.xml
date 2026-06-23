@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.PlanMaterialParameterMapper">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialParameterPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="material_code" jdbcType="VARCHAR" property="materialCode"/>
+        <result column="logical_plant_no" jdbcType="VARCHAR" property="logicalPlantNo"/>
+        <result column="logical_plant_name" jdbcType="VARCHAR" property="logicalPlantName"/>
+        <result column="plan_type" jdbcType="TINYINT" property="planType"/>
+        <result column="demand_type" jdbcType="TINYINT" property="demandType"/>
+        <result column="demand_strategy_code" jdbcType="VARCHAR" property="demandStrategyCode"/>
+        <result column="vendor_lead_time" jdbcType="INTEGER" property="vendorLeadTime"/>
+        <result column="planning_time_fence" jdbcType="INTEGER" property="planningTimeFence"/>
+        <result column="demand_time_fence" jdbcType="INTEGER" property="demandTimeFence"/>
+        <result column="order_quantity" jdbcType="BIGINT" property="orderQuantity"/>
+        <result column="min_order_quantity" jdbcType="BIGINT" property="minOrderQuantity"/>
+        <result column="order_cycle_time" jdbcType="INTEGER" property="orderCycleTime"/>
+        <result column="safety_stock_cal_type" jdbcType="TINYINT" property="safetyStockCalType"/>
+        <result column="safety_stock" jdbcType="BIGINT" property="safetyStock"/>
+        <result column="safety_stock_factors" jdbcType="VARCHAR" property="safetyStockFactors"/>
+        <result column="loss_rate" jdbcType="INTEGER" property="lossRate"/>
+        <result column="finished_rate" jdbcType="INTEGER" property="finishedRate"/>
+        <result column="deleted" jdbcType="TINYINT" property="isDelete"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="creator_id" jdbcType="VARCHAR" property="createUserId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="updator_id" jdbcType="VARCHAR" property="updateUserId"/>
+        <result column="operator_name" jdbcType="VARCHAR" property="operatorName"/>
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+        <result column="material_desc" jdbcType="VARCHAR" property="materialDesc"/>
+        <result column="transfer_logical_plant_no" jdbcType="VARCHAR" property="transferLogicalPlantNo"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        material_code,
+        logical_plant_no,
+        logical_plant_name,
+        plan_type,
+        demand_type,
+        demand_strategy_code,
+        vendor_lead_time,
+        planning_time_fence,
+        demand_time_fence,
+        order_quantity,
+        min_order_quantity,
+        order_cycle_time,
+        safety_stock_cal_type,
+        safety_stock,
+        safety_stock_factors,
+        loss_rate,
+        finished_rate,
+        deleted,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id,
+        operator_name,
+        tenant_id,
+        material_desc,
+        transfer_logical_plant_no
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `pl_plan_material_parameter`
+        where id = #{id}
+    </select>
+    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialParameterPO">
+        insert into `pl_plan_material_parameter` (id, material_code, logical_plant_no,
+        logical_plant_name, plan_type, demand_type,demand_strategy_code,
+        vendor_lead_time, planning_time_fence, demand_time_fence,
+        order_quantity, min_order_quantity, order_cycle_time,
+        safety_stock_cal_type, safety_stock, safety_stock_factors,
+        loss_rate, finished_rate, deleted,
+        create_time, creator_id, update_time,
+        updator_id, operator_name, tenant_id,
+        material_desc, transfer_logical_plant_no)
+        values (#{id}, #{materialCode}, #{logicalPlantNo},
+        #{logicalPlantName}, #{planType}, #{demandType}, #{demandStrategyCode},
+        #{vendorLeadTime}, #{planningTimeFence}, #{demandTimeFence},
+        #{orderQuantity}, #{minOrderQuantity}, #{orderCycleTime},
+        #{safetyStockCalType}, #{safetyStock}, #{safetyStockFactors},
+        #{lossRate}, #{finishedRate}, #{isDelete},
+        #{createTime}, #{createUserId}, #{updateTime},
+        #{updateUserId}, #{operatorName}, #{tenantId},
+        #{materialDesc}, #{transferLogicalPlantNo})
+    </insert>
+    <insert id="insertSelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialParameterPO">
+        insert into `pl_plan_material_parameter`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="materialCode != null">
+                material_code,
+            </if>
+            <if test="logicalPlantNo != null">
+                logical_plant_no,
+            </if>
+            <if test="logicalPlantName != null">
+                logical_plant_name,
+            </if>
+            <if test="planType != null">
+                plan_type,
+            </if>
+            <if test="demandType != null">
+                demand_type,
+            </if>
+            <if test="demandStrategyCode != null">
+                demand_strategy_code,
+            </if>
+            <if test="vendorLeadTime != null">
+                vendor_lead_time,
+            </if>
+            <if test="planningTimeFence != null">
+                planning_time_fence,
+            </if>
+            <if test="demandTimeFence != null">
+                demand_time_fence,
+            </if>
+            <if test="orderQuantity != null">
+                order_quantity,
+            </if>
+            <if test="minOrderQuantity != null">
+                min_order_quantity,
+            </if>
+            <if test="orderCycleTime != null">
+                order_cycle_time,
+            </if>
+            <if test="safetyStockCalType != null">
+                safety_stock_cal_type,
+            </if>
+            <if test="safetyStock != null">
+                safety_stock,
+            </if>
+            <if test="safetyStockFactors != null">
+                safety_stock_factors,
+            </if>
+            <if test="lossRate != null">
+                loss_rate,
+            </if>
+            <if test="finishedRate != null">
+                finished_rate,
+            </if>
+            <if test="isDelete != null">
+                deleted,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createUserId != null">
+                creator_id,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateUserId != null">
+                updator_id,
+            </if>
+            <if test="operatorName != null">
+                operator_name,
+            </if>
+            <if test="tenantId != null">
+                tenant_id,
+            </if>
+            <if test="materialDesc != null">
+                material_desc,
+            </if>
+            <if test="transferLogicalPlantNo != null">
+                transfer_logical_plant_no,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="materialCode != null">
+                #{materialCode},
+            </if>
+            <if test="logicalPlantNo != null">
+                #{logicalPlantNo},
+            </if>
+            <if test="logicalPlantName != null">
+                #{logicalPlantName},
+            </if>
+            <if test="planType != null">
+                #{planType},
+            </if>
+            <if test="demandType != null">
+                #{demandType},
+            </if>
+            <if test="demandStrategyCode != null">
+                #{demandStrategyCode},
+            </if>
+            <if test="vendorLeadTime != null">
+                #{vendorLeadTime},
+            </if>
+            <if test="planningTimeFence != null">
+                #{planningTimeFence},
+            </if>
+            <if test="demandTimeFence != null">
+                #{demandTimeFence},
+            </if>
+            <if test="orderQuantity != null">
+                #{orderQuantity},
+            </if>
+            <if test="minOrderQuantity != null">
+                #{minOrderQuantity},
+            </if>
+            <if test="orderCycleTime != null">
+                #{orderCycleTime},
+            </if>
+            <if test="safetyStockCalType != null">
+                #{safetyStockCalType},
+            </if>
+            <if test="safetyStock != null">
+                #{safetyStock},
+            </if>
+            <if test="safetyStockFactors != null">
+                #{safetyStockFactors},
+            </if>
+            <if test="lossRate != null">
+                #{lossRate},
+            </if>
+            <if test="finishedRate != null">
+                #{finishedRate},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="createUserId != null">
+                #{createUserId},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="updateUserId != null">
+                #{updateUserId},
+            </if>
+            <if test="operatorName != null">
+                #{operatorName},
+            </if>
+            <if test="tenantId != null">
+                #{tenantId},
+            </if>
+            <if test="materialDesc != null">
+                #{materialDesc},
+            </if>
+            <if test="transferLogicalPlantNo != null">
+                #{transferLogicalPlantNo},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialParameterPO">
+        update `pl_plan_material_parameter`
+        <set>
+            <if test="materialCode != null">
+                material_code = #{materialCode},
+            </if>
+            <if test="logicalPlantNo != null">
+                logical_plant_no = #{logicalPlantNo},
+            </if>
+            <if test="logicalPlantName != null">
+                logical_plant_name = #{logicalPlantName},
+            </if>
+            <if test="planType != null">
+                plan_type = #{planType},
+            </if>
+            <if test="demandType != null">
+                demand_type = #{demandType},
+            </if>
+            <if test="demandStrategyCode != null">
+                demand_strategy_code = #{demandStrategyCode},
+            </if>
+            <if test="vendorLeadTime != null">
+                vendor_lead_time = #{vendorLeadTime},
+            </if>
+            <if test="planningTimeFence != null">
+                planning_time_fence = #{planningTimeFence},
+            </if>
+            <if test="demandTimeFence != null">
+                demand_time_fence = #{demandTimeFence},
+            </if>
+            <if test="orderQuantity != null">
+                order_quantity = #{orderQuantity},
+            </if>
+            <if test="minOrderQuantity != null">
+                min_order_quantity = #{minOrderQuantity},
+            </if>
+            <if test="orderCycleTime != null">
+                order_cycle_time = #{orderCycleTime},
+            </if>
+            <if test="safetyStockCalType != null">
+                safety_stock_cal_type = #{safetyStockCalType},
+            </if>
+            <if test="safetyStock != null">
+                safety_stock = #{safetyStock},
+            </if>
+            <if test="safetyStockFactors != null">
+                safety_stock_factors = #{safetyStockFactors},
+            </if>
+            <if test="lossRate != null">
+                loss_rate = #{lossRate},
+            </if>
+            <if test="finishedRate != null">
+                finished_rate = #{finishedRate},
+            </if>
+            <if test="isDelete != null">
+                deleted = #{isDelete},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="createUserId != null">
+                creator_id = #{createUserId},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUserId != null">
+                updator_id = #{updateUserId},
+            </if>
+            <if test="operatorName != null">
+                operator_name = #{operatorName},
+            </if>
+            <if test="tenantId != null">
+                tenant_id = #{tenantId},
+            </if>
+            <if test="materialDesc != null">
+                material_desc = #{materialDesc},
+            </if>
+            <if test="transferLogicalPlantNo != null">
+                transfer_logical_plant_no = #{transferLogicalPlantNo},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialParameterPO">
+        update `pl_plan_material_parameter`
+        set plan_type = #{planType},
+        demand_type = #{demandType},
+        demand_strategy_code = #{demandStrategyCode},
+        vendor_lead_time = #{vendorLeadTime},
+        planning_time_fence = #{planningTimeFence},
+        demand_time_fence = #{demandTimeFence},
+        order_quantity = #{orderQuantity},
+        min_order_quantity = #{minOrderQuantity},
+        order_cycle_time = #{orderCycleTime},
+        safety_stock_cal_type = #{safetyStockCalType},
+        safety_stock = #{safetyStock},
+        safety_stock_factors = #{safetyStockFactors},
+        loss_rate = #{lossRate},
+        finished_rate = #{finishedRate},
+        updator_id = #{updateUserId},
+        operator_name = #{operatorName},
+        transfer_logical_plant_no = #{transferLogicalPlantNo}
+        where id = #{id}
+    </update>
+
+    <insert id="batchSavePlanMaterialParam" parameterType="java.util.List" useGeneratedKeys="true">
+        insert into `pl_plan_material_parameter` (material_code, logical_plant_no,
+        logical_plant_name, plan_type, demand_type, demand_strategy_code,
+        vendor_lead_time, planning_time_fence, demand_time_fence,
+        order_quantity, min_order_quantity, order_cycle_time,
+        safety_stock_cal_type, safety_stock, safety_stock_factors,
+        loss_rate, finished_rate, creator_id,
+        updator_id, tenant_id,operator_name,material_desc,transfer_logical_plant_no)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.materialCode}, #{item.logicalPlantNo},
+            #{item.logicalPlantName}, #{item.planType}, #{item.demandType}, #{item.demandStrategyCode},
+            #{item.vendorLeadTime}, #{item.planningTimeFence}, #{item.demandTimeFence},
+            #{item.orderQuantity}, #{item.minOrderQuantity}, #{item.orderCycleTime},
+            #{item.safetyStockCalType}, #{item.safetyStock}, #{item.safetyStockFactors},
+            #{item.lossRate}, #{item.finishedRate}, #{item.createUserId},
+            #{item.updateUserId}, #{item.tenantId},#{item.operatorName},#{item.materialDesc}
+            ,#{item.transferLogicalPlantNo})
+        </foreach>
+        ON DUPLICATE key update
+        plan_type = values(plan_type),
+        demand_type = values(demand_type),
+        demand_strategy_code = values(demand_strategy_code),
+        plan_type = values(plan_type),
+        vendor_lead_time = values(vendor_lead_time),
+        planning_time_fence = values(planning_time_fence),
+        demand_time_fence = values(demand_time_fence),
+        order_quantity = values(order_quantity),
+        min_order_quantity = values(min_order_quantity),
+        order_cycle_time = values(order_cycle_time),
+        safety_stock_cal_type = values(safety_stock_cal_type),
+        safety_stock = values(safety_stock),
+        safety_stock_factors = values(safety_stock_factors),
+        loss_rate = values(loss_rate),
+        finished_rate = values(finished_rate),
+        updator_id = values(updator_id),
+        update_time = values(update_time),
+        operator_name = values(operator_name),
+        material_desc = values(material_desc),
+        transfer_logical_plant_no = values(transfer_logical_plant_no);
+    </insert>
+
+    <select id="selectByMaterialCodeAndLogicalPlantNo"
+            parameterType="com.enn.plan.management.dal.dao.condition.PlanMaterialParamQueryCondition"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `pl_plan_material_parameter`
+        where tenant_id = #{tenantId}
+        and deleted = 0
+        and logical_plant_no = #{logicalPlantNo}
+        and material_code = #{materialCode}
+    </select>
+
+    <select id="pageQueryPlanMaterialParam"
+            parameterType="com.enn.plan.management.dal.dao.condition.PlanMaterialParamPageCondition"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `pl_plan_material_parameter`
+        where tenant_id = #{tenantId}
+        and logical_plant_no = #{logicalPlantNo}
+        <if test="null != materialCode and '' != materialCode">
+            and material_code = #{materialCode}
+        </if>
+        <if test="null != operatorName and '' != operatorName">
+            and operator_name = #{operatorName}
+        </if>
+        and deleted = 0
+        order by update_time desc
+    </select>
+
+    <select id="batchQueryPlanMaterialParam" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `pl_plan_material_parameter`
+        where deleted != 1 and
+        (tenant_id, logical_plant_no, material_code) IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            (#{item.tenantId}, #{item.logicalPlantNo},
+            #{item.materialCode})
+        </foreach>
+    </select>
+
+    <select id="queryLogicalPlantNoByMaterialCode"
+            parameterType="com.enn.plan.management.dal.dao.condition.PlanQueryPlanTransferLogicalPlantsCondition"
+            resultType="java.lang.String">
+        select
+        logical_plant_no
+        from `pl_plan_material_parameter`
+        where
+        tenant_id = #{tenantId}
+        <if test="logicalPlantNo != null">
+            and logical_plant_no != #{logicalPlantNo}
+        </if>
+        and material_code = #{materialCode}
+        and deleted != 1
+    </select>
+</mapper>

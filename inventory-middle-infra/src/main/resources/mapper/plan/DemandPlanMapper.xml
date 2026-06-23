@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.DemandPlanMapper">
+  <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.DemandPlanPO">
+    <!--@mbg.generated-->
+    <!--@Table pl_demand_plan-->
+    <id column="id" property="id" />
+    <result column="company_code" property="companyCode" />
+    <result column="company_name" property="companyName" />
+    <result column="plan_version" property="planVersion" />
+    <result column="demand_source_type" property="demandSourceType" />
+    <result column="logical_plant_no" property="logicalPlantNo" />
+    <result column="logical_plant_name" property="logicalPlantName" />
+    <result column="warehouse_no" property="warehouseNo" />
+    <result column="warehouse_name" property="warehouseName" />
+    <result column="aggregation_period" property="aggregationPeriod" />
+    <result column="demand_horizon_begin_time" property="demandHorizonBeginTime" />
+    <result column="demand_horizon_end_time" property="demandHorizonEndTime" />
+    <result column="status" property="status" />
+    <result column="deleted" property="isDelete" />
+    <result column="create_time" property="createTime" />
+    <result column="creator_id" property="createUserId" />
+    <result column="create_user_name" property="createUserName" />
+    <result column="update_time" property="updateTime" />
+    <result column="updator_id" property="updateUserId" />
+    <result column="tenant_id" property="tenantId" />
+    <result column="demand_type" property="demandType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, company_code, company_name, plan_version, demand_source_type, logical_plant_no,
+    logical_plant_name, warehouse_no, warehouse_name, aggregation_period, demand_horizon_begin_time,
+    demand_horizon_end_time, `status`, deleted, create_time, creator_id, create_user_name,
+    update_time, updator_id, tenant_id, demand_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from pl_demand_plan
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from pl_demand_plan
+    where id = #{id}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.plan.persistence.entity.DemandPlanPO" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into pl_demand_plan (company_code, company_name, plan_version, demand_source_type, logical_plant_no, 
+      logical_plant_name, warehouse_no, warehouse_name, aggregation_period, demand_horizon_begin_time, 
+      demand_horizon_end_time, `status`, deleted, create_time, creator_id, 
+      create_user_name, update_time, updator_id, tenant_id, demand_type)
+    values (#{companyCode}, #{companyName}, #{planVersion}, #{demandSourceType}, #{logicalPlantNo}, 
+      #{logicalPlantName}, #{warehouseNo}, #{warehouseName}, #{aggregationPeriod}, #{demandHorizonBeginTime}, 
+      #{demandHorizonEndTime}, #{status}, #{isDelete}, #{createTime}, #{createUserId}, 
+      #{createUserName}, #{updateTime}, #{updateUserId}, #{tenantId}, #{demandType})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.plan.persistence.entity.DemandPlanPO" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into pl_demand_plan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="companyCode != null">
+        company_code,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="planVersion != null">
+        plan_version,
+      </if>
+      <if test="demandSourceType != null">
+        demand_source_type,
+      </if>
+      <if test="logicalPlantNo != null">
+        logical_plant_no,
+      </if>
+      <if test="logicalPlantName != null">
+        logical_plant_name,
+      </if>
+      <if test="warehouseNo != null">
+        warehouse_no,
+      </if>
+      <if test="warehouseName != null">
+        warehouse_name,
+      </if>
+      <if test="aggregationPeriod != null">
+        aggregation_period,
+      </if>
+      <if test="demandHorizonBeginTime != null">
+        demand_horizon_begin_time,
+      </if>
+      <if test="demandHorizonEndTime != null">
+        demand_horizon_end_time,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="isDelete != null">
+        deleted,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUserId != null">
+        creator_id,
+      </if>
+      <if test="createUserName != null">
+        create_user_name,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUserId != null">
+        updator_id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="demandType != null">
+        demand_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="companyCode != null">
+        #{companyCode},
+      </if>
+      <if test="companyName != null">
+        #{companyName},
+      </if>
+      <if test="planVersion != null">
+        #{planVersion},
+      </if>
+      <if test="demandSourceType != null">
+        #{demandSourceType},
+      </if>
+      <if test="logicalPlantNo != null">
+        #{logicalPlantNo},
+      </if>
+      <if test="logicalPlantName != null">
+        #{logicalPlantName},
+      </if>
+      <if test="warehouseNo != null">
+        #{warehouseNo},
+      </if>
+      <if test="warehouseName != null">
+        #{warehouseName},
+      </if>
+      <if test="aggregationPeriod != null">
+        #{aggregationPeriod},
+      </if>
+      <if test="demandHorizonBeginTime != null">
+        #{demandHorizonBeginTime},
+      </if>
+      <if test="demandHorizonEndTime != null">
+        #{demandHorizonEndTime},
+      </if>
+      <if test="status != null">
+        #{status},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId},
+      </if>
+      <if test="createUserName != null">
+        #{createUserName},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime},
+      </if>
+      <if test="updateUserId != null">
+        #{updateUserId},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId},
+      </if>
+      <if test="demandType != null">
+        #{demandType},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.DemandPlanPO">
+    <!--@mbg.generated-->
+    update pl_demand_plan
+    <set>
+      <if test="companyCode != null">
+        company_code = #{companyCode},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName},
+      </if>
+      <if test="planVersion != null">
+        plan_version = #{planVersion},
+      </if>
+      <if test="demandSourceType != null">
+        demand_source_type = #{demandSourceType},
+      </if>
+      <if test="logicalPlantNo != null">
+        logical_plant_no = #{logicalPlantNo},
+      </if>
+      <if test="logicalPlantName != null">
+        logical_plant_name = #{logicalPlantName},
+      </if>
+      <if test="warehouseNo != null">
+        warehouse_no = #{warehouseNo},
+      </if>
+      <if test="warehouseName != null">
+        warehouse_name = #{warehouseName},
+      </if>
+      <if test="aggregationPeriod != null">
+        aggregation_period = #{aggregationPeriod},
+      </if>
+      <if test="demandHorizonBeginTime != null">
+        demand_horizon_begin_time = #{demandHorizonBeginTime},
+      </if>
+      <if test="demandHorizonEndTime != null">
+        demand_horizon_end_time = #{demandHorizonEndTime},
+      </if>
+      <if test="status != null">
+        `status` = #{status},
+      </if>
+      <if test="isDelete != null">
+        deleted = #{isDelete},
+      </if>
+      <if test="updateUserId != null">
+        updator_id = #{updateUserId},
+      </if>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId},
+      </if>
+      <if test="demandType != null">
+        demand_type = #{demandType},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.DemandPlanPO">
+    <!--@mbg.generated-->
+    update pl_demand_plan
+    set company_code = #{companyCode},
+      company_name = #{companyName},
+      plan_version = #{planVersion},
+      demand_source_type = #{demandSourceType},
+      logical_plant_no = #{logicalPlantNo},
+      logical_plant_name = #{logicalPlantName},
+      warehouse_no = #{warehouseNo},
+      warehouse_name = #{warehouseName},
+      aggregation_period = #{aggregationPeriod},
+      demand_horizon_begin_time = #{demandHorizonBeginTime},
+      demand_horizon_end_time = #{demandHorizonEndTime},
+      `status` = #{status},
+      deleted = #{isDelete},
+      updator_id = #{updateUserId},
+      tenant_id = #{tenantId},
+      demand_type = #{demandType}
+    where id = #{id}
+  </update>
+
+  <select id="selectByIds" parameterType="java.util.List" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `pl_demand_plan`
+    where id in
+    <foreach close=")" collection="ids" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </select>
+
+
+  <select id="selectByPage" parameterType="com.inventory.middle.infra.plan.persistence.dao.condition.DemandPlanSelectReqCondition" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `pl_demand_plan`
+    where deleted != 1
+    and tenant_id = #{tenantId}
+    <if test="planVersion != null">
+      and plan_version = #{planVersion}
+    </if>
+    <if test="companyName != null">
+      and company_name = #{companyName}
+    </if>
+    <if test="logicalPlantNo != null">
+      and logical_plant_no = #{logicalPlantNo}
+    </if>
+    <if test="warehouseNo != null">
+      and warehouse_no = #{warehouseNo}
+    </if>
+    <if test="aggregationPeriod != null">
+      and aggregation_period = #{aggregationPeriod}
+    </if>
+    <if test="status != null">
+      and status = #{status}
+    </if>
+    <if test="createUserName != null">
+      and create_user_name = #{createUserName}
+    </if>
+    <if test="beginTime != null and endTime != null">
+      and create_time <![CDATA[ >= ]]> #{beginTime}
+      and create_time <![CDATA[ <= ]]> #{endTime}
+    </if>
+    <if test="demandType != null">
+      and demand_type = #{demandType}
+    </if>
+    <if test="demandSourceType != null">
+      and demand_source_type = #{demandSourceType}
+    </if>
+    order by id desc
+  </select>
+  <select id="selectByLogicalPlantNos" resultMap="BaseResultMap">
+    select * from `pl_demand_plan`
+    where deleted != 1 and status = 1
+    <if test="logicalPlantNos != null and logicalPlantNos.size() &gt; 0">
+      and logical_plant_no in
+      <foreach close=")" collection="logicalPlantNos" item="no" open="(" separator=",">
+        #{no}
+      </foreach>
+    </if>
+    <if test="tenantId != null">
+      and tenant_id = #{tenantId}
+    </if>
+  </select>
+
+  <select id="checkDuplicate" parameterType="map" resultType="String">
+    select material.material_code from pl_demand_plan plan
+    left join pl_demand_plan_material material on plan.id = material.demand_plan_id
+    where plan.deleted != 1 and plan.status = 1 and material.deleted != 1 and material.status = 1
+        and plan.tenant_id = #{tenantId}
+        and plan.logical_plant_no =  #{logicalPlantNo}
+        and plan.demand_type = #{demandType}
+        and material.material_code in
+    <foreach close=")" collection="materialList" index="index" item="materialCode" open="(" separator=",">
+      #{materialCode}
+    </foreach>
+  </select>
+
+  <select id="selectPlanInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `pl_demand_plan`
+    where deleted != 1
+    <if test="id != null">
+      and id = #{id}
+    </if>
+    <if test="tenantId != null">
+      and tenant_id = #{tenantId}
+    </if>
+  </select>
+
+  <select id="querySingleByCondition" parameterType="com.inventory.middle.infra.plan.persistence.dao.condition.DemandPlanSelectReqCondition" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `pl_demand_plan`
+    where deleted != 1
+    and tenant_id = #{tenantId}
+    <if test="planVersion != null">
+      and plan_version = #{planVersion}
+    </if>
+    <if test="companyName != null">
+      and company_name = #{companyName}
+    </if>
+    <if test="logicalPlantNo != null">
+      and logical_plant_no = #{logicalPlantNo}
+    </if>
+    <if test="warehouseNo != null">
+      and warehouse_no = #{warehouseNo}
+    </if>
+    <if test="aggregationPeriod != null">
+      and aggregation_period = #{aggregationPeriod}
+    </if>
+    <if test="status != null">
+      and status = #{status}
+    </if>
+    <if test="createUserName != null">
+      and create_user_name = #{createUserName}
+    </if>
+    <if test="beginTime != null and endTime != null">
+      and create_time <![CDATA[ >= ]]> #{beginTime}
+      and create_time <![CDATA[ <= ]]> #{endTime}
+    </if>
+    <if test="demandType != null">
+      and demand_type = #{demandType}
+    </if>
+    order by id desc
+  </select>
+
+</mapper>

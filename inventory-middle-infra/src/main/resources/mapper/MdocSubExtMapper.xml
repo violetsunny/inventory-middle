@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MdocSubExtMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.MdocSubExtPO">
+        <result column="id" property="id"/>
+        <result column="material_doc_id" property="materialDocId"/>
+        <result column="material_doc_item_id" property="materialDocItemId"/>
+        <result column="batch_produce_date" property="batchProduceDate"/>
+        <result column="valid_days" property="validDays"/>
+        <result column="hs_code" property="hsCode"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updator_id" property="updatorId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="deleted" property="deleted"/>
+        <result column="annual_date" property="annualDate"/>
+        <result column="annual_cycle_days" property="annualCycleDays"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,
+                material_doc_id,
+                material_doc_item_id,
+                batch_produce_date,
+                valid_days,
+                hs_code,
+                tenant_id,
+                creator_id,
+                update_time,
+                updator_id,
+                create_time,
+                annual_date,
+                annual_cycle_days,
+                deleted
+    </sql>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into mdoc_sub_ext (
+        id,
+        material_doc_id,
+        material_doc_item_id,
+        batch_produce_date,
+        valid_days,
+        hs_code,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id,
+        deleted,
+        annual_date,
+        annual_cycle_days,
+        tenant_id
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.materialDocId},
+            #{item.materialDocItemId},
+            #{item.batchProduceDate},
+            #{item.validDays},
+            #{item.hsCode},
+            #{item.createTime},
+            #{item.creatorId},
+            #{item.updateTime},
+            #{item.updatorId},
+            #{item.deleted},
+            #{item.annualDate},
+            #{item.annualCycleDays},
+            #{item.tenantId}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity.MdocSubExtPO">
+        INSERT INTO mdoc_sub_ext
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                id,
+            </if>
+            <if test="null != materialDocId ">
+                material_doc_id,
+            </if>
+            <if test="null != materialDocItemId ">
+                material_doc_item_id,
+            </if>
+            <if test="null != batchProduceDate ">
+                batch_produce_date,
+            </if>
+            <if test="null != validDays ">
+                valid_days,
+            </if>
+            <if test="null != hsCode and '' != hsCode">
+                hs_code,
+            </if>
+            <if test="null != tenantId">
+                tenant_id,
+            </if>
+            <if test="null != creatorId">
+                creator_id,
+            </if>
+            <if test="null != updateTime">
+                update_time,
+            </if>
+            <if test="null != updatorId">
+                updator_id,
+            </if>
+            <if test="null != createTime">
+                create_time,
+            </if>
+            <if test="null != deleted">
+                deleted
+            </if>
+            <if test="null != annualDate">
+                annual_date
+            </if>
+            <if test="null != annualCycleDays">
+                annual_cycle_days
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                #{id},
+            </if>
+            <if test="null != materialDocId ">
+                #{materialDocId},
+            </if>
+            <if test="null != materialDocItemId ">
+                #{materialDocItemId},
+            </if>
+            <if test="null != batchProduceDate ">
+                #{batchProduceDate},
+            </if>
+            <if test="null != validDays ">
+                #{validDays},
+            </if>
+            <if test="null != hsCode and '' != hsCode">
+                #{hsCode},
+            </if>
+            <if test="null != tenantId ">
+                #{tenantId},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId ">
+                #{updatorId},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != deleted ">
+                #{deleted}
+            </if>
+            <if test="null != annualDate ">
+                #{annualDate}
+            </if>
+            <if test="null != annualCycleDays ">
+                #{annualCycleDays}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM mdoc_sub_ext
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.MdocSubExtPO">
+        UPDATE mdoc_sub_ext
+        <set>
+            <if test="null != materialDocId ">material_doc_id = #{materialDocId},</if>
+            <if test="null != materialDocItemId ">material_doc_item_id = #{materialDocItemId},</if>
+            <if test="null != batchProduceDate ">batch_produce_date = #{batchProduceDate},</if>
+            <if test="null != validDays ">valid_days = #{validDays},</if>
+            <if test="null != hsCode and '' != hsCode">hs_code = #{hsCode},</if>
+            <if test="null != tenantId ">tenant_id = #{tenantId},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != annualDate ">annual_date = #{annualDate},</if>
+            <if test="null != annualCycleDays ">annual_cycle_days = #{annualCycleDays}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_ext
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_ext
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM mdoc_sub_ext
+    </select>
+
+    <select id="queryByItemId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_ext
+        WHERE material_doc_item_id = #{materialDocItemId}
+    </select>
+</mapper>

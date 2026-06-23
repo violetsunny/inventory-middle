@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MaterialDocMainMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.MaterialDocMainPO">
+        <result column="id" property="id"/>
+        <result column="material_doc_category" property="materialDocCategory"/>
+        <result column="material_doc_no" property="materialDocNo"/>
+        <result column="group_no" property="groupNo"/>
+        <result column="material_doc_type" property="materialDocType"/>
+        <result column="publish_date" property="publishDate"/>
+        <result column="posting_date" property="postingDate"/>
+        <result column="original_no" property="originalNo"/>
+        <result column="original_no_type" property="originalNoType"/>
+        <result column="deliver_no" property="deliverNo"/>
+        <result column="owner_id" property="ownerId"/>
+        <result column="adjust_type" property="adjustType"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updator_id" property="updatorId"/>
+        <result column="deleted" property="deleted"/>
+        <result column="demand_logical_plant_no" property="demandLogicalPlantNo"/>
+        <result column="supply_logical_plant_no" property="supplyLogicalPlantNo"/>
+        <result column="map_code" property="mapCode"/>
+        <result column="remark" property="remark"/>
+        <result column="unique_no" property="uniqueNo"/>
+        <result column="app_key" property="appKey"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+                material_doc_category,
+                material_doc_no,
+                group_no,
+                material_doc_type,
+                publish_date,
+                posting_date,
+                original_no,
+                original_no_type,
+                deliver_no,
+                owner_id,
+                adjust_type,
+                tenant_id,
+                create_time,
+                creator_id,
+                update_time,
+                updator_id,
+                demand_logical_plant_no,
+                supply_logical_plant_no,
+                map_code,
+                remark,
+                unique_no,
+                app_key,
+                deleted
+    </sql>
+
+    <insert id="insert"  parameterType="com.inventory.middle.infra.persistence.entity.MaterialDocMainPO">
+        INSERT INTO material_doc_main
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                id,
+            </if>
+            <if test="null != materialDocCategory and '' != materialDocCategory">
+                material_doc_category,
+            </if>
+            <if test="null != materialDocNo and '' != materialDocNo">
+                material_doc_no,
+            </if>
+            <if test="null != groupNo and '' != groupNo">
+                group_no,
+            </if>
+            <if test="null != materialDocType ">
+                material_doc_type,
+            </if>
+            <if test="null != publishDate ">
+                publish_date,
+            </if>
+            <if test="null != postingDate ">
+                posting_date,
+            </if>
+            <if test="null != originalNo and '' != originalNo">
+                original_no,
+            </if>
+            <if test="null != originalNoType ">
+                original_no_type,
+            </if>
+            <if test="null != deliverNo and '' != deliverNo">
+                deliver_no,
+            </if>
+            <if test="null != ownerId ">
+                owner_id,
+            </if>
+            <if test="null != adjustType and '' != adjustType">
+                adjust_type,
+            </if>
+            <if test="null != tenantId ">
+                tenant_id,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId ">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId ">
+                updator_id,
+            </if>
+            <if test="null != demandLogicalPlantNo ">
+                demand_logical_plant_no,
+            </if>
+            <if test="null != supplyLogicalPlantNo ">
+                supply_logical_plant_no,
+            </if>
+            <if test="null != mapCode and '' != mapCode">
+                map_code,
+            </if>
+            <if test="null != remark and '' != remark">
+                remark,
+            </if>
+            <if test="null != uniqueNo and '' != uniqueNo">
+                unique_no,
+            </if>
+            <if test="null != appKey and '' != appKey">
+                app_key,
+            </if>
+            <if test="null != deleted ">
+                deleted
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                #{id},
+            </if>
+            <if test="null != materialDocCategory and '' != materialDocCategory">
+                #{materialDocCategory},
+            </if>
+            <if test="null != materialDocNo and '' != materialDocNo">
+                #{materialDocNo},
+            </if>
+            <if test="null != groupNo and '' != groupNo">
+                #{groupNo},
+            </if>
+            <if test="null != materialDocType ">
+                #{materialDocType},
+            </if>
+            <if test="null != publishDate ">
+                #{publishDate},
+            </if>
+            <if test="null != postingDate ">
+                #{postingDate},
+            </if>
+            <if test="null != originalNo and '' != originalNo">
+                #{originalNo},
+            </if>
+            <if test="null != originalNoType ">
+                #{originalNoType},
+            </if>
+            <if test="null != deliverNo and '' != deliverNo">
+                #{deliverNo},
+            </if>
+            <if test="null != ownerId ">
+                #{ownerId},
+            </if>
+            <if test="null != adjustType and '' != adjustType">
+                #{adjustType},
+            </if>
+            <if test="null != tenantId ">
+                #{tenantId},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId ">
+                #{updatorId},
+            </if>
+            <if test="null != demandLogicalPlantNo ">
+                #{demandLogicalPlantNo},
+            </if>
+            <if test="null != supplyLogicalPlantNo ">
+                #{supplyLogicalPlantNo},
+            </if>
+            <if test="null != mapCode and '' != mapCode">
+                #{mapCode},
+            </if>
+            <if test="null != remark and '' != remark">
+                #{remark},
+            </if>
+            <if test="null != uniqueNo and '' != uniqueNo">
+                #{uniqueNo},
+            </if>
+            <if test="null != appKey and '' != appKey">
+                #{appKey},
+            </if>
+            <if test="null != deleted ">
+                #{deleted}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM material_doc_main
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.MaterialDocMainPO">
+        UPDATE material_doc_main
+        <set>
+            <if test="null != materialDocCategory and '' != materialDocCategory">material_doc_category =
+                #{materialDocCategory},
+            </if>
+            <if test="null != materialDocNo and '' != materialDocNo">material_doc_no = #{materialDocNo},</if>
+            <if test="null != groupNo and '' != groupNo">group_no = #{groupNo},</if>
+            <if test="null != materialDocType ">material_doc_type = #{materialDocType},</if>
+            <if test="null != publishDate ">publish_date = #{publishDate},</if>
+            <if test="null != postingDate ">posting_date = #{postingDate},</if>
+            <if test="null != originalNo and '' != originalNo">original_no = #{originalNo},</if>
+            <if test="null != originalNoType ">original_no_type = #{originalNoType},</if>
+            <if test="null != deliverNo and '' != deliverNo">deliver_no = #{deliverNo},</if>
+            <if test="null != ownerId ">owner_id = #{ownerId},</if>
+            <if test="null != adjustType and '' != adjustType">adjust_type = #{adjustType},</if>
+            <if test="null != tenantId ">tenant_id = #{tenantId},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId},</if>
+            <if test="null != demandLogicalPlantNo ">demand_logical_plant_no = #{demandLogicalPlantNo},</if>
+            <if test="null != supplyLogicalPlantNo ">supply_logical_plant_no = #{supplyLogicalPlantNo},</if>
+            <if test="null != mapCode and '' != mapCode">map_code = #{mapCode},</if>
+            <if test="null != remark and '' != remark">remark = #{remark},</if>
+            <if test="null != uniqueNo and '' != uniqueNo">unique_no = #{uniqueNo},</if>
+            <if test="null != appKey and '' != appKey">app_key = #{appKey},</if>
+            <if test="null != deleted ">deleted = #{deleted}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_doc_main
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_doc_main
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM material_doc_main
+    </select>
+
+    <select id="queryByMaterialDocNo" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_doc_main
+        WHERE material_doc_no = #{materialDocNo} limit 1
+    </select>
+
+    <select id="queryByOriginalNoAndCate" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_doc_main
+        WHERE original_no = #{originalNo}
+        and material_doc_category = #{materialDocCategory}
+        limit 1
+    </select>
+
+    <select id="queryByMaterialDocByOriginalNo" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_doc_main
+        WHERE original_no = #{originalNo} limit 1
+    </select>
+
+    <select id="pageListByParams" resultMap="BaseResultMap"
+            parameterType="com.inventory.middle.infra.persistence.entity.PageMaterialDocumentReqPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_doc_main
+        WHERE tenant_id = #{tenantId} AND deleted = 0
+        <if test="null != materialDocGroup and '' != materialDocGroup">AND group_no = #{materialDocGroup}</if>
+        <if test="null != materialDocType and '' != materialDocType">AND material_doc_type = #{materialDocType}</if>
+        <if test="null != referBizNo and '' != referBizNo">AND original_no = #{referBizNo}</if>
+        <if test="null != materialDocNo and '' != materialDocNo">AND material_doc_no = #{materialDocNo}</if>
+        <if test="null != logicalPlantNo and '' != logicalPlantNo">AND (supply_logical_plant_no = #{logicalPlantNo} OR
+            demand_logical_plant_no = #{logicalPlantNo} )
+        </if>
+        <if test="null != maxMaterialDocDate and '' != maxMaterialDocDate">AND publish_date &lt;= #{maxMaterialDocDate}
+        </if>
+        <if test="null != minMaterialDocDate and '' != minMaterialDocDate">AND publish_date &gt;= #{minMaterialDocDate}
+        </if>
+        <if test="null != maxAccountsPostingDate and '' != maxAccountsPostingDate">AND posting_date &lt;=
+            #{maxAccountsPostingDate}
+        </if>
+        <if test="null != minAccountsPostingDate and '' != minAccountsPostingDate">AND posting_date &gt;=
+            #{minAccountsPostingDate}
+        </if>
+        <if test="null != materialCode and '' != materialCode">AND id in (SELECT DISTINCT(material_doc_id) FROM
+            giv.material_doc_item WHERE material_code = #{materialCode})
+        </if>
+        <if test="null != companyCode and '' != companyCode">
+            AND (supply_logical_plant_no in (SELECT DISTINCT(logical_plant_no) FROM logical_plant WHERE company_code =
+            #{companyCode})
+            OR demand_logical_plant_no in (SELECT DISTINCT(logical_plant_no) FROM logical_plant WHERE company_code =
+            #{companyCode}))
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="exportListByParams" resultMap="BaseResultMap"
+            parameterType="com.inventory.middle.infra.persistence.entity.PageMaterialDocumentReqPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_doc_main
+        WHERE tenant_id = #{tenantId} AND deleted = 0
+        <if test="null != materialDocGroup and '' != materialDocGroup">AND group_no = #{materialDocGroup}</if>
+        <if test="null != materialDocType and '' != materialDocType">AND material_doc_type = #{materialDocType}</if>
+        <if test="null != referBizNo and '' != referBizNo">AND original_no = #{referBizNo}</if>
+        <if test="null != materialDocNo and '' != materialDocNo">AND material_doc_no = #{materialDocNo}</if>
+        <if test="null != logicalPlantNo and '' != logicalPlantNo">AND (supply_logical_plant_no = #{logicalPlantNo} OR
+            demand_logical_plant_no = #{logicalPlantNo} )
+        </if>
+        <if test="null != maxMaterialDocDate and '' != maxMaterialDocDate">AND create_time &lt;= #{maxMaterialDocDate}
+        </if>
+        <if test="null != minMaterialDocDate and '' != minMaterialDocDate">AND create_time &gt;= #{minMaterialDocDate}
+        </if>
+        <if test="null != maxAccountsPostingDate and '' != maxAccountsPostingDate">AND publish_date &lt;=
+            #{maxAccountsPostingDate}
+        </if>
+        <if test="null != minAccountsPostingDate and '' != minAccountsPostingDate">AND publish_date &gt;=
+            #{minAccountsPostingDate}
+        </if>
+        <if test="null != materialCode and '' != materialCode">AND id in (SELECT DISTINCT(material_doc_id) FROM
+            giv.material_doc_item WHERE material_code = #{materialCode})
+        </if>
+        <if test="null != companyCode and '' != companyCode">
+            AND supply_logical_plant_no in (SELECT DISTINCT(logical_plant_no) FROM logical_plant WHERE company_code =
+            #{companyCode})
+            OR demand_logical_plant_no in (SELECT DISTINCT(logical_plant_no) FROM logical_plant WHERE company_code =
+            #{companyCode})
+        </if>
+        <if test="null != createTime and '' != createTime">AND create_time &gt; #{createTime}</if>
+        order by create_time desc
+    </select>
+
+    <select id="listMaterialDocByIds" resultMap="BaseResultMap" parameterType="java.util.List">
+        select
+        <include refid="Base_Column_List"/>
+        from material_doc_main
+        where id in
+        <foreach collection="list" item="materialDocIds" open="(" close=")" separator=",">
+            #{materialDocIds}
+        </foreach>
+        and deleted = 0
+    </select>
+
+    <select id="queryByUniqueNo" resultType="java.lang.String">
+        SELECT
+        unique_no
+        FROM material_doc_main
+        WHERE  deleted = 0
+        <if test="null != uniqueNo and '' != uniqueNo">and unique_no = #{uniqueNo}</if>
+        <if test="null != appKey and '' != appKey">and app_key = #{appKey}</if>
+    </select>
+
+    <!-- ===== 标准通用方法（Repository 层约定）===== -->
+
+    <select id="queryPage" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MaterialDocMainDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM material_doc_main
+        <where>
+            <if test="params.materialDocNo != null and params.materialDocNo !=''">AND material_doc_no = #{params.materialDocNo}</if>
+            <if test="params.originalNo != null and params.originalNo !=''">AND original_no = #{params.originalNo}</if>
+            <if test="params.tenantId != null and params.tenantId !=''">AND tenant_id = #{params.tenantId}</if>
+            AND deleted = 0
+        </where>
+        order by id desc
+    </select>
+
+    <select id="queryEntity" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MaterialDocMainDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM material_doc_main
+        <where>
+            <if test="params.id != null">AND id = #{params.id}</if>
+            AND deleted = 0
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="Map"
+            resultType="com.inventory.middle.infra.persistence.entity.MaterialDocMainDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM material_doc_main
+        <where>
+            <if test="params.id != null">AND id = #{params.id}</if>
+            AND deleted = 0
+        </where>
+    </select>
+
+    <select id="findById"
+            resultType="com.inventory.middle.infra.persistence.entity.MaterialDocMainDo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM material_doc_main
+        WHERE id = #{id} AND deleted = 0
+    </select>
+
+</mapper>

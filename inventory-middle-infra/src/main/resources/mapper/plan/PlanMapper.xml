@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.PlanMapper">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="plan_code" jdbcType="VARCHAR" property="planCode"/>
+        <result column="plan_desc" jdbcType="VARCHAR" property="planDesc"/>
+        <result column="plan_type" jdbcType="INTEGER" property="planType"/>
+        <result column="cover_logical_plant" jdbcType="VARCHAR" property="coverLogicalPlant"/>
+        <result column="cover_material_type" jdbcType="TINYINT" property="coverMaterialType"/>
+        <result column="plan_horizon" jdbcType="INTEGER" property="planHorizon"/>
+        <result column="plan_start_time" jdbcType="TIMESTAMP" property="planStartTime"/>
+        <result column="demand_plan_file" jdbcType="VARCHAR" property="demandPlanFile"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="deleted" jdbcType="TINYINT" property="isDelete"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="creator_id" jdbcType="VARCHAR" property="createUserId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="updator_id" jdbcType="VARCHAR" property="updateUserId"/>
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+        <result column="operator_name" jdbcType="VARCHAR" property="operatorName"/>
+        <result column="related_bom" jdbcType="TINYINT" property="relatedBom"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO">
+        <result column="plan_calculate_params" jdbcType="LONGVARCHAR" property="planCalculateParams"/>
+        <result column="plan_delivery_params" jdbcType="LONGVARCHAR" property="planDeliveryParams"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        plan_code,
+        plan_desc,
+        plan_type,
+        cover_logical_plant,
+        cover_material_type,
+        plan_horizon,
+        plan_start_time,
+        demand_plan_file,
+        status,
+        deleted,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id,
+        tenant_id,
+        operator_name,
+        related_bom
+    </sql>
+    <sql id="Blob_Column_List">
+        plan_calculate_params,
+        plan_delivery_params
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from `pl_plan`
+        where id = #{id}
+    </select>
+    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO">
+        insert into `pl_plan` (id, plan_code, plan_desc,
+        plan_type, cover_logical_plant, cover_material_type,
+        plan_horizon, plan_start_time, demand_plan_file,
+        status, deleted, create_time,
+        creator_id, update_time, updator_id,
+        tenant_id, plan_calculate_params, plan_delivery_params,operator_name
+        )
+        values (#{id}, #{planCode}, #{planDesc},
+        #{planType}, #{coverLogicalPlant}, #{coverMaterialType},
+        #{planHorizon}, #{planStartTime}, #{demandPlanFile},
+        #{status}, #{isDelete}, #{createTime},
+        #{createUserId}, #{updateTime}, #{updateUserId},
+        #{tenantId}, #{planCalculateParams}, #{planDeliveryParams},
+        #{operatorName}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into `pl_plan`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="planCode != null">
+                plan_code,
+            </if>
+            <if test="planDesc != null">
+                plan_desc,
+            </if>
+            <if test="planType != null">
+                plan_type,
+            </if>
+            <if test="coverLogicalPlant != null">
+                cover_logical_plant,
+            </if>
+            <if test="coverMaterialType != null">
+                cover_material_type,
+            </if>
+            <if test="planHorizon != null">
+                plan_horizon,
+            </if>
+            <if test="planStartTime != null">
+                plan_start_time,
+            </if>
+            <if test="demandPlanFile != null">
+                demand_plan_file,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="isDelete != null">
+                deleted,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createUserId != null">
+                creator_id,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateUserId != null">
+                updator_id,
+            </if>
+            <if test="tenantId != null">
+                tenant_id,
+            </if>
+            <if test="planCalculateParams != null">
+                plan_calculate_params,
+            </if>
+            <if test="planDeliveryParams != null">
+                plan_delivery_params,
+            </if>
+            <if test="operatorName != null">
+                operator_name,
+            </if>
+            <if test="relatedBom != null">
+                related_bom,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="planCode != null">
+                #{planCode},
+            </if>
+            <if test="planDesc != null">
+                #{planDesc},
+            </if>
+            <if test="planType != null">
+                #{planType},
+            </if>
+            <if test="coverLogicalPlant != null">
+                #{coverLogicalPlant},
+            </if>
+            <if test="coverMaterialType != null">
+                #{coverMaterialType},
+            </if>
+            <if test="planHorizon != null">
+                #{planHorizon},
+            </if>
+            <if test="planStartTime != null">
+                #{planStartTime},
+            </if>
+            <if test="demandPlanFile != null">
+                #{demandPlanFile},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="createUserId != null">
+                #{createUserId},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="updateUserId != null">
+                #{updateUserId},
+            </if>
+            <if test="tenantId != null">
+                #{tenantId},
+            </if>
+            <if test="planCalculateParams != null">
+                #{planCalculateParams},
+            </if>
+            <if test="planDeliveryParams != null">
+                #{planDeliveryParams},
+            </if>
+            <if test="operatorName != null">
+                #{operatorName},
+            </if>
+            <if test="relatedBom != null">
+                #{relatedBom},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO">
+        update `pl_plan`
+        <set>
+            <if test="planCode != null and '' != planCode">
+                plan_code = #{planCode},
+            </if>
+            <if test="planDesc != null and '' != planDesc">
+                plan_desc = #{planDesc},
+            </if>
+            <if test="planType != null">
+                plan_type = #{planType},
+            </if>
+            <if test="coverLogicalPlant != null and '' != coverLogicalPlant">
+                cover_logical_plant = #{coverLogicalPlant},
+            </if>
+            <if test="coverMaterialType != null">
+                cover_material_type = #{coverMaterialType},
+            </if>
+            <if test="planHorizon != null">
+                plan_horizon = #{planHorizon},
+            </if>
+            <if test="planStartTime != null">
+                plan_start_time = #{planStartTime},
+            </if>
+            <if test="demandPlanFile != null and '' != demandPlanFile">
+                demand_plan_file = #{demandPlanFile},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="isDelete != null">
+                deleted = #{isDelete},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="createUserId != null and '' != createUserId">
+                creator_id = #{createUserId},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUserId != null and '' != updateUserId">
+                updator_id = #{updateUserId},
+            </if>
+            <if test="tenantId != null and '' != tenantId">
+                tenant_id = #{tenantId},
+            </if>
+            <if test="planCalculateParams != null and '' != planCalculateParams">
+                plan_calculate_params = #{planCalculateParams},
+            </if>
+            <if test="planDeliveryParams != null and '' != planDeliveryParams">
+                plan_delivery_params = #{planDeliveryParams},
+            </if>
+            <if test="operatorName != null and '' != operatorName">
+                operator_name = #{operatorName},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO">
+        update `pl_plan`
+        set plan_code = #{planCode},
+        plan_desc = #{planDesc},
+        plan_type = #{planType},
+        cover_logical_plant = #{coverLogicalPlant},
+        cover_material_type = #{coverMaterialType},
+        plan_horizon = #{planHorizon},
+        plan_start_time = #{planStartTime},
+        demand_plan_file = #{demandPlanFile},
+        status = #{status},
+        deleted = #{isDelete},
+        create_time = #{createTime},
+        creator_id = #{createUserId},
+        update_time = #{updateTime},
+        updator_id = #{updateUserId},
+        tenant_id = #{tenantId},
+        plan_calculate_params = #{planCalculateParams},
+        plan_delivery_params = #{planDeliveryParams},
+        operator_name = #{operatorName}
+        where id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO">
+        update `pl_plan`
+        set
+        plan_desc = #{planDesc},
+        plan_type = #{planType},
+        cover_logical_plant = #{coverLogicalPlant},
+        cover_material_type = #{coverMaterialType},
+        plan_horizon = #{planHorizon},
+        plan_start_time = #{planStartTime},
+        updator_id = #{updateUserId},
+        tenant_id = #{tenantId},
+        plan_calculate_params = #{planCalculateParams},
+        plan_delivery_params = #{planDeliveryParams},
+        operator_name = #{operatorName},
+        related_bom=#{relatedBom}
+        where id = #{id}
+    </update>
+    <select id="selectPlanByType" parameterType="com.enn.plan.management.dal.dao.condition.PlanQueryByTypeCondition"
+            resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from `pl_plan`
+        where deleted = 0
+        and status = 1
+        and plan_type = #{planType}
+        <if test="null != tenantId">
+            and tenant_id = #{tenantId}
+        </if>
+    </select>
+
+    <select id="pageQueryPlan" parameterType="com.enn.plan.management.dal.dao.condition.PlanPageCondition"
+            resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from `pl_plan`
+        where tenant_id = #{tenantId}
+        and deleted = 0
+        <if test="null == status">
+            and status in (0, 1)
+        </if>
+        <if test="null != status">
+            and status = #{status}
+        </if>
+        and cover_material_type in (0, 1)
+        <if test="null != planType">
+            and plan_type = #{planType}
+        </if>
+        <if test="null != planCode and '' != planCode">
+            and plan_code = #{planCode}
+        </if>
+        <if test="null != operatorName and '' != operatorName">
+            and operator_name = #{operatorName}
+        </if>
+        <if test="null != planDesc and '' != planDesc">
+            and plan_desc like concat('%', #{planDesc},'%')
+        </if>
+        order by update_time desc
+    </select>
+    <select id="selectPlanByIds" parameterType="java.util.List" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from `pl_plan`
+        where id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+    <select id="selectPlanByCoverMaterialType"
+            parameterType="com.enn.plan.management.dal.dao.condition.PlanQueryByCoverMaterialTypeCondition"
+            resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from `pl_plan`
+        where tenant_id = #{tenantId}
+        and deleted = 0
+        and status = 1
+        and cover_material_type = #{coverMaterialType}
+    </select>
+    <select id="selectPlanByDemandPlanId"
+            parameterType="com.enn.plan.management.dal.dao.condition.PlanQueryByDemandPlanIdCondition"
+            resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from `pl_plan`
+        where tenant_id = #{tenantId}
+        and deleted = 0
+        and status = 1
+        and find_in_set(#{demandPlanId}, demand_plan_file)
+    </select>
+    <select id="selectPlanByLogicalPlantNo"
+            parameterType="com.enn.plan.management.dal.dao.condition.PlanQueryByLogicalPlantNoCondition"
+            resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from `pl_plan`
+        where tenant_id = #{tenantId}
+        and deleted = 0
+        and status = 1
+        and find_in_set(#{logicalPlantNo}, cover_logical_plant)
+    </select>
+    <update id="updateStatusByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.ChangeStatusPlanPO">
+        update `pl_plan`
+        set status = #{status}
+        where id = #{id}
+    </update>
+
+    <select id="selectByTenantId" resultMap="ResultMapWithBLOBs">
+        select id,plan_code,cover_material_type, cover_logical_plant,related_bom
+        from `pl_plan`
+        where tenant_id = #{tenantId}
+        and deleted = 0
+        and status = 1
+    </select>
+
+    <select id="selectPlanCondition" parameterType="java.util.List" resultType="java.lang.String">
+        select p.plan_code from pl_plan_material t INNER JOIN pl_plan p ON p.id=t.source_id where
+        (t.tenant_id,t.source_id, t.logical_plant_no, t.material_code,t.deleted) IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            (#{item.tenantId},#{item.planId}, #{item.logicalPlantNo},
+            #{item.materialCode},0)
+        </foreach>
+    </select>
+</mapper>

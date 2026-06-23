@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventoryMapMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.InventoryMapPO" >
+        <result column="id" property="id" />
+        <result column="map_code" property="mapCode" />
+        <result column="map_sub_code" property="mapSubCode" />
+        <result column="sku_code" property="skuCode" />
+        <result column="logical_plant_no" property="logicalPlantNo" />
+        <result column="map" property="map" />
+        <result column="create_time" property="createTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="update_time" property="updateTime" />
+        <result column="updator_id" property="updatorId" />
+        <result column="deleted" property="deleted" />
+        <result column="tenant_id" property="tenantId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                map_code,
+                map_sub_code,
+                sku_code,
+                logical_plant_no,
+                map,
+                create_time,
+                creator_id,
+                update_time,
+                updator_id,
+                deleted,
+                tenant_id
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.persistence.entity.InventoryMapPO">
+        INSERT INTO inventory_map
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != mapCode and '' != mapCode">
+                map_code,
+            </if>
+            <if test="null != mapSubCode and '' != mapSubCode">
+                map_sub_code,
+            </if>
+            <if test="null != skuCode and '' != skuCode">
+                sku_code,
+            </if>
+            <if test="null != logicalPlantNo and '' != logicalPlantNo">
+                logical_plant_no,
+            </if>
+            <if test="null != map ">
+                map,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId and '' != creatorId">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId and '' != updatorId">
+                updator_id,
+            </if>
+            <if test="null != deleted ">
+                deleted,
+            </if>
+            <if test="null != tenantId and '' != tenantId">
+                tenant_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != mapCode and '' != mapCode">
+                #{mapCode},
+            </if>
+            <if test="null != mapSubCode and '' != mapSubCode">
+                #{mapSubCode},
+            </if>
+            <if test="null != skuCode and '' != skuCode">
+                #{skuCode},
+            </if>
+            <if test="null != logicalPlantNo and '' != logicalPlantNo">
+                #{logicalPlantNo},
+            </if>
+            <if test="null != map ">
+                #{map},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId and '' != creatorId">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId and '' != updatorId">
+                #{updatorId},
+            </if>
+            <if test="null != deleted ">
+                #{deleted},
+            </if>
+            <if test="null != tenantId and '' != tenantId">
+                #{tenantId}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.InventoryMapPO">
+        UPDATE inventory_map
+        <set>
+            <if test="null != mapCode and '' != mapCode">map_code = #{mapCode},</if>
+            <if test="null != mapSubCode and '' != mapSubCode">map_sub_code = #{mapSubCode},</if>
+            <if test="null != skuCode and '' != skuCode">sku_code = #{skuCode},</if>
+            <if test="null != logicalPlantNo and '' != logicalPlantNo">logical_plant_no = #{logicalPlantNo},</if>
+            <if test="null != map ">map = #{map},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId and '' != creatorId">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId and '' != updatorId">updator_id = #{updatorId},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != tenantId and '' != tenantId">tenant_id = #{tenantId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_map
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_map
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM inventory_map
+    </select>
+
+    <select id="queryInventoryMap" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_map
+        WHERE sku_code = #{skuCode}
+        and logical_plant_no = #{logicalPlantNo}
+        and tenant_id = #{tenantId}
+        limit 1
+    </select>
+
+    <select id="list" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_map
+        WHERE sku_code = #{skuCode}
+        and tenant_id = #{tenantId}
+    </select>
+</mapper>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.MaterialPlanDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanDetailPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="material_instance_id" jdbcType="BIGINT" property="materialInstanceId"/>
+        <result column="material_code" jdbcType="VARCHAR" property="materialCode"/>
+        <result column="material_desc" jdbcType="VARCHAR" property="materialDesc"/>
+        <result column="logical_plant_no" jdbcType="VARCHAR" property="logicalPlantNo"/>
+        <result column="plan_date" jdbcType="TIMESTAMP" property="planDate"/>
+        <result column="deleted" jdbcType="TINYINT" property="isDelete"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="creator_id" jdbcType="VARCHAR" property="createUserId"/>
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+        <result column="plan_detail" jdbcType="LONGVARCHAR" property="planDetail"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        material_instance_id,
+        material_code,
+        material_desc,
+        logical_plant_no,
+        plan_date,
+        plan_detail,
+        tenant_id,
+        deleted,
+        create_time,
+        creator_id
+    </sql>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `pl_material_plan_detail`
+        where id = #{id}
+    </select>
+
+    <select id="selectByMaterialInstance" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `pl_material_plan_detail`
+        where material_instance_id = #{materialInstanceId}
+    </select>
+
+    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanDetailPO" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into `pl_material_plan_detail` (id, material_instance_id, material_code,
+                                                    material_desc, logical_plant_no, plan_date, deleted,
+                                                    create_time, creator_id, tenant_id,
+                                                    plan_detail)
+        values (#{id}, #{materialInstanceId}, #{materialCode},
+                #{materialDesc}, #{logicalPlantNo}, #{planDate}, 0,
+                NOW(), #{createUserId}, #{tenantId},
+                #{planDetail})
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into `pl_material_plan_detail` (material_instance_id, material_code,
+                                               material_desc, logical_plant_no, plan_date, deleted,
+                                               create_time, creator_id, tenant_id, plan_detail)
+        values
+        <foreach collection="records" item="record" index="index" separator=",">
+            (#{record.materialInstanceId}, #{record.materialCode},
+            #{record.materialDesc}, #{record.logicalPlantNo},
+             #{record.planDate}, 0, NOW(), #{record.createUserId},
+             #{record.tenantId}, #{record.planDetail})
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanDetailPO">
+        update `pl_material_plan_detail`
+        <set>
+            <if test="materialInstanceId != null">
+                material_instance_id = #{materialInstanceId},
+            </if>
+            <if test="materialDesc != null">
+                material_desc = #{materialDesc},
+            </if>
+            <if test="planDate != null">
+                plan_date = #{planDate},
+            </if>
+            <if test="isDelete != null">
+                deleted = #{isDelete},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="createUserId != null">
+                creator_id = #{createUserId},
+            </if>
+            <if test="tenantId != null">
+                tenant_id = #{tenantId},
+            </if>
+            <if test="planDetail != null">
+                plan_detail = #{planDetail},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

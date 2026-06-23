@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.bom.BomCaseMapper">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.bom.BomCasePO">
+        <id column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="company_code" property="companyCode"/>
+        <result column="company_name" property="companyName"/>
+        <result column="logical_plant_no" property="logicalPlantNo"/>
+        <result column="logical_plant_name" property="logicalPlantName"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="create_user_id" property="creatorId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user_id" property="updatorId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_delete" property="deleted"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, code, `name`, company_code, company_name, logical_plant_no, logical_plant_name,
+        `type`, `status`, remark, tenant_id, create_user_id, create_time,
+        update_user_id, update_time, is_delete
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pl_bom_case
+        where id = #{id}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from pl_bom_case
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.inventory.middle.infra.plan.persistence.entity.bom.BomCasePO"
+            useGeneratedKeys="true">
+        insert into pl_bom_case (code, `name`, company_code, company_name, logical_plant_no, logical_plant_name,
+        `type`, `status`, remark, tenant_id, create_user_id,
+        create_time, update_user_id, update_time, is_delete)
+        values (#{code}, #{name}, #{companyCode}, #{companyName}, #{logicalPlantNo}, #{logicalPlantName},
+        #{type}, #{status}, #{remark}, #{tenantId}, #{creatorId},
+        #{createTime}, #{updatorId}, #{updateTime}, #{deleted})
+    </insert>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.inventory.middle.infra.plan.persistence.entity.bom.BomCasePO"
+            useGeneratedKeys="true">
+        insert into pl_bom_case
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null">code,</if>
+            <if test="name != null">`name`,</if>
+            <if test="companyCode != null">company_code,</if>
+            <if test="companyName != null">company_name,</if>
+            <if test="logicalPlantNo != null">logical_plant_no,</if>
+            <if test="logicalPlantName != null">logical_plant_name,</if>
+            <if test="type != null">`type`,</if>
+            <if test="status != null">`status`,</if>
+            <if test="remark != null">remark,</if>
+            <if test="tenantId != null">tenant_id,</if>
+            <if test="creatorId != null">create_user_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updatorId != null">update_user_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            is_delete,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null">#{code},</if>
+            <if test="name != null">#{name},</if>
+            <if test="companyCode != null">#{companyCode},</if>
+            <if test="companyName != null">#{companyName},</if>
+            <if test="logicalPlantNo != null">#{logicalPlantNo},</if>
+            <if test="logicalPlantName != null">#{logicalPlantName},</if>
+            <if test="type != null">#{type},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="tenantId != null">#{tenantId},</if>
+            <if test="creatorId != null">#{creatorId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updatorId != null">#{updatorId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            #{deleted},
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.inventory.middle.infra.plan.persistence.entity.bom.BomCasePO">
+        update pl_bom_case
+        <set>
+            <if test="code != null">code = #{code},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="companyCode != null">company_code = #{companyCode},</if>
+            <if test="companyName != null">company_name = #{companyName},</if>
+            <if test="logicalPlantNo != null">logical_plant_no = #{logicalPlantNo},</if>
+            <if test="logicalPlantName != null">logical_plant_name = #{logicalPlantName},</if>
+            <if test="type != null">`type` = #{type},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="tenantId != null">tenant_id = #{tenantId},</if>
+            <if test="creatorId != null">create_user_id = #{creatorId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updatorId != null">update_user_id = #{updatorId},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            is_delete = #{deleted},
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateByPrimaryKey"
+            parameterType="com.inventory.middle.infra.plan.persistence.entity.bom.BomCasePO">
+        update pl_bom_case
+        set code = #{code},
+        `name` = #{name},
+        company_code = #{companyCode},
+        company_name = #{companyName},
+        logical_plant_no = #{logicalPlantNo},
+        logical_plant_name = #{logicalPlantName},
+        `type` = #{type},
+        `status` = #{status},
+        remark = #{remark},
+        tenant_id = #{tenantId},
+        create_user_id = #{creatorId},
+        create_time = #{createTime},
+        update_user_id = #{updatorId},
+        update_time = #{updateTime},
+        is_delete = #{deleted}
+        where id = #{id}
+    </update>
+
+    <update id="updateStatusById"
+            parameterType="com.inventory.middle.infra.plan.persistence.condition.bom.BomChangeStatusCondition">
+        update pl_bom_case
+        set status=#{status}
+        where id=#{id}
+    </update>
+
+    <resultMap id="BomCaseQueryMap"
+               type="com.inventory.middle.infra.plan.persistence.condition.bom.BomCaseResult">
+        <result column="bom_id" property="bomId"/>
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="company_code" property="companyCode"/>
+        <result column="company_name" property="companyName"/>
+        <result column="logical_plant_no" property="logicalPlantNo"/>
+        <result column="logical_plant_name" property="logicalPlantName"/>
+        <result column="type" property="type"/>
+        <result column="material_desc" property="parentName"/>
+        <result column="material_unit" property="unit"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="status" property="status"/>
+        <result column="create_user_name" property="createUserName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="pageQueryBom"
+            parameterType="com.inventory.middle.infra.plan.persistence.condition.bom.BomCaseQueryCondition"
+            resultMap="BomCaseQueryMap">
+        select
+        bomCase.id as bom_id, bomCase.code, bomCase.name, bomCase.company_code, bomCase.company_name,
+        bomCase.logical_plant_no, bomCase.logical_plant_name, bomCase.type, bomCase.status,
+        bomCase.create_time, bomCase.update_time,
+        bomNode.material_desc, bomNode.material_unit, bomNode.material_code
+        from pl_bom_case bomCase
+        left join pl_bom_node bomNode on bomCase.id = bomNode.bom_case_id
+        where bomCase.is_delete = 0 and bomNode.is_delete = 0 and bomNode.type = 0
+        <if test="tenantId != null">and bomCase.tenant_id = #{tenantId}</if>
+        <if test="code != null">and bomCase.code = #{code}</if>
+        <if test="companyName != null">and bomCase.company_name = #{companyName}</if>
+        <if test="type != null">and bomCase.type = #{type}</if>
+        <if test="status != null">and bomCase.status = #{status}</if>
+        <if test="name != null">and bomCase.name like concat('%',#{name},'%')</if>
+        <if test="ids != null and ids.size() > 0">
+            and bomCase.id in
+            <foreach collection="ids" item="bomCaseId" open="(" close=")" separator=",">
+                #{bomCaseId}
+            </foreach>
+        </if>
+        <if test="logicalPlantNos != null and logicalPlantNos.size() > 0">
+            and bomCase.logical_plant_no in
+            <foreach collection="logicalPlantNos" item="logicalPlantNo" open="(" close=")" separator=",">
+                #{logicalPlantNo}
+            </foreach>
+        </if>
+        order by bomCase.update_time DESC
+    </select>
+
+    <select id="queryByCondition"
+            parameterType="com.inventory.middle.infra.plan.persistence.entity.bom.BomCasePO"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from pl_bom_case
+        where is_delete = 0
+        <if test="id != null">and id = #{id}</if>
+        <if test="tenantId != null">and tenant_id = #{tenantId}</if>
+        <if test="code != null">and code = #{code}</if>
+        <if test="name != null">and name = #{name}</if>
+        <if test="companyCode != null">and company_code = #{companyCode}</if>
+        <if test="companyName != null">and company_name = #{companyName}</if>
+        <if test="logicalPlantNo != null">and logical_plant_no = #{logicalPlantNo}</if>
+        <if test="logicalPlantName != null">and logical_plant_name = #{logicalPlantName}</if>
+        <if test="type != null">and type = #{type}</if>
+        <if test="status != null">and status = #{status}</if>
+        <if test="remark != null">and remark = #{remark}</if>
+        <if test="creatorId != null">and create_user_id = #{creatorId}</if>
+        <if test="createTime != null">and create_time = #{createTime}</if>
+        <if test="updatorId != null">and update_user_id = #{updatorId}</if>
+        <if test="updateTime != null">and update_time = #{updateTime}</if>
+    </select>
+
+    <select id="queryBomCode"
+            parameterType="com.inventory.middle.infra.plan.persistence.condition.bom.BomCodeQueryCondition"
+            resultMap="BomCaseQueryMap">
+        select bomNode.material_code, bomCase.code
+        from pl_bom_case bomCase
+        left join pl_bom_node bomNode on bomCase.id = bomNode.bom_case_id
+        where bomCase.is_delete = 0 and bomNode.is_delete = 0 and bomNode.type = 0 and bomCase.status = 1
+        <if test="tenantId != null">and bomCase.tenant_id = #{tenantId}</if>
+        <if test="logicalPlantNo != null">and bomCase.logical_plant_no = #{logicalPlantNo}</if>
+        <if test="materialCodeList != null and materialCodeList.size() > 0">
+            and bomNode.material_code in
+            <foreach collection="materialCodeList" item="code" open="(" close=")" separator=",">
+                #{code}
+            </foreach>
+        </if>
+    </select>
+</mapper>

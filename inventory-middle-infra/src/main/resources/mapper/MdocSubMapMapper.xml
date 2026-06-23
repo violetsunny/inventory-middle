@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MdocSubMapMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.MdocSubMapPO">
+        <result column="id" property="id"/>
+        <result column="material_doc_id" property="materialDocId"/>
+        <result column="material_doc_item_id" property="materialDocItemId"/>
+        <result column="map_code" property="mapCode"/>
+        <result column="map_sub_code" property="mapSubCode"/>
+        <result column="map_status" property="mapStatus"/>
+        <result column="deleted" property="deleted"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updator_id" property="updatorId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,
+                material_doc_id,
+                material_doc_item_id,
+                map_code,
+                map_sub_code,
+                map_status,
+                deleted,
+                tenant_id,
+                creator_id,
+                create_time,
+                update_time,
+                updator_id
+    </sql>
+
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into mdoc_sub_map (
+        id,
+        material_doc_id,
+        material_doc_item_id,
+        map_code,
+        map_sub_code,
+        map_status,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id,
+        deleted,
+        tenant_id
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.materialDocId},
+            #{item.materialDocItemId},
+            #{item.mapCode},
+            #{item.mapSubCode},
+            #{item.mapStatus},
+            #{item.createTime},
+            #{item.creatorId},
+            #{item.updateTime},
+            #{item.updatorId},
+            #{item.deleted},
+            #{item.tenantId}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity.MdocSubMapPO">
+        INSERT INTO mdoc_sub_map
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                id,
+            </if>
+            <if test="null != materialDocId ">
+                material_doc_id,
+            </if>
+            <if test="null != materialDocItemId ">
+                material_doc_item_id,
+            </if>
+            <if test="null != mapCode and '' != mapCode">
+                map_code,
+            </if>
+            <if test="null != mapSubCode and '' != mapSubCode">
+                map_sub_code,
+            </if>
+            <if test="null != mapStatus and '' != mapStatus">
+                map_status,
+            </if>
+            <if test="null != deleted ">
+                deleted,
+            </if>
+            <if test="null != tenantId ">
+                tenant_id,
+            </if>
+            <if test="null != creatorId ">
+                creator_id,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId ">
+                updator_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                #{id},
+            </if>
+            <if test="null != materialDocId ">
+                #{materialDocId},
+            </if>
+            <if test="null != materialDocItemId ">
+                #{materialDocItemId},
+            </if>
+            <if test="null != mapCode and '' != mapCode">
+                #{mapCode},
+            </if>
+            <if test="null != mapSubCode and '' != mapSubCode">
+                #{mapSubCode},
+            </if>
+            <if test="null != mapStatus and '' != mapStatus">
+                #{mapStatus},
+            </if>
+            <if test="null != deleted ">
+                #{deleted},
+            </if>
+            <if test="null != tenantId ">
+                #{tenantId},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId ">
+                #{updatorId}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM mdoc_sub_map
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.MdocSubMapPO">
+        UPDATE mdoc_sub_map
+        <set>
+            <if test="null != materialDocId ">material_doc_id = #{materialDocId},</if>
+            <if test="null != materialDocItemId ">material_doc_item_id = #{materialDocItemId},</if>
+            <if test="null != mapCode and '' != mapCode">map_code = #{mapCode},</if>
+            <if test="null != mapSubCode and '' != mapSubCode">map_sub_code = #{mapSubCode},</if>
+            <if test="null != mapStatus and '' != mapStatus">map_status = #{mapStatus},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != tenantId ">tenant_id = #{tenantId},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_map
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_map
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM mdoc_sub_map
+    </select>
+
+    <select id="queryByItemId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_map
+        WHERE material_doc_item_id = #{materialDocItemId}
+    </select>
+
+    <update id="updateMap" parameterType="com.inventory.middle.infra.persistence.entity.material.UpdateMaterialDocMapPO">
+        UPDATE mdoc_sub_map set map_status = #{mapStatus}
+        WHERE map_sub_code = #{mapSubCode}
+        <if test="null != tenantId ">and tenant_id = #{tenantId}</if>
+    </update>
+</mapper>

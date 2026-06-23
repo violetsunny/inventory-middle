@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.PlanOrderReceiptMapper">
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" useGeneratedKeys="true"
+            parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanOrderReceiptPO">
+        insert into pl_plan_order_receipt
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bizNo != null">biz_no,</if>
+            <if test="sourceType != null">source_type,</if>
+            <if test="sourceNo != null">source_no,</if>
+            <if test="realReceivingTime != null">real_receiving_time,</if>
+            <if test="finishQuantity != null">finish_quantity,</if>
+            <if test="currentStatus != null">current_status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="originalInfo != null">original_info,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bizNo != null">#{bizNo},</if>
+            <if test="sourceType != null">#{sourceType},</if>
+            <if test="sourceNo != null">#{sourceNo},</if>
+            <if test="realReceivingTime != null">#{realReceivingTime},</if>
+            <if test="finishQuantity != null">#{finishQuantity},</if>
+            <if test="currentStatus != null">#{currentStatus},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="originalInfo != null">#{originalInfo},</if>
+        </trim>
+    </insert>
+</mapper>

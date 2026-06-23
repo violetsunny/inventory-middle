@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.CodeApplyApprovalRecordMapper">
+
+  <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.CodeApplyApprovalRecordDo">
+    <result column="id" property="id" />
+    <result column="tenant_id" property="tenantId" />
+    <result column="apply_order_id" property="applyOrderId" />
+    <result column="approval_status" property="approvalStatus" />
+    <result column="approval_time" property="approvalTime" />
+    <result column="approval_reason" property="approvalReason" />
+    <result column="creator_id" property="creatorId" />
+    <result column="create_time" property="createTime" />
+    <result column="updator_id" property="updatorId" />
+    <result column="update_time" property="updateTime" />
+    <result column="deleted" property="deleted" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id,
+    tenant_id,
+    apply_order_id,
+    approval_status,
+    approval_time,
+    approval_reason,
+    creator_id,
+    create_time,
+    updator_id,
+    update_time,
+    deleted
+  </sql>
+
+  <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.persistence.entity">
+    INSERT INTO code_apply_approval_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="null != tenantId and '' != tenantId">
+        tenant_id,
+      </if>
+      <if test="null != applyOrderId">
+        apply_order_id,
+      </if>
+      <if test="null != approvalStatus">
+        approval_status,
+      </if>
+      <if test="null != approvalTime">
+        approval_time,
+      </if>
+      <if test="null != approvalReason and '' != approvalReason">
+        approval_reason,
+      </if>
+      <if test="null != creatorId and '' != creatorId">
+        creator_id,
+      </if>
+      <if test="null != createTime">
+        create_time,
+      </if>
+      <if test="null != updatorId and '' != updatorId">
+        updator_id,
+      </if>
+      <if test="null != updateTime">
+        update_time,
+      </if>
+      <if test="null != deleted">
+        deleted
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="null != tenantId and '' != tenantId">
+        #{tenantId},
+      </if>
+      <if test="null != applyOrderId">
+        #{applyOrderId},
+      </if>
+      <if test="null != approvalStatus">
+        #{approvalStatus},
+      </if>
+      <if test="null != approvalTime">
+        #{approvalTime},
+      </if>
+      <if test="null != approvalReason and '' != approvalReason">
+        #{approvalReason},
+      </if>
+      <if test="null != creatorId and '' != creatorId">
+        #{creatorId},
+      </if>
+      <if test="null != createTime">
+        #{createTime},
+      </if>
+      <if test="null != updatorId and '' != updatorId">
+        #{updatorId},
+      </if>
+      <if test="null != updateTime ">
+        #{updateTime},
+      </if>
+      <if test="null != deleted">
+        #{deleted}
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getById" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM code_apply_approval_record
+    WHERE id = #{id}
+  </select>
+
+
+</mapper>

@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.CodeMapper">
+  <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.CodeDo">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="business_no" jdbcType="VARCHAR" property="businessNo" />
+    <result column="source_no" jdbcType="VARCHAR" property="sourceNo" />
+    <result column="inner_code" jdbcType="VARCHAR" property="innerCode" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="publisher" jdbcType="VARCHAR" property="publisher" />
+    <result column="pre_owner" jdbcType="VARCHAR" property="preOwner" />
+    <result column="current_owner" jdbcType="VARCHAR" property="currentOwner" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="extend_field1" jdbcType="VARCHAR" property="extendField1" />
+    <result column="extend_field2" jdbcType="VARCHAR" property="extendField2" />
+    <result column="extend_param" jdbcType="VARCHAR" property="extendParam" />
+    <result column="active_time" jdbcType="TIMESTAMP" property="activeTime" />
+    <result column="creator_id" jdbcType="VARCHAR" property="creatorId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="updator_id" jdbcType="VARCHAR" property="updatorId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="BIGINT" property="deleted" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, business_no,source_no,inner_code, `type`,
+    code, publisher, pre_owner,
+    current_owner, `status`, extend_field1, extend_field2,
+    extend_param,active_time, creator_id, create_time,
+    updator_id, update_time, deleted
+  </sql>
+
+  <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+    insert into code_record (id, business_no,source_no,inner_code, `type`,
+      code, publisher, pre_owner, 
+      current_owner, `status`, extend_field1, extend_field2,
+    extend_param, active_time,creator_id, create_time,
+      updator_id, update_time, deleted
+      )
+    values (#{id,jdbcType=BIGINT}, #{businessNo,jdbcType=VARCHAR},#{sourceNo,jdbcType=VARCHAR},,#{innerCode} #{type,jdbcType=VARCHAR},
+      #{code,jdbcType=VARCHAR}, #{publisher,jdbcType=VARCHAR}, #{preOwner,jdbcType=VARCHAR}, 
+      #{currentOwner,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{extendField1,jdbcType=VARCHAR}, #{extendField2,jdbcType=VARCHAR},
+    #{extendParam,jdbcType=VARCHAR}, #{activeTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{updatorId,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.inventory.middle.infra.persistence.entity" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+    insert into code_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="businessNo != null">
+        business_no,
+      </if>
+      <if test="sourceNo != null">
+        source_no,
+      </if>
+      <if test="innerCode != null">
+        inner_code,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="publisher != null">
+        publisher,
+      </if>
+      <if test="preOwner != null">
+        pre_owner,
+      </if>
+      <if test="currentOwner != null">
+        current_owner,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="extendField1 != null">
+        extend_field1,
+      </if>
+      <if test="extendField2 != null">
+        extend_field2,
+      </if>
+      <if test="extendParam != null">
+        extend_param,
+      </if>
+      <if test="activeTime != null">
+        active_time,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updatorId != null">
+        updator_id,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="businessNo != null">
+        #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceNo != null">
+        #{sourceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="innerCode != null">
+        #{innerCode},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="publisher != null">
+        #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="preOwner != null">
+        #{preOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="currentOwner != null">
+        #{currentOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="extendField1 != null">
+        #{extendField1,jdbcType=VARCHAR},
+      </if>
+      <if test="extendField2 != null">
+        #{extendField2,jdbcType=VARCHAR},
+      </if>
+      <if test="extendParam != null">
+        #{extendParam,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null">
+        #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatorId != null">
+        #{updatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <insert id="batchInsert">
+    insert into code_record (business_no,source_no,inner_code, `type`,
+    code, publisher,
+    current_owner,pre_owner, `status`, extend_field1,extend_field2,
+    extend_param, creator_id
+    )
+    values
+    <foreach collection="list" separator="," item="item">
+      (
+      #{item.businessNo},#{item.sourceNo},#{item.innerCode}, #{item.type},
+      #{item.code}, #{item.publisher},
+      #{item.currentOwner},#{item.preOwner}, #{item.status}, #{item.extendField1},#{item.extendField2},
+      #{item.extendParam}, #{item.creatorId}
+      )
+    </foreach>
+  </insert>
+  <update id="updateByIdSelective">
+    update code_record
+    <set>
+      <if test="status != null and '' != status">
+        status = #{status},
+      </if>
+      <if test="extendField1 != null and '' != extendField1">
+        extend_field1 = #{extendField1},
+      </if>
+      <if test="extendField2 != null and '' != extendField2">
+        extend_field2 = #{extendField2},
+      </if>
+      <if test="extendParam != null and '' != extendParam">
+        extend_param = #{extendParam},
+      </if>
+      <if test="activeTime != null">
+        active_time = #{activeTime},
+      </if>
+      <if test="updatorId != null and '' != updatorId">
+        updator_id = #{updatorId},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted},
+      </if>
+    </set>
+      where
+        id = #{id}
+  </update>
+  <update id="batchUpdate">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      UPDATE code_record
+      <set>
+        <if test="null != item.preOwner and '' != item.preOwner">pre_owner = #{item.preOwner},</if>
+        <if test="null != item.currentOwner  and '' != item.currentOwner">current_owner = #{item.currentOwner},</if>
+        <if test="null != item.status  and '' != item.status">status = #{item.status},</if>
+        <if test="null != item.extendField1  and '' != item.extendField1">extend_field1 = #{item.extendField1},</if>
+        <if test="null != item.extendField2  and '' != item.extendField2">extend_field2 = #{item.extendField2},</if>
+        <if test="null != item.extendParam  and '' != item.extendParam">extend_param = #{item.extendParam},</if>
+        <if test="null != item.activeTime ">active_time = #{item.activeTime},</if>
+        <if test="null != item.updatorId  and '' != item.updatorId">updator_id = #{item.updatorId},</if>
+        <if test="null != item.updateTime ">update_time = #{item.updateTime},</if>
+        <if test="null != item.deleted ">deleted = #{item.deleted},</if>
+      </set>
+      WHERE id = #{item.id}
+    </foreach>
+  </update>
+  <update id="updateByIdAndStatusSelective">
+    update code_record
+    <set>
+      <if test="po.preOwner != null and '' != po.preOwner">
+        pre_owner = #{po.preOwner},
+      </if>
+      <if test="po.currentOwner != null and '' != po.currentOwner">
+        current_owner = #{po.currentOwner},
+      </if>
+      <if test="po.status != null and '' != po.status">
+        status = #{po.status},
+      </if>
+      <if test="po.extendField1 != null and '' != po.extendField1">
+        extend_field1 = #{po.extendField1},
+      </if>
+      <if test="po.extendField2 != null and '' != po.extendField2">
+        extend_field2 = #{po.extendField2},
+      </if>
+      <if test="po.extendParam != null and '' != po.extendParam">
+        extend_param = #{po.extendParam},
+      </if>
+      <if test="po.activeTime != null">
+        active_time = #{po.activeTime},
+      </if>
+      <if test="po.updatorId != null and '' != po.updatorId">
+        updator_id = #{po.updatorId},
+      </if>
+      <if test="po.updateTime != null">
+        update_time = #{po.updateTime},
+      </if>
+      <if test="po.deleted != null">
+        deleted = #{po.deleted},
+      </if>
+    </set>
+      where
+        id = #{id}
+      and
+        status = #{status}
+
+  </update>
+
+  <select id="list" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from
+    code_record
+    <where>
+      <if test="businessNo != null and '' != businessNo" >
+        and business_no = #{businessNo}
+      </if>
+      <if test="sourceNo != null and '' != sourceNo" >
+        and source_no = #{sourceNo}
+      </if>
+      <if test="innerCode != null and '' != innerCode" >
+        and inner_code = #{innerCode}
+      </if>
+      <if test="type != null and '' != type" >
+        and type = #{type}
+      </if>
+      <if test="code != null and '' != code" >
+        and code = #{code}
+      </if>
+      <if test="codeList != null and codeList.size() > 0" >
+        and code in
+        <foreach collection="codeList" separator="," item="item" open="(" close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="innerCodeList != null and innerCodeList.size() > 0" >
+        and inner_code in
+        <foreach collection="innerCodeList" separator="," item="item" open="(" close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="publisher != null and '' != publisher" >
+        and publisher = #{publisher}
+      </if>
+      <if test="preOwner != null and '' != preOwner" >
+        and pre_owner = #{preOwner}
+      </if>
+      <if test="currentOwner != null and '' != currentOwner" >
+        and current_owner = #{currentOwner}
+      </if>
+      <if test="status != null and '' != status" >
+        and status = #{status}
+      </if>
+      <if test="excludeStatusList != null and excludeStatusList.size() > 0" >
+        and status not in
+        <foreach collection="excludeStatusList" item="excludeStatus" separator="," open="(" close=")">
+          #{excludeStatus}
+        </foreach>
+      </if>
+      <if test="extendField1 != null and '' != extendField1" >
+        and extend_field1 = #{extendField1}
+      </if>
+      <if test="extendField2 != null and '' != extendField2" >
+        and extend_field2 = #{extendField2}
+      </if>
+      <if test="fuzzyExtendField2 != null and '' != fuzzyExtendField2" >
+        and extend_field2  like concat('%',concat('/',#{fuzzyExtendField2},'%')) ESCAPE '/'
+      </if>
+      <if test="deleted != null" >
+        and deleted = #{deleted}
+      </if>
+      <if test="activeTimeStart != null" >
+        and active_time &gt;= #{activeTimeStart}
+      </if>
+      <if test="activeTimeEnd != null" >
+        and active_time &lt;= #{activeTimeEnd}
+      </if>
+      order by update_time desc
+    </where>
+  </select>
+  <select id="selectOne" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List"/>
+    from
+      code_record
+    where
+    1=1
+    <if test="publisher != null and '' != publisher" >
+      and publisher = #{publisher}
+    </if>
+    <if test="currentOwner != null and '' != currentOwner" >
+      and current_owner = #{currentOwner}
+    </if>
+    and
+      type = #{type}
+    and
+      code = #{code}
+    and
+      business_no = #{businessNo}
+    limit 1
+  </select>
+  <select id="selectByInnerCode" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List"/>
+    from
+      code_record
+    where
+      inner_code = #{innerCode}
+    <if test="publisher != null and '' != publisher" >
+      and publisher = #{publisher}
+    </if>
+    <if test="businessNo != null and '' != businessNo" >
+      and business_no = #{businessNo}
+    </if>
+  </select>
+  <select id="count" resultType="java.lang.Integer">
+    select
+      count(*)
+    from
+      code_record
+    where
+    1=1
+    <if test="businessNo != null and '' != businessNo" >
+      and business_no = #{businessNo}
+    </if>
+    <if test="publisher != null and '' != publisher" >
+      and publisher = #{publisher}
+    </if>
+    <if test="sourceNo != null and '' != sourceNo" >
+      and source_no = #{sourceNo}
+    </if>
+    <if test="currentOwner != null and '' != currentOwner" >
+      and current_owner = #{currentOwner}
+    </if>
+    <if test="type != null and '' != type" >
+      and type = #{type}
+    </if>
+  </select>
+
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventoryMapHisMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.InventoryMapHisPO" >
+        <result column="id" property="id" />
+        <result column="map_id" property="mapId" />
+        <result column="map_code" property="mapCode" />
+        <result column="map_sub_code" property="mapSubCode" />
+        <result column="sku_code" property="skuCode" />
+        <result column="logical_plant_no" property="logicalPlantNo" />
+        <result column="sku_price_total" property="skuPriceTotal" />
+        <result column="sku_stock_total" property="skuStockTotal" />
+        <result column="map" property="map" />
+        <result column="currency" property="currency" />
+        <result column="exchange_rate" property="exchangeRate" />
+        <result column="create_time" property="createTime" />
+        <result column="creator_id" property="creatorId" />
+        <result column="update_time" property="updateTime" />
+        <result column="updator_id" property="updatorId" />
+        <result column="deleted" property="deleted" />
+        <result column="tenant_id" property="tenantId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+                id,
+                map_id,
+                map_code,
+                map_sub_code,
+                sku_code,
+                logical_plant_no,
+                sku_price_total,
+                sku_stock_total,
+                map,
+                currency,
+                exchange_rate,
+                create_time,
+                creator_id,
+                update_time,
+                updator_id,
+                deleted,
+                tenant_id
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.persistence.entity.InventoryMapHisPO">
+        INSERT INTO inventory_map_his
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != mapId">
+                map_id,
+            </if>
+            <if test="null != mapCode and '' != mapCode">
+                map_code,
+            </if>
+            <if test="null != mapSubCode and '' != mapSubCode">
+                map_sub_code,
+            </if>
+            <if test="null != skuCode and '' != skuCode">
+                sku_code,
+            </if>
+            <if test="null != logicalPlantNo and '' != logicalPlantNo">
+                logical_plant_no,
+            </if>
+            <if test="null != skuPriceTotal ">
+                sku_price_total,
+            </if>
+            <if test="null != skuStockTotal ">
+                sku_stock_total,
+            </if>
+            <if test="null != map">
+                map,
+            </if>
+            <if test="null != currency and '' != currency">
+                currency,
+            </if>
+            <if test="null != exchangeRate ">
+                exchange_rate,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId and '' != creatorId">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId and '' != updatorId">
+                updator_id,
+            </if>
+            <if test="null != deleted ">
+                deleted,
+            </if>
+            <if test="null != tenantId and '' != tenantId">
+                tenant_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != mapId and '' != mapId">
+                #{mapId},
+            </if>
+            <if test="null != mapCode and '' != mapCode">
+                #{mapCode},
+            </if>
+            <if test="null != mapSubCode and '' != mapSubCode">
+                #{mapSubCode},
+            </if>
+            <if test="null != skuCode and '' != skuCode">
+                #{skuCode},
+            </if>
+            <if test="null != logicalPlantNo and '' != logicalPlantNo">
+                #{logicalPlantNo},
+            </if>
+            <if test="null != skuPriceTotal ">
+                #{skuPriceTotal},
+            </if>
+            <if test="null != skuStockTotal ">
+                #{skuStockTotal},
+            </if>
+            <if test="null != map">
+                #{map},
+            </if>
+            <if test="null != currency and '' != currency">
+                #{currency},
+            </if>
+            <if test="null != exchangeRate ">
+                #{exchangeRate},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId and '' != creatorId">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId and '' != updatorId">
+                #{updatorId},
+            </if>
+            <if test="null != deleted ">
+                #{deleted},
+            </if>
+            <if test="null != tenantId and '' != tenantId">
+                #{tenantId}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.InventoryMapHisPO">
+        UPDATE inventory_map_his
+        <set>
+            <if test="null != mapId ">map_id = #{mapId},</if>
+            <if test="null != mapCode and '' != mapCode">map_code = #{mapCode},</if>
+            <if test="null != mapSubCode and '' != mapSubCode">map_sub_code = #{mapSubCode},</if>
+            <if test="null != skuCode and '' != skuCode">sku_code = #{skuCode},</if>
+            <if test="null != logicalPlantNo and '' != logicalPlantNo">logical_plant_no = #{logicalPlantNo},</if>
+            <if test="null != skuPriceTotal ">sku_price_total = #{skuPriceTotal},</if>
+            <if test="null != skuStockTotal ">sku_stock_total = #{skuStockTotal},</if>
+            <if test="null != map ">map = #{map},</if>
+            <if test="null != currency and '' != currency">currency = #{currency},</if>
+            <if test="null != exchangeRate ">exchange_rate = #{exchangeRate},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId and '' != creatorId">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId and '' != updatorId">updator_id = #{updatorId},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != tenantId and '' != tenantId">tenant_id = #{tenantId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_map_his
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_map_his
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM inventory_map_his
+    </select>
+
+    <select id="queryInventoryMapHis" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_map_his
+        WHERE sku_code = #{skuCode}
+    </select>
+</mapper>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.PlanMaterialMapper">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialPO">
+        <!--@mbg.generated-->
+        <!--@Table pl_plan_material-->
+        <id column="id" property="id"/>
+        <result column="source_id" property="sourceId"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="logical_plant_no" property="logicalPlantNo"/>
+        <result column="type" property="type"/>
+        <result column="deleted" property="isDelete"/>
+        <result column="create_time" property="createTime"/>
+        <result column="creator_id" property="createUserId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updator_id" property="updateUserId"/>
+        <result column="tenant_id" property="tenantId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, source_id, material_code, logical_plant_no, `type`, deleted, create_time, creator_id,
+        update_time, updator_id, tenant_id
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from pl_plan_material
+        where id = #{id}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        <!--@mbg.generated-->
+        delete from pl_plan_material
+        where id = #{id}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialPO"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into pl_plan_material (source_id, material_code, logical_plant_no, `type`, deleted, create_time,
+        creator_id, update_time, updator_id, tenant_id)
+        values (#{sourceId}, #{materialCode}, #{logicalPlantNo}, #{type}, #{isDelete}, #{createTime},
+        #{createUserId}, #{updateTime}, #{updateUserId}, #{tenantId})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialPO" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into pl_plan_material
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sourceId != null">
+                source_id,
+            </if>
+            <if test="materialCode != null">
+                material_code,
+            </if>
+            <if test="logicalPlantNo != null">
+                logical_plant_no,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="isDelete != null">
+                deleted,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="createUserId != null">
+                creator_id,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="updateUserId != null">
+                updator_id,
+            </if>
+            <if test="tenantId != null">
+                tenant_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sourceId != null">
+                #{sourceId},
+            </if>
+            <if test="materialCode != null">
+                #{materialCode},
+            </if>
+            <if test="logicalPlantNo != null">
+                #{logicalPlantNo},
+            </if>
+            <if test="type != null">
+                #{type},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="createUserId != null">
+                #{createUserId},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="updateUserId != null">
+                #{updateUserId},
+            </if>
+            <if test="tenantId != null">
+                #{tenantId},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialPO">
+        <!--@mbg.generated-->
+        update pl_plan_material
+        <set>
+            <if test="sourceId != null">
+                source_id = #{sourceId},
+            </if>
+            <if test="materialCode != null">
+                material_code = #{materialCode},
+            </if>
+            <if test="logicalPlantNo != null">
+                logical_plant_no = #{logicalPlantNo},
+            </if>
+            <if test="type != null">
+                `type` = #{type},
+            </if>
+            <if test="isDelete != null">
+                deleted = #{isDelete},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="createUserId != null">
+                creator_id = #{createUserId},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUserId != null">
+                updator_id = #{updateUserId},
+            </if>
+            <if test="tenantId != null">
+                tenant_id = #{tenantId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialPO">
+        <!--@mbg.generated-->
+        update pl_plan_material
+        set source_id = #{sourceId},
+        material_code = #{materialCode},
+        logical_plant_no = #{logicalPlantNo},
+        `type` = #{type},
+        deleted = #{isDelete},
+        create_time = #{createTime},
+        creator_id = #{createUserId},
+        update_time = #{updateTime},
+        updator_id = #{updateUserId},
+        tenant_id = #{tenantId}
+        where id = #{id}
+    </update>
+    <select id="selectByMaterialCodeAndLogicalNo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `pl_plan_material`
+        where id in
+        <foreach close=")" collection="conditions" item="item" open="(" separator=",">
+            select id from pl_plan_material where material_code = #{item.materialCode} and logical_plant_no =
+            #{item.logicalPlantNo} and type=#{type}
+        </foreach>
+        and deleted = 0
+    </select>
+    <insert id="batchInsertPlanMaterial" parameterType="java.util.List" useGeneratedKeys="true">
+        insert into `pl_plan_material` (source_id, material_code, logical_plant_no,creator_id, updator_id,
+        tenant_id,type)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.sourceId}, #{item.materialCode}, #{item.logicalPlantNo}, #{item.createUserId},
+            #{item.updateUserId}, #{item.tenantId}, #{item.type})
+        </foreach>
+        ON DUPLICATE key update
+        updator_id = values(updator_id),
+        update_time = values(update_time),
+        deleted = 0;
+    </insert>
+    <update id="batchDeletePlanMaterial" parameterType="java.util.List">
+        <foreach collection="list" item="item" separator=";">
+            update `pl_plan_material` set deleted = 1
+            where source_id = #{item.sourceId}
+            and material_code = #{item.materialCode}
+            and logical_plant_no = #{item.logicalPlantNo}
+            and type = #{item.type}
+            and deleted = 0
+        </foreach>
+    </update>
+    <select id="selectByPlanId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `pl_plan_material`
+        where source_id = #{sourceId}
+        and tenant_id = #{tenantId}
+        and type = #{type}
+        and deleted = 0
+    </select>
+    <update id="deletePlanMaterialByPlanId">
+        update `pl_plan_material` set deleted = 1
+        where source_id = #{sourceId}
+        and type =#{type}
+    </update>
+    <select id="selectByPlanIds" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `pl_plan_material`
+        where source_id in
+        <foreach close=")" collection="sources" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+        and type = #{type}
+        and deleted = 0
+    </select>
+
+    <update id="deletePlanMaterialNotInLogicalPlants">
+        update `pl_plan_material` set deleted = 1
+        where source_id = #{sourceId}
+        and type=#{type}
+        and logical_plant_no not in
+        <foreach close=")" collection="list" item="item" open="(" separator=",">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

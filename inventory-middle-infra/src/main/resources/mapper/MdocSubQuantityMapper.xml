@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MdocSubQuantityMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.MdocSubQuantityPO">
+        <result column="id" property="id"/>
+        <result column="material_doc_id" property="materialDocId"/>
+        <result column="material_doc_item_id" property="materialDocItemId"/>
+        <result column="adjust_quantity" property="adjustQuantity"/>
+        <result column="uom" property="uom"/>
+        <result column="price" property="price"/>
+        <result column="total_price" property="totalPrice"/>
+        <result column="total_price_tax" property="totalPriceTax"/>
+        <result column="tax_code" property="taxCode"/>
+        <result column="tax_name" property="taxName"/>
+        <result column="tax_rate" property="taxRate"/>
+        <result column="tax" property="tax"/>
+        <result column="currency" property="currency"/>
+        <result column="exchange_rate" property="exchangeRate"/>
+        <result column="create_time" property="createTime"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updator_id" property="updatorId"/>
+        <result column="deleted" property="deleted"/>
+        <result column="tenant_id" property="tenantId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,
+                material_doc_id,
+                material_doc_item_id,
+                adjust_quantity,
+                uom,
+                price,
+                total_price,
+                total_price_tax,
+                tax_code,
+                tax_name,
+                tax_rate,
+                tax,
+                currency,
+                exchange_rate,
+                create_time,
+                creator_id,
+                update_time,
+                updator_id,
+                deleted,
+                tenant_id
+    </sql>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into mdoc_sub_quantity (
+        id,
+        material_doc_id,
+        material_doc_item_id,
+        adjust_quantity,
+        uom,
+        price,
+        total_price,
+        total_price_tax,
+        tax_code,
+        tax_name,
+        tax_rate,
+        tax,
+        currency,
+        exchange_rate,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id,
+        deleted,
+        tenant_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.materialDocId},
+            #{item.materialDocItemId},
+            #{item.adjustQuantity},
+            #{item.uom},
+            #{item.price},
+            #{item.totalPrice},
+            #{item.totalPriceTax},
+            #{item.taxCode},
+            #{item.taxName},
+            #{item.taxRate},
+            #{item.tax},
+            #{item.currency},
+            #{item.exchangeRate},
+            #{item.createTime},
+            #{item.creatorId},
+            #{item.updateTime},
+            #{item.updatorId},
+            #{item.deleted},
+            #{item.tenantId}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity.MdocSubQuantityPO">
+        INSERT INTO mdoc_sub_quantity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                id,
+            </if>
+            <if test="null != materialDocId ">
+                material_doc_id,
+            </if>
+            <if test="null != materialDocItemId ">
+                material_doc_item_id,
+            </if>
+            <if test="null != adjustQuantity ">
+                adjust_quantity,
+            </if>
+            <if test="null != uom and '' != uom">
+                uom,
+            </if>
+            <if test="null != price ">
+                price,
+            </if>
+            <if test="null != totalPrice ">
+                total_price,
+            </if>
+            <if test="null != totalPriceTax ">
+                total_price_tax,
+            </if>
+            <if test="null != taxCode and '' != taxCode">
+                tax_code,
+            </if>
+            <if test="null != taxName and '' != taxName">
+                tax_name,
+            </if>
+            <if test="null != taxRate ">
+                tax_rate,
+            </if>
+            <if test="null != tax ">
+                tax,
+            </if>
+            <if test="null != currency and '' != currency">
+                currency,
+            </if>
+            <if test="null != exchangeRate ">
+                exchange_rate,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId ">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId ">
+                updator_id,
+            </if>
+            <if test="null != deleted ">
+                deleted,
+            </if>
+            <if test="null != tenantId ">
+                tenant_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                #{id},
+            </if>
+            <if test="null != materialDocId ">
+                #{materialDocId},
+            </if>
+            <if test="null != materialDocItemId ">
+                #{materialDocItemId},
+            </if>
+            <if test="null != adjustQuantity ">
+                #{adjustQuantity},
+            </if>
+            <if test="null != uom and '' != uom">
+                #{uom},
+            </if>
+            <if test="null != price ">
+                #{price},
+            </if>
+            <if test="null != totalPrice ">
+                #{totalPrice},
+            </if>
+            <if test="null != totalPriceTax ">
+                #{totalPriceTax},
+            </if>
+            <if test="null != taxCode and '' != taxCode">
+                #{taxCode},
+            </if>
+            <if test="null != taxName and '' != taxName">
+                #{taxName},
+            </if>
+            <if test="null != taxRate ">
+                #{taxRate},
+            </if>
+            <if test="null != tax ">
+                #{tax},
+            </if>
+            <if test="null != currency and '' != currency">
+                #{currency},
+            </if>
+            <if test="null != exchangeRate ">
+                #{exchangeRate},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId ">
+                #{updatorId},
+            </if>
+            <if test="null != deleted ">
+                #{deleted},
+            </if>
+            <if test="null != tenantId ">
+                #{tenantId}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.MdocSubQuantityPO">
+        UPDATE mdoc_sub_quantity
+        <set>
+            <if test="null != materialDocId ">material_doc_id = #{materialDocId},</if>
+            <if test="null != materialDocItemId ">material_doc_item_id = #{materialDocItemId},</if>
+            <if test="null != adjustQuantity ">adjust_quantity = #{adjustQuantity},</if>
+            <if test="null != uom and '' != uom">uom = #{uom},</if>
+            <if test="null != price ">price = #{price},</if>
+            <if test="null != totalPrice ">total_price = #{totalPrice},</if>
+            <if test="null != totalPriceTax ">total_price_tax = #{totalPriceTax},</if>
+            <if test="null != taxCode and '' != taxCode">tax_code = #{taxCode},</if>
+            <if test="null != taxName and '' != taxName">tax_name = #{taxName},</if>
+            <if test="null != taxRate ">tax_rate = #{taxRate},</if>
+            <if test="null != tax ">tax = #{tax},</if>
+            <if test="null != currency and '' != currency">currency = #{currency},</if>
+            <if test="null != exchangeRate ">exchange_rate = #{exchangeRate},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != tenantId ">tenant_id = #{tenantId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_quantity
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_quantity
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Long">
+        SELECT count(1)
+        FROM mdoc_sub_quantity
+    </select>
+
+    <select id="queryByItemId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_quantity
+        WHERE material_doc_item_id = #{materialDocItemId}
+    </select>
+</mapper>

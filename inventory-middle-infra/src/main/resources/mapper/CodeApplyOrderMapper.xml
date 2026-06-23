@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.CodeApplyOrderMapper">
+
+  <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.CodeApplyOrderDo">
+    <result column="id" property="id" />
+    <result column="tenant_id" property="tenantId" />
+    <result column="channel" property="channel" />
+    <result column="order_no" property="orderNo" />
+    <result column="owner_id" property="ownerId" />
+    <result column="original_distributor_id" property="originalDistributorId" />
+    <result column="invitee_id" property="inviteeId" />
+    <result column="invitee_logical_plant_no" property="inviteeLogicalPlantNo" />
+    <result column="apply_time" property="applyTime" />
+    <result column="apply_reason" property="applyReason" />
+    <result column="approval_status" property="approvalStatus" />
+    <result column="approval_time" property="approvalTime" />
+    <result column="extend_param" property="extendParam" />
+    <result column="creator_id" property="creatorId" />
+    <result column="create_time" property="createTime" />
+    <result column="updator_id" property="updatorId" />
+    <result column="update_time" property="updateTime" />
+    <result column="deleted" property="deleted" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id,
+    tenant_id,
+    `channel`,
+    order_no,
+    owner_id,
+    original_distributor_id,
+    invitee_id,
+    invitee_logical_plant_no,
+    apply_time,
+    apply_reason,
+    approval_status,
+    approval_time,
+    extend_param,
+    creator_id,
+    create_time,
+    updator_id,
+    update_time,
+    deleted
+  </sql>
+
+  <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.persistence.entity">
+    INSERT INTO code_apply_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="null != tenantId">
+        tenant_id,
+      </if>
+      <if test="null != channel">
+        `channel`,
+      </if>
+      <if test="null != orderNo and '' != orderNo">
+        order_no,
+      </if>
+      <if test="null != ownerId">
+        owner_id,
+      </if>
+      <if test="null != originalDistributorId">
+        original_distributor_id,
+      </if>
+      <if test="null != inviteeId">
+        invitee_id,
+      </if>
+      <if test="null != inviteeLogicalPlantNo">
+        invitee_logical_plant_no,
+      </if>
+      <if test="null != applyTime">
+        apply_time,
+      </if>
+      <if test="null != applyReason">
+        apply_reason,
+      </if>
+      <if test="null != approvalStatus">
+        approval_status,
+      </if>
+      <if test="null != approvalTime">
+        approval_time,
+      </if>
+      <if test="null != extendParam">
+        extend_param,
+      </if>
+      <if test="null != creatorId">
+        creator_id,
+      </if>
+      <if test="null != createTime">
+        create_time,
+      </if>
+      <if test="null != updatorId">
+        updator_id,
+      </if>
+      <if test="null != updateTime">
+        update_time,
+      </if>
+      <if test="null != deleted">
+        deleted
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="null != tenantId">
+        #{tenantId},
+      </if>
+      <if test="null != channel">
+        #{channel},
+      </if>
+      <if test="null != orderNo and '' != orderNo">
+        #{orderNo},
+      </if>
+      <if test="null != ownerId">
+        #{ownerId},
+      </if>
+      <if test="null != originalDistributorId">
+        #{originalDistributorId},
+      </if>
+      <if test="null != inviteeId">
+        #{inviteeId},
+      </if>
+      <if test="null != inviteeLogicalPlantNo">
+        #{inviteeLogicalPlantNo},
+      </if>
+      <if test="null != applyTime">
+        #{applyTime},
+      </if>
+      <if test="null != applyReason">
+        #{applyReason},
+      </if>
+      <if test="null != approvalStatus">
+        #{approvalStatus},
+      </if>
+      <if test="null != approvalTime">
+        #{approvalTime},
+      </if>
+      <if test="null != extendParam">
+        #{extendParam},
+      </if>
+      <if test="null != creatorId">
+        #{creatorId},
+      </if>
+      <if test="null != createTime">
+        #{createTime},
+      </if>
+      <if test="null != updatorId">
+        #{updatorId},
+      </if>
+      <if test="null != updateTime">
+        #{updateTime},
+      </if>
+      <if test="null != deleted">
+        #{deleted}
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.inventory.middle.infra.persistence.entity">
+    UPDATE code_apply_order
+    <set>
+      <if test="null != tenantId and '' != tenantId">tenant_id = #{tenantId},</if>
+      <if test="null != ownerId">owner_id = #{ownerId},</if>
+      <if test="null != inviteeId and '' != inviteeId">invitee_id = #{inviteeId},</if>
+      <if test="null != applyTime">apply_time = #{applyTime},</if>
+      <if test="null != applyReason">apply_reason = #{applyReason},</if>
+      <if test="null != approvalStatus">approval_status = #{approvalStatus},</if>
+      <if test="null != approvalTime">approval_time = #{approvalTime},</if>
+      <if test="null != extendParam">extend_param = #{extendParam},</if>
+      <if test="null != updatorId and '' != updatorId">updator_id = #{updatorId},</if>
+      <if test="null != deleted">deleted = #{deleted},</if>
+      update_time = NOW()
+    </set>
+    WHERE id = #{id}
+  </update>
+
+  <select id="listByCondition" resultMap="BaseResultMap" parameterType="com.inventory.middle.infra.persistence.entity">
+    SELECT <include refid="Base_Column_List" />
+    FROM code_apply_order
+    <where>
+      <if test="inviterId != null and inviterId != ''">
+        AND tenant_id = #{inviterId}
+      </if>
+      <if test="ownerId != null and ownerId != ''">
+        AND owner_id = #{ownerId}
+      </if>
+      <if test="channel != null ">
+        AND `channel` = #{channel}
+      </if>
+      <if test="null != originalDistributorId and originalDistributorId != ''">
+        AND original_distributor_id = #{originalDistributorId}
+      </if>
+      <if test="inviteeId != null and inviteeId != ''">
+        AND invitee_id = #{inviteeId}
+      </if>
+      <if test="applyOrderNo != null and applyOrderNo != ''">
+        AND order_no LIKE concat('%',concat('/', #{applyOrderNo},'%')) ESCAPE '/'
+      </if>
+      <if test="approvalStatus != null">
+        AND approval_status = #{approvalStatus}
+      </if>
+      <if test="approvalStatus != null">
+        AND approval_status = #{approvalStatus}
+      </if>
+      <if test="applyBeginTime != null">
+        AND apply_time &gt;= #{applyBeginTime}
+      </if>
+      <if test="applyEndTime != null">
+        AND apply_time &lt;= #{applyEndTime}
+      </if>
+      <if test="approvalBeginTime != null">
+        AND approval_time &gt;= #{approvalBeginTime}
+      </if>
+      <if test="approvalEndTime != null">
+        AND approval_time &lt;= #{approvalEndTime}
+      </if>
+    </where>
+  </select>
+
+  <select id="getById" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM code_apply_order
+    WHERE id = #{id}
+  </select>
+
+</mapper>

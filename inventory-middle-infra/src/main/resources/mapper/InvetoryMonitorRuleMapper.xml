@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventoryMonitorRuleMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.InventoryMonitorRulePO" >
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="monitor_rule_code" property="monitorRuleCode" jdbcType="VARCHAR"/>
+        <result column="tenant_id" property="tenantId" jdbcType="VARCHAR"/>
+        <result column="monitor_send_mode" property="monitorSendMode" jdbcType="VARCHAR"/>
+        <result column="monitor_send_address" property="monitorSendAddress" jdbcType="VARCHAR"/>
+        <result column="monitor_type" property="monitorType" jdbcType="VARCHAR"/>
+        <result column="monitor_dimension" property="monitorDimension" jdbcType="VARCHAR"/>
+        <result column="monitor_interval" property="monitorInterval" jdbcType="INTEGER"/>
+        <result column="monitor_enable_status" property="monitorEnableStatus" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="creator_id" property="creatorId" jdbcType="BIGINT"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="updator_id" property="updatorId" jdbcType="BIGINT"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+                monitor_rule_code,
+                tenant_id,
+                monitor_send_mode,
+                monitor_send_address,
+                monitor_type,
+                monitor_dimension,
+                monitor_interval,
+                monitor_enable_status,
+                create_time,
+                creator_id,
+                update_time,
+                updator_id,
+                deleted
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.persistence.entity.InventoryMonitorRulePO">
+        INSERT INTO inventory_monitor_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != monitorRuleCode and '' != monitorRuleCode">
+                monitor_rule_code,
+            </if>
+            <if test="null != tenantId and tenantId > 0">
+                tenant_id,
+            </if>
+            <if test="null != monitorSendMode and '' != monitorSendMode">
+                monitor_send_mode,
+            </if>
+            <if test="null != monitorSendAddress and '' != monitorSendAddress">
+                monitor_send_address,
+            </if>
+            <if test="null != monitorType and '' != monitorType">
+                monitor_type,
+            </if>
+            <if test="null != monitorDimension and '' != monitorDimension">
+                monitor_dimension,
+            </if>
+            <if test="null != monitorInterval">
+                monitor_interval,
+            </if>
+            <if test="null != monitorEnableStatus ">
+                monitor_enable_status,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId ">
+                updator_id,
+            </if>
+            <if test="null != deleted ">
+                deleted
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != monitorRuleCode and '' != monitorRuleCode">
+                #{monitorRuleCode},
+            </if>
+            <if test="null != tenantId and tenantId > 0">
+                #{tenantId},
+            </if>
+            <if test="null != monitorSendMode and '' != monitorSendMode">
+                #{monitorSendMode},
+            </if>
+            <if test="null != monitorSendAddress and '' != monitorSendAddress">
+                #{monitorSendAddress},
+            </if>
+            <if test="null != monitorType and '' != monitorType">
+                #{monitorType},
+            </if>
+            <if test="null != monitorDimension and '' != monitorDimension">
+                #{monitorDimension},
+            </if>
+            <if test="null != monitorInterval">
+                #{monitorInterval},
+            </if>
+            <if test="null != monitorEnableStatus ">
+                #{monitorEnableStatus},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId">
+                #{updatorId},
+            </if>
+            <if test="null != deleted ">
+                #{deleted}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.InventoryMonitorRulePO">
+        UPDATE inventory_monitor_rule
+        <set>
+            <if test="null != monitorRuleCode and '' != monitorRuleCode">monitor_rule_code = #{monitorRuleCode},</if>
+            <if test="null != tenantId ">tenant_id = #{tenantId},</if>
+            <if test="null != monitorSendMode and '' != monitorSendMode">monitor_send_mode = #{monitorSendMode},</if>
+            monitor_send_address = #{monitorSendAddress},
+            <if test="null != monitorType and '' != monitorType">monitor_type = #{monitorType},</if>
+            <if test="null != monitorDimension and '' != monitorDimension">monitor_dimension = #{monitorDimension},</if>
+            monitor_interval = #{monitorInterval},
+            <if test="null != monitorEnableStatus ">monitor_enable_status = #{monitorEnableStatus},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId},</if>
+            <if test="null != deleted ">deleted = #{deleted}</if>
+        </set>
+        WHERE id = #{id} and tenant_id = #{tenantId}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_monitor_rule
+        WHERE id = #{id}
+        <if test="null != deleted">and deleted = #{deleted}</if>
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_monitor_rule
+        where
+            tenant_id = #{param.tenantId}
+            <if test="param.monitorRuleCode != null and param.monitorRuleCode != ''" >
+                AND monitor_rule_code like concat('%',concat('/',#{param.monitorRuleCode},'%')) ESCAPE '/'
+            </if>
+            <if test="param.monitorEnableStatus != null and param.monitorEnableStatus != ''" >
+                AND monitor_enable_status = #{param.monitorEnableStatus}
+            </if>
+            and deleted = #{deleted}
+            order by id desc
+    </select>
+
+    <select id="listWithMaxId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_monitor_rule
+        where 1=1
+        <if test="param.tenantId != null" >
+            AND tenant_id = #{param.tenantId}
+        </if>
+        <if test="maxRuleId != null" >
+            AND id > #{maxRuleId}
+        </if>
+        <if test="param.monitorRuleCode != null and param.monitorRuleCode != ''" >
+            AND monitor_rule_code like concat('%',concat('/',#{param.monitorRuleCode},'%')) ESCAPE '/'
+        </if>
+        <if test="param.monitorType != null and param.monitorType != ''" >
+            AND monitor_type = #{param.monitorType}
+        </if>
+        <if test="param.monitorEnableStatus != null and param.monitorEnableStatus != ''" >
+            AND monitor_enable_status = #{param.monitorEnableStatus}
+        </if>
+        and deleted = #{deleted}
+        order by id asc
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM inventory_monitor_rule
+    </select>
+
+    <select id="queryByMonitorObjects" resultMap="BaseResultMap">
+        select distinct r.*
+        from inventory_monitor_rule r left join inventory_monitor_rule_line l on r.id = l.monitor_rule_id
+        where r.tenant_id = #{tenantId}
+          and r.monitor_dimension = l.monitor_dimension
+        <if test="null != monitorDimension">
+            and l.monitor_dimension = #{monitorDimension}
+        </if>
+          and l.monitor_object in
+        <foreach collection="materialObjects" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <if test="null != enableStatus">
+            and r.monitor_enable_status = #{enableStatus}
+        </if>
+        and r.deleted = #{deleted} and l.deleted = #{deleted}
+    </select>
+
+</mapper>

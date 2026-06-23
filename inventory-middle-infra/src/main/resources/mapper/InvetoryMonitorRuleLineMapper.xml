@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventoryMonitorRuleLineMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.InventoryMonitorRuleLinePO" >
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="monitor_rule_id" property="monitorRuleId" jdbcType="BIGINT"/>
+        <result column="monitor_dimension" property="monitorDimension" jdbcType="VARCHAR"/>
+        <result column="monitor_object" property="monitorObject" jdbcType="VARCHAR"/>
+        <result column="monitor_ceil" property="monitorCeil" jdbcType="DECIMAL"/>
+        <result column="monitor_floor" property="monitorFloor" jdbcType="DECIMAL"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="creator_id" property="creatorId" jdbcType="BIGINT"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="updator_id" property="updatorId" jdbcType="BIGINT"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        monitor_rule_id,
+        monitor_dimension,
+        monitor_object,
+        monitor_ceil,
+        monitor_floor,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id,
+        deleted
+    </sql>
+
+    <insert id="insertBatch" >
+        insert into inventory_monitor_rule_line (
+            id,
+            monitor_rule_id,
+            monitor_dimension,
+            monitor_object,
+            monitor_ceil,
+            monitor_floor,
+            create_time,
+            creator_id,
+            update_time,
+            updator_id,
+            deleted
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+                 #{item.id},
+                 #{item.monitorRuleId},
+                 #{item.monitorDimension},
+                 #{item.monitorObject},
+                 #{item.monitorCeil},
+                 #{item.monitorFloor},
+                 #{item.createTime},
+                 #{item.creatorId},
+                 #{item.updateTime},
+                 #{item.updatorId},
+                 #{item.deleted}
+             )
+        </foreach>
+    </insert>
+
+    <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity.InventoryMonitorRuleLinePO">
+        INSERT INTO inventory_monitor_rule_line
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id">
+                id,
+            </if>
+            <if test="null != monitorRuleId">
+                monitor_rule_id,
+            </if>
+            <if test="null != monitorDimension">
+                monitor_dimension,
+            </if>
+            <if test="null != monitorObject and '' != monitorObject">
+                monitor_object,
+            </if>
+            <if test="null != monitorCeil">
+                monitor_ceil,
+            </if>
+            <if test="null != monitorFloor ">
+                monitor_floor,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId ">
+                creator_id,
+            </if>
+            <if test="null != updateTime">
+                update_time,
+            </if>
+            <if test="null != updatorId ">
+                updator_id,
+            </if>
+            <if test="null != deleted ">
+                deleted
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id">
+                #{id},
+            </if>
+            <if test="null != monitorRuleId and '' != monitorRuleId">
+                #{monitorRuleId},
+            </if>
+            <if test="null != monitorDimension">
+                #{monitorDimension},
+            </if>
+            <if test="null != monitorObject">
+                #{monitorObject},
+            </if>
+            <if test="null != monitorCeil">
+                #{monitorCeil},
+            </if>
+            <if test="null != monitorFloor">
+                #{monitorFloor},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId ">
+                #{updatorId},
+            </if>
+            <if test="null != deleted ">
+                #{deleted}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM inventory_monitor_rule_line
+        WHERE id = #{id}
+    </delete>
+
+    <update id="updateBatch" parameterType="java.util.List" >
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE inventory_monitor_rule_line
+            <set>
+                <if test="null != item.monitorRuleId ">monitor_rule_id = #{item.monitorRuleId},</if>
+                <if test="null != item.monitorDimension ">monitor_dimension = #{item.monitorDimension},</if>
+                <if test="null != item.monitorObject ">monitor_object = #{item.monitorObject},</if>
+                monitor_ceil = #{item.monitorCeil},
+                monitor_floor = #{item.monitorFloor},
+                <if test="null != item.createTime ">create_time = #{item.createTime},</if>
+                <if test="null != item.creatorId ">creator_id = #{item.creatorId},</if>
+                <if test="null != item.updateTime ">update_time = #{item.updateTime},</if>
+                <if test="null != item.updatorId ">updator_id = #{item.updatorId},</if>
+                <if test="null != item.deleted ">deleted = #{item.deleted}</if>
+            </set>
+            WHERE id = #{item.id}
+        </foreach>
+    </update>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.InventoryMonitorRuleLinePO">
+        UPDATE inventory_monitor_rule_line
+        <set>
+            <if test="null != monitorRuleId ">monitor_rule_id = #{monitorRuleId},</if>
+            <if test="null != monitorDimension ">monitor_dimension = #{monitorDimension},</if>
+            <if test="null != monitorObject ">monitor_object = #{monitorObject},</if>
+            <if test="null != monitorCeil ">monitor_ceil = #{monitorCeil},</if>
+            <if test="null != monitorFloor ">monitor_floor = #{monitorFloor},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId},</if>
+            <if test="null != deleted ">deleted = #{deleted}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateByMonitorRuleId" parameterType="com.inventory.middle.infra.persistence.entity.InventoryMonitorRuleLinePO">
+        UPDATE inventory_monitor_rule_line
+        <set>
+            <if test="null != monitorObject ">monitor_object = #{monitorObject},</if>
+            <if test="null != monitorDimension ">monitor_dimension = #{monitorDimension},</if>
+            <if test="null != monitorCeil ">monitor_ceil = #{monitorCeil},</if>
+            <if test="null != monitorFloor ">monitor_floor = #{monitorFloor},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId},</if>
+            <if test="null != deleted ">deleted = #{deleted}</if>
+        </set>
+        WHERE monitor_rule_id = #{monitorRuleId}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_monitor_rule_line
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryByMonitorRuleIds" resultMap="BaseResultMap">
+        SELECT distinct l.*
+        FROM inventory_monitor_rule_line l
+            left join inventory_monitor_rule r on r.id = l.monitor_rule_id
+        WHERE l.monitor_rule_id in
+        <foreach collection="monitorRuleIds" index="index" item="item" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+          and l.monitor_dimension = r.monitor_dimension
+          and r.deleted = #{deleted}
+          and l.deleted = #{deleted}
+    </select>
+
+    <select id="listByMonitorRule" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_monitor_rule_line
+        WHERE deleted = #{deleted}
+        <if test="null != monitorRuleId">
+            and monitor_rule_id = #{monitorRuleId}
+        </if>
+        <if test="null != monitorDimension">
+          and monitor_dimension = #{monitorDimension}
+        </if>
+        <if test="null != materialObjects and materialObjects.size() > 0">
+            and monitor_object in
+            <foreach collection="materialObjects" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        order by id desc
+    </select>
+
+
+    <select id="queryByIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_monitor_rule_line
+        WHERE id in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+        AND deleted = #{deletedStatus}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM inventory_monitor_rule_line
+    </select>
+
+    <update id="updateByIds">
+        UPDATE inventory_monitor_rule_line
+        <set>
+            <if test="null != param.monitorObject ">monitor_object = #{param.monitorObject},</if>
+            <if test="null != param.monitorDimension ">monitor_dimension = #{param.monitorDimension},</if>
+            <if test="null != param.monitorCeil ">monitor_ceil = #{param.monitorCeil},</if>
+            <if test="null != param.monitorFloor ">monitor_floor = #{param.monitorFloor},</if>
+            <if test="null != param.updateTime ">update_time = #{param.updateTime},</if>
+            <if test="null != param.updatorId ">updator_id = #{param.updatorId},</if>
+            <if test="null != param.deleted ">deleted = #{param.deleted}</if>
+        </set>
+        WHERE id in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+        AND deleted = #{deletedStatus}
+    </update>
+
+    <select id="queryByMonitorObjects" resultMap="BaseResultMap">
+        select distinct l.*
+        from inventory_monitor_rule_line l left join inventory_monitor_rule r on r.id = l.monitor_rule_id
+        where r.tenant_id = #{tenantId}
+        and r.monitor_type = #{monitorType}
+        and r.monitor_dimension = l.monitor_dimension
+        <if test="null != monitorDimension">
+            and l.monitor_dimension = #{monitorDimension}
+        </if>
+        and l.monitor_object in
+        <foreach collection="materialObjects" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <if test="null != enableStatus">
+            and r.monitor_enable_status = #{enableStatus}
+        </if>
+        and r.deleted = #{deleted} and l.deleted = #{deleted}
+        order by l.id desc
+    </select>
+
+</mapper>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventoryMaterialMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.InventoryMaterialDo" >
+        <result column="id" property="id" />
+        <result column="tenant_id" property="tenantId" />
+        <result column="material_code" property="materialCode" />
+        <result column="material_name" property="materialName" />
+        <result column="out_material_code" property="outMaterialCode" />
+        <result column="unit_id" property="unitId" />
+        <result column="creator_id" property="creatorId" />
+        <result column="create_time" property="createTime" />
+        <result column="updator_id" property="updatorId" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        tenant_id,
+        material_code,
+        material_name,
+        out_material_code,
+        unit_id,
+        creator_id,
+        create_time,
+        updator_id,
+        update_time,
+        deleted
+    </sql>
+
+    <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity">
+        INSERT INTO inventory_material
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != tenantId and '' != tenantId">
+                tenant_id,
+            </if>
+            <if test="null != materialCode and '' != materialCode">
+                material_code,
+            </if>
+            <if test="null != materialName and '' != materialName">
+                material_name,
+            </if>
+            <if test="null != outMaterialCode and '' != outMaterialCode">
+                out_material_code,
+            </if>
+            <if test="null != unitId">
+                unit_id,
+            </if>
+            <if test="null != creatorId and '' != creatorId">
+                creator_id,
+            </if>
+            create_time,
+            <if test="null != updatorId and '' != updatorId">
+                updator_id,
+            </if>
+            update_time,
+            deleted
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != tenantId and '' != tenantId">
+                #{tenantId},
+            </if>
+            <if test="null != materialCode and '' != materialCode">
+                #{materialCode},
+            </if>
+            <if test="null != materialName and '' != materialName">
+                #{materialName},
+            </if>
+            <if test="null != outMaterialCode and '' != outMaterialCode">
+                #{outMaterialCode},
+            </if>
+            <if test="null != unitId">
+                #{unitId},
+            </if>
+            <if test="null != creatorId and '' != creatorId">
+                #{creatorId},
+            </if>
+            NOW(),
+            <if test="null != updatorId and '' != updatorId">
+                #{updatorId},
+            </if>
+            NOW(),
+            0
+        </trim>
+    </insert>
+
+    <insert id="insertBatch">
+        insert into inventory_material (
+            tenant_id,
+            material_code,
+            material_name,
+            out_material_code,
+            unit_id,
+            creator_id,
+            create_time,
+            updator_id,
+            update_time,
+            deleted
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.tenantId},
+            #{item.materialCode},
+            #{item.materialName},
+            #{item.outMaterialCode},
+            #{item.unitId},
+            #{item.creatorId},
+            NOW(),
+            #{item.updatorId},
+            NOW(),
+            0
+            )
+        </foreach>
+    </insert>
+
+
+    <update id="updateByMaterialCode" parameterType="com.inventory.middle.infra.persistence.entity">
+        UPDATE inventory_material
+        <set>
+            <if test="null != materialName and '' != materialName">material_name = #{materialName},</if>
+            <if test="null != outMaterialCode and '' != outMaterialCode">out_material_code = #{outMaterialCode},</if>
+            <if test="null != unitId ">unit_id = #{unitId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId and '' != updatorId">updator_id = #{updatorId},</if>
+            <if test="null != deleted">deleted = #{deleted}</if>
+        </set>
+        WHERE tenant_id = #{tenantId} and material_code = #{materialCode}
+    </update>
+
+
+    <select id="listByMaterialCodeList" resultMap="BaseResultMap" parameterType="com.inventory.middle.infra.persistence.entity">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_material
+        WHERE tenant_id = #{tenantId}
+        <if test="null != materialCodeList and materialCodeList.size() > 0">
+            AND material_code IN
+            <foreach collection="materialCodeList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="null != outMaterialCodeList and outMaterialCodeList.size() > 0">
+            AND out_material_code IN
+            <foreach collection="outMaterialCodeList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="deleted != null">
+            AND deleted = #{deleted}
+        </if>
+    </select>
+
+    <select id="listByCondition" resultMap="BaseResultMap" parameterType="com.inventory.middle.infra.persistence.entity">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_material
+        WHERE tenant_id = #{tenantId}
+        <choose>
+            <when test="materialCode != null and materialCode != ''">
+                AND material_code = #{materialCode}
+            </when>
+            <otherwise>
+                <if test="materialCodeFuzzy != null and materialCodeFuzzy != ''">
+                    AND material_code LIKE concat('%',concat('/', #{materialCodeFuzzy},'%')) ESCAPE '/'
+                </if>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="outMaterialCode != null and outMaterialCode != ''">
+                AND out_material_code = #{outMaterialCode}
+            </when>
+            <otherwise>
+                <if test="outMaterialCodeFuzzy != null and outMaterialCodeFuzzy != ''">
+                    AND out_material_code LIKE concat('%',concat('/', #{outMaterialCodeFuzzy},'%')) ESCAPE '/'
+                </if>
+            </otherwise>
+        </choose>
+        <if test="materialNameFuzzy != null and materialNameFuzzy != ''">
+            AND material_name LIKE concat('%',concat('/', #{materialNameFuzzy},'%')) ESCAPE '/'
+        </if>
+        <if test="deleted != null">
+            AND deleted = #{deleted}
+        </if>
+    </select>
+
+</mapper>

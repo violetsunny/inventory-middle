@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventoryAlertMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.InventoryAlertPO" >
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="monitor_rule_id" property="monitorRuleId" jdbcType="BIGINT"/>
+        <result column="tenant_id" property="tenantId" jdbcType="VARCHAR"/>
+        <result column="material_code" property="materialCode" jdbcType="VARCHAR"/>
+        <result column="logical_plant_id" property="logicalPlantId" jdbcType="BIGINT"/>
+        <result column="deviate" property="deviate" jdbcType="DECIMAL"/>
+        <result column="action" property="action" jdbcType="VARCHAR"/>
+        <result column="alert_date" property="alertDate" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="creator_id" property="creatorId" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="updator_id" property="updatorId" jdbcType="VARCHAR"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        tenant_id,
+        monitor_rule_id,
+        material_code,
+        logical_plant_id,
+        deviate,
+        action,
+        alert_date,
+        status,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id,
+        deleted
+    </sql>
+
+    <insert id="insertBatch" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into inventory_alert (
+            id,
+            tenant_id,
+            monitor_rule_id,
+            material_code,
+            logical_plant_id,
+            deviate,
+            action,
+            alert_date,
+            status,
+            create_time,
+            creator_id,
+            update_time,
+            updator_id,
+            deleted
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.tenantId},
+            #{item.monitorRuleId},
+            #{item.materialCode},
+            #{item.logicalPlantId},
+            #{item.deviate},
+            #{item.action},
+            #{item.alertDate},
+            #{item.status},
+            #{item.createTime},
+            #{item.creatorId},
+            #{item.updateTime},
+            #{item.updatorId},
+            #{item.deleted}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insert" useGeneratedKeys="true" parameterType="com.inventory.middle.infra.persistence.entity.InventoryAlertPO">
+        INSERT INTO inventory_alert
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                id,
+            </if>
+            <if test="null != tenantId ">
+                tenant_id,
+            </if>
+            <if test="null != monitorRuleId ">
+                monitor_rule_id,
+            </if>
+            <if test="null != materialCode and '' != materialCode">
+                material_code,
+            </if>
+            <if test="null != logicalPlantId ">
+                logical_plant_id,
+            </if>
+            <if test="null != deviate ">
+                deviate,
+            </if>
+            <if test="null != action and '' != action">
+                action,
+            </if>
+            <if test="null != alertDate ">
+                alert_date,
+            </if>
+            <if test="null != status ">
+                status,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId ">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != deleted ">
+                deleted
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                #{id},
+            </if>
+            <if test="null != tenantId ">
+                #{tenantId},
+            </if>
+            <if test="null != monitorRuleId a">
+                #{monitorRuleId},
+            </if>
+            <if test="null != materialCode and '' != materialCode">
+                #{materialCode},
+            </if>
+            <if test="null != logicalPlantId ">
+                #{logicalPlantId},
+            </if>
+            <if test="null != deviate and '' != deviate">
+                #{deviate},
+            </if>
+            <if test="null != action and '' != action">
+                #{action},
+            </if>
+            <if test="null != alertDate ">
+                #{alertDate},
+            </if>
+            <if test="null != status ">
+                #{status},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != deleted ">
+                #{deleted}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM inventory_alert
+        WHERE id = #{id}
+    </delete>
+    <update id="deleteByMaterialAndPlant">
+        <foreach collection="list" separator=";" item="alert">
+            UPDATE inventory_alert
+            set deleted = 1
+            where
+            material_code = #{alert.materialCode}
+            and
+            logical_plant_id = #{alert.logicalPlantId}
+        </foreach>
+    </update>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.InventoryAlertPO">
+        UPDATE inventory_alert
+        <set>
+            <if test="null != monitorRuleId">monitor_rule_id = #{monitorRuleId},</if>
+            <if test="null != materialCode and '' != materialCode">material_code = #{materialCode},</if>
+            <if test="null != logicalPlantId ">logical_plant_id = #{logicalPlantId},</if>
+            <if test="null != deviate ">deviate = #{deviate},</if>
+            <if test="null != action and '' != action">action = #{action},</if>
+            <if test="null != alertDate">alert_date = #{alertDate},</if>
+            <if test="null != status ">status = #{status},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != deleted">deleted = #{deleted}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateByMonitorRuleId" >
+        UPDATE inventory_alert
+        <set>
+            <if test="null != param.materialCode and '' != param.materialCode">material_code = #{param.materialCode},</if>
+            <if test="null != param.logicalPlantId ">logical_plant_id = #{param.logicalPlantId},</if>
+            <if test="null != param.deviate ">deviate = #{param.deviate},</if>
+            <if test="null != param.action and '' != param.action">action = #{param.action},</if>
+            <if test="null != param.alertDate">alert_date = #{param.alertDate},</if>
+            <if test="null != param.status ">status = #{param.status},</if>
+            <if test="null != param.createTime ">create_time = #{param.createTime},</if>
+            <if test="null != param.creatorId ">creator_id = #{param.creatorId},</if>
+            <if test="null != param.updateTime ">update_time = #{param.updateTime},</if>
+            <if test="null != param.deleted">deleted = #{param.deleted}</if>
+        </set>
+        WHERE monitor_rule_id = #{param.monitorRuleId} and deleted = #{deleteStatus}
+    </update>
+
+    <update id="deleteByIds">
+        UPDATE inventory_alert
+        <set>
+            <if test="null != param.materialCode and '' != param.materialCode">material_code = #{param.materialCode},</if>
+            <if test="null != param.logicalPlantId ">logical_plant_id = #{param.logicalPlantId},</if>
+            <if test="null != param.deviate ">deviate = #{param.deviate},</if>
+            <if test="null != param.action and '' != param.action">action = #{param.action},</if>
+            <if test="null != param.alertDate">alert_date = #{param.alertDate},</if>
+            <if test="null != param.status ">status = #{param.status},</if>
+            <if test="null != param.createTime ">create_time = #{param.createTime},</if>
+            <if test="null != param.creatorId ">creator_id = #{param.creatorId},</if>
+            <if test="null != param.updateTime ">update_time = #{param.updateTime},</if>
+            <if test="null != param.deleted">deleted = #{param.deleted}</if>
+        </set>
+        WHERE id in
+        <foreach collection="alertIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and deleted = #{deletedStatus}
+    </update>
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_alert
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryByMonitorRuleIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_alert
+        WHERE monitor_rule_id in
+        <foreach collection="monitorRuleIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and deleted = #{deleted}
+    </select>
+
+    <select id="queryByIds" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_alert
+        WHERE id in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and deleted = #{deleted}
+    </select>
+
+    <select id="queryByMaterialCodes" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_alert
+        WHERE tenant_id = #{param.tenantId}
+        <if test="null != param.monitorRuleId">
+            and monitor_rule_id = #{param.monitorRuleId}
+        </if>
+        and material_code in
+        <foreach collection="materialCodes" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        <if test="null != param.alertDate">
+            and alert_date  <![CDATA[ >= ]]> #{param.alertDate}
+        </if>
+        and deleted = #{deleted}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM inventory_alert
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM inventory_alert
+    </select>
+
+</mapper>

@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MdocSubInOutMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.MdocSubInOutPO">
+        <result column="id" property="id"/>
+        <result column="material_doc_id" property="materialDocId"/>
+        <result column="material_doc_item_id" property="materialDocItemId"/>
+        <result column="demand" property="demand"/>
+        <result column="demand_sale_order_no" property="demandSaleOrderNo"/>
+        <result column="demand_sale_order_item_no" property="demandSaleOrderItemNo"/>
+        <result column="demand_storage_location_no" property="demandStorageLocationNo"/>
+        <result column="demand_storage_location_name" property="demandStorageLocationName"/>
+        <result column="demand_batch_no" property="demandBatchNo"/>
+        <result column="demand_stock_type" property="demandStockType"/>
+        <result column="supply" property="supply"/>
+        <result column="supply_sale_order_no" property="supplySaleOrderNo"/>
+        <result column="supply_sale_order_item_no" property="supplySaleOrderItemNo"/>
+        <result column="supply_storage_location_no" property="supplyStorageLocationNo"/>
+        <result column="supply_storage_location_name" property="supplyStorageLocationName"/>
+        <result column="supply_batch_no" property="supplyBatchNo"/>
+        <result column="supply_stock_type" property="supplyStockType"/>
+        <result column="adjust_type" property="adjustType"/>
+        <result column="adjust_reason" property="adjustReason"/>
+        <result column="io" property="io"/>
+        <result column="create_time" property="createTime"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updator_id" property="updatorId"/>
+        <result column="deleted" property="deleted"/>
+        <result column="tenant_id" property="tenantId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,
+                material_doc_id,
+                material_doc_item_id,
+                demand,
+                demand_sale_order_no,
+                demand_sale_order_item_no,
+                demand_storage_location_no,
+                demand_storage_location_name,
+                demand_batch_no,
+                demand_stock_type,
+                supply,
+                supply_sale_order_no,
+                supply_sale_order_item_no,
+                supply_storage_location_no,
+                supply_storage_location_name,
+                supply_batch_no,
+                supply_stock_type,
+                adjust_type,
+                adjust_reason,
+                io,
+                create_time,
+                creator_id,
+                update_time,
+                updator_id,
+                deleted,
+                tenant_id
+    </sql>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into mdoc_sub_in_out (
+        id,
+        material_doc_id,
+        material_doc_item_id,
+        demand,
+        demand_sale_order_no,
+        demand_sale_order_item_no,
+        demand_storage_location_no,
+        demand_storage_location_name,
+        demand_batch_no,
+        demand_stock_type,
+        supply,
+        supply_sale_order_no,
+        supply_sale_order_item_no,
+        supply_storage_location_no,
+        supply_storage_location_name,
+        supply_batch_no,
+        supply_stock_type,
+        adjust_type,
+        adjust_reason,
+        io,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id,
+        deleted,
+        tenant_id
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.materialDocId},
+            #{item.materialDocItemId},
+            #{item.demand},
+            #{item.demandSaleOrderNo},
+            #{item.demandSaleOrderItemNo},
+            #{item.demandStorageLocationNo},
+            #{item.demandStorageLocationName},
+            #{item.demandBatchNo},
+            #{item.demandStockType},
+            #{item.supply},
+            #{item.supplySaleOrderNo},
+            #{item.supplySaleOrderItemNo},
+            #{item.supplyStorageLocationNo},
+            #{item.supplyStorageLocationName},
+            #{item.supplyBatchNo},
+            #{item.supplyStockType},
+            #{item.adjustType},
+            #{item.adjustReason},
+            #{item.io},
+            #{item.createTime},
+            #{item.creatorId},
+            #{item.updateTime},
+            #{item.updatorId},
+            #{item.deleted},
+            #{item.tenantId}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity.MdocSubInOutPO">
+        INSERT INTO mdoc_sub_in_out
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                id,
+            </if>
+            <if test="null != materialDocId ">
+                material_doc_id,
+            </if>
+            <if test="null != materialDocItemId">
+                material_doc_item_id,
+            </if>
+            <if test="null != demand and '' != demand">
+                demand,
+            </if>
+            <if test="null != demandSaleOrderNo and '' != demandSaleOrderNo">
+                demand_sale_order_no,
+            </if>
+            <if test="null != demandSaleOrderItemNo and '' != demandSaleOrderItemNo">
+                demand_sale_order_item_no,
+            </if>
+            <if test="null != demandStorageLocationNo and '' != demandStorageLocationNo">
+                demand_storage_location_no,
+            </if>
+            <if test="null != demandStorageLocationName and '' != demandStorageLocationName">
+                demand_storage_location_name,
+            </if>
+            <if test="null != demandBatchNo and '' != demandBatchNo">
+                demand_batch_no,
+            </if>
+            <if test="null != demandStockType ">
+                demand_stock_type,
+            </if>
+            <if test="null != supply and '' != supply">
+                supply,
+            </if>
+            <if test="null != supplySaleOrderNo and '' != supplySaleOrderNo">
+                supply_sale_order_no,
+            </if>
+            <if test="null != supplySaleOrderItemNo and '' != supplySaleOrderItemNo">
+                supply_sale_order_item_no,
+            </if>
+            <if test="null != supplyStorageLocationNo and '' != supplyStorageLocationNo">
+                supply_storage_location_no,
+            </if>
+            <if test="null != supplyStorageLocationName and '' != supplyStorageLocationName">
+                supply_storage_location_name,
+            </if>
+            <if test="null != supplyBatchNo and '' != supplyBatchNo">
+                supply_batch_no,
+            </if>
+            <if test="null != supplyStockType ">
+                supply_stock_type,
+            </if>
+            <if test="null != adjustType and '' != adjustType">
+                adjust_type,
+            </if>
+            <if test="null != adjustReason and '' != adjustReason">
+                adjust_reason,
+            </if>
+            <if test="null != io and '' != io">
+                io,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId ">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId ">
+                updator_id,
+            </if>
+            <if test="null != deleted ">
+                deleted,
+            </if>
+            <if test="null != tenantId ">
+                tenant_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                #{id},
+            </if>
+            <if test="null != materialDocId ">
+                #{materialDocId},
+            </if>
+            <if test="null != materialDocItemId ">
+                #{materialDocItemId},
+            </if>
+            <if test="null != demand and '' != demand">
+                #{demand},
+            </if>
+            <if test="null != demandSaleOrderNo and '' != demandSaleOrderNo">
+                #{demandSaleOrderNo},
+            </if>
+            <if test="null != demandSaleOrderItemNo and '' != demandSaleOrderItemNo">
+                #{demandSaleOrderItemNo},
+            </if>
+            <if test="null != demandStorageLocationNo and '' != demandStorageLocationNo">
+                #{demandStorageLocationNo},
+            </if>
+            <if test="null != demandStorageLocationName and '' != demandStorageLocationName">
+                #{demandStorageLocationName},
+            </if>
+            <if test="null != demandBatchNo and '' != demandBatchNo">
+                #{demandBatchNo},
+            </if>
+            <if test="null != demandStockType ">
+                #{demandStockType},
+            </if>
+            <if test="null != supply and '' != supply">
+                #{supply},
+            </if>
+            <if test="null != supplySaleOrderNo and '' != supplySaleOrderNo">
+                #{supplySaleOrderNo},
+            </if>
+            <if test="null != supplySaleOrderItemNo and '' != supplySaleOrderItemNo">
+                #{supplySaleOrderItemNo},
+            </if>
+            <if test="null != supplyStorageLocationNo and '' != supplyStorageLocationNo">
+                #{supplyStorageLocationNo},
+            </if>
+            <if test="null != supplyStorageLocationName and '' != supplyStorageLocationName">
+                #{supplyStorageLocationName},
+            </if>
+            <if test="null != supplyBatchNo and '' != supplyBatchNo">
+                #{supplyBatchNo},
+            </if>
+            <if test="null != supplyStockType ">
+                #{supplyStockType},
+            </if>
+            <if test="null != adjustType and '' != adjustType">
+                #{adjustType},
+            </if>
+            <if test="null != adjustReason and '' != adjustReason">
+                #{adjustReason},
+            </if>
+            <if test="null != io and '' != io">
+                #{io},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId ">
+                #{updatorId},
+            </if>
+            <if test="null != deleted ">
+                #{deleted},
+            </if>
+            <if test="null != tenantId ">
+                #{tenantId}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.MdocSubInOutPO">
+        UPDATE mdoc_sub_in_out
+        <set>
+            <if test="null != materialDocId ">material_doc_id = #{materialDocId},</if>
+            <if test="null != materialDocItemId ">material_doc_item_id = #{materialDocItemId},</if>
+            <if test="null != demand and '' != demand">demand = #{demand},</if>
+            <if test="null != demandSaleOrderNo and '' != demandSaleOrderNo">
+                demand_sale_order_no = #{demandSaleOrderNo},
+            </if>
+            <if test="null != demandSaleOrderItemNo and '' != demandSaleOrderItemNo">
+                demand_sale_order_item_no = #{demandSaleOrderItemNo},
+            </if>
+            <if test="null != demandStorageLocationNo and '' != demandStorageLocationNo">demand_storage_location_no =
+                #{demandStorageLocationNo},
+            </if>
+            <if test="null != demandStorageLocationName and '' != demandStorageLocationName">
+                demand_storage_location_name = #{demandStorageLocationName},
+            </if>
+            <if test="null != demandBatchNo and '' != demandBatchNo">demand_batch_no = #{demandBatchNo},</if>
+            <if test="null != demandStockType ">demand_stock_type = #{demandStockType},</if>
+            <if test="null != supply and '' != supply">supply = #{supply},</if>
+            <if test="null != supplySaleOrderNo and '' != supplySaleOrderNo">
+                supply_sale_order_no = #{supplySaleOrderNo},
+            </if>
+            <if test="null != supplySaleOrderItemNo and '' != supplySaleOrderItemNo">
+                supply_sale_order_item_no = #{supplySaleOrderItemNo},
+            </if>
+            <if test="null != supplyStorageLocationNo and '' != supplyStorageLocationNo">supply_storage_location_no =
+                #{supplyStorageLocationNo},
+            </if>
+            <if test="null != supplyStorageLocationName and '' != supplyStorageLocationName">
+                supply_storage_location_name = #{supplyStorageLocationName},
+            </if>
+            <if test="null != supplyBatchNo and '' != supplyBatchNo">supply_batch_no = #{supplyBatchNo},</if>
+            <if test="null != supplyStockType ">supply_stock_type = #{supplyStockType},</if>
+            <if test="null != adjustType and '' != adjustType">adjust_type = #{adjustType},</if>
+            <if test="null != adjustReason and '' != adjustReason">adjust_reason = #{adjustReason},</if>
+            <if test="null != io and '' != io">io = #{io},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != tenantId ">tenant_id = #{tenantId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_in_out
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_in_out
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Long">
+        SELECT count(1)
+        FROM mdoc_sub_in_out
+    </select>
+
+    <select id="queryByItemId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_in_out
+        WHERE material_doc_item_id = #{materialDocItemId}
+    </select>
+
+    <select id="listByDocId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_in_out
+        WHERE material_doc_id = #{materialDocId}
+    </select>
+</mapper>

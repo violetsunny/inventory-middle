@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MaterialDocItemMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.MaterialDocItemPO">
+        <result column="id" property="id"/>
+        <result column="material_doc_id" property="materialDocId"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="batch_no" property="batchNo"/>
+        <result column="item_category" property="itemCategory"/>
+        <result column="create_time" property="createTime"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updator_id" property="updatorId"/>
+        <result column="deleted" property="deleted"/>
+        <result column="tenant_id" property="tenantId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,
+                material_doc_id,
+                material_code,
+                batch_no,
+                item_category,
+                create_time,
+                creator_id,
+                update_time,
+                updator_id,
+                deleted,
+                tenant_id
+    </sql>
+
+    <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity.MaterialDocItemPO">
+        INSERT INTO material_doc_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                id,
+            </if>
+            <if test="null != materialDocId ">
+                material_doc_id,
+            </if>
+            <if test="null != materialCode and '' != materialCode">
+                material_code,
+            </if>
+            <if test="null != batchNo and '' != batchNo">
+                batch_no,
+            </if>
+            <if test="null != itemCategory ">
+                item_category,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId ">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId ">
+                updator_id,
+            </if>
+            <if test="null != deleted ">
+                deleted,
+            </if>
+            <if test="null != tenantId ">
+                tenant_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                #{id},
+            </if>
+            <if test="null != materialDocId ">
+                #{materialDocId},
+            </if>
+            <if test="null != materialCode and '' != materialCode">
+                #{materialCode},
+            </if>
+            <if test="null != batchNo and '' != batchNo">
+                #{batchNo},
+            </if>
+            <if test="null != itemCategory ">
+                #{itemCategory},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId ">
+                #{updatorId},
+            </if>
+            <if test="null != deleted ">
+                #{deleted},
+            </if>
+            <if test="null != tenantId ">
+                #{tenantId}
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into material_doc_item (
+        id,
+        material_doc_id,
+        material_code,
+        batch_no,
+        item_category,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id,
+        deleted,
+        tenant_id
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.materialDocId},
+            #{item.materialCode},
+            #{item.batchNo},
+            #{item.itemCategory},
+            #{item.createTime},
+            #{item.creatorId},
+            #{item.updateTime},
+            #{item.updatorId},
+            #{item.deleted},
+            #{item.tenantId}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM material_doc_item
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.MaterialDocItemPO">
+        UPDATE material_doc_item
+        <set>
+            <if test="null != materialDocId ">material_doc_id = #{materialDocId},</if>
+            <if test="null != materialCode and '' != materialCode">material_code = #{materialCode},</if>
+            <if test="null != batchNo and '' != batchNo">batch_no = #{batchNo},</if>
+            <if test="null != itemCategory ">item_category = #{itemCategory},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != tenantId ">tenant_id = #{tenantId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_doc_item
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_doc_item
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Long">
+        SELECT count(*)
+        FROM material_doc_item
+    </select>
+
+    <select id="queryByMaterialDocId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_doc_item
+        WHERE material_doc_id = #{materialDocId}
+    </select>
+
+    <select id="getMaterialDocItemByDocIdAndBatchNoAndMaterialCode" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_doc_item
+        WHERE material_doc_id = #{materialDocId}
+        AND material_code = #{materialCode}
+        AND batch_no = #{batchNo}
+    </select>
+    <select id="getFirstMaterialDocItemByBatchNoAndMaterialCode" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM material_doc_item
+        WHERE
+        material_code = #{materialCode}
+        AND batch_no = #{batchNo}
+        AND tenant_id = #{tenantId}
+        order by id
+    </select>
+
+</mapper>

@@ -29,6 +29,7 @@ target/
 .factorypath
 .project
 .settings/
+.mybatis
 
 ## AI 相关文件
 

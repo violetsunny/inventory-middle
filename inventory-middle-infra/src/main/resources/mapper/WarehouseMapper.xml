@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.WarehouseMapper">
+  <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.WarehousePO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+    <result column="warehouse_no" jdbcType="VARCHAR" property="warehouseNo" />
+    <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName" />
+    <result column="warehouse_type" jdbcType="TINYINT" property="warehouseType" />
+    <result column="owner_name" jdbcType="VARCHAR" property="ownerName" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="region" jdbcType="VARCHAR" property="region" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="creator_id" jdbcType="VARCHAR" property="creatorId" />
+    <result column="updator_id" jdbcType="VARCHAR" property="updatorId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tenant_id, warehouse_no, warehouse_name,warehouse_type, owner_name, phone, address, province,
+    city, region, remark, creator_id, updator_id, create_time, update_time, deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from warehouse
+    where id = #{id,jdbcType=BIGINT}
+    and deleted = 0
+  </select>
+    <select id="selectByTenantIdAndName" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from warehouse
+      where
+      tenant_id = #{tenantId}
+      and
+      warehouse_name = #{name}
+      and deleted = 0
+    </select>
+  <select id="selectByNo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from warehouse
+    where warehouse_no = #{no}
+    and deleted = 0
+  </select>
+  <select id="listBy" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from warehouse
+    where tenant_id = #{tenantId}
+    <if test="warehouseType != null" >
+    and warehouse_type = #{warehouseType}
+    </if>
+    and deleted = 0
+    order by update_time desc
+  </select>
+  <select id="listByIds" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from warehouse
+    where id in
+    <foreach collection="list" separator="," open="(" close=")" item="item">
+      #{item}
+    </foreach>
+    and deleted = 0
+  </select>
+  <select id="list" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from warehouse
+    where deleted = 0 and tenant_id = #{tenantId}
+    <if test="warehouseType != null" >
+      and warehouse_type = #{warehouseType}
+    </if>
+    <if test="null != idList and idList.size() > 0">
+      and id in
+      <foreach collection="idList" item="id" open="(" close=")" separator=",">
+        #{id}
+      </foreach>
+    </if>
+    <if test="null != noList and noList.size() > 0">
+      and warehouse_no in
+      <foreach collection="noList" item="no" open="(" close=")" separator=",">
+        #{no}
+      </foreach>
+    </if>
+  </select>
+  <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity.WarehousePO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into warehouse (id, tenant_id, warehouse_no,
+      warehouse_name, warehouse_type, owner_name, phone,
+      address, province, city, 
+      region, remark, creator_id,
+      updator_id, create_time, update_time,
+      deleted)
+    values (#{id,jdbcType=BIGINT}, #{tenantId,jdbcType=VARCHAR}, #{warehouseNo,jdbcType=VARCHAR}, 
+      #{warehouseName,jdbcType=VARCHAR}, #{warehouseType,jdbcType=TINYINT}, #{ownerName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+      #{address,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{region,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{creatorId,jdbcType=VARCHAR},
+      #{updatorId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{deleted,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.inventory.middle.infra.persistence.entity.WarehousePO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into warehouse
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="warehouseNo != null">
+        warehouse_no,
+      </if>
+      <if test="warehouseName != null">
+        warehouse_name,
+      </if>
+      <if test="warehouseType != null">
+        warehouse_type,
+      </if>
+      <if test="ownerName != null">
+        owner_name,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="region != null">
+        region,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="updatorId != null">
+        updator_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseNo != null">
+        #{warehouseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null">
+        #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseType != null">
+        #{warehouseType,jdbcType=TINYINT},
+      </if>
+      <if test="ownerName != null">
+        #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null">
+        #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="updatorId != null">
+        #{updatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.persistence.entity.WarehousePO">
+    update warehouse
+    <set>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseNo != null">
+        warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null">
+        warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseType != null">
+        warehouse_type = #{warehouseType,jdbcType=TINYINT},
+      </if>
+      <if test="ownerName != null">
+        owner_name = #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null">
+        region = #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        creator_id = #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="updatorId != null">
+        updator_id = #{updatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.persistence.entity.WarehousePO">
+    update warehouse
+    set tenant_id = #{tenantId,jdbcType=VARCHAR},
+      warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
+      warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      warehouse_type = #{warehouseType,jdbcType=TINYINT},
+      owner_name = #{ownerName,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      region = #{region,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      creator_id = #{creatorId,jdbcType=VARCHAR},
+      updator_id = #{updatorId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByIdAndTenantIdSelective">
+    update warehouse
+    <set>
+      <if test="warehouseNo != null">
+        warehouse_no = #{warehouseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null">
+        warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseType != null">
+        warehouse_type = #{warehouseType,jdbcType=TINYINT},
+      </if>
+      <if test="ownerName != null">
+        owner_name = #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="region != null">
+        region = #{region,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        creator_id = #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="updatorId != null">
+        updator_id = #{updatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+    and tenant_id = #{tenantId}
+  </update>
+
+  <select id="selectByTenantIdAndType" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from warehouse
+    where
+    tenant_id = #{tenantId}
+    and warehouse_type = #{warehouseType}
+    and deleted = 0
+  </select>
+    <select id="listByParam" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from warehouse
+      where tenant_id = #{tenantId}
+      <if test="warehouseNo != null and warehouseNo != ''" >
+        AND warehouse_no like concat('%',concat('/',#{warehouseNo},'%')) ESCAPE '/'
+      </if>
+      <if test="warehouseName != null and warehouseName != ''" >
+        AND warehouse_name like concat('%',concat('/',#{warehouseName},'%')) ESCAPE '/'
+      </if>
+      <if test="warehouseType != null" >
+        and warehouse_type = #{warehouseType}
+      </if>
+      and deleted = 0
+      order by update_time desc
+    </select>
+</mapper>

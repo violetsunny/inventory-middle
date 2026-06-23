@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.SkuBatchMapper">
+
+  <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.SkuBatchDo">
+    <id     column="id"          jdbcType="BIGINT"    property="id" />
+    <result column="sku_code"    jdbcType="VARCHAR"   property="skuCode" />
+    <result column="batch_code"  jdbcType="VARCHAR"   property="batchCode" />
+    <result column="tenant_id"   jdbcType="VARCHAR"   property="tenantId" />
+    <result column="ext"         jdbcType="VARCHAR"   property="ext" />
+    <result column="updator_id"  jdbcType="VARCHAR"   property="updatorId" />
+    <result column="deleted"     jdbcType="INTEGER"   property="deleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, sku_code, batch_code, tenant_id, ext, updator_id, deleted, create_time, update_time
+  </sql>
+
+  <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity.SkuBatchDo"
+          keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO product_sku_batch (sku_code, batch_code, tenant_id, ext, updator_id,
+      deleted, create_time, update_time)
+    VALUES (#{skuCode}, #{batchCode}, #{tenantId}, #{ext}, #{updatorId},
+      0, NOW(), NOW())
+  </insert>
+
+  <insert id="insertOrUpdate" parameterType="com.inventory.middle.infra.persistence.entity.SkuBatchDo"
+          keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO product_sku_batch (sku_code, batch_code, tenant_id, ext, updator_id,
+      deleted, create_time, update_time)
+    VALUES (#{skuCode}, #{batchCode}, #{tenantId}, #{ext}, #{updatorId},
+      0, NOW(), NOW())
+    ON DUPLICATE KEY UPDATE
+      batch_code  = VALUES(batch_code),
+      ext         = VALUES(ext),
+      updator_id  = VALUES(updator_id),
+      update_time = NOW()
+  </insert>
+
+  <insert id="batchInsertOrUpdate" parameterType="java.util.List">
+    INSERT INTO product_sku_batch (sku_code, batch_code, tenant_id, ext, updator_id,
+      deleted, create_time, update_time)
+    VALUES
+    <foreach collection="list" item="item" separator=",">
+      (#{item.skuCode}, #{item.batchCode}, #{item.tenantId}, #{item.ext}, #{item.updatorId},
+       0, NOW(), NOW())
+    </foreach>
+    ON DUPLICATE KEY UPDATE
+      batch_code  = VALUES(batch_code),
+      ext         = VALUES(ext),
+      updator_id  = VALUES(updator_id),
+      update_time = NOW()
+  </insert>
+
+  <select id="list" parameterType="com.inventory.middle.infra.persistence.entity.SkuBatchQueryPO"
+          resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List" />
+    FROM product_sku_batch
+    WHERE deleted = 0
+    <if test="skuCode != null and skuCode != ''">
+      AND sku_code = #{skuCode}
+    </if>
+    <if test="tenantId != null and tenantId != ''">
+      AND tenant_id = #{tenantId}
+    </if>
+    <if test="skuCodeList != null and skuCodeList.size() > 0">
+      AND sku_code IN
+      <foreach collection="skuCodeList" item="code" open="(" separator="," close=")">
+        #{code}
+      </foreach>
+    </if>
+    ORDER BY id DESC
+    <if test="pageNum != null and pageSize != null">
+      LIMIT #{pageSize} OFFSET #{pageNum}
+    </if>
+  </select>
+
+  <select id="count" parameterType="com.inventory.middle.infra.persistence.entity.SkuBatchQueryPO"
+          resultType="int">
+    SELECT COUNT(1)
+    FROM product_sku_batch
+    WHERE deleted = 0
+    <if test="skuCode != null and skuCode != ''">
+      AND sku_code = #{skuCode}
+    </if>
+    <if test="tenantId != null and tenantId != ''">
+      AND tenant_id = #{tenantId}
+    </if>
+    <if test="skuCodeList != null and skuCodeList.size() > 0">
+      AND sku_code IN
+      <foreach collection="skuCodeList" item="code" open="(" separator="," close=")">
+        #{code}
+      </foreach>
+    </if>
+  </select>
+
+</mapper>

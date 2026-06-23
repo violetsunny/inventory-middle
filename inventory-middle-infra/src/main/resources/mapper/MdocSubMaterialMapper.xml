@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MdocSubMaterialMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.MdocSubMaterialPO">
+        <result column="id" property="id"/>
+        <result column="material_doc_id" property="materialDocId"/>
+        <result column="material_doc_item_id" property="materialDocItemId"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="material_name" property="materialName"/>
+        <result column="material_category_code" property="materialCategoryCode"/>
+        <result column="material_weight" property="materialWeight"/>
+        <result column="weight_unit" property="weightUnit"/>
+        <result column="material_volume" property="materialVolume"/>
+        <result column="volume_unit" property="volumeUnit"/>
+        <result column="valuation" property="valuation"/>
+        <result column="remark1" property="remark1"/>
+        <result column="remark2" property="remark2"/>
+        <result column="create_time" property="createTime"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updator_id" property="updatorId"/>
+        <result column="deleted" property="deleted"/>
+        <result column="tenant_id" property="tenantId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,
+                material_doc_id,
+                material_doc_item_id,
+                material_code,
+                material_name,
+                material_category_code,
+                material_weight,
+                weight_unit,
+                material_volume,
+                volume_unit,
+                valuation,
+                remark1,
+                remark2,
+                create_time,
+                creator_id,
+                update_time,
+                updator_id,
+                deleted,
+                tenant_id
+    </sql>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into mdoc_sub_material (
+        id,
+        material_doc_id,
+        material_doc_item_id,
+        material_code,
+        material_name,
+        material_category_code,
+        material_weight,
+        weight_unit,
+        material_volume,
+        volume_unit,
+        valuation,
+        remark1,
+        remark2,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id,
+        deleted,
+        tenant_id
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.materialDocId},
+            #{item.materialDocItemId},
+            #{item.materialCode},
+            #{item.materialName},
+            #{item.materialCategoryCode},
+            #{item.materialWeight},
+            #{item.weightUnit},
+            #{item.materialVolume},
+            #{item.volumeUnit},
+            #{item.valuation},
+            #{item.remark1},
+            #{item.remark2},
+            #{item.createTime},
+            #{item.creatorId},
+            #{item.updateTime},
+            #{item.updatorId},
+            #{item.deleted},
+            #{item.tenantId}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insert"
+            parameterType="com.inventory.middle.infra.persistence.entity.MdocSubMaterialPO">
+        INSERT INTO mdoc_sub_material
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                id,
+            </if>
+            <if test="null != materialDocId ">
+                material_doc_id,
+            </if>
+            <if test="null != materialDocItemId ">
+                material_doc_item_id,
+            </if>
+            <if test="null != materialCode and '' != materialCode">
+                material_code,
+            </if>
+            <if test="null != materialName and '' != materialName">
+                material_name,
+            </if>
+            <if test="null != materialCategoryCode and '' != materialCategoryCode">
+                material_category_code,
+            </if>
+            <if test="null != materialWeight ">
+                material_weight,
+            </if>
+            <if test="null != weightUnit and '' != weightUnit">
+                weight_unit,
+            </if>
+            <if test="null != materialVolume ">
+                material_volume,
+            </if>
+            <if test="null != volumeUnit and '' != volumeUnit">
+                volume_unit,
+            </if>
+            <if test="null != valuation and '' != valuation">
+                valuation,
+            </if>
+            <if test="null != remark1 and '' != remark1">
+                remark1,
+            </if>
+            <if test="null != remark2 and '' != remark2">
+                remark2,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId ">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId ">
+                updator_id,
+            </if>
+            <if test="null != deleted ">
+                deleted,
+            </if>
+            <if test="null != tenantId ">
+                tenant_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                #{id},
+            </if>
+            <if test="null != materialDocId ">
+                #{materialDocId},
+            </if>
+            <if test="null != materialDocItemId ">
+                #{materialDocItemId},
+            </if>
+            <if test="null != materialCode and '' != materialCode">
+                #{materialCode},
+            </if>
+            <if test="null != materialName and '' != materialName">
+                #{materialName},
+            </if>
+            <if test="null != materialCategoryCode and '' != materialCategoryCode">
+                #{materialCategoryCode},
+            </if>
+            <if test="null != materialWeight ">
+                #{materialWeight},
+            </if>
+            <if test="null != weightUnit and '' != weightUnit">
+                #{weightUnit},
+            </if>
+            <if test="null != materialVolume ">
+                #{materialVolume},
+            </if>
+            <if test="null != volumeUnit and '' != volumeUnit">
+                #{volumeUnit},
+            </if>
+            <if test="null != valuation and '' != valuation">
+                #{valuation},
+            </if>
+            <if test="null != remark1 and '' != remark1">
+                #{remark1},
+            </if>
+            <if test="null != remark2 and '' != remark2">
+                #{remark2},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId ">
+                #{updatorId},
+            </if>
+            <if test="null != deleted ">
+                #{deleted},
+            </if>
+            <if test="null != tenantId ">
+                #{tenantId}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.MdocSubMaterialPO">
+        UPDATE mdoc_sub_material
+        <set>
+            <if test="null != materialDocId ">material_doc_id = #{materialDocId},</if>
+            <if test="null != materialDocItemId ">material_doc_item_id = #{materialDocItemId},</if>
+            <if test="null != materialCode and '' != materialCode">material_code = #{materialCode},</if>
+            <if test="null != materialName and '' != materialName">material_name = #{materialName},</if>
+            <if test="null != materialCategoryCode and '' != materialCategoryCode">material_category_code =
+                #{materialCategoryCode},
+            </if>
+            <if test="null != materialWeight ">material_weight = #{materialWeight},</if>
+            <if test="null != weightUnit and '' != weightUnit">weight_unit = #{weightUnit},</if>
+            <if test="null != materialVolume ">material_volume = #{materialVolume},</if>
+            <if test="null != volumeUnit and '' != volumeUnit">volume_unit = #{volumeUnit},</if>
+            <if test="null != valuation and '' != valuation">valuation = #{valuation},</if>
+            <if test="null != remark1 and '' != remark1">remark1 = #{remark1},</if>
+            <if test="null != remark2 and '' != remark2">remark2 = #{remark2},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != tenantId ">tenant_id = #{tenantId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_material
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_material
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Long">
+        SELECT count(1)
+        FROM mdoc_sub_material
+    </select>
+
+    <select id="queryByItemId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_material
+        WHERE material_doc_item_id = #{materialDocItemId}
+    </select>
+</mapper>

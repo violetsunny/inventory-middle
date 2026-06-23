@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.StorageLocationMapper">
+  <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.StorageLocationPO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tenant_id" jdbcType="VARCHAR" property="tenantId" />
+    <result column="storage_location_no" jdbcType="VARCHAR" property="storageLocationNo" />
+    <result column="logical_plant_id" jdbcType="BIGINT" property="logicalPlantId" />
+    <result column="location_type" jdbcType="INTEGER" property="locationType" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="storage_location_position" jdbcType="VARCHAR" property="storageLocationPosition" />
+    <result column="creator_id" jdbcType="VARCHAR" property="creatorId" />
+    <result column="updator_id" jdbcType="VARCHAR" property="updatorId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tenant_id, storage_location_no, logical_plant_id, location_type, description, storage_location_position,
+    creator_id, updator_id, create_time, update_time, deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from storage_location
+    where id = #{id,jdbcType=BIGINT}
+    and deleted = 0
+  </select>
+  <select id="listByPlantId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from storage_location
+    where logical_plant_id = #{logicalPlantId}
+    and deleted = 0
+    order by create_time
+  </select>
+  <select id="listByPlantIdList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from storage_location
+    where logical_plant_id in
+    <foreach collection="list" item="item" separator="," open="(" close=")">#{item}</foreach>
+    and deleted = 0
+  </select>
+
+  <select id="listByIds" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from storage_location
+    where id in
+    <foreach collection="list" item="item" separator="," open="(" close=")">#{item}</foreach>
+    and deleted = 0
+  </select>
+  <select id="selectListById" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from storage_location
+    where
+    deleted = 0
+    <if test="tenantId != null">
+      and tenant_id = #{tenantId}
+    </if>
+    <if test="null != idList and idList.size() > 0">
+      and id in
+      <foreach collection="idList" item="id" open="(" close=")" separator=",">
+        #{id}
+      </foreach>
+    </if>
+    <if test="null != noList and noList.size() > 0">
+      and storage_location_no in
+      <foreach collection="noList" item="storageLocationNo" open="(" close=")" separator=",">
+        #{storageLocationNo}
+      </foreach>
+    </if>
+  </select>
+
+  <select id="selectListByType" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from storage_location
+    where
+    deleted = 0 and tenant_id = #{tenantId}
+    <if test="logicalPlantId != null">
+      and logical_plant_id = #{logicalPlantId}
+    </if>
+    <if test="null != types and types.size() > 0">
+      and location_type in
+      <foreach collection="types" item="type" open="(" close=")" separator=",">
+        #{type}
+      </foreach>
+    </if>
+  </select>
+
+  <select id="getByStorageLocationNo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from storage_location
+    where storage_location_no = #{storageLocationNo}
+    and deleted = 0
+    limit 1
+  </select>
+  <select id="getByCondition" resultMap="BaseResultMap" parameterType="com.inventory.middle.infra.persistence.entity.StorageLocationPO">
+    select
+    <include refid="Base_Column_List" />
+    from storage_location
+    where tenant_id = #{tenantId}
+      <if test="id != null">
+        and id = #{id}
+      </if>
+      <if test="storageLocationNo != null and storageLocationNo != ''">
+        and storage_location_no = #{storageLocationNo}
+      </if>
+      <if test="logicalPlantId != null">
+        and logical_plant_id = #{logicalPlantId}
+      </if>
+      <if test="locationType != null">
+        and location_type = #{locationType}
+      </if>
+      <if test="description != null and description != ''">
+        and description = #{description}
+      </if>
+        and deleted = 0
+  </select>
+  <select id="selectByTenantPlantAndDesc" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from storage_location
+    where
+    tenant_id = #{tenantId}
+    and
+    logical_plant_id = #{logicalPlantId}
+    and
+    description = #{description}
+    and deleted = 0
+  </select>
+
+  <insert id="insertBatch" >
+    insert into storage_location (
+    tenant_id, storage_location_no,
+    logical_plant_id, location_type,
+    description, storage_location_position,
+    creator_id, updator_id, create_time,
+    update_time, deleted
+    )
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.tenantId,jdbcType=VARCHAR}, #{item.storageLocationNo,jdbcType=VARCHAR},
+      #{item.logicalPlantId,jdbcType=BIGINT},#{item.locationType,jdbcType=INTEGER},
+      #{item.description,jdbcType=VARCHAR}, #{item.storageLocationPosition,jdbcType=VARCHAR},
+      #{item.creatorId,jdbcType=VARCHAR}, #{item.updatorId,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP},
+      #{item.updateTime,jdbcType=TIMESTAMP}, #{item.deleted,jdbcType=BIT})
+    </foreach>
+  </insert>
+
+  <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity.StorageLocationPO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into storage_location (id, tenant_id, storage_location_no,
+      logical_plant_id, location_type, description, storage_location_position,
+      creator_id, updator_id, create_time,
+      update_time, deleted)
+    values (#{id,jdbcType=BIGINT}, #{tenantId,jdbcType=VARCHAR}, #{storageLocationNo,jdbcType=VARCHAR},
+      #{logicalPlantId,jdbcType=BIGINT},#{locationType,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{storageLocationPosition,jdbcType=VARCHAR},
+      #{creatorId,jdbcType=VARCHAR}, #{updatorId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.inventory.middle.infra.persistence.entity.StorageLocationPO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    insert into storage_location
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
+      <if test="storageLocationNo != null">
+        storage_location_no,
+      </if>
+      <if test="logicalPlantId != null">
+        logical_plant_id,
+      </if>
+      <if test="locationType != null">
+        location_type,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="storageLocationPosition != null">
+        storage_location_position,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="updatorId != null">
+        updator_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="storageLocationNo != null">
+        #{storageLocationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logicalPlantId != null">
+        #{logicalPlantId,jdbcType=BIGINT},
+      </if>
+      <if test="locationType != null">
+        #{locationType,jdbcType=INTEGER},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="storageLocationPosition != null">
+        #{storageLocationPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="updatorId != null">
+        #{updatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.persistence.entity.StorageLocationPO">
+    update storage_location
+    <set>
+      <if test="tenantId != null">
+        tenant_id = #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="storageLocationNo != null">
+        storage_location_no = #{storageLocationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logicalPlantId != null">
+        logical_plant_id = #{logicalPlantId,jdbcType=BIGINT},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="storageLocationPosition != null">
+        storage_location_position = #{storageLocationPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        creator_id = #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="updatorId != null">
+        updator_id = #{updatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.persistence.entity.StorageLocationPO">
+    update storage_location
+    set tenant_id = #{tenantId,jdbcType=VARCHAR},
+      storage_location_no = #{storageLocationNo,jdbcType=VARCHAR},
+      logical_plant_id = #{logicalPlantId,jdbcType=BIGINT},
+      description = #{description,jdbcType=VARCHAR},
+      storage_location_position = #{storageLocationPosition,jdbcType=VARCHAR},
+      creator_id = #{creatorId,jdbcType=VARCHAR},
+      updator_id = #{updatorId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="getDefaultLocationByType" resultMap="BaseResultMap">
+
+    select <include refid="Base_Column_List" />
+    from storage_location
+    where logical_plant_id in
+    <foreach collection="logicalPlantIds" item="logicalPlantId" open="(" close=")" separator=",">
+      #{logicalPlantId}
+    </foreach>
+      and location_type = #{locationType}
+    group by logical_plant_id;
+
+  </select>
+  <select id="list" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from storage_location
+    where
+      tenant_id = #{tenantId}
+    <if test="logicalPlantId != null">
+      and logical_plant_id = #{logicalPlantId}
+    </if>
+    <if test="locationType != null">
+      and location_type = #{locationType}
+    </if>
+    <if test="preciseDescription != null and preciseDescription != ''">
+      and description = #{preciseDescription}
+    </if>
+    and deleted = 0
+  </select>
+</mapper>

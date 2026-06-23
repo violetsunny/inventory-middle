@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.MaterialPlanInstanceMapper">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanInstancePO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="instance_id" jdbcType="BIGINT" property="instanceId"/>
+        <result column="material_code" jdbcType="VARCHAR" property="materialCode"/>
+        <result column="material_desc" jdbcType="VARCHAR" property="materialDesc"/>
+        <result column="material_level" jdbcType="VARCHAR" property="materialLevel"/>
+        <result column="logical_plant_no" jdbcType="VARCHAR" property="logicalPlantNo"/>
+        <result column="logical_plant_name" jdbcType="VARCHAR" property="logicalPlantName"/>
+        <result column="demand_strategy_code" jdbcType="VARCHAR" property="demandStrategyCode"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="root_id" jdbcType="BIGINT" property="rootId"/>
+        <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
+        <result column="ext_attrs" jdbcType="LONGVARCHAR" property="extAttrs"/>
+        <result column="gene_type" jdbcType="TINYINT" property="geneType"/>
+        <result column="deleted" jdbcType="TINYINT" property="isDelete"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="creator_id" jdbcType="VARCHAR" property="createUserId"/>
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+    </resultMap>
+
+    <resultMap id="withConfigResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanInstanceWithPlanPO"
+               extends="BaseResultMap">
+        <result column="plan_type" jdbcType="BIGINT" property="planType"/>
+        <result column="plan_code" jdbcType="VARCHAR" property="planCode"/>
+        <result column="plan_version" jdbcType="VARCHAR" property="planVersion"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        instance_id,
+        material_code,
+        material_desc,
+        material_level,
+        logical_plant_no,
+        logical_plant_name,
+        demand_strategy_code,
+        status,
+        root_id,
+        parent_id,
+        ext_attrs,
+        gene_type,
+        deleted,
+        create_time,
+        creator_id,
+        tenant_id
+    </sql>
+
+    <sql id="planCondition">
+        <if test="planCode != null">
+            AND p.plan_code = #{planCode}
+        </if>
+        <if test="planVersion != null">
+            AND p.plan_version = #{planVersion}
+        </if>
+        <if test="planType != null">
+            AND p.plan_type = #{planType}
+        </if>
+        <if test="status != null">
+            AND p.status = #{status}
+        </if>
+        <if test="calStartTimeStart != null">
+            AND p.cal_start_time >= #{calStartTimeStart}
+        </if>
+        <if test="calStartTimeEnd != null">
+            AND p.cal_start_time <![CDATA[<= #{calStartTimeEnd}]]>
+        </if>
+    </sql>
+
+    <sql id="materialWhereCondition">
+        <if test="materialCode != null">
+            AND material_code = #{materialCode}
+        </if>
+        <if test="logicalPlantNo != null">
+            AND logical_plant_no = #{logicalPlantNo}
+        </if>
+        <if test="tenantId != null">
+            AND m.tenant_id = #{tenantId}
+        </if>
+        <if test="materialCodes != null and materialCodes.size() > 0">
+            AND material_code in
+            <foreach collection="materialCodes" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="logicalPlantNos != null and logicalPlantNos.size() > 0">
+            AND logical_plant_no in
+            <foreach collection="logicalPlantNos" item="plant" separator="," open="(" close=")">
+                #{plant}
+            </foreach>
+        </if>
+    </sql>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `pl_material_plan_instance`
+        where id = #{id}
+        and tenant_id = #{tenantId}
+        and deleted = '0'
+    </select>
+
+    <select id="selectLatestByMaterial" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `pl_material_plan_instance`
+        where material_code = #{materialCode}
+          and logical_plant_no = #{logicalPlantNo}
+          and tenant_id = #{tenantId}
+          and gene_type = #{geneType}
+          and deleted = '0'
+        order by create_time desc
+        limit 1
+    </select>
+
+    <select id="count" resultType="java.lang.Long"
+            parameterType="com.enn.plan.management.dal.dao.condition.MaterialPlanInstanceCondition">
+        select count(1)
+        from `pl_material_plan_instance` m,
+             `pl_plan_instance` p
+                where p.id = m.instance_id
+        <include refid="planCondition"/>
+        <include refid="materialWhereCondition"/>
+        and parent_id is null
+    </select>
+
+    <select id="selectByCondition" resultMap="withConfigResultMap"
+            parameterType="com.enn.plan.management.dal.dao.condition.MaterialPlanInstanceCondition">
+        select m.id,
+               m.instance_id,
+               m.material_code,
+               m.material_desc,
+               m.material_level,
+               m.logical_plant_no,
+               p.plan_code,
+               p.plan_version,
+               p.plan_type,
+               m.logical_plant_name,
+               m.demand_strategy_code,
+               m.status,
+               m.ext_attrs,
+               m.deleted,
+               m.create_time,
+               m.creator_id,
+               m.tenant_id
+        from `pl_material_plan_instance` m,
+             `pl_plan_instance` p
+                where p.id = m.instance_id
+        <include refid="planCondition"/>
+        <include refid="materialWhereCondition"/>
+        and parent_id is null
+        <if test="sorts != null and sorts.size() > 0">
+            order by
+            <foreach collection="sorts" item="sort" separator=",">
+                ${sort.key} ${sort.order}
+            </foreach>
+        </if>
+        limit #{offset}, #{size}
+    </select>
+
+    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanInstancePO"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into `pl_material_plan_instance` (id, instance_id, material_code,
+                                                 material_desc, material_level, logical_plant_no,
+                                                 logical_plant_name, demand_strategy_code, status, gene_type,
+                                                 root_id, parent_id, ext_attrs, deleted, create_time,
+                                                 creator_id, tenant_id)
+        values (#{id}, #{instanceId}, #{materialCode},
+                #{materialDesc}, #{materialLevel}, #{logicalPlantNo},
+                #{logicalPlantName}, #{demandStrategyCode}, #{status}, #{geneType},
+                #{rootId}, #{parentId}, #{extAttrs}, 0, NOW(), #{createUserId},
+                #{tenantId})
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into `pl_material_plan_instance` (instance_id, material_code,
+                                                 material_desc, material_level, logical_plant_no,
+                                                 logical_plant_name, demand_strategy_code, status, gene_type,
+                                                 root_id, parent_id,  ext_attrs, deleted, create_time,
+                                                 creator_id, tenant_id)
+                values
+        <foreach collection="records" item="record" index="index" separator=",">
+            (#{record.instanceId}, #{record.materialCode},
+             #{record.materialDesc}, #{record.materialLevel}, #{record.logicalPlantNo},
+             #{record.logicalPlantName}, #{record.demandStrategyCode}, #{record.status}, #{record.geneType},
+             #{record.rootId}, #{record.parentId}, #{record.extAttrs}, 0, NOW(), #{record.createUserId},
+             #{record.tenantId})
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanInstancePO">
+        update `pl_material_plan_instance`
+        <set>
+            <if test="instanceId != null">
+                instance_id = #{instanceId},
+            </if>
+            <if test="materialCode != null">
+                material_code = #{materialCode},
+            </if>
+            <if test="materialDesc != null">
+                material_desc = #{materialDesc},
+            </if>
+            <if test="materialLevel != null">
+                material_level = #{materialLevel},
+            </if>
+            <if test="logicalPlantNo != null">
+                logical_plant_no = #{logicalPlantNo},
+            </if>
+            <if test="logicalPlantName != null">
+                logical_plant_name = #{logicalPlantName},
+            </if>
+            <if test="demandStrategyCode != null">
+                demand_strategy_code = #{demandStrategyCode},
+            </if>
+            <if test="rootId != null">
+                root_id = #{rootId},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="geneType != null">
+                gene_type = #{geneType},
+            </if>
+            <if test="extAttrs != null">
+                ext_attrs = #{extAttrs},
+            </if>
+            <if test="isDelete != null">
+                deleted = #{isDelete},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="createUserId != null">
+                creator_id = #{createUserId},
+            </if>
+            <if test="tenantId != null">
+                tenant_id = #{tenantId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <select id="selectRootByAccordingId"
+            resultMap ="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `pl_material_plan_instance`
+        where id = (
+                select root_id
+                from `pl_material_plan_instance`
+                where id = #{id})
+                and tenant_id = #{tenantId}
+                and deleted = '0'
+    </select>
+</mapper>

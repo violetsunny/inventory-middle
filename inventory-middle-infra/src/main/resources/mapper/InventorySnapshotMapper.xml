@@ -1,0 +1,753 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventorySnapshotMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.InventorySnapshotPO">
+        <result column="id" property="id"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="material_category_code" property="materialCategoryCode"/>
+        <result column="warehouse_id" property="warehouseId"/>
+        <result column="logical_plant_id" property="logicalPlantId"/>
+        <result column="logical_plant_no" property="logicalPlantNo"/>
+        <result column="logical_plant_type" property="logicalPlantType"/>
+        <result column="location_id" property="locationId"/>
+        <result column="location_no" property="locationNo"/>
+        <result column="batch_no" property="batchNo"/>
+        <result column="batch_time" property="batchTime"/>
+        <result column="batch_price" property="batchPrice"/>
+        <result column="currency" property="currency"/>
+        <result column="unrestricted" property="unrestricted"/>
+        <result column="damaged" property="damaged"/>
+        <result column="inspection" property="inspection"/>
+        <result column="uom" property="uom"/>
+        <result column="eta" property="eta"/>
+        <result column="due_date" property="dueDate"/>
+        <result column="warehouse_price" property="warehousePrice"/>
+        <result column="owner_id" property="ownerId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updator_id" property="updatorId"/>
+        <result column="deleted" property="deleted"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="action" property="warningMark"/>
+        <result column="deviate" property="offset"/>
+        <result column="batch_total_price" property="batchTotalPrice"/>
+        <result column="alert_id" property="alertId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,
+                material_code,
+                material_category_code,
+                warehouse_id,
+                logical_plant_id,
+                logical_plant_no,
+                logical_plant_type,
+                location_id,
+                location_no,
+                batch_no,
+                batch_time,
+                batch_price,
+                currency,
+                unrestricted,
+                damaged,
+                inspection,
+                uom,
+                eta,
+                due_date,
+                warehouse_price,
+                owner_id,
+                create_time,
+                creator_id,
+                update_time,
+                updator_id,
+                deleted,
+                tenant_id
+    </sql>
+
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into inventory_snapshot (
+        material_code,
+        material_category_code,
+        warehouse_id,
+        logical_plant_id,
+        logical_plant_no,
+        logical_plant_type,
+        location_id,
+        location_no,
+        batch_no,
+        batch_time,
+        batch_price,
+        currency,
+        unrestricted,
+        damaged,
+        inspection,
+        uom,
+        eta,
+        due_date,
+        warehouse_price,
+        owner_id,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id,
+        deleted,
+        tenant_id
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.materialCode},
+            #{item.materialCategoryCode},
+            #{item.warehouseId},
+            #{item.logicalPlantId},
+            #{item.logicalPlantNo},
+            #{item.logicalPlantType},
+            #{item.locationId},
+            #{item.locationNo},
+            #{item.batchNo},
+            #{item.batchTime},
+            #{item.batchPrice},
+            #{item.currency},
+            #{item.unrestricted},
+            #{item.damaged},
+            #{item.inspection},
+            #{item.uom},
+            #{item.eta},
+            #{item.dueDate},
+            #{item.warehousePrice},
+            #{item.ownerId},
+            #{item.createTime},
+            #{item.creatorId},
+            #{item.updateTime},
+            #{item.updatorId},
+            #{item.deleted},
+            #{item.tenantId}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+            parameterType="com.inventory.middle.infra.persistence.entity.InventorySnapshotPO">
+        INSERT INTO inventory_snapshot
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != materialCode and '' != materialCode">
+                material_code,
+            </if>
+            <if test="null != materialCategoryCode and '' != materialCategoryCode">
+                material_category_code,
+            </if>
+            <if test="null != warehouseId ">
+                warehouse_id,
+            </if>
+            <if test="null != logicalPlantId ">
+                logical_plant_id,
+            </if>
+            <if test="null != logicalPlantNo and '' != logicalPlantNo">
+                logical_plant_no,
+            </if>
+            <if test="null != logicalPlantType ">
+                logical_plant_type,
+            </if>
+            <if test="null != locationId ">
+                location_id,
+            </if>
+            <if test="null != locationNo ">
+                location_no,
+            </if>
+            <if test="null != batchNo and '' != batchNo">
+                batch_no,
+            </if>
+            <if test="null != batchTime ">
+                batch_time,
+            </if>
+            <if test="null != batchPrice ">
+                batch_price,
+            </if>
+            <if test="null != currency and '' != currency">
+                currency,
+            </if>
+            <if test="null != unrestricted ">
+                unrestricted,
+            </if>
+            <if test="null != damaged ">
+                damaged,
+            </if>
+            <if test="null != inspection ">
+                inspection,
+            </if>
+            <if test="null != uom and '' != uom">
+                uom,
+            </if>
+            <if test="null != eta ">
+                eta,
+            </if>
+            <if test="null != dueDate ">
+                due_date,
+            </if>
+            <if test="null != warehousePrice ">
+                warehouse_price,
+            </if>
+            <if test="null != ownerId ">
+                owner_id,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId ">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId ">
+                updator_id,
+            </if>
+            <if test="null != deleted ">
+                deleted,
+            </if>
+            <if test="null != tenantId ">
+                tenant_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != materialCode and '' != materialCode">
+                #{materialCode},
+            </if>
+            <if test="null != materialCategoryCode and '' != materialCategoryCode">
+                #{materialCategoryCode},
+            </if>
+            <if test="null != warehouseId ">
+                #{warehouseId},
+            </if>
+            <if test="null != logicalPlantId ">
+                #{logicalPlantId},
+            </if>
+            <if test="null != logicalPlantNo and '' != logicalPlantNo">
+                #{logicalPlantNo},
+            </if>
+            <if test="null != logicalPlantType ">
+                #{logicalPlantType},
+            </if>
+            <if test="null != locationId ">
+                #{locationId},
+            </if>
+            <if test="null != locationNo ">
+                #{locationNo},
+            </if>
+            <if test="null != batchNo and '' != batchNo">
+                #{batchNo},
+            </if>
+            <if test="null != batchTime ">
+                #{batchTime},
+            </if>
+            <if test="null != batchPrice ">
+                #{batchPrice},
+            </if>
+            <if test="null != currency and '' != currency">
+                #{currency},
+            </if>
+            <if test="null != unrestricted ">
+                #{unrestricted},
+            </if>
+            <if test="null != damaged ">
+                #{damaged},
+            </if>
+            <if test="null != inspection ">
+                #{inspection},
+            </if>
+            <if test="null != uom and '' != uom">
+                #{uom},
+            </if>
+            <if test="null != eta ">
+                #{eta},
+            </if>
+            <if test="null != dueDate ">
+                #{dueDate},
+            </if>
+            <if test="null != warehousePrice ">
+                #{warehousePrice},
+            </if>
+            <if test="null != ownerId ">
+                #{ownerId},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId ">
+                #{updatorId},
+            </if>
+            <if test="null != deleted ">
+                #{deleted},
+            </if>
+            <if test="null != tenantId ">
+                #{tenantId}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.InventorySnapshotPO">
+        UPDATE inventory_snapshot
+        <set>
+            <if test="null != materialCode and '' != materialCode">material_code = #{materialCode},</if>
+            <if test="null != materialCategoryCode and '' != materialCategoryCode">material_category_code =
+                #{materialCategoryCode},
+            </if>
+            <if test="null != warehouseId ">warehouse_id = #{warehouseId},</if>
+            <if test="null != logicalPlantId ">logical_plant_id = #{logicalPlantId},</if>
+            <if test="null != logicalPlantNo and '' != logicalPlantNo">logical_plant_no = #{logicalPlantNo},</if>
+            <if test="null != logicalPlantType ">logical_plant_type = #{logicalPlantType},</if>
+            <if test="null != locationId ">location_id = #{locationId},</if>
+            <if test="null != locationNo ">location_no = #{locationNo},</if>
+            <if test="null != batchNo and '' != batchNo">batch_no = #{batchNo},</if>
+            <if test="null != batchTime ">batch_time = #{batchTime},</if>
+            <if test="null != batchPrice ">batch_price = #{batchPrice},</if>
+            <if test="null != currency and '' != currency">currency = #{currency},</if>
+            <if test="null != unrestricted ">unrestricted = #{unrestricted},</if>
+            <if test="null != damaged ">damaged = #{damaged},</if>
+            <if test="null != inspection ">inspection = #{inspection},</if>
+            <if test="null != uom and '' != uom">uom = #{uom},</if>
+            <if test="null != eta ">eta = #{eta},</if>
+            <if test="null != dueDate ">due_date = #{dueDate},</if>
+            <if test="null != warehousePrice ">warehouse_price = #{warehousePrice},</if>
+            <if test="null != ownerId ">owner_id = #{ownerId},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != tenantId ">tenant_id = #{tenantId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <update id="adjustUp" parameterType="com.inventory.middle.infra.persistence.entity.InventorySnapshotPO">
+        UPDATE inventory_snapshot
+        <set>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != unrestricted ">unrestricted = unrestricted+#{unrestricted},</if>
+            <if test="null != damaged ">damaged =damaged+ #{damaged},</if>
+            <if test="null != inspection ">inspection = inspection+#{inspection},</if>
+        </set>
+        WHERE material_code = #{materialCode}
+        and batch_no = #{batchNo}
+        and tenant_id = #{tenantId}
+        <if test="null != locationId ">and location_id = #{locationId}</if>
+        <if test="null != logicalPlantId ">and logical_plant_id = #{logicalPlantId}</if>
+    </update>
+
+    <update id="adjustDown" parameterType="com.inventory.middle.infra.persistence.entity.InventorySnapshotPO">
+        UPDATE inventory_snapshot
+        <set>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != unrestricted ">unrestricted = unrestricted-#{unrestricted},</if>
+            <if test="null != damaged ">damaged =damaged- #{damaged},</if>
+            <if test="null != inspection ">inspection = inspection-#{inspection},</if>
+        </set>
+        WHERE material_code = #{materialCode}
+        and batch_no = #{batchNo}
+        and tenant_id = #{tenantId}
+        <if test="null != locationId ">and location_id = #{locationId}</if>
+        <if test="null != logicalPlantId ">and logical_plant_id = #{logicalPlantId}</if>
+    </update>
+
+    <update id="disableById" parameterType="com.inventory.middle.infra.persistence.entity.InventorySnapshotPO">
+        UPDATE inventory_snapshot
+        <set>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != unrestricted ">unrestricted = unrestricted-#{unrestricted},</if>
+            <if test="null != damaged ">damaged =damaged- #{damaged},</if>
+            <if test="null != inspection ">inspection = inspection-#{inspection},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_snapshot
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_snapshot
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Long">
+        SELECT count(*)
+        FROM inventory_snapshot
+    </select>
+
+    <select id="queryCountSnapshotByCondition" resultMap="BaseResultMap"
+            parameterType="com.inventory.middle.infra.persistence.entity.inventory.ListQueryInventorySnapshotReqPO">
+        SELECT
+            t1.material_code,t1.material_category_code,t1.warehouse_id,
+            t1.logical_plant_id,t1.logical_plant_no,t1.logical_plant_type,
+            sum(t1.unrestricted) unrestricted, sum(t1.damaged) damaged, sum(t1.inspection) inspection,
+            t1.uom, t1.tenant_id, t1.currency
+        FROM giv.inventory_snapshot t1
+        WHERE t1.tenant_id = #{tenantId} AND t1.deleted = 0
+        <if test="null != logicalPlantNoList and logicalPlantNoList.size() > 0">
+            AND t1.logical_plant_no in
+            <foreach collection="logicalPlantNoList" item="logicalPlantN" open="(" close=")" separator=",">
+                #{logicalPlantN}
+            </foreach>
+        </if>
+        <if test="null != materialCodeList and materialCodeList.size() > 0">
+            AND t1.material_code in
+            <foreach collection="materialCodeList" item="materialCode" open="(" close=")" separator=",">
+                #{materialCode}
+            </foreach>
+        </if>
+        GROUP BY t1.material_code, t1.warehouse_id, t1.logical_plant_id
+
+    </select>
+
+    <select id="list" resultMap="BaseResultMap"
+            parameterType="com.inventory.middle.infra.persistence.entity.inventory.PageInventorySnapshotReqPO">
+        SELECT
+        t1.material_code,t1.material_category_code,t1.warehouse_id,t1.logical_plant_id,t1.logical_plant_no,t1.logical_plant_type,sum(t1.unrestricted)
+        unrestricted, sum(t1.damaged) damaged, sum(t1.inspection) inspection, t1.uom, t1.batch_price, t1.tenant_id,
+        t1.currency,t1.alert_id
+        FROM giv.inventory_snapshot t1
+        WHERE t1.tenant_id = #{tenantId} AND t1.deleted = 0
+        <if test="null != warning and 1 == warning ">
+            AND alert_id != 0
+        </if>
+        <if test="null != warning and 0 == warning ">
+            AND alert_id = 0
+        </if>
+        <if test="null != logicalPlantId ">AND t1.logical_plant_id = #{logicalPlantId}</if>
+        <if test="null != logicalPlantNo ">AND t1.logical_plant_no = #{logicalPlantNo}</if>
+        <if test="null != logicalPlantType ">AND t1.logical_plant_type = #{logicalPlantType}</if>
+        <if test="null != materialCode and '' != materialCode"> AND t1.material_code LIKE concat('%',concat('/', #{materialCode},'%')) ESCAPE '/'</if>
+        <if test="null != materialCategoryCode and '' != materialCategoryCode">
+            AND t1.material_category_code LIKE concat('%',concat('/', #{materialCategoryCode},'%')) ESCAPE '/'
+        </if>
+        <if test="null != warehouseId ">AND t1.warehouse_id = #{warehouseId}</if>
+        GROUP BY t1.material_code,t1.logical_plant_id
+        order by id desc
+    </select>
+
+    <select id="detailByLogicalPlant" resultMap="BaseResultMap" parameterType="com.inventory.middle.infra.persistence.entity.InventorySnapshotPO">
+        SELECT logical_plant_id,
+               sum(unrestricted)               unrestricted,
+               sum(damaged)                    damaged,
+               sum(inspection)                 inspection,
+               sum(batch_price * unrestricted) batch_total_price,
+               create_time
+        FROM giv.inventory_snapshot
+        WHERE material_code = #{materialCode}
+          AND logical_plant_id = #{logicalPlantId}
+          AND tenant_id = #{tenantId}
+          AND deleted = 0
+        GROUP BY material_code, logical_plant_id
+    </select>
+
+    <select id="detailByLocation" resultMap="BaseResultMap" parameterType="com.inventory.middle.infra.persistence.entity.InventorySnapshotPO">
+        SELECT location_id,
+               sum(unrestricted)               unrestricted,
+               sum(damaged)                    damaged,
+               sum(inspection)                 inspection,
+               sum(batch_price * unrestricted) batch_total_price,
+               create_time
+        FROM giv.inventory_snapshot
+        WHERE material_code = #{materialCode}
+          AND logical_plant_id = #{logicalPlantId}
+          AND tenant_id = #{tenantId}
+          AND deleted = 0
+        group by material_code, logical_plant_id, location_id
+    </select>
+
+    <select id="detailByBatch" resultMap="BaseResultMap" parameterType="com.inventory.middle.infra.persistence.entity.InventorySnapshotPO">
+        SELECT batch_no,
+               batch_price,
+               uom,
+               currency,
+               sum(unrestricted)               unrestricted,
+               sum(damaged)                    damaged,
+               sum(inspection)                 inspection,
+               sum(batch_price * unrestricted) batch_total_price,
+               create_time,
+               eta,
+               due_date
+        FROM giv.inventory_snapshot
+        WHERE material_code = #{materialCode}
+          AND logical_plant_id = #{logicalPlantId}
+          AND location_id = #{locationId}
+          AND tenant_id = #{tenantId}
+          AND deleted = 0
+        group by material_code, logical_plant_id, location_id, batch_no
+    </select>
+
+    <select id="queryBatchNo" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_snapshot
+        WHERE material_code = #{materialCode}
+        and logical_plant_id = #{logicalPlantId}
+        <if test="null != storageLocationId ">and location_id = #{storageLocationId}</if>
+        and deleted = 0
+    </select>
+
+    <select id="queryMaterialTotal" resultMap="BaseResultMap"
+            parameterType="com.inventory.middle.infra.persistence.entity.inventory.QuerySnapshotMaterialTotalPO">
+        SELECT material_code, logical_plant_id, sum(unrestricted) unrestricted, tenant_id,  batch_no
+        FROM inventory_snapshot
+        WHERE
+        tenant_id = #{tenantId}
+        <if test="null != id">
+            AND id > #{id}
+        </if>
+        <if test="null != logicalPlantIdList and logicalPlantIdList.size() > 0">
+            AND logical_plant_id IN
+            <foreach collection="logicalPlantIdList" item="logicalPlantId" index="index" open="(" close=")"
+                     separator=",">
+                #{logicalPlantId}
+            </foreach>
+        </if>
+        <if test="null != materialCodeList and materialCodeList.size() > 0">
+            AND material_code IN
+            <foreach collection="materialCodeList" item="materialCode" index="index" open="(" close=")" separator=",">
+                #{materialCode}
+            </foreach>
+        </if>
+        and deleted = #{deleted}
+        group by material_code,logical_plant_id
+        order by id asc
+    </select>
+
+    <select id="queryByMaterialAndLogical" resultMap="BaseResultMap"
+            parameterType="com.inventory.middle.infra.persistence.entity.inventory.QuerySnapshotMaterialTotalPO">
+        SELECT <include refid="Base_Column_List"/>
+        FROM inventory_snapshot
+        WHERE
+        tenant_id = #{tenantId}
+        <if test="null != logicalPlantIdList and logicalPlantIdList.size() > 0">
+            AND logical_plant_id IN
+            <foreach collection="logicalPlantIdList" item="logicalPlantId" index="index" open="(" close=")"
+                     separator=",">
+                #{logicalPlantId}
+            </foreach>
+        </if>
+        <if test="null != materialCodeList and materialCodeList.size() > 0">
+            AND material_code IN
+            <foreach collection="materialCodeList" item="materialCode" index="index" open="(" close=")" separator=",">
+                #{materialCode}
+            </foreach>
+        </if>
+        and deleted = #{deleted}
+        order by id asc
+    </select>
+
+
+    <select id="countAvailableUnrestricted" resultType="decimal">
+        SELECT sum(unrestricted)
+        FROM inventory_snapshot
+        WHERE tenant_id = #{tenantId}
+        and material_code = #{materialCode}
+        and logical_plant_no = #{logicalPlantNo}
+        <if test="null != locationId ">and location_id = #{locationId}</if>
+        <if test="null != logicalPlantId ">and logical_plant_id = #{logicalPlantId}</if>
+        <if test="null != batchNo "> and batch_no = #{batchNo}</if>
+        and deleted = 0
+        and unrestricted > 0
+    </select>
+
+
+    <select id="countAvailableDamaged" resultType="decimal">
+        SELECT sum(damaged)
+        FROM inventory_snapshot
+        WHERE tenant_id = #{tenantId}
+        and material_code = #{materialCode}
+        and logical_plant_no = #{logicalPlantNo}
+        <if test="null != locationId ">and location_id = #{locationId}</if>
+        <if test="null != logicalPlantId ">and logical_plant_id = #{logicalPlantId}</if>
+        <if test="null != batchNo "> and batch_no = #{batchNo}</if>
+        and deleted = 0
+        and damaged > 0
+    </select>
+    <select id="countAvailableInspection" resultType="decimal">
+        SELECT sum(inspection)
+        FROM inventory_snapshot
+        WHERE tenant_id = #{tenantId}
+        and material_code = #{materialCode}
+        and logical_plant_no = #{logicalPlantNo}
+        <if test="null != locationId ">and location_id = #{locationId}</if>
+        <if test="null != logicalPlantId ">and logical_plant_id = #{logicalPlantId}</if>
+        <if test="null != batchNo "> and batch_no = #{batchNo}</if>
+        and deleted = 0
+        and inspection > 0
+    </select>
+
+
+    <select id="listAvailableUnrestricted" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_snapshot
+        WHERE tenant_id = #{tenantId}
+        and material_code = #{materialCode}
+        and logical_plant_no = #{logicalPlantNo}
+        <if test="null != locationId ">and location_id = #{locationId}</if>
+        <if test="null != logicalPlantId ">and logical_plant_id = #{logicalPlantId}</if>
+
+        and deleted = 0
+        and unrestricted > 0
+        order by id
+    </select>
+    <select id="listAvailableDamaged" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_snapshot
+        WHERE tenant_id = #{tenantId}
+        and material_code = #{materialCode}
+        and logical_plant_no = #{logicalPlantNo}
+        <if test="null != locationId ">and location_id = #{locationId}</if>
+        <if test="null != logicalPlantId ">and logical_plant_id = #{logicalPlantId}</if>
+
+        and deleted = 0
+        and damaged > 0
+        order by id
+    </select>
+    <select id="listAvailableInspection" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_snapshot
+        WHERE tenant_id = #{tenantId}
+        and material_code = #{materialCode}
+        and logical_plant_no = #{logicalPlantNo}
+        <if test="null != locationId ">and location_id = #{locationId}</if>
+        <if test="null != logicalPlantId ">and logical_plant_id = #{logicalPlantId}</if>
+
+        and deleted = 0
+        and inspection > 0
+        order by id
+    </select>
+    <update id="adjustInventoryInc" parameterType="com.inventory.middle.infra.persistence.entity.InventorySnapshotPO">
+        UPDATE inventory_snapshot
+        <set>
+            <if test="null != unrestricted ">unrestricted = unrestricted+#{unrestricted},</if>
+            <if test="null != damaged ">damaged =damaged+#{damaged},</if>
+            <if test="null != inspection ">inspection = inspection+#{inspection},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId},</if>
+            deleted = 0
+        </set>
+        WHERE material_code = #{materialCode}
+        and batch_no = #{batchNo}
+    </update>
+    <update id="saveAlertId">
+        <foreach collection="list" item="alert" separator=";">
+            update inventory_snapshot set alert_id = #{alert.id}
+            where
+                material_code = #{alert.materialCode}
+            and
+                logical_plant_id = #{alert.logicalPlantId}
+            and
+                deleted = 0
+        </foreach>
+    </update>
+    <update id="deleteAlertId">
+        update inventory_snapshot
+        set
+            alert_id = 0
+        where
+            alert_id in
+            <foreach collection="list" separator="," item="alert" open="(" close=")">
+                #{alert.id}
+            </foreach>
+    </update>
+    <select id="exportList" resultMap="BaseResultMap"
+            parameterType="com.inventory.middle.infra.persistence.entity.InventorySnapshotPO">
+        SELECT
+        t1.*
+        FROM giv.inventory_snapshot t1
+        LEFT JOIN
+        (SELECT a.material_code, a.logical_plant_id, a.action, a.deviate
+        FROM giv.inventory_alert a
+        WHERE ( SELECT count(id) FROM giv.inventory_alert b WHERE b.material_code = a.material_code AND
+        b.logical_plant_id = a.logical_plant_id AND b.alert_date > a.alert_date )=0 AND deleted = 0) t2
+        ON t1.material_code = t2.material_code and t1.logical_plant_id = t2.logical_plant_id
+        WHERE t1.tenant_id = #{tenantId} AND t1.deleted = 0
+        <if test="null != logicalPlantId "> AND t1.logical_plant_id = #{logicalPlantId}</if>
+        <if test="null != logicalPlantType "> AND t1.logical_plant_type = #{logicalPlantType}</if>
+        <if test="null != materialCode and '' != materialCode"> AND t1.material_code LIKE concat('%',concat('/', #{materialCode},'%')) ESCAPE '/'</if>
+        <if test="null != materialCategoryCode and '' != materialCategoryCode">
+         AND t1.material_category_code LIKE concat('%',concat('/', #{materialCategoryCode},'%')) ESCAPE '/'
+        </if>
+        <if test="null != warehouseId "> AND t1.warehouse_id = #{warehouseId}</if>
+<!--        <if test="null != warning and 1 == warning ">-->
+<!--            AND NOT ISNULL(t2.material_code)-->
+<!--        </if>-->
+<!--        <if test="null != warning and 0 == warning ">-->
+<!--            AND ISNULL(t2.material_code)-->
+<!--        </if>-->
+
+    </select>
+
+    <select id="queryInventory" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_snapshot
+        WHERE material_code = #{materialCode}
+        and logical_plant_no = #{logicalPlantNo}
+        <if test="null != batchNo and '' != batchNo">and batch_no = #{batchNo}</if>
+        and tenant_id = #{tenantId}
+        and deleted = 0
+    </select>
+
+    <select id="queryInventorySnapshotByBatchNo" resultMap="BaseResultMap" parameterType="java.util.List">
+        select
+        <include refid="Base_Column_List"/>
+        from inventory_snapshot
+        where batch_no in
+        <foreach collection="list" item="batchNoList" open="(" close=")" separator=",">
+            #{batchNoList}
+        </foreach>
+        and deleted = 0
+    </select>
+
+    <select id="queryCurrentInventory" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_snapshot
+        WHERE material_code = #{materialCode}
+        and batch_no = #{batchNo}
+        and tenant_id = #{tenantId}
+        and deleted = 0
+    </select>
+
+    <update id="removeBatchNo">
+        update inventory_snapshot
+        set deleted = 1
+        where
+        tenant_id = #{tenantId}
+        and deleted = 0
+        <if test="null != logicalPlantNo ">and logical_plant_no = #{logicalPlantNo}</if>
+        <if test="null != storageLocationNo ">and location_no = #{storageLocationNo}</if>
+        <if test="null != materialCodeList and materialCodeList.size() > 0">
+            and material_code in
+            <foreach collection="materialCodeList" item="materialCode" index="index" open="(" close=")" separator=",">
+                #{materialCode}
+            </foreach>
+        </if>
+    </update>
+
+</mapper>

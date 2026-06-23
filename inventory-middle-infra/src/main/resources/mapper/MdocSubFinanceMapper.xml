@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.MdocSubFinanceMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.MdocSubFinancePO">
+        <result column="id" property="id"/>
+        <result column="material_doc_id" property="materialDocId"/>
+        <result column="material_doc_item_id" property="materialDocItemId"/>
+        <result column="assert_tag" property="assertTag"/>
+        <result column="sub_assert_tag" property="subAssertTag"/>
+        <result column="profit_center_name" property="profitCenterName"/>
+        <result column="profit_center" property="profitCenter"/>
+        <result column="cost_center_name" property="costCenterName"/>
+        <result column="cost_center" property="costCenter"/>
+        <result column="product_line" property="productLine"/>
+        <result column="trade_partner" property="tradePartner"/>
+        <result column="supply_name" property="supplyName"/>
+        <result column="supply_code" property="supplyCode"/>
+        <result column="customer" property="customer"/>
+        <result column="customer_code" property="customerCode"/>
+        <result column="settlement_type" property="settlementType"/>
+        <result column="marketing_no" property="marketingNo"/>
+        <result column="budget_no" property="budgetNo"/>
+        <result column="internal_order_no" property="internalOrderNo"/>
+        <result column="remark" property="remark"/>
+        <result column="deleted" property="deleted"/>
+        <result column="tenant_id" property="tenantId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updator_id" property="updatorId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,
+                material_doc_id,
+                material_doc_item_id,
+                assert_tag,
+                sub_assert_tag,
+                profit_center_name,
+                profit_center,
+                cost_center_name,
+                cost_center,
+                product_line,
+                trade_partner,
+                supply_name,
+                supply_code,
+                customer,
+                customer_code,
+                settlement_type,
+                marketing_no,
+                budget_no,
+                internal_order_no,
+                remark,
+                deleted,
+                tenant_id,
+                create_time,
+                creator_id,
+                update_time,
+                updator_id
+    </sql>
+
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into mdoc_sub_finance (
+        id,
+        material_doc_id,
+        material_doc_item_id,
+        assert_tag,
+        sub_assert_tag,
+        profit_center_name,
+        profit_center,
+        cost_center_name,
+        cost_center,
+        product_line,
+        trade_partner,
+        supply_name,
+        supply_code,
+        customer,
+        customer_code,
+        settlement_type,
+        marketing_no,
+        budget_no,
+        internal_order_no,
+        remark,
+        create_time,
+        creator_id,
+        update_time,
+        updator_id,
+        deleted,
+        tenant_id
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.materialDocId},
+            #{item.materialDocItemId},
+            #{item.assertTag},
+            #{item.subAssertTag},
+            #{item.profitCenterName},
+            #{item.profitCenter},
+            #{item.costCenterName},
+            #{item.costCenter},
+            #{item.productLine},
+            #{item.tradePartner},
+            #{item.supplyName},
+            #{item.supplyCode},
+            #{item.customer},
+            #{item.customerCode},
+            #{item.settlementType},
+            #{item.marketingNo},
+            #{item.budgetNo},
+            #{item.internalOrderNo},
+            #{item.remark},
+            #{item.createTime},
+            #{item.creatorId},
+            #{item.updateTime},
+            #{item.updatorId},
+            #{item.deleted},
+            #{item.tenantId}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity.MdocSubFinancePO">
+        INSERT INTO mdoc_sub_finance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                id,
+            </if>
+            <if test="null != materialDocId ">
+                material_doc_id,
+            </if>
+            <if test="null != materialDocItemId ">
+                material_doc_item_id,
+            </if>
+            <if test="null != assertTag and '' != assertTag">
+                assert_tag,
+            </if>
+            <if test="null != subAssertTag and '' != subAssertTag">
+                sub_assert_tag,
+            </if>
+            <if test="null != profitCenterName and '' != profitCenterName">
+                profit_center_name,
+            </if>
+            <if test="null != profitCenter and '' != profitCenter">
+                profit_center,
+            </if>
+            <if test="null != costCenterName and '' != costCenterName">
+                cost_center_name,
+            </if>
+            <if test="null != costCenter and '' != costCenter">
+                cost_center,
+            </if>
+            <if test="null != productLine and '' != productLine">
+                product_line,
+            </if>
+            <if test="null != tradePartner and '' != tradePartner">
+                trade_partner,
+            </if>
+            <if test="null != supplyName and '' != supplyName">
+                supply_name,
+            </if>
+            <if test="null != supplyCode and '' != supplyCode">
+                supply_code,
+            </if>
+            <if test="null != customer and '' != customer">
+                customer,
+            </if>
+            <if test="null != customerCode and '' != customerCode">
+                customer_code,
+            </if>
+            <if test="null != settlementType ">
+                settlement_type,
+            </if>
+            <if test="null != marketingNo and '' != marketingNo">
+                marketing_no,
+            </if>
+            <if test="null != budgetNo and '' != budgetNo">
+                budget_no,
+            </if>
+            <if test="null != internalOrderNo and '' != internalOrderNo">
+                internal_order_no,
+            </if>
+            <if test="null != remark and '' != remark">
+                remark,
+            </if>
+            <if test="null != deleted ">
+                deleted,
+            </if>
+            <if test="null != tenantId ">
+                tenant_id,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId ">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId ">
+                updator_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                #{id},
+            </if>
+            <if test="null != materialDocId ">
+                #{materialDocId},
+            </if>
+            <if test="null != materialDocItemId ">
+                #{materialDocItemId},
+            </if>
+            <if test="null != assertTag and '' != assertTag">
+                #{assertTag},
+            </if>
+            <if test="null != subAssertTag and '' != subAssertTag">
+                #{subAssertTag},
+            </if>
+            <if test="null != profitCenterName and '' != profitCenterName">
+                #{profitCenterName},
+            </if>
+            <if test="null != profitCenter and '' != profitCenter">
+                #{profitCenter},
+            </if>
+            <if test="null != costCenterName and '' != costCenterName">
+                #{costCenterName},
+            </if>
+            <if test="null != costCenter and '' != costCenter">
+                #{costCenter},
+            </if>
+            <if test="null != productLine and '' != productLine">
+                #{productLine},
+            </if>
+            <if test="null != tradePartner and '' != tradePartner">
+                #{tradePartner},
+            </if>
+            <if test="null != supplyName and '' != supplyName">
+                #{supplyName},
+            </if>
+            <if test="null != supplyCode and '' != supplyCode">
+                #{supplyCode},
+            </if>
+            <if test="null != customer and '' != customer">
+                #{customer},
+            </if>
+            <if test="null != customerCode and '' != customerCode">
+                #{customerCode},
+            </if>
+            <if test="null != settlementType ">
+                #{settlementType},
+            </if>
+            <if test="null != marketingNo and '' != marketingNo">
+                #{marketingNo},
+            </if>
+            <if test="null != budgetNo and '' != budgetNo">
+                #{budgetNo},
+            </if>
+            <if test="null != internalOrderNo and '' != internalOrderNo">
+                #{internalOrderNo},
+            </if>
+            <if test="null != remark and '' != remark">
+                #{remark},
+            </if>
+            <if test="null != deleted ">
+                #{deleted},
+            </if>
+            <if test="null != tenantId ">
+                #{tenantId},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId ">
+                #{updatorId}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM mdoc_sub_finance
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.MdocSubFinancePO">
+        UPDATE mdoc_sub_finance
+        <set>
+            <if test="null != materialDocId ">material_doc_id = #{materialDocId},</if>
+            <if test="null != materialDocItemId ">material_doc_item_id = #{materialDocItemId},</if>
+            <if test="null != assertTag and '' != assertTag">assert_tag = #{assertTag},</if>
+            <if test="null != subAssertTag and '' != subAssertTag">sub_assert_tag = #{subAssertTag},</if>
+            <if test="null != profitCenterName and '' != profitCenterName">profit_center_name = #{profitCenterName},
+            </if>
+            <if test="null != profitCenter and '' != profitCenter">profit_center = #{profitCenter},</if>
+            <if test="null != costCenterName and '' != costCenterName">cost_center_name = #{costCenterName},</if>
+            <if test="null != costCenter and '' != costCenter">cost_center = #{costCenter},</if>
+            <if test="null != productLine and '' != productLine">product_line = #{productLine},</if>
+            <if test="null != tradePartner and '' != tradePartner">trade_partner = #{tradePartner},</if>
+            <if test="null != supplyName and '' != supplyName">supply_name = #{supplyName},</if>
+            <if test="null != supplyCode and '' != supplyCode">supply_code = #{supplyCode},</if>
+            <if test="null != customer and '' != customer">customer = #{customer},</if>
+            <if test="null != customerCode and '' != customerCode">customer_code = #{customerCode},</if>
+            <if test="null != settlementType ">settlement_type = #{settlementType},</if>
+            <if test="null != marketingNo and '' != marketingNo">marketing_no = #{marketingNo},</if>
+            <if test="null != budgetNo and '' != budgetNo">budget_no = #{budgetNo},</if>
+            <if test="null != internalOrderNo and '' != internalOrderNo">internal_order_no = #{internalOrderNo},</if>
+            <if test="null != remark and '' != remark">remark = #{remark},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != tenantId ">tenant_id = #{tenantId},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_finance
+        WHERE id = #{id}
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_finance
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="pageListCount" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM mdoc_sub_finance
+    </select>
+
+    <select id="queryByItemId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mdoc_sub_finance
+        WHERE material_doc_item_id = #{materialDocItemId}
+    </select>
+</mapper>

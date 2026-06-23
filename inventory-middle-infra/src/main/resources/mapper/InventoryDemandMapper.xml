@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.persistence.mapper.InventoryDemandMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.persistence.entity.InventoryDemandPO">
+        <result column="id" property="id"/>
+        <result column="material_doc_id" property="materialDocId"/>
+        <result column="material_code" property="materialCode"/>
+        <result column="batch_no" property="batchNo"/>
+        <result column="owner_id" property="ownerId"/>
+        <result column="logical_plant_id" property="logicalPlantId"/>
+        <result column="location_id" property="locationId"/>
+        <result column="stock_type" property="stockType"/>
+        <result column="demand_type" property="demandType"/>
+        <result column="source_order_type" property="sourceOrderType"/>
+        <result column="source_order_no" property="sourceOrderNo"/>
+        <result column="unrestricted" property="unrestricted"/>
+        <result column="damaged" property="damaged"/>
+        <result column="inspection" property="inspection"/>
+        <result column="uom" property="uom"/>
+        <result column="cancel_date" property="cancelDate"/>
+        <result column="deadline_date" property="deadlineDate"/>
+        <result column="pot" property="pot"/>
+        <result column="currency" property="currency"/>
+        <result column="warehouse_price" property="warehousePrice"/>
+        <result column="create_time" property="createTime"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="updator_id" property="updatorId"/>
+        <result column="deleted" property="deleted"/>
+        <result column="tenant_id" property="tenantId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,
+                material_doc_id,
+                material_code,
+                batch_no,
+                owner_id,
+                logical_plant_id,
+                location_id,
+                stock_type,
+                demand_type,
+                source_order_type,
+                source_order_no,
+                unrestricted,
+                damaged,
+                inspection,
+                uom,
+                cancel_date,
+                deadline_date,
+                pot,
+                currency,
+                warehouse_price,
+                create_time,
+                creator_id,
+                update_time,
+                updator_id,
+                deleted,
+                tenant_id
+    </sql>
+
+    <insert id="insert" parameterType="com.inventory.middle.infra.persistence.entity.InventoryDemandPO">
+        INSERT INTO inventory_demand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                id,
+            </if>
+            <if test="null != materialDocId ">
+                material_doc_id,
+            </if>
+            <if test="null != materialCode and '' != materialCode">
+                material_code,
+            </if>
+            <if test="null != batchNo and '' != batchNo">
+                batch_no,
+            </if>
+            <if test="null != ownerId ">
+                owner_id,
+            </if>
+            <if test="null != logicalPlantId ">
+                logical_plant_id,
+            </if>
+            <if test="null != locationId ">
+                location_id,
+            </if>
+            <if test="null != stockType ">
+                stock_type,
+            </if>
+            <if test="null != demandType ">
+                demand_type,
+            </if>
+            <if test="null != sourceOrderType ">
+                source_order_type,
+            </if>
+            <if test="null != sourceOrderNo and '' != sourceOrderNo ">
+                source_order_no,
+            </if>
+            <if test="null != unrestricted ">
+                unrestricted,
+            </if>
+            <if test="null != damaged ">
+                damaged,
+            </if>
+            <if test="null != inspection ">
+                inspection,
+            </if>
+            <if test="null != uom and '' != uom">
+                uom,
+            </if>
+            <if test="null != cancelDate ">
+                cancel_date,
+            </if>
+            <if test="null != deadlineDate ">
+                deadline_date,
+            </if>
+            <if test="null != pot ">
+                pot,
+            </if>
+            <if test="null != currency and '' != currency">
+                currency,
+            </if>
+            <if test="null != warehousePrice ">
+                warehouse_price,
+            </if>
+            <if test="null != createTime ">
+                create_time,
+            </if>
+            <if test="null != creatorId ">
+                creator_id,
+            </if>
+            <if test="null != updateTime ">
+                update_time,
+            </if>
+            <if test="null != updatorId ">
+                updator_id,
+            </if>
+            <if test="null != deleted ">
+                deleted,
+            </if>
+            <if test="null != tenantId ">
+                tenant_id
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != id ">
+                #{id},
+            </if>
+            <if test="null != materialDocId ">
+                #{materialDocId},
+            </if>
+            <if test="null != materialCode and '' != materialCode">
+                #{materialCode},
+            </if>
+            <if test="null != batchNo and '' != batchNo">
+                #{batchNo},
+            </if>
+            <if test="null != ownerId ">
+                #{ownerId},
+            </if>
+            <if test="null != logicalPlantId ">
+                #{logicalPlantId},
+            </if>
+            <if test="null != locationId ">
+                #{locationId},
+            </if>
+            <if test="null != stockType ">
+                #{stockType},
+            </if>
+            <if test="null != demandType ">
+                #{demandType},
+            </if>
+            <if test="null != sourceOrderType ">
+                #{sourceOrderType},
+            </if>
+            <if test="null != sourceOrderNo and '' != sourceOrderNo ">
+                #{sourceOrderNo},
+            </if>
+            <if test="null != unrestricted ">
+                #{unrestricted},
+            </if>
+            <if test="null != damaged ">
+                #{damaged},
+            </if>
+            <if test="null != inspection ">
+                #{inspection},
+            </if>
+            <if test="null != uom and '' != uom">
+                #{uom},
+            </if>
+            <if test="null != cancelDate ">
+                #{cancelDate},
+            </if>
+            <if test="null != deadlineDate ">
+                #{deadlineDate},
+            </if>
+            <if test="null != pot ">
+                #{pot},
+            </if>
+            <if test="null != currency and '' != currency">
+                #{currency},
+            </if>
+            <if test="null != warehousePrice ">
+                #{warehousePrice},
+            </if>
+            <if test="null != createTime ">
+                #{createTime},
+            </if>
+            <if test="null != creatorId ">
+                #{creatorId},
+            </if>
+            <if test="null != updateTime ">
+                #{updateTime},
+            </if>
+            <if test="null != updatorId ">
+                #{updatorId},
+            </if>
+            <if test="null != deleted ">
+                #{deleted},
+            </if>
+            <if test="null != tenantId ">
+                #{tenantId}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM inventory_demand
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.inventory.middle.infra.persistence.entity.InventoryDemandPO">
+        UPDATE inventory_demand
+        <set>
+            <if test="null != materialDocId ">material_doc_id = #{materialDocId},</if>
+            <if test="null != materialCode and '' != materialCode">material_code = #{materialCode},</if>
+            <if test="null != batchNo and '' != batchNo">batch_no = #{batchNo},</if>
+            <if test="null != ownerId ">owner_id = #{ownerId},</if>
+            <if test="null != logicalPlantId ">logical_plant_id = #{logicalPlantId},</if>
+            <if test="null != locationId ">location_id = #{locationId},</if>
+            <if test="null != stockType ">stock_type = #{stockType},</if>
+            <if test="null != demandType ">demand_type = #{demandType},</if>
+            <if test="null != sourceOrderType ">source_order_type = #{sourceOrderType},</if>
+            <if test="null != sourceOrderNo and '' != sourceOrderNo ">source_order_no = #{sourceOrderNo},</if>
+            <if test="null != unrestricted ">unrestricted = #{unrestricted},</if>
+            <if test="null != damaged ">damaged = #{damaged},</if>
+            <if test="null != inspection ">inspection = #{inspection},</if>
+            <if test="null != uom and '' != uom">uom = #{uom},</if>
+            <if test="null != cancelDate ">cancel_date = #{cancelDate},</if>
+            <if test="null != deadlineDate ">deadline_date = #{deadlineDate},</if>
+            <if test="null != pot ">pot = #{pot},</if>
+            <if test="null != currency and '' != currency">currency = #{currency},</if>
+            <if test="null != warehousePrice ">warehouse_price = #{warehousePrice},</if>
+            <if test="null != createTime ">create_time = #{createTime},</if>
+            <if test="null != creatorId ">creator_id = #{creatorId},</if>
+            <if test="null != updateTime ">update_time = #{updateTime},</if>
+            <if test="null != updatorId ">updator_id = #{updatorId},</if>
+            <if test="null != deleted ">deleted = #{deleted},</if>
+            <if test="null != tenantId ">tenant_id = #{tenantId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="reverse" parameterType="com.inventory.middle.infra.persistence.entity.InventoryDemandPO">
+        UPDATE inventory_demand
+        set unrestricted = unrestricted - #{unrestricted}
+
+        WHERE material_doc_id = #{materialDocId}
+          and batch_no = #{batchNo}
+          and material_code = #{materialCode}
+          and unrestricted - #{unrestricted} >= 0
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_demand
+        WHERE id = #{id}
+    </select>
+
+    <select id="find" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_demand
+        WHERE 1=1
+        <if test="null != materialDocId ">and material_doc_id = #{materialDocId}</if>
+        and batch_no = #{batchNo}
+        and material_code = #{materialCode}
+        and tenant_id = #{tenantId}
+        <if test="null != locationId ">and location_id = #{locationId}</if>
+        <if test="null != logicalPlantId ">and logical_plant_id = #{logicalPlantId}</if>
+        and demand_type = 1
+    </select>
+
+    <select id="queryInventoryDemandByDay" parameterType="com.inventory.middle.infra.persistence.entity.inventory.InventoryDemandByDayQueryPO"
+    resultType="com.inventory.middle.infra.persistence.entity.inventory.InventoryDemandByDayRespPO">
+        SELECT
+        DATE_FORMAT(t.deadline_date,'%Y-%m-%d') as deadlineDate,
+        sum(t.unrestricted) as unrestricted
+        FROM inventory_demand t
+        WHERE t.tenant_id = #{tenantId}
+        <if test="null != materialCode and '' != materialCode">and t.material_code = #{materialCode}</if>
+        <if test="null != logicalPlantId ">and t.logical_plant_id = #{logicalPlantId}</if>
+        <if test="null != startTime ">and t.deadline_date &gt;= #{startTime}</if>
+        <if test="null != endTime ">and t.deadline_date &lt;= #{endTime}</if>
+        and t.demand_type = 2
+        and t.unrestricted > 0
+        and t.deleted = 0
+        group by DATE_FORMAT(t.deadline_date,'%Y-%m-%d');
+    </select>
+
+    <select id="queryPlanOutboundInventory"
+            parameterType="com.inventory.middle.infra.persistence.entity.inventory.PlanOutboundInventoryQueryPO" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM inventory_demand t
+        WHERE t.tenant_id = #{tenantId}
+        <if test="null != materialCode and '' != materialCode">
+            and t.material_code = #{materialCode}
+        </if>
+        <if test="null != logicalPlantId ">
+          and t.logical_plant_id = #{logicalPlantId}
+        </if>
+        <if test="null != startTime">
+            and t.pot  <![CDATA[ >= ]]> #{startTime}
+        </if>
+        <if test="null != endTime">
+            and t.pot  <![CDATA[ <= ]]> #{endTime}
+        </if>
+        and t.demand_type = 2
+        and t.deleted = 0
+        and t.unrestricted > 0
+    </select>
+
+</mapper>

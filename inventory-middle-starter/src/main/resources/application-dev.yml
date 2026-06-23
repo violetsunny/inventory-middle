@@ -1,0 +1,5 @@
+# Dev 环境专属配置
+kdla:
+  config:
+    request-log:
+      enabled: true  # dev/test：自动打印全量 HTTP 请求体/响应体/耗时（正确 key: kdla.config.request-log.enabled）

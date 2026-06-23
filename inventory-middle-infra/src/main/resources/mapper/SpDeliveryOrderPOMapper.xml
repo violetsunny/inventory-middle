@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.enn.sparepart.screw.ext.dal.mapper.SpDeliveryOrderPOMapper">
+    <resultMap id="BaseResultMap" type="com.enn.sparepart.screw.ext.dal.entity.SpDeliveryOrderPO">
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+        <result column="delivery_order_no" jdbcType="VARCHAR" property="deliveryOrderNo"/>
+        <result column="delivery_type" jdbcType="VARCHAR" property="deliveryType"/>
+        <result column="crm_order_no" jdbcType="VARCHAR" property="crmOrderNo"/>
+        <result column="out_order_no" jdbcType="VARCHAR" property="outOrderNo"/>
+        <result column="delivery_time" jdbcType="VARCHAR" property="deliveryTime"/>
+        <result column="distributor_id" jdbcType="VARCHAR" property="distributorId"/>
+        <result column="distributor_tenant_id" jdbcType="VARCHAR" property="distributorTenantId"/>
+        <result column="distributor_name" jdbcType="VARCHAR" property="distributorName"/>
+        <result column="distributor_type" jdbcType="VARCHAR" property="distributorType"/>
+        <result column="origin_system" jdbcType="VARCHAR" property="originSystem"/>
+        <result column="state" jdbcType="TINYINT" property="state"/>
+        <result column="creator_id" jdbcType="VARCHAR" property="creatorId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updator_id" jdbcType="VARCHAR" property="updatorId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="deleted" jdbcType="TINYINT" property="deleted"/>
+    </resultMap>
+
+    <resultMap id="DistributorResultMap" type="com.enn.sparepart.screw.ext.dal.entity.SpDistributorInfoPO">
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+        <result column="distributor_id" jdbcType="VARCHAR" property="distributorId"/>
+        <result column="distributor_tenant_id" jdbcType="VARCHAR" property="distributorTenantId"/>
+        <result column="distributor_name" jdbcType="VARCHAR" property="distributorName"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, tenant_id, delivery_order_no,
+      delivery_type, crm_order_no, out_order_no,
+      delivery_time, distributor_id, distributor_tenant_id,
+      distributor_name, distributor_type, origin_system,
+      `state`, creator_id, create_time,
+      updator_id, update_time, deleted
+    </sql>
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+            parameterType="com.enn.sparepart.screw.ext.dal.entity.SpDeliveryOrderPO">
+        insert into sp_delivery_order (id, tenant_id, delivery_order_no,
+                                       delivery_type, crm_order_no, out_order_no,
+                                       delivery_time, distributor_id, distributor_tenant_id,
+                                       distributor_name, distributor_type, origin_system,
+                                       `state`, creator_id, create_time,
+                                       updator_id, update_time, deleted)
+        values (#{id,jdbcType=BIGINT}, #{tenantId,jdbcType=VARCHAR}, #{deliveryOrderNo,jdbcType=VARCHAR},
+                #{deliveryType,jdbcType=VARCHAR}, #{crmOrderNo,jdbcType=VARCHAR}, #{outOrderNo,jdbcType=VARCHAR},
+                #{deliveryTime,jdbcType=VARCHAR}, #{distributorId,jdbcType=VARCHAR},
+                #{distributorTenantId,jdbcType=VARCHAR},
+                #{distributorName,jdbcType=VARCHAR}, #{distributorType,jdbcType=VARCHAR},
+                #{originSystem,jdbcType=VARCHAR},
+                #{state,jdbcType=TINYINT}, #{creatorId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                #{updatorId,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=TINYINT})
+    </insert>
+    <insert id="insertSelective" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+            parameterType="com.enn.sparepart.screw.ext.dal.entity.SpDeliveryOrderPO">
+        insert into sp_delivery_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="tenantId != null">
+                tenant_id,
+            </if>
+            <if test="deliveryOrderNo != null">
+                delivery_order_no,
+            </if>
+            <if test="deliveryType != null">
+                delivery_type,
+            </if>
+            <if test="crmOrderNo != null">
+                crm_order_no,
+            </if>
+            <if test="outOrderNo != null">
+                out_order_no,
+            </if>
+            <if test="deliveryTime != null">
+                delivery_time,
+            </if>
+            <if test="distributorId != null">
+                distributor_id,
+            </if>
+            <if test="distributorTenantId != null">
+                distributor_tenant_id,
+            </if>
+            <if test="distributorName != null">
+                distributor_name,
+            </if>
+            <if test="distributorType != null">
+                distributor_type,
+            </if>
+            <if test="originSystem != null">
+                origin_system,
+            </if>
+            <if test="state != null">
+                `state`,
+            </if>
+            <if test="creatorId != null">
+                creator_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updatorId != null">
+                updator_id,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="deleted != null">
+                deleted,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="tenantId != null">
+                #{tenantId,jdbcType=VARCHAR},
+            </if>
+            <if test="deliveryOrderNo != null">
+                #{deliveryOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="deliveryType != null">
+                #{deliveryType,jdbcType=VARCHAR},
+            </if>
+            <if test="crmOrderNo != null">
+                #{crmOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="outOrderNo != null">
+                #{outOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="deliveryTime != null">
+                #{deliveryTime,jdbcType=VARCHAR},
+            </if>
+            <if test="distributorId != null">
+                #{distributorId,jdbcType=VARCHAR},
+            </if>
+            <if test="distributorTenantId != null">
+                #{distributorTenantId,jdbcType=VARCHAR},
+            </if>
+            <if test="distributorName != null">
+                #{distributorName,jdbcType=VARCHAR},
+            </if>
+            <if test="distributorType != null">
+                #{distributorType,jdbcType=VARCHAR},
+            </if>
+            <if test="originSystem != null">
+                #{originSystem,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=TINYINT},
+            </if>
+            <if test="creatorId != null">
+                #{creatorId,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatorId != null">
+                #{updatorId,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deleted != null">
+                #{deleted,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <select id="queryDeliveryOrderInfo"  resultMap="BaseResultMap" parameterType="com.enn.sparepart.screw.ext.dal.entity.SpDeliveryOrderQueryPO">
+        select
+        <include refid="Base_Column_List"/>
+        from sp_delivery_order
+        where
+            deleted = 0
+            <if test="tenantId != null and tenantId != '' ">
+                and tenant_id = #{tenantId,jdbcType=VARCHAR}
+            </if>
+            <if test="distributorTenantId != null and distributorTenantId != '' ">
+                and distributor_tenant_id = #{distributorTenantId,jdbcType=VARCHAR}
+            </if>
+
+            <if test="orderNo != null and orderNo != '' ">
+                and crm_order_no = #{orderNo,jdbcType=VARCHAR}
+            </if>
+            <if test="deliveryOrderNo != null and deliveryOrderNo != '' ">
+                and delivery_order_no = #{deliveryOrderNo,jdbcType=VARCHAR}
+            </if>
+            <if test="createTimeStart != null">
+                and create_time &gt;= #{createTimeStart}
+            </if>
+            <if test="createTimeEnd != null">
+                and create_time &lt;= #{createTimeEnd}
+            </if>
+            <if test="state != null">
+                and `state` = #{state}
+            </if>
+            <if test="state == null">
+                and `state` in(0,1,2,4)
+            </if>
+            order by id desc
+    </select>
+
+    <select id="selectDeliveryOrderById" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List"/>
+    from sp_delivery_order
+    where
+        deleted = 0
+        and tenant_id = #{tenantId}
+        and id = #{orderId}
+    </select>
+    <update id="updateStateByOrderId" >
+        update sp_delivery_order
+        set state = #{state}, updator_id = #{updatorId}
+        where id = #{orderId}
+    </update>
+
+    <select id="queryDistributorByTenantIds" resultMap="DistributorResultMap">
+        SELECT DISTINCT distributor_id, distributor_name, distributor_tenant_id, tenant_id
+        FROM sp_delivery_order
+        WHERE distributor_tenant_id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and `state` in(0,1,2,4)
+        and deleted = 0
+        order by id desc
+    </select>
+
+    <select id="queryDistributorByName" resultMap="DistributorResultMap">
+        SELECT DISTINCT distributor_id, distributor_name, distributor_tenant_id, tenant_id
+        FROM sp_delivery_order
+        WHERE
+        distributor_name LIKE concat('%',concat('/', #{distributorName},'%')) ESCAPE '/'
+        and `state` in(0,1,2,4)
+        and deleted = 0
+    </select>
+
+</mapper>
