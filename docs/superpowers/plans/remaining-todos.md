@@ -79,7 +79,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
 
 **步骤：**
 
-- [ ] **N1-1：`ImportMonitorRuleLineExcelBO` 继承 `BaseExcel`**
+- [x] **N1-1：`ImportMonitorRuleLineExcelBO` 继承 `BaseExcel`**
 
 ```java
 import top.kdla.framework.supplement.excel.BaseExcel;
@@ -102,7 +102,7 @@ public class ImportMonitorRuleLineExcelBO extends BaseExcel {
 // 去掉 implements Serializable 和 serialVersionUID（BaseExcel 已实现）
 ```
 
-- [ ] **N1-2：新建 `MonitorRuleLineExcelReadListener`**
+- [x] **N1-2：新建 `MonitorRuleLineExcelReadListener`**
 
 ```java
 package com.inventory.middle.application.service.monitor;
@@ -134,7 +134,7 @@ public class MonitorRuleLineExcelReadListener
 }
 ```
 
-- [ ] **N1-3：改造 `importByExcel` 使用 Listener 模式**
+- [x] **N1-3：改造 `importByExcel` 使用 Listener 模式**
 
 ```java
 // InventoryMonitorRuleLineApplicationServiceImpl.java
@@ -174,7 +174,7 @@ public String importByExcel(Long monitorRuleId, String monitorType, MultipartFil
 }
 ```
 
-- [ ] **N1-4：在 `InventoryMonitorRuleController` 补充 `/exportTemplate` 端点**
+- [x] **N1-4：在 `InventoryMonitorRuleController` 补充 `/exportTemplate` 端点**
 
 ```java
 import top.kdla.framework.supplement.excel.exp.KdlaExcelWrite;
@@ -191,8 +191,8 @@ public void exportTemplate(HttpServletResponse response) throws IOException {
 }
 ```
 
-- [ ] **N1-5：编译验证**
-- [ ] **N1-6：Commit** `feat(application): refactor Excel import to KdlaExcelReadListener, add exportTemplate`
+- [x] **N1-5：编译验证**
+- [x] **N1-6：Commit** `feat(application): refactor Excel import to KdlaExcelReadListener, add exportTemplate`
 
 ---
 
@@ -209,7 +209,7 @@ public void exportTemplate(HttpServletResponse response) throws IOException {
 
 **步骤：**
 
-- [ ] **N2-1：`RemoteProductCenterRestService` 新增 2 个方法**
+- [x] **N2-1：`RemoteProductCenterRestService` 新增 2 个方法**
 
 ```java
 /** 查询组装物料信息（按 skuCode 精确查本地 SkuBatch） */
@@ -219,7 +219,7 @@ SingleResponse<Object> queryBuildMaterialInfo(String skuCode, String tenantId);
 SingleResponse<Object> fuzzyQueryByName(String skuName, int pageNum, int pageSize, String tenantId);
 ```
 
-- [ ] **N2-2：`ProductExternalServiceImpl` 实现上述方法（SkuBatchMapper 本地查询）**
+- [x] **N2-2：`ProductExternalServiceImpl` 实现上述方法（SkuBatchMapper 本地查询）**
 
 ```java
 @Override
@@ -241,7 +241,7 @@ public SingleResponse<Object> fuzzyQueryByName(String skuName, int pageNum, int 
 }
 ```
 
-- [ ] **N2-3：`MaterialDocController` 注入服务，替换 2 个 TODO**
+- [x] **N2-3：`MaterialDocController` 注入服务，替换 2 个 TODO**
 
 ```java
 @Resource
@@ -263,7 +263,7 @@ public SingleResponse<Object> queryMaterialInfoByName(@RequestBody MaterialFuzzy
 }
 ```
 
-- [ ] **N2-4：编译验证 + Commit** `feat(infra/interfaces): wire ProductExternalService to MaterialDocController (local DB)`
+- [x] **N2-4：编译验证 + Commit** `feat(infra/interfaces): wire ProductExternalService to MaterialDocController (local DB)`
 
 ---
 
@@ -281,7 +281,7 @@ public SingleResponse<Object> queryMaterialInfoByName(@RequestBody MaterialFuzzy
 
 **步骤：**
 
-- [ ] **N3-1：确认 `InventoryTransitDto` 是否有 `uomName` 字段**
+- [x] **N3-1：确认 `InventoryTransitDto` 是否有 `uomName` 字段**
 
 ```bash
 grep -n "uomName\|uom" inventory-middle-client/src/main/java/com/inventory/middle/client/dto/InventoryTransitDto.java
@@ -289,14 +289,14 @@ grep -n "uomName\|uom" inventory-middle-client/src/main/java/com/inventory/middl
 
 若无，新增 `private String uomName;`。
 
-- [ ] **N3-2：`RemoteProductCenterRestService` 新增方法**
+- [x] **N3-2：`RemoteProductCenterRestService` 新增方法**
 
 ```java
 /** 根据单位编码查询单位名称（本地 DB 无表时降级返回编码） */
 String getUnitNameByCode(String uomCode, String tenantId);
 ```
 
-- [ ] **N3-3：`ProductExternalServiceImpl` 实现（降级）**
+- [x] **N3-3：`ProductExternalServiceImpl` 实现（降级）**
 
 ```java
 @Override
@@ -306,7 +306,7 @@ public String getUnitNameByCode(String uomCode, String tenantId) {
 }
 ```
 
-- [ ] **N3-4：`InventoryTransitController` 替换 TODO，填充单位名称**
+- [x] **N3-4：`InventoryTransitController` 替换 TODO，填充单位名称**
 
 ```java
 @Resource
@@ -329,7 +329,7 @@ public PageResponse<InventoryTransitDto> queryInTransitStockPage(
 }
 ```
 
-- [ ] **N3-5：编译验证 + Commit** `feat(interfaces): fill uomName in InventoryTransit page query`
+- [x] **N3-5：编译验证 + Commit** `feat(interfaces): fill uomName in InventoryTransit page query`
 
 ---
 
@@ -348,7 +348,7 @@ public PageResponse<InventoryTransitDto> queryInTransitStockPage(
 
 **步骤：**
 
-- [ ] **N4-1：新建 domain 层接口 `SpDeliveryOrderRemoteService`（6 个方法）**
+- [x] **N4-1：新建 domain 层接口 `SpDeliveryOrderRemoteService`（6 个方法）**
 
 ```java
 package com.inventory.middle.domain.service.external;
@@ -366,7 +366,7 @@ public interface SpDeliveryOrderRemoteService {
 }
 ```
 
-- [ ] **N4-2：新建 `SpDeliveryOrderFeignClient`（infra 层，OpenFeign）**
+- [x] **N4-2：新建 `SpDeliveryOrderFeignClient`（infra 层，OpenFeign）**
 
 ```java
 package com.inventory.middle.infra.feign;
@@ -404,7 +404,7 @@ public interface SpDeliveryOrderFeignClient {
 
 > **注意：** url 空串时 `@FeignClient` 无法注入，需要在 `SpDeliveryOrderRemoteServiceImpl` 中用 `@Autowired(required = false)` 注入 Feign Client，URL 未配置时降级返回错误响应。
 
-- [ ] **N4-3：新建 `SpDeliveryOrderRemoteServiceImpl`（委托 Feign，URL 空时降级）**
+- [x] **N4-3：新建 `SpDeliveryOrderRemoteServiceImpl`（委托 Feign，URL 空时降级）**
 
 ```java
 package com.inventory.middle.infra.feign.impl;
@@ -465,7 +465,7 @@ public class SpDeliveryOrderRemoteServiceImpl implements SpDeliveryOrderRemoteSe
 }
 ```
 
-- [ ] **N4-4：`DeliveryOrderMgntController` 注入 `SpDeliveryOrderRemoteService`，替换 6 个 TODO**
+- [x] **N4-4：`DeliveryOrderMgntController` 注入 `SpDeliveryOrderRemoteService`，替换 6 个 TODO**
 
 ```java
 @Resource
@@ -478,7 +478,7 @@ public SingleResponse<Object> listSales(@RequestBody Object query) {
 // 其余同理...
 ```
 
-- [ ] **N4-5：`application.yml` 新增配置**
+- [x] **N4-5：`application.yml` 新增配置**
 
 ```yaml
 remote:
@@ -486,7 +486,7 @@ remote:
     url: ${SP_DELIVERY_URL:}
 ```
 
-- [ ] **N4-6：确认 `@EnableFeignClients` 扫描路径覆盖 `infra.feign` 包**
+- [x] **N4-6：确认 `@EnableFeignClients` 扫描路径覆盖 `infra.feign` 包**
 
 ```bash
 grep -n "EnableFeignClients\|basePackages" \
@@ -494,7 +494,7 @@ grep -n "EnableFeignClients\|basePackages" \
 ```
 若 `basePackages` 未包含 `com.inventory.middle.infra.feign`，需添加。
 
-- [ ] **N4-7：编译验证 + Commit** `feat(infra/interfaces): add SpDeliveryOrderFeignClient, wire DeliveryOrderMgntController`
+- [x] **N4-7：编译验证 + Commit** `feat(infra/interfaces): add SpDeliveryOrderFeignClient, wire DeliveryOrderMgntController`
 
 ---
 
@@ -513,7 +513,7 @@ grep -n "EnableFeignClients\|basePackages" \
 
 **步骤：**
 
-- [ ] **N5-1：新建 domain 层接口 `CrmDistributorRemoteService`（2 个方法）**
+- [x] **N5-1：新建 domain 层接口 `CrmDistributorRemoteService`（2 个方法）**
 
 ```java
 package com.inventory.middle.domain.service.external;
@@ -529,7 +529,7 @@ public interface CrmDistributorRemoteService {
 }
 ```
 
-- [ ] **N5-2：新建 `CrmDistributorFeignClient`**
+- [x] **N5-2：新建 `CrmDistributorFeignClient`**
 
 ```java
 package com.inventory.middle.infra.feign;
@@ -551,7 +551,7 @@ public interface CrmDistributorFeignClient {
 }
 ```
 
-- [ ] **N5-3：新建 `CrmDistributorRemoteServiceImpl`（委托 Feign，URL 空时降级）**
+- [x] **N5-3：新建 `CrmDistributorRemoteServiceImpl`（委托 Feign，URL 空时降级）**
 
 ```java
 package com.inventory.middle.infra.feign.impl;
@@ -584,7 +584,7 @@ public class CrmDistributorRemoteServiceImpl implements CrmDistributorRemoteServ
 }
 ```
 
-- [ ] **N5-4：`DistributorController` 注入 `CrmDistributorRemoteService`，替换 2 个 TODO**
+- [x] **N5-4：`DistributorController` 注入 `CrmDistributorRemoteService`，替换 2 个 TODO**
 
 ```java
 @Resource
@@ -603,7 +603,7 @@ public SingleResponse<Object> fuzzyQueryByDistributor(
 }
 ```
 
-- [ ] **N5-5：`application.yml` 新增配置**
+- [x] **N5-5：`application.yml` 新增配置**
 
 ```yaml
 remote:
@@ -611,7 +611,7 @@ remote:
     url: ${CRM_URL:}
 ```
 
-- [ ] **N5-6：编译验证 + Commit** `feat(infra/interfaces): add CrmDistributorFeignClient, wire DistributorController`
+- [x] **N5-6：编译验证 + Commit** `feat(infra/interfaces): add CrmDistributorFeignClient, wire DistributorController`
 
 ---
 
