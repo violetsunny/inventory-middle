@@ -313,8 +313,7 @@ public class DemandPlanServiceImpl implements DemandPlanService {
         //校验
         validateDemandPlan(demandPlanBO);
         // 租户id 用户id 公司编码 TODO
-        //String companyName = participantCenterService.getCompanyName(logicalPlant.getCompanyCode(), demandPlanBO.getUserId(), demandPlanBO.getTenantId());
-        String companyName = "永康城燃";
+        String companyName = planParticipantStub.getCompanyName(demandPlanBO.getTenantId(), demandPlanBO.getUserId(), logicalPlant.getCompanyCode());
         DemandPlanPO planPO = new DemandPlanPO();
         planPO.setLogicalPlantNo(demandPlanBO.getLogicalPlantNo());
         planPO.setLogicalPlantName(logicalPlant.getLogicalPlantName());

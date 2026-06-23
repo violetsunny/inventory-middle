@@ -148,6 +148,14 @@ remote:
     url: ${SP_DELIVERY_URL:}
   crm:
     url: ${CRM_URL:}
+  participant:
+    search:
+      url: ${PARTICIPANT_SEARCH_URL:}
+    tenant:
+      url: ${PARTICIPANT_TENANT_URL:}
+    identify:
+      url: ${PARTICIPANT_IDENTIFY_URL:}
+    appId: ${PARTICIPANT_APP_ID:inventory-middle}
 
 alert:
   interval:
