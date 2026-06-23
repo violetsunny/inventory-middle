@@ -64,6 +64,11 @@ public class InventoryTransitDto extends BaseModel {
      * 计量单位
      */
     private String uom;
+
+    /**
+     * 计量单位名称
+     */
+    private String uomName;
     
     /**
      * 生产日期

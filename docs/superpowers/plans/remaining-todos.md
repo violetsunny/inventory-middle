@@ -39,7 +39,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
 | P1-P10 | plan 包路径去重（plan/plan/ 嵌套修复）+ 跨模块重名类处理 | ✅ 全部完成 |
 | R1-R9 | BFF 迁移残余（CatchAndLog/WebConfig/application-dev.yml/SnapshotQuery/MonitorRule枚举/Excel导入/MaterialDoc/LogicalPlant/StorageLocation/Warehouse） | ✅ 全部完成 |
 | SCM O-4 | SCM Plan 迁移代码全量提交（f441f65） | ✅ 完成 |
-| **N1-N5** | **EasyExcel 改造 + R6/R10/R11/R12 外部服务接入** | **❌ 待完成** |
+| **N1-N5** | **EasyExcel 改造 + R6/R10/R11/R12 外部服务接入** | **✅ 全部完成** |
 
 ---
 
@@ -56,9 +56,9 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
 |------|------|--------|------|
 | N1 | EasyExcel 改造：`importByExcel` 改用 `KdlaExcelReadListener`，补 `exportTemplate` 端点 | 高 | ✅ 已完成（2026-06-23） |
 | N2 | R6-productExternal：`RemoteProductCenterRestService` 扩展 2 个方法，接入 `MaterialDocController` | 中 | ✅ 已完成（2026-06-23） |
-| N3 | R10：`InventoryTransitController` 分页结果填充 `uomName`（本地 DB 降级） | 低 | - [ ] |
-| N4 | R11：新建 `SpDeliveryOrderFeignClient`（6 接口），接入 `DeliveryOrderMgntController` | 低 | - [ ] |
-| N5 | R12：新建 `CrmDistributorFeignClient`（2 接口），接入 `DistributorController` | 低 | - [ ] |
+| N3 | R10：`InventoryTransitController` 分页结果填充 `uomName`（本地 DB 降级） | 低 | ✅ 已完成（2026-06-23） |
+| N4 | R11：新建 `SpDeliveryOrderFeignClient`（6 接口），接入 `DeliveryOrderMgntController` | 低 | ✅ 已完成（2026-06-23） |
+| N5 | R12：新建 `CrmDistributorFeignClient`（2 接口），接入 `DistributorController` | 低 | ✅ 已完成（2026-06-23） |
 
 **执行顺序：** N1 → N2 → N3 → N4/N5（可并行）
 

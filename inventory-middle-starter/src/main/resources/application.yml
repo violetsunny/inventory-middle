@@ -144,6 +144,10 @@ remote:
     tenantId: ""
     templateCode: ""
     emailContentKey: ""
+  spDelivery:
+    url: ${SP_DELIVERY_URL:}
+  crm:
+    url: ${CRM_URL:}
 
 alert:
   interval:

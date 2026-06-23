@@ -26,4 +26,7 @@ public interface RemoteProductCenterRestService {
 
     /** 按名称模糊查询物料信息（分页，当前降级返回租户全量分页） */
     SingleResponse<Object> fuzzyQueryByName(String skuName, int pageNum, int pageSize, String tenantId);
+
+    /** 根据单位编码查询单位名称（本地 DB 无 uom 表时降级返回编码本身） */
+    String getUnitNameByCode(String uomCode, String tenantId);
 }

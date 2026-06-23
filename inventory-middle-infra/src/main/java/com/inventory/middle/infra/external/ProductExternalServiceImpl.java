@@ -149,4 +149,10 @@ public class ProductExternalServiceImpl implements RemoteProductCenterRestServic
         }).collect(Collectors.toList());
         return SingleResponse.buildSuccess(items);
     }
+
+    @Override
+    public String getUnitNameByCode(String uomCode, String tenantId) {
+        // 本地无专属 uom 表，降级返回编码本身
+        return uomCode;
+    }
 }

@@ -5,10 +5,12 @@ import com.inventory.middle.application.service.InventoryTransitQueryService;
 import com.inventory.middle.client.dto.InventoryTransitDto;
 import com.inventory.middle.client.dto.command.InventoryTransitCommand;
 import com.inventory.middle.client.dto.query.InventoryTransitPageQuery;
+import com.inventory.middle.domain.service.external.RemoteProductCenterRestService;
 import com.inventory.middle.interfaces.support.UserContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import top.kdla.framework.dto.PageResponse;
 import top.kdla.framework.dto.SingleResponse;
@@ -37,13 +39,22 @@ public class InventoryTransitController {
     private InventoryTransitQueryService inventoryTransitQueryService;
     @Resource
     private InventoryTransitApplicationService inventoryTransitApplicationService;
+    @Resource
+    private RemoteProductCenterRestService remoteProductCenterRestService;
 
     @Operation(summary = "分页查询在途库存信息")
     @PostMapping("/page/query")
     public PageResponse<InventoryTransitDto> queryInTransitStockPage(@RequestBody InventoryTransitPageQuery pageQuery) {
         pageQuery.setTenantId(UserContextHolder.getTenantId());
         PageResponse<InventoryTransitDto> result = inventoryTransitQueryService.queryPage(pageQuery);
-        // TODO: 待接入 ProductExternalService.getUnitById(uom) 填充单位名称
+        String tenantId = UserContextHolder.getTenantId();
+        if (result != null && !CollectionUtils.isEmpty(result.getData())) {
+            result.getData().forEach(dto -> {
+                if (dto.getUom() != null) {
+                    dto.setUomName(remoteProductCenterRestService.getUnitNameByCode(dto.getUom(), tenantId));
+                }
+            });
+        }
         return result;
     }
 
