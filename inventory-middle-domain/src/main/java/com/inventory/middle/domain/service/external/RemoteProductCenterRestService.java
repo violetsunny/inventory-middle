@@ -20,4 +20,10 @@ public interface RemoteProductCenterRestService {
     /** skuBatch 带 special token 查询（用于年度盘点）*/
     List<SkuBatchResponse> skuBatchListByRequestWithSpecialToken(
         SkuBatchPageRequest request, String token, String operatorId, String tenantId);
+
+    /** 查询组装物料信息（按 skuCode 精确查本地 SkuBatch） */
+    SingleResponse<Object> queryBuildMaterialInfo(String skuCode, String tenantId);
+
+    /** 按名称模糊查询物料信息（分页，当前降级返回租户全量分页） */
+    SingleResponse<Object> fuzzyQueryByName(String skuName, int pageNum, int pageSize, String tenantId);
 }

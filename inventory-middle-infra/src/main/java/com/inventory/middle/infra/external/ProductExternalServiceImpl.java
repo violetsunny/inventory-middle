@@ -106,4 +106,47 @@ public class ProductExternalServiceImpl implements RemoteProductCenterRestServic
             return resp;
         }).collect(Collectors.toList());
     }
+
+    @Override
+    public SingleResponse<Object> queryBuildMaterialInfo(String skuCode, String tenantId) {
+        if (!StringUtils.hasText(skuCode)) {
+            return SingleResponse.buildSuccess(null);
+        }
+        SkuBatchQueryPO param = new SkuBatchQueryPO();
+        param.setSkuCode(skuCode);
+        param.setTenantId(tenantId);
+        List<SkuBatchDo> doList = skuBatchMapper.list(param);
+        log.info("ProductExternalServiceImpl.queryBuildMaterialInfo local DB, skuCode={} tenantId={} size={}", skuCode, tenantId, doList.size());
+        if (CollectionUtils.isEmpty(doList)) {
+            return SingleResponse.buildSuccess(null);
+        }
+        SkuBatchDo first = doList.get(0);
+        java.util.Map<String, Object> result = new java.util.HashMap<>();
+        result.put("skuCode", first.getSkuCode());
+        result.put("batchCode", first.getBatchCode());
+        result.put("tenantId", first.getTenantId());
+        result.put("ext", first.getExt());
+        return SingleResponse.buildSuccess(result);
+    }
+
+    @Override
+    public SingleResponse<Object> fuzzyQueryByName(String skuName, int pageNum, int pageSize, String tenantId) {
+        // 本地 SkuBatchDo 无 skuName 字段，降级按租户分页返回全量数据
+        SkuBatchQueryPO param = new SkuBatchQueryPO();
+        param.setTenantId(tenantId);
+        int offset = (pageNum - 1) * pageSize;
+        param.setPageNum(offset);
+        param.setPageSize(pageSize);
+        List<SkuBatchDo> doList = skuBatchMapper.list(param);
+        log.info("ProductExternalServiceImpl.fuzzyQueryByName degraded local DB, skuName={} tenantId={} size={}", skuName, tenantId, doList.size());
+        List<java.util.Map<String, Object>> items = doList.stream().map(d -> {
+            java.util.Map<String, Object> item = new java.util.HashMap<>();
+            item.put("skuCode", d.getSkuCode());
+            item.put("batchCode", d.getBatchCode());
+            item.put("tenantId", d.getTenantId());
+            item.put("ext", d.getExt());
+            return item;
+        }).collect(Collectors.toList());
+        return SingleResponse.buildSuccess(items);
+    }
 }

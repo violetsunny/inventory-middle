@@ -17,6 +17,7 @@ import com.inventory.middle.client.file.dto.response.FileImportRecord;
 import com.inventory.middle.domain.model.bo.material.MaterialDocumentBO;
 import com.inventory.middle.domain.model.bo.material.UpdateMaterialAnnualDateReqBO;
 import com.inventory.middle.domain.service.material.model.MaterialDocInvRes;
+import com.inventory.middle.domain.service.external.RemoteProductCenterRestService;
 import com.inventory.middle.interfaces.support.UserContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -55,6 +56,8 @@ public class MaterialDocController {
     private MaterialDocQueryService materialDocQueryService;
     @Resource
     private FileImportApplicationService fileImportApplicationService;
+    @Resource
+    private RemoteProductCenterRestService remoteProductCenterRestService;
 
     // ==================== 查询类 ====================
 
@@ -110,17 +113,17 @@ public class MaterialDocController {
     @Operation(summary = "查询组装物料信息")
     @GetMapping("/queryBuildMaterialInfo")
     public SingleResponse<Object> queryBuildMaterialInfo(@RequestParam String skuCode) {
-        // TODO: 待接入 ProductExternalService.queryBuildMaterialInfo(skuCode)
-        log.warn("queryBuildMaterialInfo: 待接入 ProductExternalService, skuCode={}", skuCode);
-        return SingleResponse.buildSuccess(null);
+        String tenantId = UserContextHolder.getTenantId();
+        return remoteProductCenterRestService.queryBuildMaterialInfo(skuCode, tenantId);
     }
 
     @Operation(summary = "通过名称模糊查询物料信息")
     @PostMapping("/queryMaterialInfoByName")
     public SingleResponse<Object> queryMaterialInfoByName(@RequestBody MaterialFuzzyQueryReq req) {
-        // TODO: 待接入 ProductExternalService.fuzzyQueryByName(req)
-        log.warn("queryMaterialInfoByName: 待接入 ProductExternalService, skuName={}", req.getSkuName());
-        return SingleResponse.buildSuccess(null);
+        String tenantId = UserContextHolder.getTenantId();
+        int pageNum = req.getPageNum() != null ? req.getPageNum() : 1;
+        int pageSize = req.getPageSize() != null ? req.getPageSize() : 20;
+        return remoteProductCenterRestService.fuzzyQueryByName(req.getSkuName(), pageNum, pageSize, tenantId);
     }
 
     // ==================== 写操作类 ====================

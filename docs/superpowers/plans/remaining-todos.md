@@ -54,8 +54,8 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
 
 | 任务 | 说明 | 优先级 | 状态 |
 |------|------|--------|------|
-| N1 | EasyExcel 改造：`importByExcel` 改用 `KdlaExcelReadListener`，补 `exportTemplate` 端点 | 高 | - [ ] |
-| N2 | R6-productExternal：`RemoteProductCenterRestService` 扩展 2 个方法，接入 `MaterialDocController` | 中 | - [ ] |
+| N1 | EasyExcel 改造：`importByExcel` 改用 `KdlaExcelReadListener`，补 `exportTemplate` 端点 | 高 | ✅ 已完成（2026-06-23） |
+| N2 | R6-productExternal：`RemoteProductCenterRestService` 扩展 2 个方法，接入 `MaterialDocController` | 中 | ✅ 已完成（2026-06-23） |
 | N3 | R10：`InventoryTransitController` 分页结果填充 `uomName`（本地 DB 降级） | 低 | - [ ] |
 | N4 | R11：新建 `SpDeliveryOrderFeignClient`（6 接口），接入 `DeliveryOrderMgntController` | 低 | - [ ] |
 | N5 | R12：新建 `CrmDistributorFeignClient`（2 接口），接入 `DistributorController` | 低 | - [ ] |
