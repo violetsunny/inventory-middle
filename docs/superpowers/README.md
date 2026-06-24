@@ -5,14 +5,21 @@
 | 源项目 | 计划文件                                                                 | 状态 |
 |--------|----------------------------------------------------------------------|------|
 | inventory-center + inventory-center-ext | [inventory-center-migration.md](plans/inventory-center-migration.md) | ✅ 已完成 |
-| inventory-center-bff | [inventory-bff-migration.md](plans/inventory-bff-migration.md)       | ✅ 已完成（可能遗漏 3 个 Controller，见 remaining-todos X1-X3） |
-| scm-plan-management + scm-plan-bff | [inventory-scm-plan-migration.md](plans/inventory-scm-plan-migration.md)    | ✅ 代码迁移+编译+mock验证已完成；功能缺口见 remaining-todos H1-H11 |
+| inventory-center-bff | [inventory-bff-migration.md](plans/inventory-bff-migration.md)       | ✅ 已完成 |
+| scm-plan-management + scm-plan-bff | [inventory-scm-plan-migration.md](plans/inventory-scm-plan-migration.md)    | ✅ 代码迁移、全量编译和 mock 验证已完成 |
 
 ## 补充计划
 
 | 文件 | 说明 | 状态 |
 |------|------|------|
-| [remaining-todos.md](plans/remaining-todos.md) | 剩余 TODO：已完成 A-K/L/P/R/N/O/V 全系列；**未完成 H1-H11（高）/ M1-M8（中）/ X1-X3（待确认）/ L1-L3（低）** | 24 项未完成 |
+| [remaining-todos.md](plans/remaining-todos.md) | 剩余 TODO：迁移代码缺口已基本清零，当前仅剩 **M8（外部 URL 部署配置）** | 1 项未完成 |
+
+## 当前结论
+
+- `inventory-center` 和 `inventory-center-ext` 已完成迁移。
+- `inventory-center-bff` 已完成迁移。
+- `scm-plan-management` 和 `scm-plan-bff` 已完成代码迁移，并通过全量编译和 mock 验证。
+- 当前剩余项不再是代码迁移缺口，而是部署配置项 `M8`：`application.yml` 中部分 `remote.*.url` 仍需在目标环境提供真实值。
 
 ## SQL 脚本
 

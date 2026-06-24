@@ -4,7 +4,7 @@
 
 ## 迁移目标
 
-将 `inventory-center-bff`（/Users/kangll13/aiot/java-code/self/inventory/inventory-center-bff） 全部 HTTP Controller 迁移至 `inventory-middle-interfaces/web/`，本地 ApplicationService 替代原 Dubbo/RDFA 远程调用。
+将 `inventory-center-bff`（/Users/kangll13/aiot/java-code/self/inventory/inventory-center-bff） 全部 HTTP Controller 和 Server 迁移至 `inventory-middle-interfaces/web/`，本地 Controller 和 ApplicationService ，去除 RDFA/Nacos/Dubbo，替换为 KDLA 和 SpringBoot 、 SpringCloud 原生组件。
 
 ## 全局替换规则（参考）
 

@@ -4,7 +4,7 @@
 
 ## 迁移目标
 
-将 `scm-plan-management`（/Users/kangll13/aiot/java-code/self/inventory/scm-plan-management） + `scm-plan-bff`（/Users/kangll13/aiot/java-code/self/inventory/scm-plan-bff） 迁移进 `inventory-middle` 现有各模块，以 `plan` 子包并列。
+将 `scm-plan-management`（/Users/kangll13/aiot/java-code/self/inventory/scm-plan-management） + `scm-plan-bff`（/Users/kangll13/aiot/java-code/self/inventory/scm-plan-bff） 迁移进 `inventory-middle` 现有各模块，以 `plan` 子包并列，去除 RDFA/Nacos/Dubbo，替换为 KDLA 和 SpringBoot 、 SpringCloud 原生组件。
 
 **路径：**
 - 源：`/Users/kangll13/aiot/java-code/self/inventory/scm-plan-management` 和 `/Users/kangll13/aiot/java-code/self/inventory/scm-plan-bff`

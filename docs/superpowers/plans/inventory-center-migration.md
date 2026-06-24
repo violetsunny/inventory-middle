@@ -4,7 +4,7 @@
 
 ## 迁移目标
 
-将 `inventory-center`（/Users/kangll13/aiot/java-code/self/inventory/inventory-center） + `inventory-center-ext`（/Users/kangll13/aiot/java-code/self/inventory/inventory-center-ext） 完整迁移至 `inventory-middle` DDD 架构，去除 RDFA/Nacos/Dubbo，替换为 Spring 原生组件。
+将 `inventory-center`（/Users/kangll13/aiot/java-code/self/inventory/inventory-center） + `inventory-center-ext`（/Users/kangll13/aiot/java-code/self/inventory/inventory-center-ext） 完整迁移至 `inventory-middle` DDD 架构，去除 RDFA/Nacos/Dubbo，替换为 KDLA 和 SpringBoot 、 SpringCloud 原生组件。
 
 ## 完成摘要
 
