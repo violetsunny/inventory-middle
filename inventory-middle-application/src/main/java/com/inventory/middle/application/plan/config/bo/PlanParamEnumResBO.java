@@ -13,7 +13,7 @@ import java.util.Map;
  * @author caosheng
  * @title: PlanParamEnumResBO
  * @projectName scm-plan-management
- * @description: TODO
+ * @description: 计划参数枚举响应BO（含订货计算规则映射）
  * @date 2021/10/26 18:59
  */
 @Data

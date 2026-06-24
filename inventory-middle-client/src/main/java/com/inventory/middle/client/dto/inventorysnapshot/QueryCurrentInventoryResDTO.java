@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * @author peisheng.wang
  * @version 1.0
- * @description: TODO
+ * @description: 查询当前库存响应DTO
  * @date 2021/8/31 19:38
  */
 @Data

@@ -51,7 +51,7 @@ public class InventoryMapServiceFacadeImpl implements InventoryMapServiceFacade 
 	 */
 	@Override
 	public MultiResponse<InventoryMapDto> list() {
-		//TODO list query
+		// 分页查询待实现
 		return MultiResponse.buildSuccess(null);
 	}
 

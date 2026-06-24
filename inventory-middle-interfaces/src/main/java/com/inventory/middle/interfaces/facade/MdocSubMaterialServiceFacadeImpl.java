@@ -51,7 +51,7 @@ public class MdocSubMaterialServiceFacadeImpl implements MdocSubMaterialServiceF
 	 */
 	@Override
 	public MultiResponse<MdocSubMaterialDto> list() {
-		//TODO list query
+		// 分页查询待实现
 		return MultiResponse.buildSuccess(null);
 	}
 

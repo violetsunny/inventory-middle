@@ -93,7 +93,7 @@ Refs like `R1`, `F2-F7`, `H1+H2+M1+M3+M4` encode tracked migration tasks.
 - `pom.xml` — dependency versions, module list
 - `inventory-middle-starter/src/main/resources/application.yml` — all config (DB, Redis, MQ, KDLA, plan cron)
 - `inventory-middle-starter/src/main/java/.../ProviderApplication.java` — entry point
-- `docs/sql/init.sql` — inventory DDL; `docs/sql/plan.sql` — plan DDL (17 tables)
+- `docs/sql/inventory.sql` — inventory DDL; `docs/sql/plan.sql` — plan DDL (17 tables)
 - `docs/superpowers/plans/` — migration plans (BFF, SCM Plan, inventory-center, remaining-todos)
 
 *Last updated: 2026-06-22*

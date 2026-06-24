@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,8 +65,10 @@ public class PlanOrderController {
 
     @Operation(summary = "下发计划订单")
     @PostMapping("/issuePlanOrder")
-    public SingleResponse<Boolean> issuePlanOrder(@RequestBody IssuePlanOrderReqDTO reqDTO) {
-        return planOrderApplicationService.issuePlanOrder(PlanOrderWebConvertor.toIssueDTO(reqDTO, currentUser()));
+    public SingleResponse<Boolean> issuePlanOrder(
+            @RequestBody IssuePlanOrderReqDTO reqDTO,
+            @RequestHeader(value = "ennUnifiedAuthorization", required = false) String token) {
+        return planOrderApplicationService.issuePlanOrder(PlanOrderWebConvertor.toIssueDTO(reqDTO, currentUser(), token));
     }
 
     @Operation(summary = "确认计划订单")

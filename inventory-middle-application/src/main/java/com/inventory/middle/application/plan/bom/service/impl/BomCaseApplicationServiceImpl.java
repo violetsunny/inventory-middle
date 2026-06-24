@@ -56,6 +56,9 @@ public class BomCaseApplicationServiceImpl implements BomCaseApplicationService 
     @Resource
     private PlanParticipantStub planParticipantStub;
 
+    @Resource
+    private com.inventory.middle.infra.plan.sequence.SequenceFactory sequenceFactory;
+
     // ==================== BomCaseRpcService 接口实现 ====================
 
     @Override
@@ -626,7 +629,7 @@ public class BomCaseApplicationServiceImpl implements BomCaseApplicationService 
      * Placeholder: uses time-based code for now
      */
     private String generateBomCode(String tenantId) {
-        // TODO: replace with SequenceFactory after 组N migration
-        return "BOM_NO" + String.format("%07d", System.currentTimeMillis() % 10000000);
+        Long seq = sequenceFactory.getSequence("bom_case_" + tenantId).next();
+        return "BOM_NO" + String.format("%07d", seq);
     }
 }

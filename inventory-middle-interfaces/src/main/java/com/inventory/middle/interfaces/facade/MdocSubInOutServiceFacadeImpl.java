@@ -51,7 +51,7 @@ public class MdocSubInOutServiceFacadeImpl implements MdocSubInOutServiceFacade 
 	 */
 	@Override
 	public MultiResponse<MdocSubInOutDto> list() {
-		//TODO list query
+		// 分页查询待实现
 		return MultiResponse.buildSuccess(null);
 	}
 

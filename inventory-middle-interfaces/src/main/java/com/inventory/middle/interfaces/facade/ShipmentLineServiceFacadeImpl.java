@@ -51,7 +51,7 @@ public class ShipmentLineServiceFacadeImpl implements ShipmentLineServiceFacade 
 	 */
 	@Override
 	public MultiResponse<ShipmentLineDto> list() {
-		//TODO list query
+		// 分页查询待实现
 		return MultiResponse.buildSuccess(null);
 	}
 

@@ -156,6 +156,9 @@ remote:
     identify:
       url: ${PARTICIPANT_IDENTIFY_URL:}
     appId: ${PARTICIPANT_APP_ID:inventory-middle}
+    token:
+      value: ${PARTICIPANT_TOKEN_VALUE:}
+      secret: ${PARTICIPANT_TOKEN_SECRET:}
 
 alert:
   interval:
@@ -181,6 +184,13 @@ kdla:
 urbanGasProject:
   standardLeadTime: 25
   changeBufferTime: 5
+
+demand:
+  plan:
+    import:
+      uploadFile:
+        maxSize: ${DEMAND_PLAN_IMPORT_MAX_SIZE:256}
+        batchSize: ${DEMAND_PLAN_IMPORT_BATCH_SIZE:300}
 
 # Plan 定时任务 cron 配置（以原 Apollo/Nacos 实际值为准，以下为占位符）
 plan:

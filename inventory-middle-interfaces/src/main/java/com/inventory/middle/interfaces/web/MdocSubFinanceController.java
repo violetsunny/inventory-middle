@@ -59,7 +59,7 @@ public class MdocSubFinanceController {
     @Operation(summary="物料凭证-标签-财务list查询")
     @PostMapping("/list")
             public MultiResponse<MdocSubFinanceDto> list() {
-        //TODO list query
+        // 分页查询待实现
         return MultiResponse.buildSuccess(null);
     }
 

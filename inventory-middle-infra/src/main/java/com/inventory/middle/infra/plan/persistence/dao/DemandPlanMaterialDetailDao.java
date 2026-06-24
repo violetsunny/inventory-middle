@@ -24,9 +24,8 @@ public class DemandPlanMaterialDetailDao {
     @Resource
     private DemandPlanMaterialDetailMapper demandPlanMaterialDetailMapper;
     
-    // TODO: PlanConfigDao 尚未迁移,待迁移后取消注释
-    // @Resource
-    // private PlanConfigDao planConfigDao;
+    @Resource
+    private PlanConfigDao planConfigDao;
 
     public List<DemandPlanMaterialDetailPO> findMaterialDemandDetails(String materialCode,
                                                                       String logicalPlantNo,
@@ -78,10 +77,9 @@ public class DemandPlanMaterialDetailDao {
         if (CollectionUtils.isNotEmpty(updateList)) {
             this.updateAmountBatch(updateList);
         }
-        // TODO: PlanConfigDao 尚未迁移,待迁移后取消注释
-        // if (CollectionUtils.isNotEmpty(planMaterials)){
-        //     planConfigDao.batchSavePlanMaterial(planMaterials);
-        // }
+        if (CollectionUtils.isNotEmpty(planMaterials)) {
+            planConfigDao.batchSavePlanMaterial(planMaterials);
+        }
     }
 
 

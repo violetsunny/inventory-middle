@@ -47,18 +47,26 @@ public class PlanCommonController {
     @Resource
     private PlanParticipantStub planParticipantStub;
 
+    @Resource
+    private com.inventory.middle.infra.plan.stub.PlanProductStub planProductStub;
+
     @Operation(summary = "根据物料code查询物料信息")
     @PostMapping("/queryMaterialInfoByCode")
     public SingleResponse<MaterialInfoQueryResVO> queryMaterialInfoByCode(
             @RequestParam("materialCode") String materialCode) {
         String tenantId = UserContextHolder.getTenantId();
         List<com.inventory.middle.client.plan.dto.inventory.LogicalPlant> logicalPlants = Collections.emptyList();
-        // TODO: 待接入 ProductCenter 查询物料名称/单位（当前仅返回编码）
-        log.warn("queryMaterialInfoByCode: ProductCenter 尚未接入，materialCode={}", materialCode);
+        String materialName = materialCode;
+        String unit = "";
+        com.inventory.middle.domain.plan.common.bo.PlanProductBO product = planProductStub.queryMaterialByCode(materialCode, tenantId);
+        if (product != null) {
+            materialName = product.getName() != null ? product.getName() : materialCode;
+            unit = product.getUnit() != null ? product.getUnit() : "";
+        }
         MaterialInfoQueryResVO result = MaterialInfoQueryResVO.builder()
                 .materialCode(materialCode)
-                .materialName(materialCode)
-                .unit("")
+                .materialName(materialName)
+                .unit(unit)
                 .logicalPlantList(logicalPlants)
                 .build();
         return SingleResponse.buildSuccess(result);

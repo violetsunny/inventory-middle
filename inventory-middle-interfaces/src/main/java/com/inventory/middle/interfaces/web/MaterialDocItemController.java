@@ -59,7 +59,7 @@ public class MaterialDocItemController {
     @Operation(summary="物料凭证-itemlist查询")
     @PostMapping("/list")
             public MultiResponse<MaterialDocItemDto> list() {
-        //TODO list query
+        // 分页查询待实现
         return MultiResponse.buildSuccess(null);
     }
 

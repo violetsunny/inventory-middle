@@ -51,7 +51,7 @@ public class LogicalPlantServiceFacadeImpl implements LogicalPlantServiceFacade 
 	 */
 	@Override
 	public MultiResponse<LogicalPlantDto> list() {
-		//TODO list query
+		// 分页查询待实现
 		return MultiResponse.buildSuccess(null);
 	}
 

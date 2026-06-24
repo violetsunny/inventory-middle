@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.PlanDemandSupplyStockMapper">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.PlanDemandSupplyStockPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="material_code" jdbcType="VARCHAR" property="materialCode"/>
+        <result column="logical_plant_no" jdbcType="VARCHAR" property="logicalPlantNo"/>
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+        <result column="plan_date" jdbcType="TIMESTAMP" property="planDate"/>
+        <result column="plan_element_type" jdbcType="INTEGER" property="planElementType"/>
+        <result column="biz_type" jdbcType="INTEGER" property="bizType"/>
+        <result column="amount" jdbcType="BIGINT" property="amount"/>
+        <result column="voucher_no" jdbcType="VARCHAR" property="voucherNo"/>
+        <result column="document_no" jdbcType="VARCHAR" property="documentNo"/>
+        <result column="business_id_ref" jdbcType="VARCHAR" property="businessIdRef"/>
+        <result column="exception_code" jdbcType="VARCHAR" property="exceptionCode"/>
+        <result column="is_delete" jdbcType="TINYINT" property="isDelete"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, material_code, logical_plant_no, tenant_id, plan_date, plan_element_type, biz_type,
+        amount, voucher_no, document_no, business_id_ref, exception_code, is_delete, create_time, update_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from `pl_plan_demand_supply_stock` where id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanDemandSupplyStockPO"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into `pl_plan_demand_supply_stock` (material_code, logical_plant_no, tenant_id, plan_date,
+            plan_element_type, biz_type, amount, voucher_no, document_no, business_id_ref, exception_code,
+            is_delete, create_time, update_time)
+        values (#{materialCode}, #{logicalPlantNo}, #{tenantId}, #{planDate},
+            #{planElementType}, #{bizType}, #{amount}, #{voucherNo}, #{documentNo}, #{businessIdRef}, #{exceptionCode},
+            #{isDelete}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanDemandSupplyStockPO"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into `pl_plan_demand_supply_stock`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="materialCode != null">material_code,</if>
+            <if test="logicalPlantNo != null">logical_plant_no,</if>
+            <if test="tenantId != null">tenant_id,</if>
+            <if test="planDate != null">plan_date,</if>
+            <if test="planElementType != null">plan_element_type,</if>
+            <if test="bizType != null">biz_type,</if>
+            <if test="amount != null">amount,</if>
+            <if test="voucherNo != null">voucher_no,</if>
+            <if test="documentNo != null">document_no,</if>
+            <if test="businessIdRef != null">business_id_ref,</if>
+            <if test="exceptionCode != null">exception_code,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="logicalPlantNo != null">#{logicalPlantNo},</if>
+            <if test="tenantId != null">#{tenantId},</if>
+            <if test="planDate != null">#{planDate},</if>
+            <if test="planElementType != null">#{planElementType},</if>
+            <if test="bizType != null">#{bizType},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="voucherNo != null">#{voucherNo},</if>
+            <if test="documentNo != null">#{documentNo},</if>
+            <if test="businessIdRef != null">#{businessIdRef},</if>
+            <if test="exceptionCode != null">#{exceptionCode},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanDemandSupplyStockPO">
+        update `pl_plan_demand_supply_stock`
+        <set>
+            <if test="materialCode != null">material_code = #{materialCode},</if>
+            <if test="logicalPlantNo != null">logical_plant_no = #{logicalPlantNo},</if>
+            <if test="tenantId != null">tenant_id = #{tenantId},</if>
+            <if test="planDate != null">plan_date = #{planDate},</if>
+            <if test="planElementType != null">plan_element_type = #{planElementType},</if>
+            <if test="bizType != null">biz_type = #{bizType},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="voucherNo != null">voucher_no = #{voucherNo},</if>
+            <if test="documentNo != null">document_no = #{documentNo},</if>
+            <if test="businessIdRef != null">business_id_ref = #{businessIdRef},</if>
+            <if test="exceptionCode != null">exception_code = #{exceptionCode},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanDemandSupplyStockPO">
+        update `pl_plan_demand_supply_stock`
+        set material_code = #{materialCode}, logical_plant_no = #{logicalPlantNo}, tenant_id = #{tenantId},
+            plan_date = #{planDate}, plan_element_type = #{planElementType}, biz_type = #{bizType},
+            amount = #{amount}, voucher_no = #{voucherNo}, document_no = #{documentNo},
+            business_id_ref = #{businessIdRef}, exception_code = #{exceptionCode},
+            is_delete = #{isDelete}, create_time = #{createTime}, update_time = #{updateTime}
+        where id = #{id}
+    </update>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into `pl_plan_demand_supply_stock` (material_code, logical_plant_no, tenant_id, plan_date,
+            plan_element_type, biz_type, amount, voucher_no, document_no, business_id_ref, exception_code)
+        values
+        <foreach collection="records" item="record" index="index" separator=",">
+            (#{record.materialCode}, #{record.logicalPlantNo}, #{record.tenantId}, #{record.planDate},
+            #{record.planElementType}, #{record.bizType}, #{record.amount}, #{record.voucherNo},
+            #{record.documentNo}, #{record.businessIdRef}, #{record.exceptionCode})
+        </foreach>
+    </insert>
+
+    <select id="batchQueryByMaterialCode" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from `pl_plan_demand_supply_stock`
+        where is_delete = 0 and tenant_id = #{tenantId} and logical_plant_no = #{logicalPlantNo}
+        and material_code in
+        <foreach collection="materialCodeList" item="code" open="(" close=")" separator=",">
+            #{code}
+        </foreach>
+        order by material_code, plan_date, plan_element_type
+    </select>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="records" item="record" index="index" open="" close="" separator=";">
+            update pl_plan_demand_supply_stock
+            <set>
+                <if test="record.amount != null">amount = #{record.amount},</if>
+                <if test="record.isDelete != null">is_delete = #{record.isDelete},</if>
+                <if test="record.planElementType != null">plan_element_type = #{record.planElementType},</if>
+                <if test="record.bizType != null">biz_type = #{record.bizType},</if>
+                <if test="record.voucherNo != null">voucher_no = #{record.voucherNo},</if>
+                <if test="record.documentNo != null">document_no = #{record.documentNo},</if>
+                <if test="record.businessIdRef != null">business_id_ref = #{record.businessIdRef},</if>
+                <if test="record.exceptionCode != null">exception_code = #{record.exceptionCode},</if>
+            </set>
+            where id = #{record.id}
+        </foreach>
+    </update>
+
+    <select id="queryByPlanDate" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from `pl_plan_demand_supply_stock`
+        where is_delete = 0 and tenant_id = #{tenantId} and logical_plant_no = #{logicalPlantNo}
+        and material_code = #{materialCode}
+        <![CDATA[ and plan_date >= #{startDate} and plan_date <= #{endDate} ]]>
+        order by plan_date, plan_element_type
+    </select>
+
+    <select id="queryMaterialRecords" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from `pl_plan_demand_supply_stock`
+        where is_delete = 0 and tenant_id = #{tenantId} and logical_plant_no = #{logicalPlantNo}
+        and material_code = #{materialCode}
+        order by plan_date, plan_element_type
+    </select>
+</mapper>

@@ -59,7 +59,7 @@ public class MdocSubInOutController {
     @Operation(summary="物料凭证子表-出入库信息list查询")
     @PostMapping("/list")
             public MultiResponse<MdocSubInOutDto> list() {
-        //TODO list query
+        // 分页查询待实现
         return MultiResponse.buildSuccess(null);
     }
 

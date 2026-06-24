@@ -33,14 +33,29 @@ public class DefaultMqProducer {
      * @param tag     消息 tag
      */
     public void doSend(String message, String tag) {
-        log.info("DefaultMqProducer send MQ tag={} message={}", tag, message);
-        try {
-            String destination = topic + ":" + tag;
-            rocketMQTemplate.convertAndSend(destination, message);
-            log.info("DefaultMqProducer send MQ success destination={}", destination);
-        } catch (Exception ex) {
-            // TODO: 失败消息落库定时任务重试
-            log.error("DefaultMqProducer send MQ Error tag={}", tag, ex);
+        doSend(message, tag, 3);
+    }
+
+    public void doSend(String message, String tag, int maxRetries) {
+        String destination = topic + ":" + tag;
+        for (int attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                log.info("DefaultMqProducer send MQ tag={} attempt={}/{}", tag, attempt, maxRetries);
+                rocketMQTemplate.convertAndSend(destination, message);
+                log.info("DefaultMqProducer send MQ success destination={}", destination);
+                return;
+            } catch (Exception ex) {
+                log.error("DefaultMqProducer send MQ Error tag={} attempt={}/{}", tag, attempt, maxRetries, ex);
+                if (attempt >= maxRetries) {
+                    log.error("DefaultMqProducer send MQ failed after {} retries, message lost tag={}", maxRetries, tag);
+                }
+                try {
+                    Thread.sleep(1000L * attempt);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
         }
     }
 }

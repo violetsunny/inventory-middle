@@ -10,7 +10,7 @@ import java.util.Map;
  * @author caosheng
  * @title: PlanParamEnumResDTO
  * @projectName scm-plan-management
- * @description: TODO
+ * @description: 计划参数枚举列表响应DTO
  * @date 2021/10/26 18:59
  */
 @Data

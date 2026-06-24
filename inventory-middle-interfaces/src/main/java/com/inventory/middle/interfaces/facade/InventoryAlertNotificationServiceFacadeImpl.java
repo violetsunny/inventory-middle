@@ -51,7 +51,7 @@ public class InventoryAlertNotificationServiceFacadeImpl implements InventoryAle
 	 */
 	@Override
 	public MultiResponse<InventoryAlertNotificationDto> list() {
-		//TODO list query
+		// 分页查询待实现
 		return MultiResponse.buildSuccess(null);
 	}
 

@@ -59,7 +59,7 @@ public class InventoryDemandController {
     @Operation(summary="库存-需求list查询")
     @PostMapping("/list")
             public MultiResponse<InventoryDemandDto> list() {
-        //TODO list query
+        // 分页查询待实现
         return MultiResponse.buildSuccess(null);
     }
 

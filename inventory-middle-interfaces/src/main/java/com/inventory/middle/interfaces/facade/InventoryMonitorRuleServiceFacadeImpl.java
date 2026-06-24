@@ -51,7 +51,7 @@ public class InventoryMonitorRuleServiceFacadeImpl implements InventoryMonitorRu
 	 */
 	@Override
 	public MultiResponse<InventoryMonitorRuleDto> list() {
-		//TODO list query
+		// 分页查询待实现
 		return MultiResponse.buildSuccess(null);
 	}
 

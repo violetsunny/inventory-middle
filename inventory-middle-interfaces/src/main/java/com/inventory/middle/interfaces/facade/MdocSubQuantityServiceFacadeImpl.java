@@ -51,7 +51,7 @@ public class MdocSubQuantityServiceFacadeImpl implements MdocSubQuantityServiceF
 	 */
 	@Override
 	public MultiResponse<MdocSubQuantityDto> list() {
-		//TODO list query
+		// 分页查询待实现
 		return MultiResponse.buildSuccess(null);
 	}
 

@@ -59,7 +59,7 @@ public class ShipmentLineController {
     @Operation(summary="交运单明细list查询")
     @PostMapping("/list")
             public MultiResponse<ShipmentLineDto> list() {
-        //TODO list query
+        // 分页查询待实现
         return MultiResponse.buildSuccess(null);
     }
 

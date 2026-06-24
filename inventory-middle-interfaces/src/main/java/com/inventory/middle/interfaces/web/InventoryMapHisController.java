@@ -59,7 +59,7 @@ public class InventoryMapHisController {
     @Operation(summary="移动平均价历史记录list查询")
     @PostMapping("/list")
             public MultiResponse<InventoryMapHisDto> list() {
-        //TODO list query
+        // 分页查询待实现
         return MultiResponse.buildSuccess(null);
     }
 

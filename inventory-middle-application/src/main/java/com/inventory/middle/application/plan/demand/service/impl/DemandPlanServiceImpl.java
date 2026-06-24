@@ -276,9 +276,7 @@ public class DemandPlanServiceImpl implements DemandPlanService {
         //校验状态
         checkStatus(demandPlanPO,createBO.getTenantId());
         List<DemandPlanMaterialPeriodBO> periodBOList = createBO.getPeriodList();
-        //校验物料
-        //List<DemandPlanMaterialBatchCreateDetailBO> materialCodeFailList = validateImportInfo(demandPlanPO, periodBOList, createBO.getTenantId());
-        List<DemandPlanMaterialBatchCreateDetailBO> materialCodeFailList = null;
+        List<DemandPlanMaterialBatchCreateDetailBO> materialCodeFailList = validateImportInfo(demandPlanPO, periodBOList, createBO.getTenantId());
         response.setTotalCount(periodBOList.size());
         if (!CollectionUtils.isEmpty(materialCodeFailList)) {
             response.setFailCount(materialCodeFailList.size());
@@ -335,9 +333,7 @@ public class DemandPlanServiceImpl implements DemandPlanService {
         planPO.setStatus(DemandStatusEnum.OFF.getCode());
 
         List<DemandPlanMaterialPeriodBO> periodBOList = demandPlanBO.getPeriodList();
-        //校验物料 TODO
-       //List<DemandPlanMaterialBatchCreateDetailBO> materialCodeFailList = validateImportInfo(planPO, periodBOList, demandPlanBO.getTenantId());
-       List<DemandPlanMaterialBatchCreateDetailBO> materialCodeFailList =null;
+        List<DemandPlanMaterialBatchCreateDetailBO> materialCodeFailList = validateImportInfo(planPO, periodBOList, demandPlanBO.getTenantId());
         if (!CollectionUtils.isEmpty(materialCodeFailList)) {
             response.setFailCount(materialCodeFailList.size());
             response.setFailDetails(materialCodeFailList);

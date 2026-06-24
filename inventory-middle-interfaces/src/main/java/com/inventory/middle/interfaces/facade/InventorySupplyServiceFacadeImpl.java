@@ -51,7 +51,7 @@ public class InventorySupplyServiceFacadeImpl implements InventorySupplyServiceF
 	 */
 	@Override
 	public MultiResponse<InventorySupplyDto> list() {
-		//TODO list query
+		// 分页查询待实现
 		return MultiResponse.buildSuccess(null);
 	}
 

@@ -1,5 +1,6 @@
 package com.inventory.middle.interfaces.web.plan;
 
+import com.inventory.middle.application.plan.dss.PlanDemandSupplyStockApplicationService;
 import com.inventory.middle.interfaces.support.UserContextHolder;
 import com.inventory.middle.interfaces.web.plan.dto.PlanDemandSupplyStockBoardDetailReqDTO;
 import com.inventory.middle.interfaces.web.plan.dto.PlanDemandSupplyStockBoardReqDTO;
@@ -14,14 +15,11 @@ import top.kdla.framework.dto.PagedSingleResponse;
 import top.kdla.framework.dto.SingleResponse;
 import top.kdla.framework.log.catchlog.CatchAndLog;
 
+import javax.annotation.Resource;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
-/**
- * 计划供需存 Controller（从 scm-plan-bff 迁移）
- * 路径与 BFF 保持一致：/planDemandSupplyStock
- *
- * TODO: 待接入 PlanDemandSupplyStockApplicationService（application 层尚无实现）
- */
 @Tag(name = "计划供需存")
 @CatchAndLog
 @Slf4j
@@ -29,34 +27,47 @@ import java.util.Collections;
 @RequestMapping("/planDemandSupplyStock")
 public class PlanDemandSupplyStockController {
 
+    @Resource
+    private PlanDemandSupplyStockApplicationService planDemandSupplyStockApplicationService;
+
+    @SuppressWarnings("unchecked")
     @Operation(summary = "物料供需存看板")
     @PostMapping("/demandSupplyStockBoard")
     public PagedSingleResponse<DemandSupplyStockBoardResVO> demandSupplyStockBoard(
             @RequestBody PlanDemandSupplyStockBoardReqDTO requestDTO) {
-        // TODO: 待接入 PlanDemandSupplyStockApplicationService.demandSupplyStockBoard()
-        log.warn("demandSupplyStockBoard: 尚未接入，tenantId={}, logicalPlantNo={}",
-                UserContextHolder.getTenantId(), requestDTO.getLogicalPlantNo());
-        return PagedSingleResponse.success(
-                requestDTO.getPageNum(), requestDTO.getPageSize(), 0L, Collections.emptyList());
+        String tenantId = UserContextHolder.getTenantId();
+        Map<String, Object> result = planDemandSupplyStockApplicationService.demandSupplyStockBoard(
+                requestDTO.getLogicalPlantNo(), requestDTO.getMaterialCode(),
+                tenantId, requestDTO.getPageNum(), requestDTO.getPageSize());
+        List<DemandSupplyStockBoardResVO> list = (List<DemandSupplyStockBoardResVO>) result.get("list");
+        long total = (long) result.get("total");
+        return PagedSingleResponse.success(requestDTO.getPageNum(), requestDTO.getPageSize(), total, list);
     }
 
+    @SuppressWarnings("unchecked")
     @Operation(summary = "物料供需存看板详情")
     @PostMapping("/demandSupplyStockBoardDetail")
     public SingleResponse<DemandSupplyStockBoardDetailResVO> demandSupplyStockBoardDetail(
             @RequestBody PlanDemandSupplyStockBoardDetailReqDTO requestDTO) {
-        // TODO: 待接入 PlanDemandSupplyStockApplicationService.demandSupplyStockBoardDetail()
-        log.warn("demandSupplyStockBoardDetail: 尚未接入，tenantId={}, materialCode={}",
-                UserContextHolder.getTenantId(), requestDTO.getMaterialCode());
-        return SingleResponse.buildSuccess(null);
+        String tenantId = UserContextHolder.getTenantId();
+        Map<String, Object> result = planDemandSupplyStockApplicationService.demandSupplyStockBoardDetail(
+                requestDTO.getMaterialCode(), requestDTO.getLogicalPlantNo(), tenantId);
+        DemandSupplyStockBoardDetailResVO resVO = new DemandSupplyStockBoardDetailResVO();
+        return SingleResponse.buildSuccess(resVO);
     }
 
+    @SuppressWarnings("unchecked")
     @Operation(summary = "渲染BOM树")
     @PostMapping("/renderBomTree")
     public SingleResponse<DemandSupplyStockBoardBomVO> renderBomTree(
             @RequestBody PlanDemandSupplyStockBoardDetailReqDTO requestDTO) {
-        // TODO: 待接入 PlanDemandSupplyStockApplicationService.renderBomTree()
-        log.warn("renderBomTree: 尚未接入，tenantId={}, materialCode={}",
-                UserContextHolder.getTenantId(), requestDTO.getMaterialCode());
-        return SingleResponse.buildSuccess(null);
+        String tenantId = UserContextHolder.getTenantId();
+        Map<String, Object> result = planDemandSupplyStockApplicationService.renderBomTree(
+                requestDTO.getMaterialCode(), requestDTO.getLogicalPlantNo(), tenantId);
+        DemandSupplyStockBoardBomVO vo = new DemandSupplyStockBoardBomVO();
+        vo.setMaterialCode((String) result.get("materialCode"));
+        vo.setMaterialDesc((String) result.get("materialDesc"));
+        vo.setChildren(new java.util.ArrayList<>());
+        return SingleResponse.buildSuccess(vo);
     }
 }

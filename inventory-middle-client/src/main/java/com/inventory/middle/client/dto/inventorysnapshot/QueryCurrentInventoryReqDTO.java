@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 /**
  * @author peisheng.wang
  * @version 1.0
- * @description: TODO
+ * @description: 查询当前库存请求DTO
  * @date 2021/8/31 19:38
  */
 @Data

@@ -9,7 +9,7 @@ import java.util.List;
  * @author caosheng
  * @title: PlanTransferLogicalPlantsResBO
  * @projectName scm-plan-management
- * @description: TODO
+ * @description: 计划方案调拨逻辑仓响应BO
  * @date 2021/11/25 14:07
  */
 @Data

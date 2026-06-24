@@ -6,6 +6,7 @@ import com.inventory.middle.client.plan.dto.participant.ParticipantDeptDTO;
 import com.inventory.middle.client.plan.dto.participant.ParticipantMenuDTO;
 import com.inventory.middle.client.plan.dto.participant.ParticipantUser;
 import com.inventory.middle.domain.service.external.ParticipantCenterRemoteService;
+import com.inventory.middle.domain.service.external.ParticipantTokenService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -23,8 +24,14 @@ import java.util.stream.Collectors;
 @Service
 public class ParticipantCenterRemoteServiceImpl implements ParticipantCenterRemoteService {
 
+    private static final String HEADER_PARTICIPANT_TOKEN = "participant-token";
+    private static final String HEADER_APP_SECRET = "appSecret";
+
     @Resource
     private RestTemplate restTemplate;
+
+    @Resource
+    private ParticipantTokenService participantTokenService;
 
     @Value("${remote.participant.search.url:}")
     private String searchUrl;
@@ -94,7 +101,7 @@ public class ParticipantCenterRemoteServiceImpl implements ParticipantCenterRemo
         if (notConfigured(identifyUrl)) return Collections.emptyList();
         try {
             String url = identifyUrl + "/AuthIdentify/app/menuAndFunc/" + userId + "/" + tenantId + "/" + appId;
-            String body = get(url);
+            String body = getWithAppSecret(url);
             BaseResponse<List<ParticipantMenuDTO>> resp = JSON.parseObject(body,
                     new TypeReference<BaseResponse<List<ParticipantMenuDTO>>>() {});
             return resp != null && resp.getData() != null ? resp.getData() : Collections.emptyList();
@@ -107,7 +114,15 @@ public class ParticipantCenterRemoteServiceImpl implements ParticipantCenterRemo
     private String get(String url) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        // TODO: 接入 participant-token 认证（需 ParticipantTokenService 或网关透传）
+        headers.add(HEADER_PARTICIPANT_TOKEN, participantTokenService.getParticipantToken());
+        ResponseEntity<String> entity = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        return entity.getBody();
+    }
+
+    private String getWithAppSecret(String url) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.add(HEADER_APP_SECRET, participantTokenService.getAppSecret());
         ResponseEntity<String> entity = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), String.class);
         return entity.getBody();
     }

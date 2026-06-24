@@ -59,7 +59,7 @@ public class InventoryAlertController {
     @Operation(summary="库存报警日志list查询")
     @PostMapping("/list")
             public MultiResponse<InventoryAlertDto> list() {
-        //TODO list query
+        // 分页查询待实现
         return MultiResponse.buildSuccess(null);
     }
 

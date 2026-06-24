@@ -5,15 +5,19 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.WriteTable;
 import com.google.common.collect.Lists;
+import com.inventory.middle.application.plan.demand.excel.DemandPlanMaterialImportExcelListener;
 import com.inventory.middle.application.plan.demand.service.DemandPlanApplicationService;
 import com.inventory.middle.client.plan.demand.dto.*;
+import com.inventory.middle.domain.common.exception.BusinessException;
 import com.inventory.middle.interfaces.support.UserContextHolder;
 import com.inventory.middle.interfaces.web.plan.demand.dto.DemandPlanSelectRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import top.kdla.framework.dto.PageResponse;
 import top.kdla.framework.dto.SingleResponse;
 import top.kdla.framework.log.catchlog.CatchAndLog;
@@ -21,6 +25,8 @@ import top.kdla.framework.log.catchlog.CatchAndLog;
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +43,16 @@ import java.util.Objects;
 @RequestMapping("/demandPlan")
 public class DemandPlanController {
 
+    private static final long KB_SIZE = 1024;
+
     @Resource
     private DemandPlanApplicationService demandPlanApplicationService;
+
+    @Value("${demand.plan.import.uploadFile.maxSize:256}")
+    private long importMaxSizeInKb;
+
+    @Value("${demand.plan.import.uploadFile.batchSize:300}")
+    private int importBatchSize;
 
     @Operation(summary = "创建需求计划")
     @PostMapping("/createDemandPlan")
@@ -90,12 +104,40 @@ public class DemandPlanController {
 
     @Operation(summary = "导入需求计划物料")
     @PostMapping("/importDemandPlanMaterial")
-    public SingleResponse importDemandPlanMaterial(@RequestBody DemandPlanMaterialBatchCreateReqDTO reqDTO) {
+    public SingleResponse importDemandPlanMaterial(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("demandPlanId") Long demandPlanId) {
+        if (demandPlanId == null || file == null || file.isEmpty()) {
+            throw new BusinessException("请求参数错误");
+        }
+        String filename = file.getOriginalFilename();
+        if (filename == null || (!filename.toLowerCase().endsWith(".xls") && !filename.toLowerCase().endsWith(".xlsx"))) {
+            throw new BusinessException("请上传 .xls 或 .xlsx 格式文件");
+        }
+        long fileSizeInKb = file.getSize() / KB_SIZE;
+        if (importMaxSizeInKb <= fileSizeInKb) {
+            throw new BusinessException(String.format("文件超过最大限制，最大不能超过 %s kb", importMaxSizeInKb));
+        }
+        DemandPlanMaterialImportExcelListener listener = new DemandPlanMaterialImportExcelListener(importBatchSize);
+        try {
+            InputStream inputStream = new BufferedInputStream(file.getInputStream());
+            EasyExcel.read(inputStream, listener).sheet().doRead();
+        } catch (BusinessException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("解析 Excel 文件失败", e);
+            throw new BusinessException("解析 Excel 文件失败");
+        }
+        List<DemandPlanMaterialPeriodDTO> periodList = listener.getPeriodList();
+        if (CollectionUtils.isEmpty(periodList)) {
+            throw new BusinessException("未导入数据");
+        }
+        DemandPlanMaterialBatchCreateReqDTO reqDTO = new DemandPlanMaterialBatchCreateReqDTO();
+        reqDTO.setDemandPlanId(demandPlanId);
         reqDTO.setTenantId(UserContextHolder.getTenantId());
         reqDTO.setUserId(UserContextHolder.getUserId());
         reqDTO.setUserName(UserContextHolder.getUsername());
-        // TODO: 待接入 EasyExcel 解析 MultipartFile → reqDTO.setMaterialList(...)
-        log.warn("importDemandPlanMaterial: EasyExcel 解析尚未接入，demandPlanId={}", reqDTO.getDemandPlanId());
+        reqDTO.setPeriodList(periodList);
         return demandPlanApplicationService.createDemandPlanMaterialPeriod(reqDTO);
     }
 

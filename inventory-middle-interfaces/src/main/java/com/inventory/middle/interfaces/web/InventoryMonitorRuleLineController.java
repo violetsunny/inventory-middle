@@ -59,7 +59,7 @@ public class InventoryMonitorRuleLineController {
     @Operation(summary="库存预警规则明细list查询")
     @PostMapping("/list")
             public MultiResponse<InventoryMonitorRuleLineDto> list() {
-        //TODO list query
+        // 分页查询待实现
         return MultiResponse.buildSuccess(null);
     }
 

@@ -51,7 +51,7 @@ public class StorageLocationServiceFacadeImpl implements StorageLocationServiceF
 	 */
 	@Override
 	public MultiResponse<StorageLocationDto> list() {
-		//TODO list query
+		// 分页查询待实现
 		return MultiResponse.buildSuccess(null);
 	}
 
