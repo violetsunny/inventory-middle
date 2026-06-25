@@ -102,5 +102,21 @@ public class InventoryDomainServiceImpl implements InventoryDomainService {
         }).collect(Collectors.toList());
         return inventorySupplyRepository.batchStore(entities);
     }
+
+    @Override
+    public boolean transferInTransitStock(TransferTransitStockRequest request) {
+        if (request == null || CollectionUtils.isEmpty(request.getMaterialDTOList())) {
+            log.warn("transferInTransitStock: request or materialDTOList is empty");
+            return false;
+        }
+        List<InventorySupplyBO> supplyBOList = request.getMaterialDTOList().stream().map(dto -> {
+            InventorySupplyBO bo = new InventorySupplyBO();
+            bo.setMaterialCode(dto.getMaterialCode());
+            bo.setSourceOrderNo(request.getSourceOrderNo());
+            bo.setTenantId(request.getTenantId());
+            return bo;
+        }).collect(Collectors.toList());
+        return batchUpdateInTransitStock(supplyBOList);
+    }
 }
 

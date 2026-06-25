@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 import javax.annotation.Resource;
+import com.inventory.middle.interfaces.support.UserContextHolder;
 
 
 /**
@@ -78,6 +79,8 @@ public class InventoryMapHisController {
     @Operation(summary="保存移动平均价历史记录")
     @PostMapping("/save")
     public SingleResponse<Boolean> save(@Validated(AddGroup.class) @RequestBody InventoryMapHisCommand inventorymaphisCommand) {
+        inventorymaphisCommand.setTenantId(UserContextHolder.getTenantId());
+        inventorymaphisCommand.setCreatorId(UserContextHolder.getUserId());
         return SingleResponse.buildSuccess(inventorymaphisApplicationService.add(inventorymaphisCommand));
 
     }
@@ -88,6 +91,7 @@ public class InventoryMapHisController {
     @Operation(summary="修改移动平均价历史记录")
     @PostMapping("/update")
     public SingleResponse<Boolean> update(@Validated(UpdateGroup.class) @RequestBody InventoryMapHisCommand inventorymaphisCommand) {
+        inventorymaphisCommand.setUpdatorId(UserContextHolder.getUserId());
         return SingleResponse.buildSuccess(inventorymaphisApplicationService.update(inventorymaphisCommand));
     }
 

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 import javax.annotation.Resource;
+import com.inventory.middle.interfaces.support.UserContextHolder;
 
 
 /**
@@ -78,6 +79,8 @@ public class MaterialDocItemController {
     @Operation(summary="保存物料凭证-item")
     @PostMapping("/save")
     public SingleResponse<Boolean> save(@Validated(AddGroup.class) @RequestBody MaterialDocItemCommand materialdocitemCommand) {
+        materialdocitemCommand.setTenantId(UserContextHolder.getTenantId());
+        materialdocitemCommand.setCreatorId(UserContextHolder.getUserId());
         return SingleResponse.buildSuccess(materialdocitemApplicationService.add(materialdocitemCommand));
 
     }
@@ -88,6 +91,7 @@ public class MaterialDocItemController {
     @Operation(summary="修改物料凭证-item")
     @PostMapping("/update")
     public SingleResponse<Boolean> update(@Validated(UpdateGroup.class) @RequestBody MaterialDocItemCommand materialdocitemCommand) {
+        materialdocitemCommand.setUpdatorId(UserContextHolder.getUserId());
         return SingleResponse.buildSuccess(materialdocitemApplicationService.update(materialdocitemCommand));
     }
 

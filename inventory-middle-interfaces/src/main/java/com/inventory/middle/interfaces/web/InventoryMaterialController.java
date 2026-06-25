@@ -6,6 +6,7 @@ import com.inventory.middle.client.material.dto.request.InventoryMaterialCreateR
 import com.inventory.middle.client.material.dto.request.InventoryMaterialPageRequest;
 import com.inventory.middle.client.material.dto.request.InventoryMaterialUpdateRequest;
 import com.inventory.middle.client.material.dto.request.ListMaterialCodeRequest;
+import com.inventory.middle.interfaces.support.UserContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -53,12 +54,14 @@ public class InventoryMaterialController {
     @Operation(summary = "分页查询物料信息")
     @PostMapping("/page")
     public PageResponse<InventoryMaterialDTO> pageList(@RequestBody InventoryMaterialPageRequest pageRequest) {
+        pageRequest.setTenantId(UserContextHolder.getTenantId());
         return inventoryMaterialApplicationService.pageList(pageRequest);
     }
 
     @Operation(summary = "查询城燃物料数据（BFF /inventory-material/queryCityGasMaterialPage）")
     @PostMapping("/queryCityGasMaterialPage")
     public PageResponse<InventoryMaterialDTO> queryCityGasMaterialPage(@RequestBody InventoryMaterialPageRequest pageRequest) {
+        pageRequest.setTenantId(UserContextHolder.getTenantId());
         // 城燃专用分页查询，复用通用 pageList（如有城燃特殊过滤条件待补充）
         return inventoryMaterialApplicationService.pageList(pageRequest);
     }

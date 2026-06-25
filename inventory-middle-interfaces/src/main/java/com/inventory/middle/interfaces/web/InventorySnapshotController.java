@@ -50,6 +50,7 @@ public class InventorySnapshotController {
     @Operation(summary = "库存详情查询")
     @PostMapping("/detail/query")
     public SingleResponse<InventorySnapshotDto> queryDetail(@RequestBody InventorySnapshotPageQuery pageQuery) {
+        pageQuery.setTenantId(UserContextHolder.getTenantId());
         if (pageQuery.getId() != null) {
             return SingleResponse.buildSuccess(inventorySnapshotQueryService.findById(pageQuery.getId()));
         }

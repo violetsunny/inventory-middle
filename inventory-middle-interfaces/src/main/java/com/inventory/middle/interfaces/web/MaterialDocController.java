@@ -17,7 +17,7 @@ import com.inventory.middle.client.file.dto.response.FileImportRecord;
 import com.inventory.middle.domain.model.bo.material.MaterialDocumentBO;
 import com.inventory.middle.domain.model.bo.material.UpdateMaterialAnnualDateReqBO;
 import com.inventory.middle.domain.service.material.model.MaterialDocInvRes;
-import com.inventory.middle.domain.service.external.RemoteProductCenterRestService;
+import com.inventory.middle.application.service.InventoryExternalApplicationService;
 import com.inventory.middle.interfaces.support.UserContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -57,7 +57,7 @@ public class MaterialDocController {
     @Resource
     private FileImportApplicationService fileImportApplicationService;
     @Resource
-    private RemoteProductCenterRestService remoteProductCenterRestService;
+    private InventoryExternalApplicationService inventoryExternalApplicationService;
 
     // ==================== 查询类 ====================
 
@@ -82,6 +82,7 @@ public class MaterialDocController {
     @Operation(summary = "查询物料批次")
     @PostMapping("/queryMaterialBatchNo")
     public SingleResponse<QueryMaterialBatchNoResDTO> queryMaterialBatchNo(@RequestBody MaterialBatchNoQuery query) {
+        query.setTenantId(UserContextHolder.getTenantId());
         return SingleResponse.buildSuccess(materialDocQueryService.queryMaterialBatchNo(query));
     }
 
@@ -114,7 +115,7 @@ public class MaterialDocController {
     @GetMapping("/queryBuildMaterialInfo")
     public SingleResponse<Object> queryBuildMaterialInfo(@RequestParam String skuCode) {
         String tenantId = UserContextHolder.getTenantId();
-        return remoteProductCenterRestService.queryBuildMaterialInfo(skuCode, tenantId);
+        return inventoryExternalApplicationService.queryBuildMaterialInfo(skuCode, tenantId);
     }
 
     @Operation(summary = "通过名称模糊查询物料信息")
@@ -123,7 +124,7 @@ public class MaterialDocController {
         String tenantId = UserContextHolder.getTenantId();
         int pageNum = req.getPageNum() != null ? req.getPageNum() : 1;
         int pageSize = req.getPageSize() != null ? req.getPageSize() : 20;
-        return remoteProductCenterRestService.fuzzyQueryByName(req.getSkuName(), pageNum, pageSize, tenantId);
+        return inventoryExternalApplicationService.fuzzyQueryByName(req.getSkuName(), pageNum, pageSize, tenantId);
     }
 
     // ==================== 写操作类 ====================
@@ -206,6 +207,7 @@ public class MaterialDocController {
     @Operation(summary = "城燃项目导入记录查询")
     @PostMapping("/city-gas/excel/page")
     public PageResponse<FileImportRecord> cityGasExcelPage(@RequestBody PageQueryFileImportRecordRequest request) {
+        request.setTenantId(UserContextHolder.getTenantId());
         return fileImportApplicationService.pageQuery(request);
     }
 

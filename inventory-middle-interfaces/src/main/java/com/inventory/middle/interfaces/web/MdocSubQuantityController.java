@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 import javax.annotation.Resource;
+import com.inventory.middle.interfaces.support.UserContextHolder;
 
 
 /**
@@ -78,6 +79,8 @@ public class MdocSubQuantityController {
     @Operation(summary="保存物料凭证子表-数量")
     @PostMapping("/save")
     public SingleResponse<Boolean> save(@Validated(AddGroup.class) @RequestBody MdocSubQuantityCommand mdocsubquantityCommand) {
+        mdocsubquantityCommand.setTenantId(UserContextHolder.getTenantId());
+        String _cid = UserContextHolder.getUserId(); if (_cid != null) { try { mdocsubquantityCommand.setCreatorId(Long.parseLong(_cid)); } catch (NumberFormatException ignored) {} }
         return SingleResponse.buildSuccess(mdocsubquantityApplicationService.add(mdocsubquantityCommand));
 
     }
@@ -88,6 +91,7 @@ public class MdocSubQuantityController {
     @Operation(summary="修改物料凭证子表-数量")
     @PostMapping("/update")
     public SingleResponse<Boolean> update(@Validated(UpdateGroup.class) @RequestBody MdocSubQuantityCommand mdocsubquantityCommand) {
+        String _uid2 = UserContextHolder.getUserId(); if (_uid2 != null) { try { mdocsubquantityCommand.setUpdatorId(Long.parseLong(_uid2)); } catch (NumberFormatException ignored) {} }
         return SingleResponse.buildSuccess(mdocsubquantityApplicationService.update(mdocsubquantityCommand));
     }
 

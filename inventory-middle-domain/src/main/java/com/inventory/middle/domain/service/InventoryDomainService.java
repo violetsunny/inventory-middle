@@ -17,4 +17,6 @@ public interface InventoryDomainService {
     boolean batchUpdateInTransitStock(List<InventorySupplyBO> supplyBOList);
 
     boolean batchCreateInTransitStock(List<CreateInTransitStockRequest> requestList);
+
+    boolean transferInTransitStock(TransferTransitStockRequest request);
 }

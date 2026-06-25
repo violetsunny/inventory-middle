@@ -9,7 +9,7 @@ import com.inventory.middle.domain.handles.IHandler;
 import com.inventory.middle.domain.service.material.model.MaterialDocInvReq;
 import com.inventory.middle.domain.service.material.model.MaterialDocInvRes;
 import com.inventory.middle.client.dto.transit.TransferTransitStockRequest;
-import com.inventory.middle.client.service.InTransitStockService;
+import com.inventory.middle.domain.service.InventoryDomainService;
 import top.kdla.framework.common.aspect.watch.StopWatchWrapper;
 import com.inventory.middle.domain.model.bo.material.CreateMaterialLogicalPlantRefBO;
 import com.inventory.middle.domain.model.bo.material.MaterialBatchNoBO;
@@ -49,7 +49,7 @@ public class MaterialDocInTmHandle implements IHandler {
     @Resource
     private MaterialDocSubCoreService materialDocSubCoreService;
     @Resource
-    private InTransitStockService inTransitStockService;
+    private InventoryDomainService inventoryDomainService;
     @Resource
     private MaterialLogicalPlantRefCoreService materialLogicalPlantRefCoreService;
 
@@ -71,7 +71,7 @@ public class MaterialDocInTmHandle implements IHandler {
         sw0.start();
         TransferTransitStockRequest request = req.getTransitStockRequest();
         if(Objects.nonNull(request)){
-            inTransitStockService.transferInStock(request);
+            inventoryDomainService.transferInTransitStock(request);
         }
         sw0.stop();
         log.info("createMaterialDoc MaterialDocInTmHandle 调整在途 {}", sw0.toString());

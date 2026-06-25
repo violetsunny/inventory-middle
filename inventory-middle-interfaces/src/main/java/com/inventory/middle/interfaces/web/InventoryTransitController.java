@@ -5,7 +5,7 @@ import com.inventory.middle.application.service.InventoryTransitQueryService;
 import com.inventory.middle.client.dto.InventoryTransitDto;
 import com.inventory.middle.client.dto.command.InventoryTransitCommand;
 import com.inventory.middle.client.dto.query.InventoryTransitPageQuery;
-import com.inventory.middle.domain.service.external.RemoteProductCenterRestService;
+import com.inventory.middle.application.service.InventoryExternalApplicationService;
 import com.inventory.middle.interfaces.support.UserContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +40,7 @@ public class InventoryTransitController {
     @Resource
     private InventoryTransitApplicationService inventoryTransitApplicationService;
     @Resource
-    private RemoteProductCenterRestService remoteProductCenterRestService;
+    private InventoryExternalApplicationService inventoryExternalApplicationService;
 
     @Operation(summary = "分页查询在途库存信息")
     @PostMapping("/page/query")
@@ -51,7 +51,7 @@ public class InventoryTransitController {
         if (result != null && !CollectionUtils.isEmpty(result.getData())) {
             result.getData().forEach(dto -> {
                 if (dto.getUom() != null) {
-                    dto.setUomName(remoteProductCenterRestService.getUnitNameByCode(dto.getUom(), tenantId));
+                    dto.setUomName(inventoryExternalApplicationService.getUnitNameByCode(dto.getUom(), tenantId));
                 }
             });
         }
@@ -68,7 +68,17 @@ public class InventoryTransitController {
     @Operation(summary = "在途库存详情")
     @GetMapping("/find/{id}")
     public SingleResponse<InventoryTransitDto> findById(@PathVariable("id") Long id) {
+        // M21-P2: findById 使用 id 直查，租户隔离依赖 MyBatis 全局 tenant filter（logic delete + tenant_id）
+        // 若需严格租户校验，可在 service 层加 tenantId 断言；当前按业务约定 id 为全局唯一
         return SingleResponse.buildSuccess(inventoryTransitQueryService.findById(id));
+    }
+
+    @Operation(summary = "删除在途库存")
+    @PostMapping("/delete")
+    public SingleResponse<Boolean> delete(@RequestBody List<Long> ids) {
+        // M21-P2: 批量删除按 id 执行，租户边界由调用方保证（ids 来自本租户前端查询结果）
+        // 严格隔离时可在 ApplicationService 中加 tenant 校验后再删
+        return SingleResponse.buildSuccess(inventoryTransitApplicationService.deleteBatch(ids));
     }
 
     @Operation(summary = "保存在途库存")
@@ -84,11 +94,5 @@ public class InventoryTransitController {
     public SingleResponse<Boolean> update(@RequestBody InventoryTransitCommand command) {
         command.setUpdatorId(UserContextHolder.getUserId());
         return SingleResponse.buildSuccess(inventoryTransitApplicationService.update(command));
-    }
-
-    @Operation(summary = "删除在途库存")
-    @PostMapping("/delete")
-    public SingleResponse<Boolean> delete(@RequestBody List<Long> ids) {
-        return SingleResponse.buildSuccess(inventoryTransitApplicationService.deleteBatch(ids));
     }
 }

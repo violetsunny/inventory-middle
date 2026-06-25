@@ -6,6 +6,7 @@ import com.inventory.middle.client.file.dto.request.CreateFileImportRecordReques
 import com.inventory.middle.client.file.dto.request.PageQueryFileImportRecordRequest;
 import com.inventory.middle.client.file.dto.request.UpdateFileImportRecordRequest;
 import com.inventory.middle.client.file.dto.response.FileImportRecord;
+import com.inventory.middle.interfaces.support.UserContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -33,12 +34,18 @@ public class FileImportController {
     @Operation(summary = "创建文件导入记录")
     @PostMapping("/create")
     public SingleResponse<FileImportRecord> createFileImportRecord(@RequestBody CreateFileImportRecordRequest request) {
+        request.setTenantId(UserContextHolder.getTenantId());
+        request.setOperatorId(UserContextHolder.getUserId());
+        request.setOperator(UserContextHolder.getUsername());
         return fileImportApplicationService.createFileImportRecord(request);
     }
 
     @Operation(summary = "更新文件导入记录")
     @PostMapping("/update")
     public SingleResponse<Boolean> updateFileImportRecord(@RequestBody UpdateFileImportRecordRequest request) {
+        request.setTenantId(UserContextHolder.getTenantId());
+        request.setOperatorId(UserContextHolder.getUserId());
+        request.setOperator(UserContextHolder.getUsername());
         return fileImportApplicationService.updateFileImportRecord(request);
     }
 
@@ -51,6 +58,9 @@ public class FileImportController {
     @Operation(summary = "创建文件导入详情行")
     @PostMapping("/create-line-records")
     public SingleResponse<Boolean> createFileLineRecords(@RequestBody CreateFileImportLineRecordsRequest request) {
+        request.setTenantId(UserContextHolder.getTenantId());
+        request.setOperatorId(UserContextHolder.getUserId());
+        request.setOperator(UserContextHolder.getUsername());
         return fileImportApplicationService.createFileLineRecords(request);
     }
 }

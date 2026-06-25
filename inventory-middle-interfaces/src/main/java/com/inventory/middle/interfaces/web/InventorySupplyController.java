@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 import javax.annotation.Resource;
+import com.inventory.middle.interfaces.support.UserContextHolder;
 
 
 /**
@@ -78,6 +79,8 @@ public class InventorySupplyController {
     @Operation(summary="保存库存-供给")
     @PostMapping("/save")
     public SingleResponse<Boolean> save(@Validated(AddGroup.class) @RequestBody InventorySupplyCommand inventorysupplyCommand) {
+        inventorysupplyCommand.setTenantId(UserContextHolder.getTenantId());
+        inventorysupplyCommand.setCreatorId(UserContextHolder.getUserId());
         return SingleResponse.buildSuccess(inventorysupplyApplicationService.add(inventorysupplyCommand));
 
     }
@@ -88,6 +91,7 @@ public class InventorySupplyController {
     @Operation(summary="修改库存-供给")
     @PostMapping("/update")
     public SingleResponse<Boolean> update(@Validated(UpdateGroup.class) @RequestBody InventorySupplyCommand inventorysupplyCommand) {
+        inventorysupplyCommand.setUpdatorId(UserContextHolder.getUserId());
         return SingleResponse.buildSuccess(inventorysupplyApplicationService.update(inventorysupplyCommand));
     }
 

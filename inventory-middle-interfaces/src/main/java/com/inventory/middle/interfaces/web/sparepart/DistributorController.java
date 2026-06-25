@@ -1,6 +1,6 @@
 package com.inventory.middle.interfaces.web.sparepart;
 
-import com.inventory.middle.domain.service.external.CrmDistributorRemoteService;
+import com.inventory.middle.application.service.DistributorApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -23,18 +23,18 @@ import javax.annotation.Resource;
 public class DistributorController {
 
     @Resource
-    private CrmDistributorRemoteService crmDistributorRemoteService;
+    private DistributorApplicationService distributorApplicationService;
 
     @Operation(summary = "模糊查询经销商（厂商端）")
     @GetMapping("/fuzzy-query")
     public SingleResponse<Object> fuzzyQueryByManufacturer(@RequestParam String distributorName,
                                                            @RequestParam String appKey) {
-        return crmDistributorRemoteService.fuzzyQueryByManufacturer(distributorName, appKey);
+        return distributorApplicationService.fuzzyQueryByManufacturer(distributorName, appKey);
     }
 
     @Operation(summary = "模糊查询经销商（经销商端）")
     @GetMapping("/fuzzy-query-by-distributor")
     public SingleResponse<Object> fuzzyQueryByDistributor(@RequestParam(required = false) String distributorName) {
-        return crmDistributorRemoteService.fuzzyQueryByDistributor(distributorName);
+        return distributorApplicationService.fuzzyQueryByDistributor(distributorName);
     }
 }

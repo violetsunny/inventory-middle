@@ -6,6 +6,7 @@ import com.inventory.middle.client.code.dto.request.*;
 import com.inventory.middle.client.code.dto.response.AccessoriesFlowCodeResponse;
 import com.inventory.middle.client.code.dto.response.FleeingGoodsApplyCheckResponse;
 import com.inventory.middle.client.code.dto.response.SpDeliveryDetailPrintInfo;
+import com.inventory.middle.interfaces.support.UserContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class AccessoriesFlowCodeController {
     @Operation(summary = "厂商入库")
     @PostMapping("/manufacturer-in-stock")
     public SingleResponse<Boolean> manufacturerInStock(@RequestBody ManufacturerInStockRequest request) {
+        request.setSourceSystem("inventory-middle");
         accessoriesFlowCodeApplicationService.manufacturerInStock(request);
         return SingleResponse.of(true);
     }
@@ -41,18 +43,24 @@ public class AccessoriesFlowCodeController {
     @Operation(summary = "备件流转码占用")
     @PostMapping("/occupy")
     public SingleResponse<Boolean> occupy(@RequestBody AccessoriesFlowCodeOccupyRequest request) {
+        request.setOperatorId(UserContextHolder.getUserId());
+        request.setSourceSystem("inventory-middle");
         return accessoriesFlowCodeApplicationService.occupy(request);
     }
 
     @Operation(summary = "备件流转码使用")
     @PostMapping("/use")
     public SingleResponse<Boolean> use(@RequestBody AccessoriesFlowCodeUseRequest request) {
+        request.setOperatorId(UserContextHolder.getUserId());
+        request.setSourceSystem("inventory-middle");
         return accessoriesFlowCodeApplicationService.use(request);
     }
 
     @Operation(summary = "重新生成备件流转码")
     @PostMapping("/regenerate-code")
     public SingleResponse<AccessoriesFlowCodeResponse> regenerateCode(@RequestBody RegenerateCodeRequest request) {
+        request.setOperatorId(UserContextHolder.getUserId());
+        request.setSourceSystem("inventory-middle");
         return accessoriesFlowCodeApplicationService.regenerateCode(request);
     }
 
@@ -65,6 +73,8 @@ public class AccessoriesFlowCodeController {
     @Operation(summary = "更新备件流转码上附带的逻辑仓信息")
     @PostMapping("/update-code-for-deliver-order")
     public SingleResponse<Boolean> updateCodeForDeliverOrder(@RequestBody UpdateCodeForDeliverOrderRequest request) {
+        request.setOperatorId(UserContextHolder.getUserId());
+        request.setSourceSystem("inventory-middle");
         return accessoriesFlowCodeApplicationService.updateCodeForDeliverOrder(request);
     }
 
@@ -101,6 +111,7 @@ public class AccessoriesFlowCodeController {
     @Operation(summary = "查询码信息用来打印")
     @PostMapping("/query-codes-for-print")
     public MultiResponse<SpDeliveryDetailPrintInfo> queryCodesForPrint(@RequestBody QueryCodesForPrintRequest request) {
+        request.setOperatorId(UserContextHolder.getUserId());
         return accessoriesFlowCodeApplicationService.queryCodesForPrint(request);
     }
 

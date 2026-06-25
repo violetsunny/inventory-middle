@@ -24,6 +24,7 @@ import com.inventory.middle.domain.service.impl.InventorySnapshotCoreService;
 import com.inventory.middle.domain.service.impl.LogicalPlantCoreService;
 import com.inventory.middle.domain.service.impl.StorageLocationCoreService;
 // dal entity imports removed - use BO classes
+import com.inventory.middle.domain.service.external.MaterialDocOutboundService;
 import com.inventory.middle.domain.service.external.RemoteInventoryMapService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -51,7 +52,8 @@ import static com.inventory.middle.domain.common.constants.ResponseCodeEnum.MDOC
  */
 @Service
 @Slf4j
-public class MaterialDocOutboundDefaultHandlerService extends MaterialDocBaseService {
+public class MaterialDocOutboundDefaultHandlerService extends MaterialDocBaseService
+        implements MaterialDocOutboundService {
 
     @Resource
     protected InventoryMqProducer inventoryMqProducer;
@@ -137,7 +139,8 @@ public class MaterialDocOutboundDefaultHandlerService extends MaterialDocBaseSer
      */
 
     @Transactional(rollbackFor = Exception.class)
-    public List<MaterialDocumentItemBO> doBiz(String operator, MaterialDocumentItemBO itemBO, List<InventorySnapshotBO> inventorySnapshotPOS, StockTypeEnum stockTypeEnum, Long newMaterialDocId, List<MaterialDocumentItemBO> target, boolean batchNoOnly) {
+    @Override
+    public void doBiz(String operator, MaterialDocumentItemBO itemBO, List<InventorySnapshotBO> inventorySnapshotPOS, StockTypeEnum stockTypeEnum, Long newMaterialDocId, List<MaterialDocumentItemBO> target, Boolean batchNoOnly) {
         String chooseBatchNo = itemBO.getWarehouseData().getDemandBatchNo();
         List<InventorySnapshotBO> sortedList = new ArrayList<>(inventorySnapshotPOS.size());
         if (batchNoOnly) {
@@ -173,7 +176,6 @@ public class MaterialDocOutboundDefaultHandlerService extends MaterialDocBaseSer
             List<MaterialDocumentItemBO> skuBuildItems = processCountOutboundBatch(operator, stockTypeEnum, sortedList, itemBO, newMaterialDocId);
             target.addAll(skuBuildItems);
         }
-        return target;
     }
 
     /**
@@ -226,7 +228,7 @@ public class MaterialDocOutboundDefaultHandlerService extends MaterialDocBaseSer
      * @param materialDocumentBO
      * @param needBatchNo        批次内出库
      */
-    public void checkAdjustNumber(MaterialDocumentBO materialDocumentBO, boolean needBatchNo) {
+    public void checkAdjustNumber(MaterialDocumentBO materialDocumentBO, Boolean needBatchNo) {
         List<MaterialDocumentItemBO> materialDocumentItems = materialDocumentBO.getMaterialDocumentItems();
         BaseAssert.notEmpty(materialDocumentItems, "物料凭证ITEM不能为空");
         materialDocumentItems.forEach(e -> {

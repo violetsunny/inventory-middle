@@ -1,6 +1,6 @@
 package com.inventory.middle.interfaces.web.sparepart;
 
-import com.inventory.middle.domain.service.external.SpDeliveryOrderRemoteService;
+import com.inventory.middle.application.service.DeliveryOrderApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -23,41 +23,41 @@ import javax.annotation.Resource;
 public class DeliveryOrderMgntController {
 
     @Resource
-    private SpDeliveryOrderRemoteService spDeliveryOrderRemoteService;
+    private DeliveryOrderApplicationService deliveryOrderApplicationService;
 
     @Operation(summary = "查询销售发货单列表")
     @PostMapping("/list-sales")
     public SingleResponse<Object> listSales(@RequestBody Object query) {
-        return spDeliveryOrderRemoteService.listSales(query);
+        return deliveryOrderApplicationService.listSales(query);
     }
 
     @Operation(summary = "打印列表")
     @PostMapping("/list-print")
     public SingleResponse<Object> listPrint(@RequestBody Object query) {
-        return spDeliveryOrderRemoteService.listPrint(query);
+        return deliveryOrderApplicationService.listPrint(query);
     }
 
     @Operation(summary = "执行发货打印")
     @PostMapping("/do-deliver-print")
     public SingleResponse<Object> doDeliverPrint(@RequestBody Object request) {
-        return spDeliveryOrderRemoteService.doDeliverPrint(request);
+        return deliveryOrderApplicationService.doDeliverPrint(request);
     }
 
     @Operation(summary = "查询打印详情")
     @PostMapping("/query-print-infos")
     public SingleResponse<Object> queryPrintInfos(@RequestBody Object request) {
-        return spDeliveryOrderRemoteService.queryPrintInfos(request);
+        return deliveryOrderApplicationService.queryPrintInfos(request);
     }
 
     @Operation(summary = "查询发货状态列表")
     @PostMapping("/list-delivery-state")
     public SingleResponse<Object> listDeliveryState(@RequestBody Object query) {
-        return spDeliveryOrderRemoteService.listDeliveryState(query);
+        return deliveryOrderApplicationService.listDeliveryState(query);
     }
 
     @Operation(summary = "确认额外打印")
     @PostMapping("/do-confirm-extra-print")
     public SingleResponse<Object> doConfirmExtraPrint(@RequestBody Object request) {
-        return spDeliveryOrderRemoteService.doConfirmExtraPrint(request);
+        return deliveryOrderApplicationService.doConfirmExtraPrint(request);
     }
 }

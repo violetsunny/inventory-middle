@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 import javax.annotation.Resource;
+import com.inventory.middle.interfaces.support.UserContextHolder;
 
 
 /**
@@ -78,6 +79,8 @@ public class InventoryAlertController {
     @Operation(summary="保存库存报警日志")
     @PostMapping("/save")
     public SingleResponse<Boolean> save(@Validated(AddGroup.class) @RequestBody InventoryAlertCommand inventoryalertCommand) {
+        inventoryalertCommand.setTenantId(UserContextHolder.getTenantId());
+        inventoryalertCommand.setCreatorId(UserContextHolder.getUserId());
         return SingleResponse.buildSuccess(inventoryalertApplicationService.add(inventoryalertCommand));
 
     }
@@ -88,6 +91,7 @@ public class InventoryAlertController {
     @Operation(summary="修改库存报警日志")
     @PostMapping("/update")
     public SingleResponse<Boolean> update(@Validated(UpdateGroup.class) @RequestBody InventoryAlertCommand inventoryalertCommand) {
+        inventoryalertCommand.setUpdatorId(UserContextHolder.getUserId());
         return SingleResponse.buildSuccess(inventoryalertApplicationService.update(inventoryalertCommand));
     }
 

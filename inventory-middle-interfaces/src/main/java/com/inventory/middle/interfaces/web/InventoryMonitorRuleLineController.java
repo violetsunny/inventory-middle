@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 import javax.annotation.Resource;
+import com.inventory.middle.interfaces.support.UserContextHolder;
 
 
 /**
@@ -78,6 +79,8 @@ public class InventoryMonitorRuleLineController {
     @Operation(summary="保存库存预警规则明细")
     @PostMapping("/save")
     public SingleResponse<Boolean> save(@Validated(AddGroup.class) @RequestBody InventoryMonitorRuleLineCommand inventorymonitorrulelineCommand) {
+        inventorymonitorrulelineCommand.setTenantId(UserContextHolder.getTenantId());
+        String _cid = UserContextHolder.getUserId(); if (_cid != null) { try { inventorymonitorrulelineCommand.setCreatorId(Long.parseLong(_cid)); } catch (NumberFormatException ignored) {} }
         return SingleResponse.buildSuccess(inventorymonitorrulelineApplicationService.add(inventorymonitorrulelineCommand));
 
     }
@@ -88,6 +91,7 @@ public class InventoryMonitorRuleLineController {
     @Operation(summary="修改库存预警规则明细")
     @PostMapping("/update")
     public SingleResponse<Boolean> update(@Validated(UpdateGroup.class) @RequestBody InventoryMonitorRuleLineCommand inventorymonitorrulelineCommand) {
+        String _uid2 = UserContextHolder.getUserId(); if (_uid2 != null) { try { inventorymonitorrulelineCommand.setUpdatorId(Long.parseLong(_uid2)); } catch (NumberFormatException ignored) {} }
         return SingleResponse.buildSuccess(inventorymonitorrulelineApplicationService.update(inventorymonitorrulelineCommand));
     }
 

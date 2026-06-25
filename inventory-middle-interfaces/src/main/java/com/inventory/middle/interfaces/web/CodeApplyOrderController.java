@@ -8,6 +8,7 @@ import com.inventory.middle.client.code.dto.request.CodeApplyOrderInfoRequest;
 import com.inventory.middle.client.code.dto.request.CodeApplyOrderPageRequest;
 import com.inventory.middle.client.code.dto.response.CodeApplyOrderCreateResponse;
 import com.inventory.middle.client.code.dto.response.CodeApplyOrderInfoResponse;
+import com.inventory.middle.interfaces.support.UserContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -35,12 +36,18 @@ public class CodeApplyOrderController {
     @Operation(summary = "码申请单创建")
     @PostMapping("/create")
     public SingleResponse<CodeApplyOrderCreateResponse> create(@RequestBody CodeApplyOrderCreateRequest createRequest) {
+        createRequest.setTenantId(UserContextHolder.getTenantId());
+        createRequest.setOperatorId(UserContextHolder.getUserId());
+        createRequest.setSourceSystem("inventory-middle");
         return codeApplyOrderApplicationService.create(createRequest);
     }
 
     @Operation(summary = "申请单审批")
     @PostMapping("/approval")
     public SingleResponse<Boolean> approval(@RequestBody CodeApplyOrderApprovalRequest approvalRequest) {
+        approvalRequest.setTenantId(UserContextHolder.getTenantId());
+        approvalRequest.setOperatorId(UserContextHolder.getUserId());
+        approvalRequest.setSourceSystem("inventory-middle");
         return codeApplyOrderApplicationService.approval(approvalRequest);
     }
 
@@ -53,6 +60,7 @@ public class CodeApplyOrderController {
     @Operation(summary = "申请单分页查询")
     @PostMapping("/page")
     public PageResponse<CodeApplyOrderDTO> pageList(@RequestBody CodeApplyOrderPageRequest pageRequest) {
+        // CodeApplyOrderPageRequest has no tenantId field — tenant filtering handled by service layer
         return codeApplyOrderApplicationService.pageList(pageRequest);
     }
 }

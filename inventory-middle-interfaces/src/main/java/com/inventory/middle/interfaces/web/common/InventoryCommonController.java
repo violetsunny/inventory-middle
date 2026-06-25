@@ -3,7 +3,7 @@ package com.inventory.middle.interfaces.web.common;
 import com.inventory.middle.client.enums.CurrencyEnum;
 import com.inventory.middle.client.enums.SettlementTypeEnum;
 import com.inventory.middle.client.plan.dto.participant.ParticipantDeptDTO;
-import com.inventory.middle.domain.service.external.ParticipantCenterRemoteService;
+import com.inventory.middle.application.service.InventoryCommonApplicationService;
 import com.inventory.middle.interfaces.support.UserContextHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,12 +26,12 @@ import java.util.stream.Collectors;
 public class InventoryCommonController {
 
     @Resource
-    private ParticipantCenterRemoteService participantCenterRemoteService;
+    private InventoryCommonApplicationService inventoryCommonApplicationService;
 
     @Operation(summary = "租户组织结构查询")
     @PostMapping("/companyTree")
     public SingleResponse<List<CompanyTreeVO>> companyTree() {
-        List<ParticipantDeptDTO> tree = participantCenterRemoteService.getTenantDeptTree(
+        List<ParticipantDeptDTO> tree = inventoryCommonApplicationService.getTenantDeptTree(
                 UserContextHolder.getTenantId(), UserContextHolder.getUserId());
         List<CompanyTreeVO> result = tree.stream().map(this::toTreeVO).collect(Collectors.toList());
         return SingleResponse.buildSuccess(result);
@@ -40,7 +40,7 @@ public class InventoryCommonController {
     @Operation(summary = "租户查询公司列表")
     @PostMapping("/listCompany")
     public SingleResponse<List<CompanyTreeVO>> listCompany() {
-        List<ParticipantDeptDTO> tree = participantCenterRemoteService.getTenantDeptTree(
+        List<ParticipantDeptDTO> tree = inventoryCommonApplicationService.getTenantDeptTree(
                 UserContextHolder.getTenantId(), UserContextHolder.getUserId());
         List<CompanyTreeVO> flat = new ArrayList<>();
         tree.forEach(node -> flatten(node, flat));

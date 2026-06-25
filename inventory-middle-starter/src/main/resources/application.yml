@@ -84,7 +84,7 @@ rocketmq:
       group: sn-material-doc-cancel-consumer-group
       tag: MATERIAL_DOC_CANCEL
     monitor-rule:
-      topic: inventory-monitor-topic
+      topic: stock-inventory-center-topic
       group: monitor-rule-consumer-group
       tag: "*"
     inventory-bff:

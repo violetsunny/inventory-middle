@@ -71,7 +71,6 @@
                                 <includes>
                                     <include>org.springframework.cloud:spring-cloud-openfeign-core</include>
                                     <include>org.springframework:spring-web</include>
-                                    <include>top.rdfa.framework:rdfa-biz</include>
                                 </includes>
                             </artifactSet>
                             <filters>
