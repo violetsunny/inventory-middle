@@ -4,6 +4,23 @@ Focused guidance for AI agents working in this repository. Only includes high-si
 
 ---
 
+## CQRS 调用路径规范（硬约束）
+
+遵循 DDD CQRS 思想，application 层调用 domain 层时按操作类型区分：
+
+- **Query 操作（Read）：** application service 可直接调用 domain `*Repository` 接口（无 Spring 注解，纯 Java），Repository 返回领域对象或 DTO
+- **Command 操作（Write）：** application service 必须通过 domain `*DomainService`（聚合/业务逻辑封装）操作，DomainService 内部使用 Repository 完成持久化，保证业务规则、事务边界、聚合一致性
+
+```
+Query:  ApplicationService → Repository (domain interface)
+Command: ApplicationService → DomainService → Repository (domain interface)
+```
+
+- **禁止** application 层直接注入 infra 层的 Mapper/DAO/Do/PO/外部 remote service
+- 违反本规范的现有代码必须在后续迭代中修复
+
+---
+
 ## Architecture Overview
 
 **6-module DDD-ish monorepo with clean layering:**
@@ -25,6 +42,11 @@ Focused guidance for AI agents working in this repository. Only includes high-si
 - **Java:** 1.8 target (but running on Java 21) — Lombok + Java 21 has compatibility issues
   - If build fails with `LombokProcessor` accessing `JavacProcessingEnvironment`: Update Lombok in pom or use Java 8
 - **Maven:** 3.3+
+
+### Code Style: Prefer `java.time.*` over `java.util.Date`
+- **All timestamp fields** in PO / BO / DTO / VO must use `java.time.LocalDateTime`, not `java.util.Date`
+- MyBatis 3.5.3+ auto-maps `LocalDateTime` ↔ `TIMESTAMP`, no extra config needed
+- This applies to the entire plan module and all new code
 
 ### Build Commands
 ```bash
@@ -143,6 +165,7 @@ When adding new message handlers, register `@RocketMQMessageListener` with topic
 3. **Don't run full test suite locally without infra** — MySQL/Redis/RocketMQ/Nacos are required
 4. **Don't ignore the KDLA framework** — @CatchAndLog and @MdcDot are already in use; respect the convention
 5. **Don't add new modules without updating parent pom.xml** `<modules>` section
+6. **Don't inject infra Mapper/DAO/Do/PO in application layer** — Query 走 domain Repository，Command 走 domain DomainService
 
 ---
 

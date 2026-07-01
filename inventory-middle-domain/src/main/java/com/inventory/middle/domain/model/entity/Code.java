@@ -67,14 +67,34 @@ public class Code implements Entity<Code> {
     private String status;
 
     /**
+     * 扩展字段1
+     */
+    private String extendField1;
+
+    /**
+     * 扩展字段2
+     */
+    private String extendField2;
+
+    /**
      * 扩展参数
      */
     private String extendParam;
 
     /**
+     * 创建人id
+     */
+    private String creatorId;
+
+    /**
      * 创建时间
      */
     private Date createTime;
+
+    /**
+     * 更新人id
+     */
+    private String updatorId;
 
     /**
      * 更新时间

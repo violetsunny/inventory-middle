@@ -8,6 +8,7 @@ import com.inventory.middle.client.material.dto.request.InventoryMaterialPageReq
 import com.inventory.middle.client.material.dto.request.InventoryMaterialUpdateRequest;
 import com.inventory.middle.client.material.dto.request.ListMaterialCodeRequest;
 import com.inventory.middle.domain.model.entity.InventoryMaterial;
+import com.inventory.middle.domain.repository.InventoryMaterialRepository;
 import com.inventory.middle.infra.persistence.entity.InventoryMaterialQueryPO;
 import com.inventory.middle.infra.persistence.entity.ListMaterialCodeParamPO;
 import com.inventory.middle.infra.persistence.entity.PageQueryMaterialPlantRefRequestPO;
@@ -40,7 +41,7 @@ import java.util.stream.Collectors;
 public class InventoryMaterialApplicationServiceImpl implements InventoryMaterialApplicationService {
 
     @Resource
-    private InventoryMaterialRepositoryImpl inventoryMaterialRepository;
+    private InventoryMaterialRepository inventoryMaterialRepository;
 
     @Resource
     private MaterialLogicalPlantRefMapper materialLogicalPlantRefMapper;
@@ -73,7 +74,7 @@ public class InventoryMaterialApplicationServiceImpl implements InventoryMateria
     public MultiResponse<InventoryMaterialDTO> listByMaterialCodeList(ListMaterialCodeRequest request) {
         ListMaterialCodeParamPO param = new ListMaterialCodeParamPO();
         BeanUtils.copyProperties(request, param);
-        List<InventoryMaterialDTO> list = inventoryMaterialRepository.listByMaterialCodes(param)
+        List<InventoryMaterialDTO> list = ((InventoryMaterialRepositoryImpl) inventoryMaterialRepository).listByMaterialCodes(param)
                 .stream().map(e -> {
                     InventoryMaterialDTO dto = new InventoryMaterialDTO();
                     BeanUtils.copyProperties(e, dto);
@@ -87,7 +88,7 @@ public class InventoryMaterialApplicationServiceImpl implements InventoryMateria
         log.info("InventoryMaterialApplicationServiceImpl.pageList request={}", JSON.toJSONString(pageRequest));
         InventoryMaterialQueryPO queryPO = new InventoryMaterialQueryPO();
         BeanUtils.copyProperties(pageRequest, queryPO);
-        List<InventoryMaterial> list = inventoryMaterialRepository.listByCondition(queryPO);
+        List<InventoryMaterial> list = ((InventoryMaterialRepositoryImpl) inventoryMaterialRepository).listByCondition(queryPO);
         List<InventoryMaterialDTO> respList = list.stream().map(e -> {
             InventoryMaterialDTO dto = new InventoryMaterialDTO();
             BeanUtils.copyProperties(e, dto);
@@ -127,7 +128,7 @@ public class InventoryMaterialApplicationServiceImpl implements InventoryMateria
                 param.setTenantId(tenantId);
                 param.setMaterialCodeList(materialCodes);
                 List<com.inventory.middle.infra.persistence.entity.InventoryMaterialDo> materialDos =
-                        inventoryMaterialRepository.listByMaterialCodesRaw(param);
+                        ((InventoryMaterialRepositoryImpl) inventoryMaterialRepository).listByMaterialCodesRaw(param);
 
                 // 构建 materialCode -> outMaterialCode 映射
                 Map<String, String> codeMapping = new HashMap<>();
@@ -184,7 +185,7 @@ public class InventoryMaterialApplicationServiceImpl implements InventoryMateria
         ListMaterialCodeParamPO param = new ListMaterialCodeParamPO();
         param.setTenantId(tenantId);
         param.setMaterialCodeList(materialCodes);
-        return inventoryMaterialRepository.listByMaterialCodesRaw(param)
+        return ((InventoryMaterialRepositoryImpl) inventoryMaterialRepository).listByMaterialCodesRaw(param)
                 .stream().map(e -> {
                     InventoryMaterialDTO dto = new InventoryMaterialDTO();
                     BeanUtils.copyProperties(e, dto);

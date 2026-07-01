@@ -11,6 +11,7 @@ import com.inventory.middle.client.code.dto.response.CodeApplyOrderCreateRespons
 import com.inventory.middle.client.code.dto.response.CodeApplyOrderInfoResponse;
 import com.inventory.middle.domain.model.entity.CodeApplyOrder;
 import com.inventory.middle.domain.model.enums.CodeApprovalStatusEnum;
+import com.inventory.middle.domain.repository.CodeApplyOrderRepository;
 import com.inventory.middle.infra.persistence.entity.CodeApplyOrderParamPO;
 import com.inventory.middle.infra.persistence.repository.impl.CodeApplyOrderRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 public class CodeApplyOrderApplicationServiceImpl implements CodeApplyOrderApplicationService {
 
     @Resource
-    private CodeApplyOrderRepositoryImpl codeApplyOrderRepository;
+    private CodeApplyOrderRepository codeApplyOrderRepository;
 
     @Override
     public SingleResponse<CodeApplyOrderCreateResponse> create(CodeApplyOrderCreateRequest createRequest) {
@@ -86,7 +87,7 @@ public class CodeApplyOrderApplicationServiceImpl implements CodeApplyOrderAppli
         log.info("CodeApplyOrderApplicationServiceImpl.pageList request={}", JSON.toJSONString(pageRequest));
         CodeApplyOrderParamPO param = new CodeApplyOrderParamPO();
         BeanUtils.copyProperties(pageRequest, param);
-        List<CodeApplyOrder> list = codeApplyOrderRepository.listByCondition(param);
+        List<CodeApplyOrder> list = ((CodeApplyOrderRepositoryImpl) codeApplyOrderRepository).listByCondition(param);
         List<CodeApplyOrderDTO> respList = list.stream().map(e -> {
             CodeApplyOrderDTO dto = new CodeApplyOrderDTO();
             BeanUtils.copyProperties(e, dto);

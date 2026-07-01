@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.PlanMaterialParameterMapper">
-    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialParameterPO">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.PlanMaterialParameterMapper">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.PlanMaterialParameterPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="material_code" jdbcType="VARCHAR" property="materialCode"/>
         <result column="logical_plant_no" jdbcType="VARCHAR" property="logicalPlantNo"/>
@@ -65,7 +65,7 @@
         from `pl_plan_material_parameter`
         where id = #{id}
     </select>
-    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialParameterPO">
+    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanMaterialParameterPO">
         insert into `pl_plan_material_parameter` (id, material_code, logical_plant_no,
         logical_plant_name, plan_type, demand_type,demand_strategy_code,
         vendor_lead_time, planning_time_fence, demand_time_fence,
@@ -85,7 +85,7 @@
         #{updateUserId}, #{operatorName}, #{tenantId},
         #{materialDesc}, #{transferLogicalPlantNo})
     </insert>
-    <insert id="insertSelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialParameterPO">
+    <insert id="insertSelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanMaterialParameterPO">
         insert into `pl_plan_material_parameter`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -254,7 +254,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialParameterPO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanMaterialParameterPO">
         update `pl_plan_material_parameter`
         <set>
             <if test="materialCode != null">
@@ -338,7 +338,7 @@
         </set>
         where id = #{id}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialParameterPO">
+    <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanMaterialParameterPO">
         update `pl_plan_material_parameter`
         set plan_type = #{planType},
         demand_type = #{demandType},

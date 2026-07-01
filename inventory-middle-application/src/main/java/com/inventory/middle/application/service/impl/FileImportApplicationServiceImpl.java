@@ -10,6 +10,7 @@ import com.inventory.middle.client.file.dto.response.FileImportRecord;
 import com.inventory.middle.client.file.enums.FileImportBusinessTypeEnum;
 import com.inventory.middle.client.file.enums.FileImportProcessStatusEnum;
 import com.inventory.middle.client.file.enums.ImplTypeEnum;
+import com.inventory.middle.domain.repository.FileImportRecordRepository;
 import com.inventory.middle.infra.persistence.entity.ListFileImportRecordParam;
 import com.inventory.middle.infra.persistence.repository.impl.FileImportRecordRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 public class FileImportApplicationServiceImpl implements FileImportApplicationService {
 
     @Resource
-    private FileImportRecordRepositoryImpl fileImportRecordRepository;
+    private FileImportRecordRepository fileImportRecordRepository;
 
     @Override
     public SingleResponse<FileImportRecord> createFileImportRecord(CreateFileImportRecordRequest request) {
@@ -63,7 +64,7 @@ public class FileImportApplicationServiceImpl implements FileImportApplicationSe
         ListFileImportRecordParam param = new ListFileImportRecordParam();
         BeanUtils.copyProperties(request, param);
         List<com.inventory.middle.domain.model.entity.FileImportRecord> list =
-                fileImportRecordRepository.listWithNoBlob(param);
+                ((FileImportRecordRepositoryImpl) fileImportRecordRepository).listWithNoBlob(param);
         List<FileImportRecord> respList = list.stream().map(e -> {
             FileImportRecord dto = new FileImportRecord();
             BeanUtils.copyProperties(e, dto);

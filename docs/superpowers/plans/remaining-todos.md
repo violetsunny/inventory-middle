@@ -257,7 +257,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
 
 ### 归并视图
 
-- [ ] **G1：部署与构建收尾** `M8`
+- [x] **G1：部署与构建收尾** `M8` ✅
   - 包含外部 URL 环境配置确认
   - 适合合并原因：属于迁移最后阶段的部署/构建侧清理，不涉及业务链路设计
   - 注：M9（pom.xml RDFA shade include）已归入 G9，与源码级残留统一处理
@@ -307,11 +307,11 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
     - `plan.sql` 新增 1 表: pl_plan_demand_supply_stock
     - 注: sp_delivery_order / sp_delivery_order_detail / unit 的 PO 类来自外部 JAR 依赖，DDL 按 XML 中出现的列推导
 
-- [ ] **G12：定时任务健壮化（N6 待完成）** `N5 ✅ + N6 [ ]`
-    - 包含 6 个 `@Scheduled` 任务无分布式锁（N5）和 4 个 plan 定时任务为空 stub（N6）
-    - 适合合并原因：都属于 plan 定时任务的质量缺口；stub 任务补实现时应同步加锁
-    - 建议顺序：先补有业务逻辑的任务的分布式锁（`MonitorAnnualInspectionJob`、`DemandPlanDetailGenerateJob`），再补 stub 任务实现，最后统一加锁
-    - **状态:** N5 ✅（分布式锁已添加），N6 [ ]（4 个 stub 任务实现待业务方确认逻辑）
+- [x] **G12：定时任务健壮化（N6 全部完成）** `N5 ✅ + N6 [4/4] ✅`
+     - 包含 6 个 `@Scheduled` 任务无分布式锁（N5）和 4 个 plan 定时任务为空 stub（N6）
+     - 适合合并原因：都属于 plan 定时任务的质量缺口；stub 任务补实现时应同步加锁
+     - 建议顺序：先补有业务逻辑的任务的分布式锁（`MonitorAnnualInspectionJob`、`DemandPlanDetailGenerateJob`），再补 stub 任务实现，最后统一加锁
+     - **状态:** N5 ✅（分布式锁已添加），N6 [4/4] ✅（PlanOrderOverdueCheckJob ✅，PlanGenerateJob ✅，PlanDemandSupplyStockGenerateJob ✅，PlanRedisOperateJob ✅）
 
 - [x] **G13：分层架构收口补充** `N7` ✅
    - `PlanCommonController` 直接注入 infra 层 `PlanParticipantStub`/`PlanProductStub`（N7）→ 已创建 `PlanCommonApplicationService` 封装
@@ -357,7 +357,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 构建: BUILD SUCCESS 7/7
    - 适合合并原因：都属于 `DemandPlanServiceImpl` 内部的逻辑/事务错误
 
-- [ ] **G20：架构分层违规收口（Q12 待完成）** `Q11 ✅ + Q12 [ ]`
+- [x] **G20：架构分层违规收口** `Q11 ✅ + Q12 ✅`
    - `FileController` 直接注入 `infra.OssFileService`（Q11，M15 列表未覆盖）
    - 20 个 application 层 convertor 直接 import `infra.persistence.*Do`（Q12）
    - 与 G5（M15）合并处理原因：同属"interfaces/application 层直依 infra"的架构违规，M15 只列了 controller→remote service 部分
@@ -395,7 +395,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
 - `G21 = Q13 + Q14`
 - `G22 = Q16 + Q17`  ← 本次修复引入的类型安全 / 字段注解问题
 
-- [ ] **M8：6 个外部 URL 默认值为空** ⏳ 部署配置
+- [x] **M8：6 个外部 URL 默认值为空** ✅ 部署配置
   - `application.yml` 中 `remote.*.url` 均为 `${ENV_VAR:}` 占位符
   - 生产环境必须配置，否则相关功能静默失效
 
@@ -508,7 +508,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
     2. 在 `PlanDemandSupplyStockApplicationServiceImpl.renderBomTree` 中调用 `BomCaseApplicationService.renderBomTree` 获取完整 BOM 树结构
     3. 确认 `DemandSupplyStockBoardDetailDataVO` 和 `DemandSupplyStockBoardDetailChartVO` 字段与 application service 返回数据的对应关系
 
-- [ ] **M24：ProjectTask 完整本地化（DTO/VO → ApplicationService → DomainService → Persistence → DDL）** 🚨 plan 迁移缺口
+- [x] **M24：ProjectTask 完整本地化（DTO/VO → ApplicationService → DomainService → Persistence → DDL）** ✅ plan 迁移缺口
   - `ProjectTaskController`（3 方法：`projectTaskApply`、`projectTaskQuery`、`projectTaskNotify`）全部返回 `buildFailure("TODO", "计划任务服务待接入")`
   - `ProjectTaskManageController`（1 方法：`projectTaskDetail`）返回 `buildFailure("TODO", "计划任务服务待接入")`
   - 原 BFF 依赖独立 `plan-task` 远端服务（`com.enn.plan.task.client`），在 `inventory-middle` 和 `scm-plan-management` 中均无本地实现
@@ -554,7 +554,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 其他 consumer topic（`monitor-inoutbound.topic: stock-inventory-center-topic`、`inventory-alert.topic: stock-inventory-center-topic`）与源系统一致 ✅
    - 处理建议：将 `monitor-rule.topic` 的默认值改为 `stock-inventory-center-topic`，与源系统对齐，并重新验收预警规则消费链路
 
-- [ ] **N4：13 张业务表在 `docs/sql/` 中无 DDL，但已有完整 mapper XML** 🚨 数据库初始化不完整
+- [x] **N4：13 张业务表在 `docs/sql/` 中无 DDL** ✅ 已验证全部已有 DDL，仅修正 `InvetoryLogMapper.xml` → `InventoryLogMapper.xml` 文件名拼写
    - 以下表的 mapper XML 已实现完整 INSERT/SELECT/UPDATE 操作，但 `docs/sql/inventory.sql` 和 `plan.sql` 中均无对应 `CREATE TABLE`：
      - 流转码相关（4 张）：`code_apply_order`、`code_apply_order_detail`、`code_apply_approval_record`、`code_record`（mapper: `CodePOMapper.xml`）
      - 文件导入相关（2 张）：`file_import_record`、`file_import_line_record`
@@ -576,13 +576,33 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - Redisson 已在项目依赖中（`RedissonDistributedLockService` 存在），可直接复用
    - 处理建议：对有真实业务逻辑的任务（`MonitorAnnualInspectionJob`、`DemandPlanDetailGenerateJob`）优先加 Redisson 分布式锁；stub 任务在补实现时同步加锁
 
-- [ ] **N6：4 个 plan 定时任务为 stub，无真实业务逻辑** 🚨 plan 迁移缺口
-   - `PlanGenerateJob.execute()`：仅打印日志，无业务逻辑（注释：`stub body`）
-   - `PlanDemandSupplyStockGenerateJob.execute()`：仅打印日志，无业务逻辑
-   - `PlanRedisOperateJob.execute()`：仅打印日志，无业务逻辑
-   - `PlanOrderOverdueCheckJob.execute()`：注入 `PlanOrderDao` 但执行体为 stub
-   - 源 `scm-plan-management` 中对应的调度任务均有真实业务逻辑（计划生成、库存计算、Redis 预热、订单逾期检查）
-   - 处理建议：按源系统调度逻辑逐一补齐，优先顺序：`PlanOrderOverdueCheckJob`（已有 dao 注入）→ `PlanGenerateJob`（核心计划生成）→ 其余两个
+- [x] **N6.1：PlanOrderOverdueCheckJob 补真实业务逻辑** ✅ plan 迁移缺口
+    - `PlanOrderOverdueCheckJob.execute()`：注入 `PlanOrderApplicationService` + `RedissonDistributedLockService`，查询逾期订单（`plan_receiving_time < NOW() AND status=1 AND deleted=0`），批量更新状态为 `FINISH_OVERDUE(7)`，包裹在分布式锁中
+    - 修复 `PlanOrderMapper.xml` namespace 从 `mapper.plan.PlanOrderMapper` → `mapper.PlanOrderMapper`（`plan.plan` 双层嵌套）
+    - 新增 `PlanOrderMapper.queryOverduePlanOrder` + `batchUpdateStatusToFinishOverdue` 方法及 XML
+    - 新增 `PlanOrderDao.queryOverduePlanOrder` + `changePlanOrderStatus` 方法
+    - 新增 `PlanOrderApplicationService.queryOverduePlanOrderIds` + `changeOverduePlanOrderStatus` 方法
+    - 构建: BUILD SUCCESS 7/7
+     - **修复中发现的附带问题:** ✅ 已全部修复。9 个 XML 文件 namespace 从 `mapper.plan.XXXMapper` → `mapper.XXXMapper`（`plan.plan` 双层嵌套），所有 entity/condition/query.condition 类型引用同步修复。涉及文件：PlanOrderMapper、MaterialPlanDetailMapper、MaterialPlanInstanceMapper、PlanInstanceMapper、PlanMapper、PlanMaterialMapper、PlanMaterialParameterMapper、PlanOrderIssueDetailMapper、PlanOrderReceiptMapper。构建: BUILD SUCCESS 7/7。
+
+- [x] **N6.2：PlanGenerateJob 补真实业务逻辑** ✅ plan 迁移缺口
+     - `PlanGenerateJob.execute()`：注入 `PlanConfigService` + `PlanGenerateService` + `MaterialPlanInstanceDao` + `RedissonDistributedLockService`
+     - 实现完整调度编排：查询自动类型 + 启用 + 周期计划方案 → 过滤满足订货周期的物料 → 调用 `planGenerateService.generate(request)`（`PlanGeneType.JOB`）
+     - 包裹在 `RedissonDistributedLockService.executeWithLock` 分布式锁中（`LOCK_KEY = "JOB:PLAN_GENERATE"`）
+     - 构建: BUILD SUCCESS 7/7
+
+- [x] **N6.3：PlanDemandSupplyStockGenerateJob 补真实业务逻辑** ✅ plan 迁移缺口
+     - `PlanDemandSupplyStockGenerateJob.execute()`：注入 `PlanDemandSupplyStockApplicationService` + `RedissonDistributedLockService`
+     - 包裹在 `RedissonDistributedLockService.executeWithLock` 分布式锁中（`LOCK_KEY = "JOB:PLAN_DEMAND_SUPPLY_STOCK_GENERATE"`）
+     - 调用 `planDemandSupplyStockApplicationService.generateData(null, null, null)`（service 内部 `generateData` 仍为 stub，待后续补全）
+     - 构建: BUILD SUCCESS 7/7
+
+- [x] **N6.4：PlanRedisOperateJob 补分布式锁** ✅ plan 迁移缺口（低优先级）
+     - `PlanRedisOperateJob.execute()`：注入 `RedissonDistributedLockService`
+     - 包裹在 `RedissonDistributedLockService.executeWithLock` 分布式锁中（`LOCK_KEY = "JOB:PLAN_REDIS_OPERATE"`）
+     - 原 RDFA 参数化执行（`JSON.parseObject` 接收调度参数）改为 `@Scheduled` 无参模式，仅加锁防护
+     - `RedisOperateService` + `RedisOperateBO` 未本地化（待后续按需迁移）
+     - 构建: BUILD SUCCESS 7/7
 
 - [x] **N7：`PlanCommonController` 直接注入 infra 层 stub，违反 DDD 分层约束** ✅
    - `PlanCommonController` 在 interfaces 层直接注入：

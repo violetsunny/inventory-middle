@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.MdocSubQuantity;
 import com.inventory.middle.domain.model.types.MdocSubQuantityId;
 import com.inventory.middle.client.dto.MdocSubQuantityDto;
 import com.inventory.middle.client.dto.command.MdocSubQuantityCommand;
-import com.inventory.middle.infra.persistence.entity.MdocSubQuantityDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface MdocSubQuantityDtoConvertor {
      * @param mdocsubquantityDo
      * @return
      */
-      MdocSubQuantityDto fromDo(final MdocSubQuantityDo mdocsubquantityDo);
 
       default MdocSubQuantityId id2id(Long id) {
           if(Objects.isNull(id)) {

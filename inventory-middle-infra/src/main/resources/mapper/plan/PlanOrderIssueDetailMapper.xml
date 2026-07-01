@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.PlanOrderIssueDetailMapper">
-    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.PlanOrderIssueDetailPO">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.PlanOrderIssueDetailMapper">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.PlanOrderIssueDetailPO">
         <id column="id" property="id"/>
         <result column="issue_no" property="issueNo"/>
         <result column="plan_order_id" property="planOrderId"/>
@@ -25,7 +25,7 @@
     </sql>
 
     <insert id="insertSelective" keyColumn="id" keyProperty="id" useGeneratedKeys="true"
-            parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanOrderIssueDetailPO">
+            parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanOrderIssueDetailPO">
         insert into pl_plan_order_issue_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="issueNo != null">issue_no,</if>
@@ -62,7 +62,7 @@
     </insert>
 
     <select id="pageQueryPlanOrderIssueDetail" resultMap="BaseResultMap"
-            parameterType="com.inventory.middle.infra.plan.persistence.condition.plan.PlanOrderIssueDetailPageCondition">
+            parameterType="com.inventory.middle.infra.plan.persistence.condition.PlanOrderIssueDetailPageCondition">
         select
         <include refid="Base_Column_List"/>
         from pl_plan_order_issue_detail

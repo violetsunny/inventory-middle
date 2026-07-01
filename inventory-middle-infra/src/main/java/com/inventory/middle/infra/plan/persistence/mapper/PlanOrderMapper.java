@@ -22,4 +22,8 @@ public interface PlanOrderMapper {
     List<PlanOrderPO> listByCondition(PlanOrderCondition condition);
 
     int confirmPlanOrder(@Param("id") Long id);
+
+    List<PlanOrderPO> queryOverduePlanOrder();
+
+    int batchUpdateStatusToFinishOverdue(@Param("ids") List<Long> ids);
 }

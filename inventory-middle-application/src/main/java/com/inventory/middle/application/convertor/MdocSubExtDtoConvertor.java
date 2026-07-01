@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.MdocSubExt;
 import com.inventory.middle.domain.model.types.MdocSubExtId;
 import com.inventory.middle.client.dto.MdocSubExtDto;
 import com.inventory.middle.client.dto.command.MdocSubExtCommand;
-import com.inventory.middle.infra.persistence.entity.MdocSubExtDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface MdocSubExtDtoConvertor {
      * @param mdocsubextDo
      * @return
      */
-      MdocSubExtDto fromDo(final MdocSubExtDo mdocsubextDo);
 
       default MdocSubExtId id2id(Long id) {
           if(Objects.isNull(id)) {

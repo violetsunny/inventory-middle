@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.MdocSubInOut;
 import com.inventory.middle.domain.model.types.MdocSubInOutId;
 import com.inventory.middle.client.dto.MdocSubInOutDto;
 import com.inventory.middle.client.dto.command.MdocSubInOutCommand;
-import com.inventory.middle.infra.persistence.entity.MdocSubInOutDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface MdocSubInOutDtoConvertor {
      * @param mdocsubinoutDo
      * @return
      */
-      MdocSubInOutDto fromDo(final MdocSubInOutDo mdocsubinoutDo);
 
       default MdocSubInOutId id2id(Long id) {
           if(Objects.isNull(id)) {

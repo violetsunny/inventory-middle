@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.StorageLocation;
 import com.inventory.middle.domain.model.types.StorageLocationId;
 import com.inventory.middle.client.dto.StorageLocationDto;
 import com.inventory.middle.client.dto.command.StorageLocationCommand;
-import com.inventory.middle.infra.persistence.entity.StorageLocationDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface StorageLocationDtoConvertor {
      * @param storagelocationDo
      * @return
      */
-      StorageLocationDto fromDo(final StorageLocationDo storagelocationDo);
 
       default StorageLocationId id2id(Long id) {
           if(Objects.isNull(id)) {

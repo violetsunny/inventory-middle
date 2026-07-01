@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.MdocSubFinance;
 import com.inventory.middle.domain.model.types.MdocSubFinanceId;
 import com.inventory.middle.client.dto.MdocSubFinanceDto;
 import com.inventory.middle.client.dto.command.MdocSubFinanceCommand;
-import com.inventory.middle.infra.persistence.entity.MdocSubFinanceDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface MdocSubFinanceDtoConvertor {
      * @param mdocsubfinanceDo
      * @return
      */
-      MdocSubFinanceDto fromDo(final MdocSubFinanceDo mdocsubfinanceDo);
 
       default MdocSubFinanceId id2id(Long id) {
           if(Objects.isNull(id)) {

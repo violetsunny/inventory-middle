@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.InventoryPlan;
 import com.inventory.middle.domain.model.types.InventoryPlanId;
 import com.inventory.middle.client.dto.InventoryPlanDto;
 import com.inventory.middle.client.dto.command.InventoryPlanCommand;
-import com.inventory.middle.infra.persistence.entity.InventoryPlanDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface InventoryPlanDtoConvertor {
      * @param inventoryplanDo
      * @return
      */
-      InventoryPlanDto fromDo(final InventoryPlanDo inventoryplanDo);
 
       default InventoryPlanId id2id(Long id) {
           if(Objects.isNull(id)) {

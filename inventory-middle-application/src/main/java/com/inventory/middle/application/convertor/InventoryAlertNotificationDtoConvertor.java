@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.InventoryAlertNotification;
 import com.inventory.middle.domain.model.types.InventoryAlertNotificationId;
 import com.inventory.middle.client.dto.InventoryAlertNotificationDto;
 import com.inventory.middle.client.dto.command.InventoryAlertNotificationCommand;
-import com.inventory.middle.infra.persistence.entity.InventoryAlertNotificationDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface InventoryAlertNotificationDtoConvertor {
      * @param inventoryalertnotificationDo
      * @return
      */
-      InventoryAlertNotificationDto fromDo(final InventoryAlertNotificationDo inventoryalertnotificationDo);
 
       default InventoryAlertNotificationId id2id(Long id) {
           if(Objects.isNull(id)) {

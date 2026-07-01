@@ -27,4 +27,6 @@ public interface MaterialLogicalPlantRefRepository {
      * 根据ID列表查询
      */
     List<MaterialLogicalPlantRef> findByIds(List<Long> ids);
+
+
 }

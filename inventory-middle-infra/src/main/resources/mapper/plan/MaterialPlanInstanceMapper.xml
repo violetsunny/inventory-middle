@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.MaterialPlanInstanceMapper">
-    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanInstancePO">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.MaterialPlanInstanceMapper">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.MaterialPlanInstancePO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="instance_id" jdbcType="BIGINT" property="instanceId"/>
         <result column="material_code" jdbcType="VARCHAR" property="materialCode"/>
@@ -21,7 +21,7 @@
         <result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
     </resultMap>
 
-    <resultMap id="withConfigResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanInstanceWithPlanPO"
+    <resultMap id="withConfigResultMap" type="com.inventory.middle.infra.plan.persistence.entity.MaterialPlanInstanceWithPlanPO"
                extends="BaseResultMap">
         <result column="plan_type" jdbcType="BIGINT" property="planType"/>
         <result column="plan_code" jdbcType="VARCHAR" property="planCode"/>
@@ -160,7 +160,7 @@
         limit #{offset}, #{size}
     </select>
 
-    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanInstancePO"
+    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.MaterialPlanInstancePO"
             useGeneratedKeys="true" keyProperty="id">
         insert into `pl_material_plan_instance` (id, instance_id, material_code,
                                                  material_desc, material_level, logical_plant_no,
@@ -191,7 +191,7 @@
         </foreach>
     </insert>
 
-    <update id="update" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanInstancePO">
+    <update id="update" parameterType="com.inventory.middle.infra.plan.persistence.entity.MaterialPlanInstancePO">
         update `pl_material_plan_instance`
         <set>
             <if test="instanceId != null">

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.ProjectTaskMapper">
+
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.ProjectTaskPO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="request_id" jdbcType="VARCHAR" property="requestId"/>
+        <result column="task_no" jdbcType="VARCHAR" property="taskNo"/>
+        <result column="project_id" jdbcType="BIGINT" property="projectId"/>
+        <result column="project_type" jdbcType="VARCHAR" property="projectType"/>
+        <result column="task_rule" jdbcType="VARCHAR" property="taskRule"/>
+        <result column="task_data" jdbcType="VARCHAR" property="taskData"/>
+        <result column="request_status" jdbcType="INTEGER" property="requestStatus"/>
+        <result column="request_body" jdbcType="VARCHAR" property="requestBody"/>
+        <result column="original_body" jdbcType="VARCHAR" property="originalBody"/>
+        <result column="optimize_result" jdbcType="VARCHAR" property="optimizeResult"/>
+        <result column="predict_inventory" jdbcType="VARCHAR" property="predictInventory"/>
+        <result column="ship_plan_check_amount" jdbcType="VARCHAR" property="shipPlanCheckAmount"/>
+        <result column="ship_plan_time" jdbcType="VARCHAR" property="shipPlanTime"/>
+        <result column="ship_plan_id" jdbcType="VARCHAR" property="shipPlanId"/>
+        <result column="available_inventory_down" jdbcType="VARCHAR" property="availableInventoryDown"/>
+        <result column="cal_result_code" jdbcType="BIGINT" property="calResultCode"/>
+        <result column="opt_target" jdbcType="VARCHAR" property="optTarget"/>
+        <result column="temp_data" jdbcType="VARCHAR" property="tempData"/>
+        <result column="re_request_id" jdbcType="VARCHAR" property="reRequestId"/>
+        <result column="re_task_no" jdbcType="VARCHAR" property="reTaskNo"/>
+        <result column="re_create_time" jdbcType="TIMESTAMP" property="reCreateTime"/>
+        <result column="is_delete" jdbcType="TINYINT" property="isDelete"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_user_id" jdbcType="VARCHAR" property="createUserId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="update_user_id" jdbcType="VARCHAR" property="updateUserId"/>
+        <result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, request_id, task_no, project_id, project_type, task_rule, task_data,
+        request_status, request_body, original_body, optimize_result, predict_inventory,
+        ship_plan_check_amount, ship_plan_time, ship_plan_id, available_inventory_down,
+        cal_result_code, opt_target, temp_data, re_request_id, re_task_no, re_create_time,
+        is_delete, create_time, create_user_id, update_time, update_user_id, tenant_id
+    </sql>
+
+    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.ProjectTaskPO"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO pl_project_task (
+            request_id, task_no, project_id, project_type, task_rule, task_data,
+            request_status, request_body, original_body, optimize_result, predict_inventory,
+            ship_plan_check_amount, ship_plan_time, ship_plan_id, available_inventory_down,
+            cal_result_code, opt_target, temp_data, re_request_id, re_task_no, re_create_time,
+            is_delete, create_time, create_user_id, update_time, update_user_id, tenant_id
+        ) VALUES (
+            #{requestId}, #{taskNo}, #{projectId}, #{projectType}, #{taskRule}, #{taskData},
+            #{requestStatus}, #{requestBody}, #{originalBody}, #{optimizeResult}, #{predictInventory},
+            #{shipPlanCheckAmount}, #{shipPlanTime}, #{shipPlanId}, #{availableInventoryDown},
+            #{calResultCode}, #{optTarget}, #{tempData}, #{reRequestId}, #{reTaskNo}, #{reCreateTime},
+            #{isDelete}, #{createTime}, #{createUserId}, #{updateTime}, #{updateUserId}, #{tenantId}
+        )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.ProjectTaskPO"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO pl_project_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="requestId != null">request_id,</if>
+            <if test="taskNo != null">task_no,</if>
+            <if test="projectId != null">project_id,</if>
+            <if test="projectType != null">project_type,</if>
+            <if test="taskRule != null">task_rule,</if>
+            <if test="taskData != null">task_data,</if>
+            <if test="requestStatus != null">request_status,</if>
+            <if test="requestBody != null">request_body,</if>
+            <if test="originalBody != null">original_body,</if>
+            <if test="optimizeResult != null">optimize_result,</if>
+            <if test="predictInventory != null">predict_inventory,</if>
+            <if test="shipPlanCheckAmount != null">ship_plan_check_amount,</if>
+            <if test="shipPlanTime != null">ship_plan_time,</if>
+            <if test="shipPlanId != null">ship_plan_id,</if>
+            <if test="availableInventoryDown != null">available_inventory_down,</if>
+            <if test="calResultCode != null">cal_result_code,</if>
+            <if test="optTarget != null">opt_target,</if>
+            <if test="tempData != null">temp_data,</if>
+            <if test="reRequestId != null">re_request_id,</if>
+            <if test="reTaskNo != null">re_task_no,</if>
+            <if test="reCreateTime != null">re_create_time,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createUserId != null">create_user_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateUserId != null">update_user_id,</if>
+            <if test="tenantId != null">tenant_id,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="requestId != null">#{requestId},</if>
+            <if test="taskNo != null">#{taskNo},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectType != null">#{projectType},</if>
+            <if test="taskRule != null">#{taskRule},</if>
+            <if test="taskData != null">#{taskData},</if>
+            <if test="requestStatus != null">#{requestStatus},</if>
+            <if test="requestBody != null">#{requestBody},</if>
+            <if test="originalBody != null">#{originalBody},</if>
+            <if test="optimizeResult != null">#{optimizeResult},</if>
+            <if test="predictInventory != null">#{predictInventory},</if>
+            <if test="shipPlanCheckAmount != null">#{shipPlanCheckAmount},</if>
+            <if test="shipPlanTime != null">#{shipPlanTime},</if>
+            <if test="shipPlanId != null">#{shipPlanId},</if>
+            <if test="availableInventoryDown != null">#{availableInventoryDown},</if>
+            <if test="calResultCode != null">#{calResultCode},</if>
+            <if test="optTarget != null">#{optTarget},</if>
+            <if test="tempData != null">#{tempData},</if>
+            <if test="reRequestId != null">#{reRequestId},</if>
+            <if test="reTaskNo != null">#{reTaskNo},</if>
+            <if test="reCreateTime != null">#{reCreateTime},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createUserId != null">#{createUserId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateUserId != null">#{updateUserId},</if>
+            <if test="tenantId != null">#{tenantId},</if>
+        </trim>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM pl_project_task
+        WHERE id = #{id} AND is_delete = 0
+    </select>
+
+    <select id="selectByTaskNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM pl_project_task
+        WHERE task_no = #{taskNo} AND is_delete = 0
+    </select>
+
+    <select id="selectByRequestIdAndProjectId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM pl_project_task
+        WHERE request_id = #{requestId} AND project_id = #{projectId} AND is_delete = 0
+    </select>
+
+    <select id="selectByRequestId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM pl_project_task
+        WHERE request_id = #{requestId} AND is_delete = 0
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.ProjectTaskPO">
+        UPDATE pl_project_task
+        <set>
+            <if test="requestStatus != null">request_status = #{requestStatus},</if>
+            <if test="requestBody != null">request_body = #{requestBody},</if>
+            <if test="originalBody != null">original_body = #{originalBody},</if>
+            <if test="optimizeResult != null">optimize_result = #{optimizeResult},</if>
+            <if test="predictInventory != null">predict_inventory = #{predictInventory},</if>
+            <if test="shipPlanCheckAmount != null">ship_plan_check_amount = #{shipPlanCheckAmount},</if>
+            <if test="shipPlanTime != null">ship_plan_time = #{shipPlanTime},</if>
+            <if test="shipPlanId != null">ship_plan_id = #{shipPlanId},</if>
+            <if test="availableInventoryDown != null">available_inventory_down = #{availableInventoryDown},</if>
+            <if test="calResultCode != null">cal_result_code = #{calResultCode},</if>
+            <if test="optTarget != null">opt_target = #{optTarget},</if>
+            <if test="tempData != null">temp_data = #{tempData},</if>
+            <if test="reRequestId != null">re_request_id = #{reRequestId},</if>
+            <if test="reTaskNo != null">re_task_no = #{reTaskNo},</if>
+            <if test="reCreateTime != null">re_create_time = #{reCreateTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateUserId != null">update_user_id = #{updateUserId},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateByTaskNoSelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.ProjectTaskPO">
+        UPDATE pl_project_task
+        <set>
+            <if test="requestStatus != null">request_status = #{requestStatus},</if>
+            <if test="requestBody != null">request_body = #{requestBody},</if>
+            <if test="originalBody != null">original_body = #{originalBody},</if>
+            <if test="optimizeResult != null">optimize_result = #{optimizeResult},</if>
+            <if test="predictInventory != null">predict_inventory = #{predictInventory},</if>
+            <if test="shipPlanCheckAmount != null">ship_plan_check_amount = #{shipPlanCheckAmount},</if>
+            <if test="shipPlanTime != null">ship_plan_time = #{shipPlanTime},</if>
+            <if test="shipPlanId != null">ship_plan_id = #{shipPlanId},</if>
+            <if test="availableInventoryDown != null">available_inventory_down = #{availableInventoryDown},</if>
+            <if test="calResultCode != null">cal_result_code = #{calResultCode},</if>
+            <if test="optTarget != null">opt_target = #{optTarget},</if>
+            <if test="tempData != null">temp_data = #{tempData},</if>
+            <if test="reRequestId != null">re_request_id = #{reRequestId},</if>
+            <if test="reTaskNo != null">re_task_no = #{reTaskNo},</if>
+            <if test="reCreateTime != null">re_create_time = #{reCreateTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateUserId != null">update_user_id = #{updateUserId},</if>
+        </set>
+        WHERE task_no = #{taskNo}
+    </update>
+
+    <update id="updateByRequestIdSelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.ProjectTaskPO">
+        UPDATE pl_project_task
+        <set>
+            <if test="requestStatus != null">request_status = #{requestStatus},</if>
+            <if test="requestBody != null">request_body = #{requestBody},</if>
+            <if test="originalBody != null">original_body = #{originalBody},</if>
+            <if test="optimizeResult != null">optimize_result = #{optimizeResult},</if>
+            <if test="predictInventory != null">predict_inventory = #{predictInventory},</if>
+            <if test="shipPlanCheckAmount != null">ship_plan_check_amount = #{shipPlanCheckAmount},</if>
+            <if test="shipPlanTime != null">ship_plan_time = #{shipPlanTime},</if>
+            <if test="shipPlanId != null">ship_plan_id = #{shipPlanId},</if>
+            <if test="availableInventoryDown != null">available_inventory_down = #{availableInventoryDown},</if>
+            <if test="calResultCode != null">cal_result_code = #{calResultCode},</if>
+            <if test="optTarget != null">opt_target = #{optTarget},</if>
+            <if test="tempData != null">temp_data = #{tempData},</if>
+            <if test="reRequestId != null">re_request_id = #{reRequestId},</if>
+            <if test="reTaskNo != null">re_task_no = #{reTaskNo},</if>
+            <if test="reCreateTime != null">re_create_time = #{reCreateTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateUserId != null">update_user_id = #{updateUserId},</if>
+        </set>
+        WHERE request_id = #{requestId}
+    </update>
+
+</mapper>

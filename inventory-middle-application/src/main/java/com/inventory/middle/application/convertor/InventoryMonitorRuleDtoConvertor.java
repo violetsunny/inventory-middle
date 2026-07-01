@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.InventoryMonitorRule;
 import com.inventory.middle.domain.model.types.InventoryMonitorRuleId;
 import com.inventory.middle.client.dto.InventoryMonitorRuleDto;
 import com.inventory.middle.client.dto.command.InventoryMonitorRuleCommand;
-import com.inventory.middle.infra.persistence.entity.InventoryMonitorRuleDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface InventoryMonitorRuleDtoConvertor {
      * @param inventorymonitorruleDo
      * @return
      */
-      InventoryMonitorRuleDto fromDo(final InventoryMonitorRuleDo inventorymonitorruleDo);
 
       default InventoryMonitorRuleId id2id(Long id) {
           if(Objects.isNull(id)) {

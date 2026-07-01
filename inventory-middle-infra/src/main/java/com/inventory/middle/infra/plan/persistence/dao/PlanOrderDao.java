@@ -63,4 +63,12 @@ public class PlanOrderDao {
         PageHelper.startPage(condition.getPageNum(), condition.getSize());
         return new PageInfo<>(planOrderIssueDetailMapper.pageQueryPlanOrderIssueDetail(condition));
     }
+
+    public List<PlanOrderPO> queryOverduePlanOrder() {
+        return planOrderMapper.queryOverduePlanOrder();
+    }
+
+    public Boolean changePlanOrderStatus(List<Long> ids) {
+        return planOrderMapper.batchUpdateStatusToFinishOverdue(ids) > 0;
+    }
 }

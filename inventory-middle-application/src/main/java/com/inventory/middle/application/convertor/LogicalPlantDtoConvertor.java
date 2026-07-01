@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.LogicalPlant;
 import com.inventory.middle.domain.model.types.LogicalPlantId;
 import com.inventory.middle.client.dto.LogicalPlantDto;
 import com.inventory.middle.client.dto.command.LogicalPlantCommand;
-import com.inventory.middle.infra.persistence.entity.LogicalPlantDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface LogicalPlantDtoConvertor {
      * @param logicalplantDo
      * @return
      */
-      LogicalPlantDto fromDo(final LogicalPlantDo logicalplantDo);
 
       default LogicalPlantId id2id(Long id) {
           if(Objects.isNull(id)) {

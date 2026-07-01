@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.Warehouse;
 import com.inventory.middle.domain.model.types.WarehouseId;
 import com.inventory.middle.client.dto.WarehouseDto;
 import com.inventory.middle.client.dto.command.WarehouseCommand;
-import com.inventory.middle.infra.persistence.entity.WarehouseDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface WarehouseDtoConvertor {
      * @param warehouseDo
      * @return
      */
-      WarehouseDto fromDo(final WarehouseDo warehouseDo);
 
       default WarehouseId id2id(Long id) {
           if(Objects.isNull(id)) {

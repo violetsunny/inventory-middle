@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.InventoryMapHis;
 import com.inventory.middle.domain.model.types.InventoryMapHisId;
 import com.inventory.middle.client.dto.InventoryMapHisDto;
 import com.inventory.middle.client.dto.command.InventoryMapHisCommand;
-import com.inventory.middle.infra.persistence.entity.InventoryMapHisDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface InventoryMapHisDtoConvertor {
      * @param inventorymaphisDo
      * @return
      */
-      InventoryMapHisDto fromDo(final InventoryMapHisDo inventorymaphisDo);
 
       default InventoryMapHisId id2id(Long id) {
           if(Objects.isNull(id)) {

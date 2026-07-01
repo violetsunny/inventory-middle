@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.Shipment;
 import com.inventory.middle.domain.model.types.ShipmentId;
 import com.inventory.middle.client.dto.ShipmentDto;
 import com.inventory.middle.client.dto.command.ShipmentCommand;
-import com.inventory.middle.infra.persistence.entity.ShipmentDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface ShipmentDtoConvertor {
      * @param shipmentDo
      * @return
      */
-      ShipmentDto fromDo(final ShipmentDo shipmentDo);
 
       default ShipmentId id2id(Long id) {
           if(Objects.isNull(id)) {

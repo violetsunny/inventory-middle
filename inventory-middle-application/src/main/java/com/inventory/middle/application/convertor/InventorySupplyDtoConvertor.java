@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.InventorySupply;
 import com.inventory.middle.domain.model.types.InventorySupplyId;
 import com.inventory.middle.client.dto.InventorySupplyDto;
 import com.inventory.middle.client.dto.command.InventorySupplyCommand;
-import com.inventory.middle.infra.persistence.entity.InventorySupplyDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface InventorySupplyDtoConvertor {
      * @param inventorysupplyDo
      * @return
      */
-      InventorySupplyDto fromDo(final InventorySupplyDo inventorysupplyDo);
 
       default InventorySupplyId id2id(Long id) {
           if(Objects.isNull(id)) {

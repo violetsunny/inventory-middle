@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.PlanMaterialMapper">
-    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialPO">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.PlanMaterialMapper">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.PlanMaterialPO">
         <!--@mbg.generated-->
         <!--@Table pl_plan_material-->
         <id column="id" property="id"/>
@@ -33,7 +33,7 @@
         delete from pl_plan_material
         where id = #{id}
     </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialPO"
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanMaterialPO"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into pl_plan_material (source_id, material_code, logical_plant_no, `type`, deleted, create_time,
@@ -42,7 +42,7 @@
         #{createUserId}, #{updateTime}, #{updateUserId}, #{tenantId})
     </insert>
     <insert id="insertSelective" keyColumn="id" keyProperty="id"
-            parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialPO" useGeneratedKeys="true">
+            parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanMaterialPO" useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into pl_plan_material
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -110,7 +110,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialPO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanMaterialPO">
         <!--@mbg.generated-->
         update pl_plan_material
         <set>
@@ -147,7 +147,7 @@
         </set>
         where id = #{id}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanMaterialPO">
+    <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanMaterialPO">
         <!--@mbg.generated-->
         update pl_plan_material
         set source_id = #{sourceId},

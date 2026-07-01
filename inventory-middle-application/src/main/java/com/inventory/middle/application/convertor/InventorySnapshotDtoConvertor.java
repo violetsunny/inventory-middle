@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.InventorySnapshot;
 import com.inventory.middle.domain.model.types.InventorySnapshotId;
 import com.inventory.middle.client.dto.InventorySnapshotDto;
 import com.inventory.middle.client.dto.command.InventorySnapshotCommand;
-import com.inventory.middle.infra.persistence.entity.InventorySnapshotDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface InventorySnapshotDtoConvertor {
      * @param inventorysnapshotDo
      * @return
      */
-      InventorySnapshotDto fromDo(final InventorySnapshotDo inventorysnapshotDo);
 
       default InventorySnapshotId id2id(Long id) {
           if(Objects.isNull(id)) {

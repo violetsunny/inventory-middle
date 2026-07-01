@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.PlanInstanceMapper">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.PlanInstanceMapper">
 
-    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.PlanInstancePO">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.PlanInstancePO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="plan_id" jdbcType="BIGINT" property="planId"/>
         <result column="plan_code" jdbcType="VARCHAR" property="planCode"/>
@@ -39,7 +39,7 @@
         limit 1
     </select>
 
-    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanInstancePO"
+    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanInstancePO"
             useGeneratedKeys="true" keyProperty="id">
         insert into `pl_plan_instance` (id, plan_id, plan_code, plan_version, plan_type, status,
                                              cal_start_time,cal_end_time,
@@ -53,7 +53,7 @@
     </insert>
 
 
-    <update id="update" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanInstancePO">
+    <update id="update" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanInstancePO">
         update `pl_plan_instance`
         <set>
             <if test="planId != null">

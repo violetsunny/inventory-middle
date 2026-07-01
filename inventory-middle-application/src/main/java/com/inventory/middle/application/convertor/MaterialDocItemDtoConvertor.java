@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.MaterialDocItem;
 import com.inventory.middle.domain.model.types.MaterialDocItemId;
 import com.inventory.middle.client.dto.MaterialDocItemDto;
 import com.inventory.middle.client.dto.command.MaterialDocItemCommand;
-import com.inventory.middle.infra.persistence.entity.MaterialDocItemDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface MaterialDocItemDtoConvertor {
      * @param materialdocitemDo
      * @return
      */
-      MaterialDocItemDto fromDo(final MaterialDocItemDo materialdocitemDo);
 
       default MaterialDocItemId id2id(Long id) {
           if(Objects.isNull(id)) {

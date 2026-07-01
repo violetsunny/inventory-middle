@@ -8,10 +8,9 @@ import com.inventory.middle.client.code.dto.response.AccessoriesFlowCodeResponse
 import com.inventory.middle.client.code.dto.response.FleeingGoodsApplyCheckResponse;
 import com.inventory.middle.client.code.dto.response.SpDeliveryDetailPrintInfo;
 import com.inventory.middle.domain.model.entity.Code;
-import com.inventory.middle.infra.persistence.entity.CodeDo;
-import com.inventory.middle.infra.persistence.entity.ListCodeParamPO;
-import com.inventory.middle.infra.persistence.mapper.CodeMapper;
-import com.inventory.middle.infra.persistence.repository.impl.CodeRepositoryImpl;
+import com.inventory.middle.domain.repository.CodeQueryParam;
+import com.inventory.middle.domain.repository.CodeRepository;
+import com.inventory.middle.domain.service.CodeDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -23,7 +22,6 @@ import top.kdla.framework.dto.SingleResponse;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -35,10 +33,10 @@ import java.util.stream.Collectors;
 public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlowCodeApplicationService {
 
     @Resource
-    private CodeRepositoryImpl codeRepository;
+    private CodeRepository codeRepository;
 
     @Resource
-    private CodeMapper codeMapper;
+    private CodeDomainService codeDomainService;
 
     @Override
     public void manufacturerInStock(ManufacturerInStockRequest request) {
@@ -47,24 +45,23 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
             log.warn("manufacturerInStock: itemRequestList is empty, skip");
             return;
         }
-        List<CodeDo> codeList = new ArrayList<>();
+        List<Code> codeList = new ArrayList<>();
         for (BatchCreateCodeItemRequest item : request.getItemRequestList()) {
             int count = item.getCount() != null ? item.getCount() : 0;
             for (int i = 0; i < count; i++) {
-                CodeDo codeDo = new CodeDo();
-                codeDo.setInnerCode(UUID.randomUUID().toString().replace("-", ""));
-                codeDo.setBusinessNo(request.getBusinessNo());
-                codeDo.setSourceNo(item.getSourceNo());
-                codeDo.setPublisher(item.getPublisher());
-                codeDo.setCurrentOwner(item.getCurrentOwner());
-                codeDo.setType("MANUFACTURER");
-                codeDo.setStatus("UNUSED");
-                codeDo.setCreatorId(request.getOperator());
-                codeList.add(codeDo);
+                Code code = new Code();
+                code.setBusinessNo(request.getBusinessNo());
+                code.setSourceNo(item.getSourceNo());
+                code.setPublisher(item.getPublisher());
+                code.setCurrentOwner(item.getCurrentOwner());
+                code.setType("MANUFACTURER");
+                code.setStatus("UNUSED");
+                code.setCreatorId(request.getOperator());
+                codeList.add(code);
             }
         }
         if (!codeList.isEmpty()) {
-            codeMapper.batchInsert(codeList);
+            codeDomainService.manufacturerInStock(request.getBusinessNo(), codeList);
             log.info("manufacturerInStock success, total={} businessNo={}", codeList.size(), request.getBusinessNo());
         }
     }
@@ -100,33 +97,13 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
     @Override
     public SingleResponse<AccessoriesFlowCodeResponse> regenerateCode(RegenerateCodeRequest request) {
         log.info("AccessoriesFlowCodeApplicationServiceImpl.regenerateCode request={}", JSON.toJSONString(request));
-        // 1. 按 innerCode 查旧码
-        ListCodeParamPO param = new ListCodeParamPO();
-        param.setInnerCode(request.getInnerCode());
-        List<CodeDo> list = codeMapper.list(param);
-        if (list == null || list.isEmpty()) {
+        Code newCode = codeDomainService.regenerateCode(request.getInnerCode(), request.getOperatorId());
+        if (newCode == null) {
             return SingleResponse.buildFailure("NOT_FOUND", "内部码不存在: " + request.getInnerCode());
         }
-        CodeDo oldDo = list.get(0);
-        // 2. 废弃旧码
-        CodeDo scrapped = new CodeDo();
-        scrapped.setId(oldDo.getId());
-        scrapped.setStatus("SCRAPPED");
-        scrapped.setUpdatorId(request.getOperatorId());
-        codeMapper.updateByIdSelective(scrapped);
-        // 3. 生成新码（继承旧码核心字段，分配新 innerCode）
-        CodeDo newDo = new CodeDo();
-        BeanUtils.copyProperties(oldDo, newDo);
-        newDo.setId(null);
-        newDo.setInnerCode(UUID.randomUUID().toString().replace("-", ""));
-        newDo.setStatus("UNUSED");
-        newDo.setCreatorId(request.getOperatorId());
-        newDo.setCreateTime(null);
-        newDo.setUpdateTime(null);
-        codeMapper.insert(newDo);
         AccessoriesFlowCodeResponse resp = new AccessoriesFlowCodeResponse();
-        BeanUtils.copyProperties(newDo, resp);
-        log.info("regenerateCode success, oldInnerCode={} newInnerCode={}", request.getInnerCode(), newDo.getInnerCode());
+        BeanUtils.copyProperties(newCode, resp);
+        log.info("regenerateCode success, oldInnerCode={} newInnerCode={}", request.getInnerCode(), newCode.getInnerCode());
         return SingleResponse.of(resp);
     }
 
@@ -136,21 +113,18 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
         if (CollectionUtils.isEmpty(request.getCodeList())) {
             return MultiResponse.of(new ArrayList<>());
         }
-        // 按 code 字段批量查询
-        ListCodeParamPO param = new ListCodeParamPO();
-        param.setCodeList(request.getCodeList());
-        List<CodeDo> codeDoList = codeMapper.list(param);
+        List<Code> codeList = codeRepository.list(
+                CodeQueryParam.of().withCodeList(request.getCodeList()));
         List<FleeingGoodsApplyCheckResponse> result = request.getCodeList().stream().map(code -> {
             FleeingGoodsApplyCheckResponse resp = new FleeingGoodsApplyCheckResponse();
             resp.setCode(code);
-            CodeDo found = codeDoList.stream()
+            Code found = codeList.stream()
                     .filter(c -> code.equals(c.getCode())).findFirst().orElse(null);
             if (found == null) {
                 resp.setSuccess(false);
                 resp.setResultCode("NOT_FOUND");
                 resp.setResultMessage("码不存在: " + code);
             } else {
-                // 窜货判断：当前持有者 != 请求中 currentOwner
                 boolean isFleeing = !request.getCurrentOwner().equals(found.getCurrentOwner());
                 resp.setSuccess(!isFleeing);
                 resp.setResultCode(isFleeing ? "FLEEING" : "OK");
@@ -164,25 +138,22 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
     @Override
     public SingleResponse<Boolean> updateCodeForDeliverOrder(UpdateCodeForDeliverOrderRequest request) {
         log.info("AccessoriesFlowCodeApplicationServiceImpl.updateCodeForDeliverOrder request={}", JSON.toJSONString(request));
-        // 按 sourceNo + businessNo 批量更新 currentOwner / logicalPlantNo（发货转移持有者）
-        ListCodeParamPO queryParam = new ListCodeParamPO();
-        queryParam.setSourceNo(request.getSourceNo());
-        queryParam.setBusinessNo(request.getBusinessNo());
-        List<CodeDo> codeDoList = codeMapper.list(queryParam);
-        if (CollectionUtils.isEmpty(codeDoList)) {
+        List<Code> codeList = codeRepository.listBySourceAndBusiness(
+                request.getSourceNo(), request.getBusinessNo());
+        if (CollectionUtils.isEmpty(codeList)) {
             log.warn("updateCodeForDeliverOrder: no code found for sourceNo={} businessNo={}",
                     request.getSourceNo(), request.getBusinessNo());
             return SingleResponse.of(false);
         }
-        List<CodeDo> updateList = codeDoList.stream().map(c -> {
-            CodeDo updateDo = new CodeDo();
-            updateDo.setId(c.getId());
-            updateDo.setCurrentOwner(request.getCurrentOwner());
-            updateDo.setExtendField1(request.getLogicalPlantNo());
-            updateDo.setUpdatorId(request.getOperatorId());
-            return updateDo;
+        List<Code> updateList = codeList.stream().map(c -> {
+            Code updateCode = new Code();
+            updateCode.setId(c.getId());
+            updateCode.setCurrentOwner(request.getCurrentOwner());
+            updateCode.setExtendField1(request.getLogicalPlantNo());
+            updateCode.setUpdatorId(request.getOperatorId());
+            return updateCode;
         }).collect(Collectors.toList());
-        codeMapper.batchUpdate(updateList);
+        codeRepository.batchUpdate(updateList);
         log.info("updateCodeForDeliverOrder success, count={} sourceNo={}", updateList.size(), request.getSourceNo());
         return SingleResponse.of(true);
     }
@@ -190,7 +161,7 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
     @Override
     public PageResponse<AccessoriesFlowCodeResponse> manufacturerPageQuery(PageQueryManufacturerCodeRequest request) {
         log.info("AccessoriesFlowCodeApplicationServiceImpl.manufacturerPageQuery request={}", JSON.toJSONString(request));
-        ListCodeParamPO param = new ListCodeParamPO();
+        CodeQueryParam param = CodeQueryParam.of();
         if (request.getBusinessNo() != null) {
             param.setBusinessNo(request.getBusinessNo());
         }
@@ -200,9 +171,9 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
         if (request.getCurrentOwner() != null) {
             param.setCurrentOwner(request.getCurrentOwner());
         }
-        List<AccessoriesFlowCodeResponse> respList = codeMapper.list(param).stream().map(doObj -> {
+        List<AccessoriesFlowCodeResponse> respList = codeRepository.list(param).stream().map(entity -> {
             AccessoriesFlowCodeResponse resp = new AccessoriesFlowCodeResponse();
-            BeanUtils.copyProperties(doObj, resp);
+            BeanUtils.copyProperties(entity, resp);
             return resp;
         }).collect(Collectors.toList());
         return PageResponse.of(respList, (long) respList.size(),
@@ -212,11 +183,11 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
     @Override
     public MultiResponse<AccessoriesFlowCodeResponse> listCode(ListAccessoriesFlowCodeRequest request) {
         log.info("AccessoriesFlowCodeApplicationServiceImpl.listCode request={}", JSON.toJSONString(request));
-        ListCodeParamPO param = new ListCodeParamPO();
+        CodeQueryParam param = CodeQueryParam.of();
         BeanUtils.copyProperties(request, param);
-        List<AccessoriesFlowCodeResponse> respList = codeMapper.list(param).stream().map(doObj -> {
+        List<AccessoriesFlowCodeResponse> respList = codeRepository.list(param).stream().map(entity -> {
             AccessoriesFlowCodeResponse resp = new AccessoriesFlowCodeResponse();
-            BeanUtils.copyProperties(doObj, resp);
+            BeanUtils.copyProperties(entity, resp);
             return resp;
         }).collect(Collectors.toList());
         return MultiResponse.of(respList);
@@ -225,12 +196,12 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
     @Override
     public MultiResponse<AccessoriesFlowCodeResponse> listUnUsedCode(ListUnUsedAccessoriesFlowCodeRequest request) {
         log.info("AccessoriesFlowCodeApplicationServiceImpl.listUnUsedCode request={}", JSON.toJSONString(request));
-        ListCodeParamPO param = new ListCodeParamPO();
+        CodeQueryParam param = CodeQueryParam.of();
         BeanUtils.copyProperties(request, param);
         param.setStatus("UNUSED");
-        List<AccessoriesFlowCodeResponse> respList = codeMapper.list(param).stream().map(doObj -> {
+        List<AccessoriesFlowCodeResponse> respList = codeRepository.list(param).stream().map(entity -> {
             AccessoriesFlowCodeResponse resp = new AccessoriesFlowCodeResponse();
-            BeanUtils.copyProperties(doObj, resp);
+            BeanUtils.copyProperties(entity, resp);
             return resp;
         }).collect(Collectors.toList());
         return MultiResponse.of(respList);
@@ -257,14 +228,12 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
         if (request == null || request.getInnerCode() == null) {
             return SingleResponse.of(null);
         }
-        ListCodeParamPO param = new ListCodeParamPO();
-        param.setInnerCode(request.getInnerCode());
-        List<com.inventory.middle.infra.persistence.entity.CodeDo> list = codeMapper.list(param);
-        if (list == null || list.isEmpty()) {
+        Code entity = codeRepository.findByInnerCode(request.getInnerCode());
+        if (entity == null) {
             return SingleResponse.of(null);
         }
         AccessoriesFlowCodeResponse resp = new AccessoriesFlowCodeResponse();
-        BeanUtils.copyProperties(list.get(0), resp);
+        BeanUtils.copyProperties(entity, resp);
         return SingleResponse.of(resp);
     }
 
@@ -274,16 +243,14 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
         if (CollectionUtils.isEmpty(request.getInnerCodeList())) {
             return MultiResponse.of(new ArrayList<>());
         }
-        ListCodeParamPO param = new ListCodeParamPO();
-        param.setInnerCodeList(request.getInnerCodeList());
-        List<CodeDo> codeDoList = codeMapper.list(param);
-        List<SpDeliveryDetailPrintInfo> result = codeDoList.stream().map(codeDo -> {
+        List<Code> codeList = codeRepository.listByInnerCodes(request.getInnerCodeList());
+        List<SpDeliveryDetailPrintInfo> result = codeList.stream().map(code -> {
             SpDeliveryDetailPrintInfo info = new SpDeliveryDetailPrintInfo();
-            info.setMarkCode(codeDo.getCode());
-            info.setInnerCode(codeDo.getInnerCode());
-            info.setMaterialCode(codeDo.getExtendField2());
-            info.setManufacturerId(codeDo.getPublisher());
-            info.setDistributorId(codeDo.getCurrentOwner());
+            info.setMarkCode(code.getCode());
+            info.setInnerCode(code.getInnerCode());
+            info.setMaterialCode(code.getExtendField2());
+            info.setManufacturerId(code.getPublisher());
+            info.setDistributorId(code.getCurrentOwner());
             return info;
         }).collect(Collectors.toList());
         return MultiResponse.of(result);
@@ -291,7 +258,6 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
 
     @Override
     public MultiResponse<EnumResponse> accessoriesFlowCodeStatusTypeList() {
-        // 返回固定枚举列表: UNUSED / OCCUPIED / USED / SCRAPPED
         List<EnumResponse> list = new ArrayList<>();
         addEnum(list, "UNUSED", "未使用");
         addEnum(list, "OCCUPIED", "已占用");
@@ -302,14 +268,12 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
 
     @Override
     public MultiResponse<EnumResponse> codeTypeList() {
-        // 返回固定枚举列表: MANUFACTURER / DISTRIBUTOR
         List<EnumResponse> list = new ArrayList<>();
         addEnum(list, "MANUFACTURER", "厂商码");
         addEnum(list, "DISTRIBUTOR", "经销商码");
         return MultiResponse.of(list);
     }
 
-    @SuppressWarnings("unchecked")
     private void addEnum(List<EnumResponse> list, String code, String desc) {
         EnumResponse item = new EnumResponse();
         item.setCode(code);

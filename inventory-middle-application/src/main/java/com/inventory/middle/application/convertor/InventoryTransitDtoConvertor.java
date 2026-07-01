@@ -4,7 +4,6 @@ import com.inventory.middle.domain.model.entity.InventoryTransit;
 import com.inventory.middle.domain.model.types.InventoryTransitId;
 import com.inventory.middle.client.dto.InventoryTransitDto;
 import com.inventory.middle.client.dto.command.InventoryTransitCommand;
-import com.inventory.middle.infra.persistence.entity.InventoryTransitDo;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -57,7 +56,6 @@ public interface InventoryTransitDtoConvertor {
      * @param inventorytransitDo
      * @return
      */
-      InventoryTransitDto fromDo(final InventoryTransitDo inventorytransitDo);
 
       default InventoryTransitId id2id(Long id) {
           if(Objects.isNull(id)) {

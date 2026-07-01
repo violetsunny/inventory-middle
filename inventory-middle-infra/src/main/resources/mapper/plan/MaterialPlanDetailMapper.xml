@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.MaterialPlanDetailMapper">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.MaterialPlanDetailMapper">
 
-    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanDetailPO">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.MaterialPlanDetailPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="material_instance_id" jdbcType="BIGINT" property="materialInstanceId"/>
         <result column="material_code" jdbcType="VARCHAR" property="materialCode"/>
@@ -44,7 +44,7 @@
         where material_instance_id = #{materialInstanceId}
     </select>
 
-    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanDetailPO" useGeneratedKeys="true"
+    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.MaterialPlanDetailPO" useGeneratedKeys="true"
             keyProperty="id">
         insert into `pl_material_plan_detail` (id, material_instance_id, material_code,
                                                     material_desc, logical_plant_no, plan_date, deleted,
@@ -69,7 +69,7 @@
         </foreach>
     </insert>
 
-    <update id="update" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.MaterialPlanDetailPO">
+    <update id="update" parameterType="com.inventory.middle.infra.plan.persistence.entity.MaterialPlanDetailPO">
         update `pl_material_plan_detail`
         <set>
             <if test="materialInstanceId != null">

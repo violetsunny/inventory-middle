@@ -168,4 +168,17 @@ public class PlanOrderApplicationServiceImpl implements PlanOrderApplicationServ
         int random = ThreadLocalRandom.current().nextInt(10000000, 99999999);
         return prefix + time + random;
     }
+
+    @Override
+    public List<Long> queryOverduePlanOrderIds() {
+        List<PlanOrderPO> overdueOrders = planOrderDao.queryOverduePlanOrder();
+        return overdueOrders.stream().map(PlanOrderPO::getId).collect(Collectors.toList());
+    }
+
+    @Override
+    public void changeOverduePlanOrderStatus(List<Long> ids) {
+        if (ids != null && !ids.isEmpty()) {
+            planOrderDao.changePlanOrderStatus(ids);
+        }
+    }
 }

@@ -27,4 +27,6 @@ public interface InventoryMaterialRepository {
      * 根据ID列表查询
      */
     List<InventoryMaterial> findByIds(List<Long> ids);
+
+
 }

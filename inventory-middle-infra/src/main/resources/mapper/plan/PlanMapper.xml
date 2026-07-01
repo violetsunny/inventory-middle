@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.plan.PlanMapper">
-    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO">
+<mapper namespace="com.inventory.middle.infra.plan.persistence.mapper.PlanMapper">
+    <resultMap id="BaseResultMap" type="com.inventory.middle.infra.plan.persistence.entity.PlanPO">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="plan_code" jdbcType="VARCHAR" property="planCode"/>
         <result column="plan_desc" jdbcType="VARCHAR" property="planDesc"/>
@@ -21,7 +21,7 @@
         <result column="operator_name" jdbcType="VARCHAR" property="operatorName"/>
         <result column="related_bom" jdbcType="TINYINT" property="relatedBom"/>
     </resultMap>
-    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO">
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.inventory.middle.infra.plan.persistence.entity.PlanPO">
         <result column="plan_calculate_params" jdbcType="LONGVARCHAR" property="planCalculateParams"/>
         <result column="plan_delivery_params" jdbcType="LONGVARCHAR" property="planDeliveryParams"/>
     </resultMap>
@@ -57,7 +57,7 @@
         from `pl_plan`
         where id = #{id}
     </select>
-    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO">
+    <insert id="insert" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanPO">
         insert into `pl_plan` (id, plan_code, plan_desc,
         plan_type, cover_logical_plant, cover_material_type,
         plan_horizon, plan_start_time, demand_plan_file,
@@ -74,7 +74,7 @@
         #{operatorName}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO"
+    <insert id="insertSelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanPO"
             useGeneratedKeys="true" keyProperty="id">
         insert into `pl_plan`
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -202,7 +202,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanPO">
         update `pl_plan`
         <set>
             <if test="planCode != null and '' != planCode">
@@ -262,7 +262,7 @@
         </set>
         where id = #{id}
     </update>
-    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO">
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanPO">
         update `pl_plan`
         set plan_code = #{planCode},
         plan_desc = #{planDesc},
@@ -284,7 +284,7 @@
         operator_name = #{operatorName}
         where id = #{id}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.PlanPO">
+    <update id="updateByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.PlanPO">
         update `pl_plan`
         set
         plan_desc = #{planDesc},
@@ -396,7 +396,7 @@
         and status = 1
         and find_in_set(#{logicalPlantNo}, cover_logical_plant)
     </select>
-    <update id="updateStatusByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.plan.ChangeStatusPlanPO">
+    <update id="updateStatusByPrimaryKey" parameterType="com.inventory.middle.infra.plan.persistence.entity.ChangeStatusPlanPO">
         update `pl_plan`
         set status = #{status}
         where id = #{id}

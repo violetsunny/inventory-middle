@@ -139,6 +139,7 @@ remote:
   product:
     center:
       url: ${PRODUCT_CENTER_URL:http://localhost:8082/product}
+  # --- 以下 URL 默认值为空，生产部署时需通过环境变量注入 ---
   uniformPush:
     url: ${UNIFORM_PUSH_URL:}
     tenantId: ""

@@ -471,3 +471,41 @@ CREATE TABLE `pl_plan_demand_supply_stock` (
   PRIMARY KEY (`id`),
   KEY `idx_tenant_material_plant` (`tenant_id`, `material_code`, `logical_plant_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='计划供需库存';
+
+-- -------------------------------------------------------
+-- 计划任务表
+-- -------------------------------------------------------
+CREATE TABLE `pl_project_task` (
+  `id`                 bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `request_id`         varchar(128) NOT NULL DEFAULT '' COMMENT '流水号',
+  `task_no`            varchar(128) NOT NULL DEFAULT '' COMMENT '任务编号',
+  `project_id`         bigint(20)            DEFAULT NULL COMMENT '方案ID',
+  `project_type`       varchar(64)  NOT NULL DEFAULT '' COMMENT '任务类型',
+  `task_rule`          text                  COMMENT '任务规则参数（JSON）',
+  `task_data`          longtext              COMMENT '任务数据参数（JSON）',
+  `request_status`     int(11)      NOT NULL DEFAULT '0' COMMENT '请求状态（0-待处理/1-处理中/2-已完成/3-失败）',
+  `request_body`       longtext              COMMENT '请求报文',
+  `original_body`      longtext              COMMENT '原始返回报文',
+  `optimize_result`    longtext              COMMENT '优化结果（JSON）',
+  `predict_inventory`  text                  COMMENT '预计库存（JSON数组）',
+  `ship_plan_check_amount` text              COMMENT '船期计划出货量（JSON数组）',
+  `ship_plan_time`     text                  COMMENT '船期计划时间（JSON数组）',
+  `ship_plan_id`       text                  COMMENT '船期计划ID（JSON数组）',
+  `available_inventory_down` text            COMMENT '可用库存下限（JSON数组）',
+  `cal_result_code`    bigint(20)            DEFAULT NULL COMMENT '返回码',
+  `opt_target`         varchar(512)          DEFAULT '' COMMENT '优化指标结果',
+  `temp_data`          text                  COMMENT '临时数据',
+  `re_request_id`      varchar(128)          DEFAULT '' COMMENT '算法计算请求ID',
+  `re_task_no`         varchar(128)          DEFAULT '' COMMENT '算法计算任务编号',
+  `re_create_time`     datetime              DEFAULT NULL COMMENT '算法计算创建时间',
+  `is_delete`          tinyint(1)   NOT NULL DEFAULT '0' COMMENT '是否删除（0:未删除/1:已删除）',
+  `create_time`        datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_user_id`     varchar(32)  NOT NULL DEFAULT '' COMMENT '创建人',
+  `update_time`        datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_user_id`     varchar(32)  NOT NULL DEFAULT '' COMMENT '更新人',
+  `tenant_id`          varchar(32)  NOT NULL DEFAULT '' COMMENT '租户id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_task_no` (`task_no`),
+  KEY `idx_request_id` (`request_id`),
+  KEY `idx_tenant_status` (`tenant_id`, `request_status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='计划任务表';
