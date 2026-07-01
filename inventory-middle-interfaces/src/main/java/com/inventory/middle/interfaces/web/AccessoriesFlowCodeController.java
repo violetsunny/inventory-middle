@@ -20,7 +20,7 @@ import javax.annotation.Resource;
 
 /**
  * 备件流转码Controller
- * 迁移自: AccessoriesFlowCodeService (Dubbo Facade)
+ * 迁移自: AccessoriesFlowCodeService
  */
 @Tag(name = "备件流转码管理")
 @RestController

@@ -214,14 +214,14 @@ public class MonitorAnnualInspectionHandleChain implements IHandleChain<List<Inv
     private MutablePair<List<SkuBatchResponse>, Long> getSkuFromProduct(SkuBatchPageRequest reqDTO, String token, InventorySnapshotBO snapshotPO){
         log.info("MonitorAnnualInspectionHandleChain.getSkuFromProduct reqDTO={}", JSON.toJSONString(reqDTO));
         Stopwatch sw = Stopwatch.createStarted();
-        java.util.List<SkuBatchResponse> rdfaResult = productCenterRestService.skuBatchListByRequestWithSpecialToken(reqDTO, token, snapshotPO.getUpdatorId(), snapshotPO.getTenantId());
-        if (Objects.isNull(rdfaResult) || CollectionUtils.isEmpty(rdfaResult)){
+        java.util.List<SkuBatchResponse> skuBatchResult = productCenterRestService.skuBatchListByRequestWithSpecialToken(reqDTO, token, snapshotPO.getUpdatorId(), snapshotPO.getTenantId());
+        if (Objects.isNull(skuBatchResult) || CollectionUtils.isEmpty(skuBatchResult)){
             log.info("MonitorAnnualInspectionHandleChain.getSkuFromProduct failed. reqDTO={}", JSON.toJSONString(reqDTO));
             return MutablePair.of(Lists.newArrayList(), 1L);
         }
         sw.stop();
         log.info("MonitorAnnualInspectionHandleChain.getSkuFromProduct 耗时：{}, reqDTO={}", sw.toString(), JSON.toJSONString(reqDTO));
-        return MutablePair.of(rdfaResult, 1L);
+        return MutablePair.of(skuBatchResult, 1L);
     }
 
     private List<InventorySnapshotBO> getInventorySnapshotBOS(Map<String, List<String>> materialMap, Map<String, List<String>> logicalMap,

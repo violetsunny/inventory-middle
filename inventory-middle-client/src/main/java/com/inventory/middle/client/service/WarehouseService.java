@@ -1,8 +1,6 @@
 package com.inventory.middle.client.service;
 
 import com.inventory.middle.client.dto.warehouse.*;
-// RDFA import removed;
-// RDFA import removed;
 
 /**
  * 物理仓库服务

@@ -18,8 +18,6 @@ import java.util.stream.Collectors;
 
 /**
  * 库存物料服务 Infra 实现（本地 DB 版）
- * <p>
- * 原 ext 模块通过 Dubbo 调用 inventory-center，现 inventory-center 已迁入，直接查本地 InventoryMaterialMapper。
  */
 @Slf4j
 @Service

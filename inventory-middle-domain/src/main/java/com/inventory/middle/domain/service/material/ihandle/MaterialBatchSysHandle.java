@@ -74,8 +74,8 @@ public class MaterialBatchSysHandle implements IHandler {
             // 批次同步给主数据
             List<SkuBatchRequest> reqs = conversionSkuBatchReq(materialDocumentIn);
             log.info("createMaterialDoc MaterialBatchDataInHandle 批次同步 token:{} 请求:{}", materialDocumentIn.getToken(),JSON.toJSON(reqs));
-            SingleResponse rdfaResult = remoteProductCenterRestService.skuBatchSys(reqs, materialDocumentIn.getToken(), materialDocumentIn.getTenantId());
-            log.info("createMaterialDoc MaterialBatchDataInHandle 批次同步 result:{}", JSON.toJSON(rdfaResult));
+            SingleResponse result = remoteProductCenterRestService.skuBatchSys(reqs, materialDocumentIn.getToken(), materialDocumentIn.getTenantId());
+            log.info("createMaterialDoc MaterialBatchDataInHandle 批次同步 result:{}", JSON.toJSON(result));
         } catch (Exception e) {
             log.error("createMaterialDoc MaterialBatchDataInHandle 批次同步 error", e);
         }

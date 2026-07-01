@@ -1,7 +1,7 @@
 spring:
   application:
     name: inventory-middle
-  # 数据源配置（本地开发，从 Apollo RDFA.db 迁移）
+  # 数据源配置（本地开发）
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/inventory?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
     username: root
@@ -16,7 +16,7 @@ spring:
       test-on-borrow: false
       test-while-idle: true
       time-between-eviction-runs-millis: 60000
-  # Redis 配置（从 Apollo RDFA.redis 迁移）
+  # Redis 配置
   redis:
     host: 127.0.0.1
     port: 6379
@@ -100,7 +100,7 @@ rocketmq:
       topic: stock-inventory-center-topic
       group: inOrOutBound
       tag: "*"
-    # Plan 模块 Consumer 配置（topic/group 以原 Nacos 实际值为准，以下为占位符）
+    # Plan 模块 Consumer 配置
     plan-demand:
       topic: ${rocketmq.plan.demand.topic:scm-plan-demand-topic}
       group: ${rocketmq.plan.demand.consumer.group:scm-plan-management-demand-consumer}
@@ -192,7 +192,7 @@ demand:
         maxSize: ${DEMAND_PLAN_IMPORT_MAX_SIZE:256}
         batchSize: ${DEMAND_PLAN_IMPORT_BATCH_SIZE:300}
 
-# Plan 定时任务 cron 配置（以原 Apollo/Nacos 实际值为准，以下为占位符）
+# Plan 定时任务 cron 配置
 plan:
   job:
     generate:

@@ -8,7 +8,6 @@ import java.io.Serializable;
  * 计划域-产品/物料BO
  * <p>
  * 迁移自: com.enn.plan.management.support.product.bo.ProductBO
- * 去除了 rdfa BaseBo 依赖，保留 plan 层实际使用的字段
  * </p>
  *
  * @author Danny.Lee (original)

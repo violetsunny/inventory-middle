@@ -2,8 +2,6 @@ package com.inventory.middle.client.service;
 
 import com.inventory.middle.client.dto.EnumResponse;
 import com.inventory.middle.client.dto.storageLocation.*;
-// RDFA import removed;
-// RDFA import removed;
 
 import java.util.ArrayList;
 

@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * 库存物料Controller
- * 迁移自: InventoryMaterialService (Dubbo Facade)
+ * 迁移自: InventoryMaterialService
  */
 @Tag(name = "库存物料管理")
 @RestController

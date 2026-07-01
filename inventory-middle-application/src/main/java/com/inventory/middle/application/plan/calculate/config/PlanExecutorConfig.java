@@ -16,23 +16,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Configuration
 public class PlanExecutorConfig {
 
-    // EXECUTOR_NAME
     /**
      * 计划计算线程池
      */
     public static final String PLAN_CALCULATE_EXECUTOR = "planCalculateExecutor";
 
-
     @Bean(PLAN_CALCULATE_EXECUTOR)
     public ExecutorService planCalculateExecutor() {
-//        return RDFAExecutor.Builder.newInstance(PLAN_CALCULATE_EXECUTOR)
-//                .corePoolSize(5)
-//                .maximumPoolSize(10)
-//                .blockingQueueSize(200)
-//                .keepAliveTimeInSeconds(10)
-//                .rejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy())
-//                .build();
-
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(20);
         executor.setMaxPoolSize(50);

@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 
 /**
  * 码申请单Controller
- * 迁移自: CodeApplyOrderService (Dubbo Facade)
+ * 迁移自: CodeApplyOrderService
  */
 @Tag(name = "码申请单管理")
 @RestController

@@ -14,9 +14,6 @@ import java.util.Map;
  * 远程统一推送服务（通过 OpenFeign / RestTemplate HTTP 调用）
  * <p>
  * 迁移自: com.enn.inventory.center.integration.push.RemoteUniformPushService
- * <p>
- * 原 Dubbo @DubboReference(version = "1.0.0") UniformPushClient
- * 已替换为 HTTP REST 调用方式
  */
 @Slf4j
 @Service

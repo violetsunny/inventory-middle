@@ -2,7 +2,6 @@ package com.inventory.middle.client.dto.logicalPlant;
 
 import com.inventory.middle.client.dto.BaseRequest;
 import lombok.Data;
-// RDFA import removed;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

@@ -1,7 +1,6 @@
 package com.inventory.middle.client.service;
 
 import com.inventory.middle.client.dto.mdata.qry.GetProductMasterDataSourceQry;
-// RDFA import removed;
 
 /**
  * 库存主数据源服务

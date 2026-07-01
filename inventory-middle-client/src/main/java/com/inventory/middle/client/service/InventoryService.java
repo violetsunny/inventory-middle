@@ -8,7 +8,6 @@ import com.inventory.middle.client.dto.inventorysnapshot.CurrentInventoryBalance
 import com.inventory.middle.client.dto.inventorysnapshot.CurrentInventoryBalanceResp;
 import com.inventory.middle.client.dto.inventorysnapshot.QueryInventoryReqDTO;
 import com.inventory.middle.client.dto.inventorysnapshot.QueryInventoryResDTO;
-// RDFA import removed;
 
 /**
  * 库存查询

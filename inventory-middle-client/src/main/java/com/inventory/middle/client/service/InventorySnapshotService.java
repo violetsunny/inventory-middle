@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.inventory.middle.client.dto.inventorysnapshot.*;
 
-// RDFA import removed;
-// RDFA import removed;
 
 /**
  * 库存快照服务

@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 /**
- * Redisson 分布式锁实现（平替 RDFA RdfaDistributeLockFactory）
+ * Redisson 分布式锁实现
  */
 @Service
 @Slf4j

@@ -19,7 +19,7 @@ import javax.annotation.Resource;
 
 /**
  * 文件导入Controller
- * 迁移自: FileImportService (Dubbo Facade)
+ * 迁移自: FileImportService
  */
 @Tag(name = "文件导入管理")
 @RestController

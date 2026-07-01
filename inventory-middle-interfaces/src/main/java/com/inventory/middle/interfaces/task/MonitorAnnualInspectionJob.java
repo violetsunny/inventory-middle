@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * 迁移自: com.enn.inventory.center.processor.job.MonitorAnnualInspectionJob
  * <p>
- * 原来使用 RDFA 的 @RdfaJob("InventoryAnnualInspectionMonitorJob") + RdfaJobHandler
  * 迁移后改用 Spring @Scheduled，如需接入 XXL-JOB 等调度平台，替换 @Scheduled 注解即可。
  */
 @Slf4j

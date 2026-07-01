@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.inventory.middle.client.dto.material.*;
-// RDFA import removed;
-// RDFA import removed;
 
 /**
  *  物料-逻辑仓关系

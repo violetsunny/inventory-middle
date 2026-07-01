@@ -1,8 +1,6 @@
 package com.inventory.middle.client.service;
 
 import com.inventory.middle.client.dto.monitory.*;
-// RDFA import removed;
-// RDFA import removed;
 
 /**
  * @author dongguo.tao

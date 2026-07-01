@@ -3,7 +3,6 @@ package com.inventory.middle.client.service;
 
 import com.inventory.middle.client.dto.sparepart.PageSparePartReqDTO;
 import com.inventory.middle.client.dto.sparepart.PageSparePartResDTO;
-// RDFA import removed;
 
 /**
  * @description 备品备件

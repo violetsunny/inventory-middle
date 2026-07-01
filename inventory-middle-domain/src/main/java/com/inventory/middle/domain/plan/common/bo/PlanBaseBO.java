@@ -8,7 +8,6 @@ import java.io.Serializable;
  * 计划域 BO 基类
  * <p>
  * 迁移自: com.enn.plan.management.core.common.bo.BaseBO
- * 去除了 rdfa BaseBo 依赖，保留用户上下文字段
  * </p>
  */
 @Data

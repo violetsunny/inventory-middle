@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 /**
  * Plan 模块默认 MQ 消息生产者
  * <p>
- * 迁移自 com.enn.plan.management.core.mq.DefaultMqProducer（原 rdfa 框架）
+ * 迁移自 com.enn.plan.management.core.mq.DefaultMqProducer
  * 改为基于 RocketMQ Spring Boot Starter 发送消息
  * </p>
  *

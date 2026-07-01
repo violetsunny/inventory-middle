@@ -35,22 +35,22 @@ public class InventoryLogDomainServiceImpl implements InventoryLogDomainService 
     @Override
     @Async("inventoryCenterExecutor")
     public SingleResponse<Boolean> createBatchAsync(List<InventoryLogBO> logBOs) {
-        SingleResponse<Boolean> rdfaResult = SingleResponse.of(Boolean.TRUE);
+        SingleResponse<Boolean> response = SingleResponse.of(Boolean.TRUE);
         try {
             logValidator.validateLogBos(logBOs);
             boolean result = inventoryLogCoreService.insertBatch(logBOs);
             if (!result) {
                 log.warn("InventoryLogDomainServiceImpl.createBatchAsync logBOs={}", JSON.toJSONString(logBOs));
-                rdfaResult = SingleResponse.buildFailure(ResponseCodeEnum.FAILED.getCode(), ResponseCodeEnum.FAILED.getDesc());
+                response = SingleResponse.buildFailure(ResponseCodeEnum.FAILED.getCode(), ResponseCodeEnum.FAILED.getDesc());
             }
         } catch (BusinessException e) {
             log.error("InventoryLogDomainServiceImpl.createBatchAsync business error. logBOs={}", JSON.toJSONString(logBOs), e);
-            rdfaResult = SingleResponse.buildFailure(e.getCode(), e.getMsg());
+            response = SingleResponse.buildFailure(e.getCode(), e.getMsg());
         } catch (Exception e) {
             log.error("InventoryLogDomainServiceImpl.createBatchAsync error. logBOs={}", JSON.toJSONString(logBOs), e);
-            rdfaResult = SingleResponse.buildFailure(ResponseCodeEnum.SYSTEM_ERROR.getCode(), ResponseCodeEnum.SYSTEM_ERROR.getDesc());
+            response = SingleResponse.buildFailure(ResponseCodeEnum.SYSTEM_ERROR.getCode(), ResponseCodeEnum.SYSTEM_ERROR.getDesc());
         }
-        return rdfaResult;
+        return response;
     }
 
     @Override

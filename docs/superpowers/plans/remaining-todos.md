@@ -290,7 +290,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
   - 包含 PlanConfig 空壳实现、DemandSupplyStock VO 映射、ProjectTask 本地化、ennUnifiedAuthorization 残留
   - 适合合并原因：都属于 plan 子包迁移后遗留的功能缺口，且 M22-M24 可独立于 G4 的登录态治理先行推进
 
-- [ ] **G9：RDFA/Nacos/Dubbo 代码残留全量清理** `M9 + M26`
+- [x] **G9：RDFA/Nacos/Dubbo 代码残留全量清理** `M9 + M26` ✅
    - 包含 pom.xml shade plugin RDFA include（M9）+ 源码变量名/死代码类/注释残留（M26）
    - 适合合并原因：都属于"去 RDFA/Nacos/Dubbo 化"的代码洁癖类清理，不涉及业务逻辑变更
    - 与 G1 的区别：G1 聚焦部署/构建配置确认，G9 聚焦源码级命名和注释清理
@@ -307,7 +307,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
     - `plan.sql` 新增 1 表: pl_plan_demand_supply_stock
     - 注: sp_delivery_order / sp_delivery_order_detail / unit 的 PO 类来自外部 JAR 依赖，DDL 按 XML 中出现的列推导
 
-- [ ] **G12：定时任务健壮化** `N5 + N6`
+- [ ] **G12：定时任务健壮化（N6 待完成）** `N5 ✅ + N6 [ ]`
     - 包含 6 个 `@Scheduled` 任务无分布式锁（N5）和 4 个 plan 定时任务为空 stub（N6）
     - 适合合并原因：都属于 plan 定时任务的质量缺口；stub 任务补实现时应同步加锁
     - 建议顺序：先补有业务逻辑的任务的分布式锁（`MonitorAnnualInspectionJob`、`DemandPlanDetailGenerateJob`），再补 stub 任务实现，最后统一加锁
@@ -357,14 +357,14 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 构建: BUILD SUCCESS 7/7
    - 适合合并原因：都属于 `DemandPlanServiceImpl` 内部的逻辑/事务错误
 
-- [ ] **G20：架构分层违规收口（M15 补充）** `Q11 + Q12`
+- [ ] **G20：架构分层违规收口（Q12 待完成）** `Q11 ✅ + Q12 [ ]`
    - `FileController` 直接注入 `infra.OssFileService`（Q11，M15 列表未覆盖）
    - 20 个 application 层 convertor 直接 import `infra.persistence.*Do`（Q12）
    - 与 G5（M15）合并处理原因：同属"interfaces/application 层直依 infra"的架构违规，M15 只列了 controller→remote service 部分
 
-- [ ] **G21：代码洁癖 — 重复类和孤儿实体清理** `Q13 + Q14`
-   - 11 个孤儿实体类（Q13）和两个 `ResponseCodeEnum`（Q14）
-   - 低优先级，不影响运行时，属于代码可维护性清理
+- [x] **G21：代码洁癖 — 重复类和孤儿实体清理** `Q13 + Q14` ✅
+    - 11 个孤儿实体类（Q13）和两个 `ResponseCodeEnum`（Q14）
+    - 低优先级，不影响运行时，属于代码可维护性清理
 
 - [x] **G22：本次修复引入的类型安全与字段注解问题** `Q16 + Q17` ✅
    - `PlanDemandSupplyStockController.demandSupplyStockBoardDetail` 无类型保证的 Map 强转（Q16）→ 改用 `instanceof` 类型检查 + `Number.longValue()` 安全转换
@@ -564,7 +564,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 影响：从 `docs/sql/` 初始化的新环境将缺少这 13 张表，导致相关功能在运行时直接报错
    - 处理建议：为每张表补写 `CREATE TABLE` DDL 并归入对应的 SQL 文件；同时修正 `InvetoryLogMapper.xml` 文件名拼写错误
 
-- [ ] **N5：所有 `@Scheduled` 任务均无分布式锁，多实例部署将重复执行** ⚠️ 多节点并发风险
+- [x] **N5：所有 `@Scheduled` 任务均无分布式锁，多实例部署将重复执行** ✅ 多节点并发风险
    - 受影响的任务（共 6 个）：
      - `MonitorAnnualInspectionJob`（`0 0 2 * * ?`）— 有真实业务逻辑，无分布式锁
      - `DemandPlanDetailGenerateJob`（`0 0 2 * * ?`）— 有真实业务逻辑（调用 `demandPlanService.generateData`），无分布式锁
@@ -599,7 +599,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 影响：前端若按 BFF 路径调用 `/monitorRule/ruleLine` 可正常使用；若误用 `/inventorymonitorruleline` 会得到 stub 响应
    - **处理结果：** 删除自动生成版 `InventoryMonitorRuleLineController`；将缺失的 `detail/{id}` 和 `delete` 端点补入 BFF 版 `InventoryMonitorRuleController` 的 `/monitorRule/ruleLine/` 路径下
 
-- [ ] **M26：RDFA/Nacos/Dubbo 代码级残留全量清理** ⚠️ 代码洁癖收尾
+- [x] **M26：RDFA/Nacos/Dubbo 代码级残留全量清理** ✅ 代码洁癖收尾
   - **变量名（11 处，3 个文件）：**
     - `domain/service/material/ihandle/MaterialBatchSysHandle.java`（line 77-78）：`rdfaResult` → `result`
     - `domain/service/monitor/MonitorAnnualInspectionHandleChain.java`（line 217-224）：`rdfaResult` → `result`
@@ -649,7 +649,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 不在 N1 覆盖范围（N1 针对自动生成 CRUD controller 的 list 方法），也未在 M22-M24 中记录
    - 处理建议：在 `MaterialDocQueryServiceImpl` 中实现真实的批次号查询逻辑，参考源 `MaterialDocBizServiceImpl.queryMaterialBatchNo`
 
-- [ ] **Q5：25 个 Mapper XML 文件在 `/mybatis/mapper/` 目录未被 MyBatis 加载** ⚠️ 配置死区
+- [x] **Q5：25 个 Mapper XML 文件在 `/mybatis/mapper/` 目录未被 MyBatis 加载** ✅ 配置死区
    - `application.yml` 配置 `mapper-locations: classpath*:/mapper/**/*.xml`，只扫描 `/mapper/` 目录
    - `/inventory-middle-infra/src/main/resources/mybatis/mapper/` 中存在 25 个同名 XML 文件（`InventoryMonitorRuleMapper.xml`、`InventoryAlertMapper.xml`、`MaterialDocMainMapper.xml`、`InventoryDemandMapper.xml` 等），与 `/mapper/` 中的 namespace 重叠，但**永远不会被加载**
    - 额外问题：`mapper/plan/DemandPlanMapper.xml`（namespace: `infra.plan.persistence.mapper.DemandPlanMapper`）和 `mapper/plan/demand/DemandPlanMapper.xml`（namespace: `infra.plan.persistence.mapper.demand.DemandPlanMapper`）**两份都被加载**，若对应 Java 接口只有一个，另一个 XML 是无效配置
@@ -672,22 +672,22 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
     - `mapper/MaterialDocMainMapper.xml` 的 `queryByUniqueNo`（line 382）：已添加 `AND tenant_id = #{tenantId}`（原有 `deleted = 0`）
     - `MaterialDocMainMapper.java` 接口：`queryByUniqueNo` 方法签名添加 `@Param("tenantId") String tenantId` 参数
 
-- [ ] **Q9：`DemandPlanServiceImpl` 内 3 处业务逻辑 TODO + 2 处 `ParseException` 被静默吞掉** ⚠️ 逻辑不完整
-   - **TODO 标记（未完成业务逻辑）：**
-     - `DemandPlanServiceImpl.java` line 308：`//TODO`（tenant_id/user_id/company_code 组装块内）
-     - line 313：`// 租户id 用户id 公司编码 TODO`
-     - line 346：`//这里的先这样组装一下，621版本优化掉 TODO`
-   - **ParseException 静默吞掉：**
-     - `calculate()` 方法（line 532）：`ParseException` 被 catch 后返回空 Map，调用方无法区分"没有数据"和"日期解析失败"
-     - `checkPeriodDate()` 方法（line 1116）：`ParseException` 被 catch 后返回 `false`，导致有效计划期被误判为无效
-   - 处理建议：补全 TODO 逻辑（依赖 G4 的 UserContext 承接方案）；ParseException catch 块改为抛出 BizException，避免静默降级
+- [x] **Q9：`DemandPlanServiceImpl` 内 3 处业务逻辑 TODO + 2 处 `ParseException` 被静默吞掉** ✅ 逻辑不完整
+    - **TODO 标记（未完成业务逻辑）：**
+      - `DemandPlanServiceImpl.java` line 308：`//TODO`（tenant_id/user_id/company_code 组装块内）
+      - line 313：`// 租户id 用户id 公司编码 TODO`
+      - line 346：`//这里的先这样组装一下，621版本优化掉 TODO`
+    - **ParseException 静默吞掉：**
+      - `calculate()` 方法（line 532）：`ParseException` 被 catch 后返回空 Map，调用方无法区分"没有数据"和"日期解析失败"
+      - `checkPeriodDate()` 方法（line 1116）：`ParseException` 被 catch 后返回 `false`，导致有效计划期被误判为无效
+    - 处理建议：补全 TODO 逻辑（依赖 G4 的 UserContext 承接方案）；ParseException catch 块改为抛出 BizException，避免静默降级
 
-- [ ] **Q10：`DemandPlanServiceImpl.handleDemandPlanDetailByMaterial` `@Transactional` 通过 `this.` 调用失效** ⚠️ 事务边界错误
-   - `application/plan/demand/service/impl/DemandPlanServiceImpl.java` line 438：`@Transactional public List<DemandPlanMaterialPO> handleDemandPlanDetailByMaterial(...)`
-   - 该方法在同一类中通过 `this.handleDemandPlanDetailByMaterial(...)` 调用（line 664）
-   - Spring AOP 代理不拦截 `this.` 内部调用，`@Transactional` 注解在此场景**完全无效**
-   - 影响：外部调用该方法时事务正常；当通过 `generateData()` 内部路径调用时，如果 `handleDemandPlanDetailByMaterial` 内部发生异常，外层事务不会因为此方法的失败被感知，数据可能部分写入
-   - 处理建议：将 `handleDemandPlanDetailByMaterial` 提取到单独的 Spring Bean，或改用 `ApplicationContext` 自注入调用（后者是 workaround，不推荐）
+- [x] **Q10：`DemandPlanServiceImpl.handleDemandPlanDetailByMaterial` `@Transactional` 通过 `this.` 调用失效** ✅ 事务边界错误
+    - `application/plan/demand/service/impl/DemandPlanServiceImpl.java` line 438：`@Transactional public List<DemandPlanMaterialPO> handleDemandPlanDetailByMaterial(...)`
+    - 该方法在同一类中通过 `this.handleDemandPlanDetailByMaterial(...)` 调用（line 664）
+    - Spring AOP 代理不拦截 `this.` 内部调用，`@Transactional` 注解在此场景**完全无效**
+    - 影响：外部调用该方法时事务正常；当通过 `generateData()` 内部路径调用时，如果 `handleDemandPlanDetailByMaterial` 内部发生异常，外层事务不会因为此方法的失败被感知，数据可能部分写入
+    - 处理结果：添加 `@Lazy @Autowired private DemandPlanServiceImpl self;` 自注入，改为 `self.handleDemandPlanDetailByMaterial(...)` 通过代理触发 @Transactional
 
 - [x] **Q11：`FileController` 直接注入 `infra.integration.oss.OssFileService` → M15 分层修复遗漏** ✅
    - `interfaces/web/file/FileController.java` line 4：`import com.inventory.middle.infra.integration.oss.OssFileService`
@@ -701,19 +701,19 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 现状导致：任何数据库字段变更都需要同时修改 infra 层实体和 application 层 convertor
    - 处理建议：将 Do → Domain Object 转换逻辑迁移到 infra 层的 RepositoryImpl 中；application 层 convertor 仅处理 Domain → VO/DTO 的转换（此项改动范围较大，建议在 G5/M15 收口后作为长期重构目标）
 
-- [ ] **Q13：11 个孤儿实体类在 `entity/inventory/` 和 `entity/material/` 子包（零引用，死代码）** ℹ️ 代码洁癖
-   - `domain/model/entity/inventory/`：`InventoryAlert`、`InventoryAlertNotification`、`InventoryDemand`、`InventoryMap`、`InventoryMapHis`、`InventoryMonitorRule`、`InventoryMonitorRuleLine`、`InventoryPlan`、`InventorySnapshot`、`InventorySupply`、`InventoryTransit`（共 11 个类）
-   - `domain/model/entity/material/`：`MaterialDocItem`、`MaterialDocMain`、`MaterialDocument` 等（与 `entity/` 根目录版本重复）
-   - 以上类全仓库零引用（仅有 `MaterialCategoryValidator`/`MaterialAdjustTypeValidator` 引用 `entity/material/MaterialDocument`）
-   - 活跃使用的版本在 `domain/model/entity/` 根目录下（直接子类，非 inventory/material 子包）
-   - 处理建议：删除 `entity/inventory/` 和 `entity/material/` 子包下的全部类（确认无引用后）
+- [x] **Q13：11 个孤儿实体类在 `entity/inventory/` 和 `entity/material/` 子包（零引用，死代码）** ✅ 代码洁癖
+    - `domain/model/entity/inventory/`：`InventoryAlert`、`InventoryAlertNotification`、`InventoryDemand`、`InventoryMap`、`InventoryMapHis`、`InventoryMonitorRule`、`InventoryMonitorRuleLine`、`InventoryPlan`、`InventorySnapshot`、`InventorySupply`、`InventoryTransit`（共 11 个类）
+    - `domain/model/entity/material/`：`MaterialDocItem`、`MaterialDocMain`、`MaterialDocument` 等（与 `entity/` 根目录版本重复）
+    - 以上类全仓库零引用（仅有 `MaterialCategoryValidator`/`MaterialAdjustTypeValidator` 引用 `entity/material/MaterialDocument`）
+    - 活跃使用的版本在 `domain/model/entity/` 根目录下（直接子类，非 inventory/material 子包）
+    - 处理建议：删除 `entity/inventory/` 和 `entity/material/` 子包下的全部类（确认无引用后）
 
-- [ ] **Q14：两个 `ResponseCodeEnum` 在 domain 层重叠定义** ℹ️ 代码洁癖
-   - `domain/common/constants/ResponseCodeEnum.java`：库存核心域错误码（10001–29999）
-   - `domain/plan/common/enums/ResponseCodeEnum.java`：plan 模块错误码（C_*/D_*系列）
-   - 两个 enum 都定义了 `SUCCESS("0","成功")`、`FAILED("1","失败")`、`SYSTEM_ERROR(...)`、`REMOTE_SERVICE_FAILED(...)`，值不同
-   - `Ex` 工具类使用 plan 版本；业务异常、domain service 使用库存核心版本；两套并存导致新代码选择混乱
-   - 处理建议：保留 `domain/common/constants/ResponseCodeEnum`，将 plan 特有的错误码（C_*/D_*）并入该 enum，删除 `domain/plan/common/enums/ResponseCodeEnum`；或明确文档约定各自用途范围
+- [x] **Q14：两个 `ResponseCodeEnum` 在 domain 层重叠定义** ✅ 代码洁癖
+    - `domain/common/constants/ResponseCodeEnum.java`：库存核心域错误码（10001–29999）
+    - `domain/plan/common/enums/ResponseCodeEnum.java`：plan 模块错误码（C_*/D_*系列）
+    - 两个 enum 都定义了 `SUCCESS("0","成功")`、`FAILED("1","失败")`、`SYSTEM_ERROR(...)`、`REMOTE_SERVICE_FAILED(...)`，值不同
+    - `Ex` 工具类使用 plan 版本；业务异常、domain service 使用库存核心版本；两套并存导致新代码选择混乱
+    - 处理结果：将 plan 特有错误码（C_*/D_*/PI_*/P_*/PMP_*/BOM_*系列）并入 `domain/common/constants/ResponseCodeEnum`（碰撞常量加 `PLAN_` 前缀），删除 `domain/plan/common/enums/ResponseCodeEnum`，更新 30+ plan 文件导入路径和常量引用，BUILD SUCCESS 7/7
 
 - [x] **Q15：`PlanConfigController` 4 处 `userInfo.getTenantId()` 直接解引用无 null 检查 → NPE** ✅ 🚨 本次修复引入
    - `queryPlan`（line 193）：`userInfo.getTenantId()` — `UserContextHolder.get()` 返回 null 时崩溃

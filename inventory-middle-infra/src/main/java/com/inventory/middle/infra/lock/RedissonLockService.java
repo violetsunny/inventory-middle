@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 /**
- * 分布式锁服务，平替 RDFA DisLockService
+ * 分布式锁服务
  */
 @Slf4j
 @Service
