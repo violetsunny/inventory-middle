@@ -2,7 +2,7 @@ package com.inventory.middle.application.plan.config.rule.validator;
 
 import com.inventory.middle.domain.plan.common.constants.CommonConstants;
 import com.inventory.middle.domain.plan.common.enums.DemandStrategyEnum;
-import com.inventory.middle.domain.plan.common.enums.ResponseCodeEnum;
+import com.inventory.middle.domain.common.constants.ResponseCodeEnum;
 import com.inventory.middle.domain.plan.common.ex.Ex;
 import com.inventory.middle.domain.plan.common.rule.IValidator;
 import com.inventory.middle.domain.plan.common.rule.ValidateMessage;
@@ -44,18 +44,18 @@ public class UpdatePlanMaterialParamFormatValidator implements IValidator {
         // 水平越权校验
         PlanMaterialParameterPO planMaterialParameterPO = planConfigDao.selectPlanMaterialParameterById(parameter.getId());
         if (Objects.isNull(planMaterialParameterPO)) {
-            throw Ex.of(ResponseCodeEnum.DATA_IS_NULL);
+            throw Ex.of(ResponseCodeEnum.PLAN_DATA_IS_NULL);
         }
         if (!planMaterialParameterPO.getTenantId().equals(parameter.getTenantId())) {
-            throw Ex.of(ResponseCodeEnum.NO_AUTH);
+            throw Ex.of(ResponseCodeEnum.PLAN_NO_AUTH);
         }
         // 校验租户Id
         if (StringUtils.isEmpty(parameter.getTenantId())) {
-            throw Ex.of(ResponseCodeEnum.TENANT_ID_IS_NULL);
+            throw Ex.of(ResponseCodeEnum.PLAN_TENANT_ID_IS_NULL);
         }
         // 校验操作人Id
         if (StringUtils.isEmpty(parameter.getUserId()) || StringUtils.isEmpty(parameter.getUserName())) {
-            throw Ex.of(ResponseCodeEnum.USER_INFO_IS_NULL);
+            throw Ex.of(ResponseCodeEnum.PLAN_USER_INFO_IS_NULL);
         }
         // 校验计划类型
         Integer planType = parameter.getPlanTypeCode();

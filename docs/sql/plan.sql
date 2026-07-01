@@ -448,3 +448,26 @@ INSERT INTO code_generator_cfg(code, name, rule, is_cache, cache_num) VALUES
 ('PLAN_ORDER_ISSUE_NO',    '计划订单下发编号','PI+yyyyMMdd+6',   1, 100),
 ('BOM_CASE_CODE',          'BOM方案编码',    'BOM+yyyyMMdd+6',   1, 100),
 ('DEMAND_PLAN_VERSION',    '需求计划版本号',  'DP+yyyyMMdd+6',   1, 100);
+
+-- -------------------------------------------------------
+-- 计划供需库存
+-- -------------------------------------------------------
+CREATE TABLE `pl_plan_demand_supply_stock` (
+  `id`                 bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `material_code`      varchar(64)  NOT NULL DEFAULT '' COMMENT '物料编码',
+  `logical_plant_no`   varchar(64)  NOT NULL DEFAULT '' COMMENT '逻辑仓编码',
+  `tenant_id`          varchar(32)  NOT NULL DEFAULT '' COMMENT '租户 ID',
+  `plan_date`          datetime              DEFAULT NULL COMMENT '计划日期',
+  `plan_element_type`  tinyint(8)   NOT NULL DEFAULT '0' COMMENT '计划要素类型',
+  `biz_type`           tinyint(8)   NOT NULL DEFAULT '0' COMMENT '业务类型',
+  `amount`             bigint(20)   NOT NULL DEFAULT '0' COMMENT '数量',
+  `voucher_no`         varchar(64)  NOT NULL DEFAULT '' COMMENT '凭证号',
+  `document_no`        varchar(64)  NOT NULL DEFAULT '' COMMENT '单据号',
+  `business_id_ref`    varchar(64)  NOT NULL DEFAULT '' COMMENT '业务 ID 引用',
+  `exception_code`     varchar(64)  NOT NULL DEFAULT '' COMMENT '异常编码',
+  `is_delete`          tinyint(1)   NOT NULL DEFAULT '0' COMMENT '删除标识',
+  `create_time`        datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time`        datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_material_plant` (`tenant_id`, `material_code`, `logical_plant_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='计划供需库存';

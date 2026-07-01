@@ -387,12 +387,14 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM inventory_snapshot
+        WHERE tenant_id = #{tenantId} AND deleted = 0
         LIMIT #{offset}, #{pageSize}
     </select>
 
     <select id="pageListCount" resultType="java.lang.Long">
         SELECT count(*)
         FROM inventory_snapshot
+        WHERE tenant_id = #{tenantId} AND deleted = 0
     </select>
 
     <select id="queryCountSnapshotByCondition" resultMap="BaseResultMap"

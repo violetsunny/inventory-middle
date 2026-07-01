@@ -2,7 +2,14 @@ package com.inventory.middle.application.plan.demand.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.inventory.middle.domain.plan.common.constants.CommonConstants;
-import com.inventory.middle.domain.plan.common.enums.*;
+import com.inventory.middle.domain.common.constants.ResponseCodeEnum;
+import com.inventory.middle.domain.plan.common.enums.DemandPlanAggregationPeriodEnum;
+import com.inventory.middle.domain.plan.common.enums.DemandPlanMaterialDetailTypeEnum;
+import com.inventory.middle.domain.plan.common.enums.DemandStatusEnum;
+import com.inventory.middle.domain.plan.common.enums.DemandTypeEnum;
+import com.inventory.middle.domain.plan.common.enums.IsDeleteEnum;
+import com.inventory.middle.domain.plan.common.enums.OrderPlanTypeEnum;
+import com.inventory.middle.domain.plan.common.enums.ProjectPlanFlagEnum;
 import com.inventory.middle.domain.plan.common.ex.Checker;
 import com.inventory.middle.domain.plan.common.ex.Ex;
 import com.inventory.middle.domain.plan.common.rule.ValidateMessage;
@@ -26,6 +33,7 @@ import com.inventory.middle.infra.plan.sequence.SequenceFactory;
 import com.inventory.middle.application.service.LogicalPlantQueryService;
 import com.inventory.middle.application.service.InventoryMaterialApplicationService;
 import com.inventory.middle.client.dto.LogicalPlantDto;
+import com.inventory.middle.domain.common.exception.BusinessException;
 import com.inventory.middle.domain.plan.common.bo.PlanProductBO;
 import com.inventory.middle.infra.plan.stub.PlanParticipantStub;
 import com.inventory.middle.infra.plan.stub.PlanProductStub;
@@ -39,6 +47,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,6 +74,10 @@ public class DemandPlanServiceImpl implements DemandPlanService {
 
     @Value("${enn.plan.demand.horizon.max.days:180}")
     private int maxHorizonDays;
+
+    @Lazy
+    @Autowired
+    private DemandPlanServiceImpl self;
 
     @Autowired
     private DemandPlanDao demandPlanDao;
@@ -187,7 +200,7 @@ public class DemandPlanServiceImpl implements DemandPlanService {
             return false;
         }
         if (!Objects.equals(demandPlanBO.getTenantId(),planPO.getTenantId())){
-            throw Ex.of(ResponseCodeEnum.NO_AUTH);
+            throw Ex.of(ResponseCodeEnum.PLAN_NO_AUTH);
         }
         planPO.setDemandHorizonBeginTime(DateUtils.getStartOfDay(demandPlanBO.getDemandHorizonBeginTime()));
         planPO.setDemandHorizonEndTime(DateUtils.getStartOfDay(demandPlanBO.getDemandHorizonEndTime()));
@@ -305,12 +318,11 @@ public class DemandPlanServiceImpl implements DemandPlanService {
         DemandPlanMaterialBatchCreateResBO response = new DemandPlanMaterialBatchCreateResBO();
         LogicalPlantDto logicalPlant = logicalPlantQueryService.findByNo(demandPlanBO.getLogicalPlantNo());
         if (Objects.isNull(logicalPlant)) {
-            //TODO
-            return SingleResponse.buildFailure("","逻辑仓不存在");
+            return SingleResponse.buildFailure(ResponseCodeEnum.FAILED.getCode(),"逻辑仓不存在");
         }
         //校验
         validateDemandPlan(demandPlanBO);
-        // 租户id 用户id 公司编码 TODO
+        // 获取公司名称
         String companyName = planParticipantStub.getCompanyName(demandPlanBO.getTenantId(), demandPlanBO.getUserId(), logicalPlant.getCompanyCode());
         DemandPlanPO planPO = new DemandPlanPO();
         planPO.setLogicalPlantNo(demandPlanBO.getLogicalPlantNo());
@@ -343,8 +355,7 @@ public class DemandPlanServiceImpl implements DemandPlanService {
         createReqBO.setTenantId(demandPlanBO.getTenantId());
         createReqBO.setUserId(demandPlanBO.getUserId());
         createReqBO.setUserName(demandPlanBO.getUserName());
-        //这里的先这样组装一下，621版本优化掉 TODO
-        //组装物料明细
+        // 组装物料明细
         List<DemandPlanMaterialPO> materialPOList = convertDemandPlanMaterial(planPO, periodBOList, createReqBO);
         //组装计划明细
         Map<String, List<DemandPlanMaterialPeriodPO>> map = convertDemandPlanMaterialPeriod(materialPOList, periodBOList);
@@ -363,7 +374,7 @@ public class DemandPlanServiceImpl implements DemandPlanService {
             throw Ex.of(ResponseCodeEnum.D_DEMAND_PLAN_NOT_EXIST);
         }
         if (!Objects.equals(tenantId,demandPlanPO.getTenantId())){
-            throw Ex.of(ResponseCodeEnum.NO_AUTH);
+            throw Ex.of(ResponseCodeEnum.PLAN_NO_AUTH);
         }
         if (Objects.equals(demandPlanPO.getStatus(), DemandStatusEnum.ON.getCode())) {
             throw Ex.of(ResponseCodeEnum.D_COMMON_STATUS_NOT_OFF);
@@ -382,7 +393,7 @@ public class DemandPlanServiceImpl implements DemandPlanService {
             return false;
         }
         if (!Objects.equals(demandPlanPO.getTenantId(),statusBO.getTenantId())){
-            throw Ex.of(ResponseCodeEnum.NO_AUTH);
+            throw Ex.of(ResponseCodeEnum.PLAN_NO_AUTH);
         }
         DemandPlanUpdateStatusReqBO req = new DemandPlanUpdateStatusReqBO();
         req.setStatus(statusBO.getStatus());
@@ -424,7 +435,7 @@ public class DemandPlanServiceImpl implements DemandPlanService {
         materialCondition.setTenantId(tenantId);
         materialCondition.setStatus(status);
         List<DemandPlanMaterialPO> materialPOList = demandPlanMaterialDao.selectByCondition(materialCondition);
-        handleDemandPlanDetailByMaterial(demandPlanPO, tenantId, materialPOList, status);
+        self.handleDemandPlanDetailByMaterial(demandPlanPO, tenantId, materialPOList, status);
         return materialPOList;
     }
 
@@ -531,7 +542,7 @@ public class DemandPlanServiceImpl implements DemandPlanService {
             }
         } catch (ParseException e) {
             log.error("calculate error:", e);
-
+            throw new BusinessException("计划期日期解析失败", e);
         }
         return result;
 
@@ -697,7 +708,7 @@ public class DemandPlanServiceImpl implements DemandPlanService {
             return titles;
         }
         if (!Objects.equals(tenantId,planPO.getTenantId())){
-            throw Ex.of(ResponseCodeEnum.NO_AUTH);
+            throw Ex.of(ResponseCodeEnum.PLAN_NO_AUTH);
         }
         titles.add("物料编码");
         List<String> dateTitles = this.getDateTitles(planPO);
@@ -795,7 +806,7 @@ public class DemandPlanServiceImpl implements DemandPlanService {
         }
         // 计划日期解析异常 将assert校验改为抛出异常
         if (null == planPeriodStart) {
-            throw Ex.of(ResponseCodeEnum.SYSTEM_ERROR);
+            throw Ex.of(ResponseCodeEnum.PLAN_SYSTEM_ERROR);
         }
         return planPeriodStart;
     }
@@ -1115,8 +1126,8 @@ public class DemandPlanServiceImpl implements DemandPlanService {
             return false;
         } catch (ParseException e) {
             log.error("checkPeriodDate error", e);
+            throw new BusinessException("计划期日期解析失败", e);
         }
-        return false;
 
     }
 }

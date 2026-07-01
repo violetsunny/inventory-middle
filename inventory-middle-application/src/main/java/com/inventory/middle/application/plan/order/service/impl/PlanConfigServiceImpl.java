@@ -1,7 +1,13 @@
 package com.inventory.middle.application.plan.order.service.impl;
 
 import com.inventory.middle.domain.plan.common.constants.CommonConstants;
-import com.inventory.middle.domain.plan.common.enums.*;
+import com.inventory.middle.domain.common.constants.ResponseCodeEnum;
+import com.inventory.middle.domain.plan.common.enums.DemandStrategyEnum;
+import com.inventory.middle.domain.plan.common.enums.MaterialSceneTypeEnum;
+import com.inventory.middle.domain.plan.common.enums.PlanCoverMaterialTypeEnum;
+import com.inventory.middle.domain.plan.common.enums.PlanMaterialParamPlanTypeEnum;
+import com.inventory.middle.domain.plan.common.enums.PlanStatusEnum;
+import com.inventory.middle.domain.plan.common.enums.SafetyStockOptionEnum;
 import com.inventory.middle.domain.plan.common.ex.Ex;
 import com.inventory.middle.domain.plan.common.ex.SpmException;
 import com.inventory.middle.domain.plan.common.rule.ValidateMessage;
@@ -153,7 +159,7 @@ public class PlanConfigServiceImpl implements PlanConfigService {
             return null;
         }
         if (!po.getTenantId().equals(tenantId)) {
-            throw new SpmException(ResponseCodeEnum.NO_AUTH.getCode(), ResponseCodeEnum.NO_AUTH.getDesc());
+            throw new SpmException(ResponseCodeEnum.PLAN_NO_AUTH.getCode(), ResponseCodeEnum.PLAN_NO_AUTH.getDesc());
         }
         PlanBO bo = PlanConfigConverter.convertPlanPO2BO(po);
         // 封装需求文件
@@ -415,10 +421,10 @@ public class PlanConfigServiceImpl implements PlanConfigService {
         // 1.查出计划方案
         PlanBO planBO = queryPlanById(bo.getId(), bo.getTenantId());
         if (Objects.isNull(planBO)) {
-            throw new SpmException(ResponseCodeEnum.DATA_IS_NULL.getCode(), ResponseCodeEnum.DATA_IS_NULL.getDesc());
+            throw new SpmException(ResponseCodeEnum.PLAN_DATA_IS_NULL.getCode(), ResponseCodeEnum.PLAN_DATA_IS_NULL.getDesc());
         }
         if (!planBO.getTenantId().equals(bo.getTenantId())) {
-            throw new SpmException(ResponseCodeEnum.NO_AUTH.getCode(), ResponseCodeEnum.NO_AUTH.getDesc());
+            throw new SpmException(ResponseCodeEnum.PLAN_NO_AUTH.getCode(), ResponseCodeEnum.PLAN_NO_AUTH.getDesc());
         }
         // 2.计划状态变为生效时，需作校验链检查
         if (PlanStatusEnum.ON.getCode().equals(bo.getStatus())) {

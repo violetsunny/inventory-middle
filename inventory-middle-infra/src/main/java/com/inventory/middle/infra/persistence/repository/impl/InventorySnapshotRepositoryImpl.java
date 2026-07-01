@@ -117,4 +117,23 @@ public class InventorySnapshotRepositoryImpl extends ServiceImpl<InventorySnapsh
                 .eq(InventorySnapshotDo::getId, id)
                 .setSql(column + " = " + column + " - " + number.toPlainString()));
     }
+
+    @Override
+    public List<InventorySnapshot> queryBatchNoList(String materialCode, String logicalPlantNo, String storageLocationNo, String tenantId) {
+        com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<InventorySnapshotDo> wrapper = Wrappers.<InventorySnapshotDo>lambdaQuery()
+                .eq(InventorySnapshotDo::getMaterialCode, materialCode)
+                .eq(InventorySnapshotDo::getLogicalPlantNo, logicalPlantNo)
+                .eq(InventorySnapshotDo::getDeleted, 0);
+        if (org.springframework.util.StringUtils.hasText(storageLocationNo)) {
+            wrapper.eq(InventorySnapshotDo::getStorageLocationNo, storageLocationNo);
+        }
+        if (org.springframework.util.StringUtils.hasText(tenantId)) {
+            wrapper.eq(InventorySnapshotDo::getTenantId, tenantId);
+        }
+        List<InventorySnapshotDo> doList = this.list(wrapper);
+        if (CollectionUtils.isEmpty(doList)) {
+            return Collections.emptyList();
+        }
+        return doList.stream().map(convertor::toInventorySnapshot).collect(Collectors.toList());
+    }
 }

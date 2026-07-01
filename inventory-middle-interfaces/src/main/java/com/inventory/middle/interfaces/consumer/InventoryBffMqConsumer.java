@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.stereotype.Component;
+import com.inventory.middle.domain.common.exception.BusinessException;
 import top.kdla.framework.common.aspect.mdc.MdcDot;
 
 import javax.annotation.Resource;
@@ -36,7 +37,7 @@ public class InventoryBffMqConsumer implements RocketMQListener<String> {
             accessoriesFlowCodeApplicationService.manufacturerInStock(request);
         } catch (Exception e) {
             log.error("InventoryBffMqConsumer.onMessage failed, message={}", JSON.toJSONString(message), e);
-            throw new RuntimeException(e);
+            throw new BusinessException("MQ消费失败", e);
         }
     }
 }

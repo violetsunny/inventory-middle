@@ -1,7 +1,7 @@
 package com.inventory.middle.application.plan.calculate.support.formula;
 
 import top.kdla.framework.validator.BaseAssert;
-import com.inventory.middle.domain.plan.common.enums.ResponseCodeEnum;
+import com.inventory.middle.domain.common.constants.ResponseCodeEnum;
 import com.inventory.middle.domain.plan.common.ex.Checker;
 import com.inventory.middle.domain.plan.common.ex.Ex;
 import com.inventory.middle.application.plan.calculate.support.formula.factor.MaterialFactor;
@@ -49,7 +49,7 @@ public class FormulaAspect {
         } catch (Throwable t) {
             log.error("formula calculate error|formula={}, factor={}",
                     point.getTarget().getClass().getSimpleName(), point.getArgs()[0], t);
-            throw Ex.of(t, ResponseCodeEnum.SYSTEM_ERROR.getCode(), "formula calculate error");
+            throw Ex.of(t, ResponseCodeEnum.PLAN_SYSTEM_ERROR.getCode(), "formula calculate error");
         }
     }
 

@@ -150,6 +150,18 @@ public class InventoryMonitorRuleController {
         return monitorRuleLineQueryService.queryPage(pageQuery);
     }
 
+    @Operation(summary = "库存预警规则明细详情")
+    @GetMapping("/ruleLine/detail/{id}")
+    public SingleResponse<InventoryMonitorRuleLineDto> monitorRuleLineDetail(@PathVariable("id") Long id) {
+        return SingleResponse.buildSuccess(monitorRuleLineQueryService.findById(id));
+    }
+
+    @Operation(summary = "库存预警规则明细删除")
+    @PostMapping("/ruleLine/delete")
+    public SingleResponse<Boolean> monitorRuleLineDelete(@RequestBody List<Long> ids) {
+        return SingleResponse.buildSuccess(monitorRuleLineApplicationService.deleteBatch(ids));
+    }
+
     // ==================== Excel 导入导出 ====================
 
     @Operation(summary = "上传导入预警规则明细（物料）")

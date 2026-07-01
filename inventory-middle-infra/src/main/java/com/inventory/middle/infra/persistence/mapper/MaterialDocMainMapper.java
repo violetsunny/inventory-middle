@@ -85,5 +85,5 @@ public interface MaterialDocMainMapper extends BaseMapper<MaterialDocMainDo> {
     /**
      * 查询 uniqueNo 是否存在
      */
-    String queryByUniqueNo(@Param("uniqueNo") String uniqueNo, @Param("appKey") String appKey);
+    String queryByUniqueNo(@Param("uniqueNo") String uniqueNo, @Param("appKey") String appKey, @Param("tenantId") String tenantId);
 }

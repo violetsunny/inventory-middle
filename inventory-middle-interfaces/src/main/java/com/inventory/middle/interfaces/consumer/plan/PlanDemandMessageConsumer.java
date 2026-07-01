@@ -9,6 +9,7 @@ import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.stereotype.Component;
 import top.kdla.framework.log.catchlog.CatchAndLog;
+import com.inventory.middle.domain.common.exception.BusinessException;
 import top.kdla.framework.common.aspect.mdc.MdcDot;
 
 import javax.annotation.Resource;
@@ -39,7 +40,7 @@ public class PlanDemandMessageConsumer implements RocketMQListener<String> {
             planMqConsumerService.handleDemandSupplySourceBatch(messages);
         } catch (Exception e) {
             log.error("PlanDemandMessageConsumer error", e);
-            throw new RuntimeException(e);
+            throw new BusinessException("MQ消费失败", e);
         }
     }
 }

@@ -3,6 +3,7 @@ package com.inventory.middle.interfaces.web.plan;
 import com.inventory.middle.application.plan.order.service.PlanOrderApplicationService;
 import com.inventory.middle.client.plan.config.dto.PlanOrderDTO;
 import com.inventory.middle.client.plan.config.dto.PlanOrderIssueDetailDTO;
+import com.inventory.middle.domain.common.exception.BusinessException;
 import com.inventory.middle.interfaces.support.UserContext;
 import com.inventory.middle.interfaces.support.UserContextHolder;
 import com.inventory.middle.interfaces.web.plan.dto.IssuePlanOrderReqDTO;
@@ -18,7 +19,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,10 +65,8 @@ public class PlanOrderController {
 
     @Operation(summary = "下发计划订单")
     @PostMapping("/issuePlanOrder")
-    public SingleResponse<Boolean> issuePlanOrder(
-            @RequestBody IssuePlanOrderReqDTO reqDTO,
-            @RequestHeader(value = "ennUnifiedAuthorization", required = false) String token) {
-        return planOrderApplicationService.issuePlanOrder(PlanOrderWebConvertor.toIssueDTO(reqDTO, currentUser(), token));
+    public SingleResponse<Boolean> issuePlanOrder(@RequestBody IssuePlanOrderReqDTO reqDTO) {
+        return planOrderApplicationService.issuePlanOrder(PlanOrderWebConvertor.toIssueDTO(reqDTO, currentUser()));
     }
 
     @Operation(summary = "确认计划订单")
@@ -100,6 +98,10 @@ public class PlanOrderController {
     }
 
     private UserContext currentUser() {
-        return UserContextHolder.get();
+        UserContext ctx = UserContextHolder.get();
+        if (ctx == null) {
+            throw new BusinessException("用户上下文未初始化，请确认登录态已正确传递");
+        }
+        return ctx;
     }
 }

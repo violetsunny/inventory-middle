@@ -65,12 +65,11 @@ public final class PlanOrderWebConvertor {
         return dto;
     }
 
-    public static PlanOrderIssueReqDTO toIssueDTO(IssuePlanOrderReqDTO reqDTO, UserContext userContext, String token) {
+    public static PlanOrderIssueReqDTO toIssueDTO(IssuePlanOrderReqDTO reqDTO, UserContext userContext) {
         PlanOrderIssueReqDTO dto = new PlanOrderIssueReqDTO();
         dto.setPlanOrderId(reqDTO.getPlanOrderId());
         dto.setIssueQuantity(reqDTO.getIssueQuantity());
         fillUserInfo(dto, userContext);
-        dto.setToken(token);
         return dto;
     }
 

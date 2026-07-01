@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import com.inventory.middle.interfaces.support.UserContext;
 import com.inventory.middle.interfaces.support.UserContextHolder;
 import top.kdla.framework.dto.PagedSingleResponse;
 import top.kdla.framework.dto.SingleResponse;
@@ -47,10 +46,9 @@ public class PlanReportController  {
     @Operation(summary = "分页查询物料计划报表")
     public PagedSingleResponse<MaterialPlanVO> pageQueryMaterialPlans(@RequestBody MaterialPlanQueryReqDTO request) {
 
-        UserContext userInfo = UserContextHolder.get();
         MaterialPlanInstanceQueryRequest condition =
                 planReportConverter.convertMaterialPlanQueryRequest(request);
-        condition.setTenantId(userInfo.getTenantId());
+        condition.setTenantId(UserContextHolder.getTenantId());
 
         PagedSingleResponse<MaterialPlanInstanceDTO> result =
                 planGenerateApplicationService.pageQueryMaterialPlans(condition);
@@ -72,10 +70,8 @@ public class PlanReportController  {
             @Parameter(description = "汇总类型:0-按日/1-按周/3-按月")
             @RequestParam(value = "collectType", required = false) Integer collectType) {
 
-        UserContext userInfo = UserContextHolder.get();
-
         MaterialPlanReportDTO report =
-                planGenerateApplicationService.queryMaterialInstanceReport(materialInstanceId, userInfo.getTenantId(), collectType);
+                planGenerateApplicationService.queryMaterialInstanceReport(materialInstanceId, UserContextHolder.getTenantId(), collectType);
 
         return SingleResponse.buildSuccess(planReportConverter.convertReport(report));
     }
@@ -87,10 +83,8 @@ public class PlanReportController  {
             @Parameter(description = "物料计划版本号")
             @RequestParam("materialInstanceId") Long materialInstanceId) {
 
-        UserContext userInfo = UserContextHolder.get();
-
         MaterialPlanInstanceBomNodeDTO materialPlanInstanceBomDTO =
-                planGenerateApplicationService.renderMaterialBomTree(materialInstanceId, userInfo.getTenantId()).getData();
+                planGenerateApplicationService.renderMaterialBomTree(materialInstanceId, UserContextHolder.getTenantId()).getData();
 
         return SingleResponse.buildSuccess(planReportConverter.convertMaterialBomTree(materialPlanInstanceBomDTO));
     }

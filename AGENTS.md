@@ -95,7 +95,7 @@ These are tracked in `docs/superpowers/plans/remaining-todos.md`. Do not paper o
 3. **Don't use Java 21 for build** — Lombok 1.18.30 + Java 21 = `LombokProcessor` crash; use Java 8
 4. **Don't add new XMLs to `/mybatis/mapper/`** — that directory is never scanned; use `/mapper/` instead
 5. **Don't add modules without updating parent `pom.xml` `<modules>`**
-6. **Don't put Spring annotations in domain layer** — domain must stay framework-agnostic (currently has 105 Spring usages which are existing debt, not a pattern to copy)
+6. **Don't put Spring annotations in domain layer** — domain must stay framework-agnostic (currently has 145 Spring imports which are existing debt, not a pattern to copy)
 7. **Don't use `plan.plan.` double-nested package paths** — always `plan.` single level
 8. **Don't trust request-body fields** for `tenantId`, `userId`, `operatorId`, `creatorId`, `updatorId`, `sourceSystem` — these must be overwritten from `UserContextHolder` in the controller layer
 9. **Don't inject infra layer beans into controllers** — interfaces → application → domain/infra only
@@ -117,4 +117,4 @@ Refs like `R1`, `F2-F7`, `M1+M3`, `Q1`, `N3` encode tracked migration tasks from
 - `docs/sql/inventory.sql` — inventory DDL; `docs/sql/plan.sql` — plan DDL (13 tables missing DDL — N4 known issue)
 - `docs/superpowers/plans/remaining-todos.md` — **authoritative backlog** of migration gaps (41 items, G1–G21 groups)
 
-*Last updated: 2026-06-25*
+*Last updated: 2026-06-26*

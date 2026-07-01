@@ -49,7 +49,7 @@ public class Checker {
 
     public static void checkState(boolean expression) {
         if (!expression) {
-            throw new BusinessException(ResponseCodeEnum.SYSTEM_ERROR);
+            throw new BusinessException(ResponseCodeEnum.PLAN_SYSTEM_ERROR);
         }
     }
 

@@ -1,7 +1,7 @@
 package com.inventory.middle.interfaces.web.file;
 
+import com.inventory.middle.application.service.FileApplicationService;
 import com.inventory.middle.domain.common.exception.BusinessException;
-import com.inventory.middle.infra.integration.oss.OssFileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
@@ -26,7 +26,7 @@ import java.net.URLEncoder;
 public class FileController {
 
     @Resource
-    private OssFileService ossFileService;
+    private FileApplicationService fileApplicationService;
 
     @Operation(summary = "下载文件")
     @PostMapping("/download")
@@ -39,7 +39,7 @@ public class FileController {
         String fileName = URLEncoder.encode("file", "UTF-8").replaceAll("\\+", "%20");
         response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
         response.setHeader("Access-Control-Expose-Headers", "Content-disposition");
-        byte[] file = ossFileService.getFile(request.getFileUrl());
+        byte[] file = fileApplicationService.getFile(request.getFileUrl());
         new BufferedInputStream(new ByteArrayInputStream(file));
         response.getOutputStream().write(file);
     }

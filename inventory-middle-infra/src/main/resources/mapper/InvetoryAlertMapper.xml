@@ -278,12 +278,14 @@
     <select id="pageList" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
         FROM inventory_alert
+        WHERE tenant_id = #{tenantId} AND deleted = 0
         LIMIT #{offset}, #{pageSize}
     </select>
 
     <select id="pageListCount" resultType="java.lang.Integer">
         SELECT count(1)
         FROM inventory_alert
+        WHERE tenant_id = #{tenantId} AND deleted = 0
     </select>
 
 </mapper>

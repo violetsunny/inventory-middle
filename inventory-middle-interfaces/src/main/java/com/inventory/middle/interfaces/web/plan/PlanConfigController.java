@@ -6,8 +6,8 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.inventory.middle.application.plan.config.bo.*;
 import com.inventory.middle.application.plan.config.service.PlanConfigService;
-import com.inventory.middle.domain.plan.common.constants.CommonConstants;
 import com.inventory.middle.application.plan.calculate.service.PlanGenerateApplicationService;
+import com.inventory.middle.domain.plan.common.constants.CommonConstants;
 import com.inventory.middle.interfaces.web.plan.PlanConfigWebConverter;
 import com.inventory.middle.interfaces.web.plan.PlanReportConverter;
 import com.inventory.middle.interfaces.web.plan.dto.*;
@@ -68,8 +68,6 @@ public class PlanConfigController  {
     @Operation(summary = "下载物料计划参数导入模板")
     @GetMapping(value = "/downloadPlanMaterialParamTemplate")
         public void downloadPlanMaterialParamTemplate(HttpServletResponse response) throws Exception {
-        UserContextHolder.get();
-
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
         String fileName = URLEncoder.encode("计划参数导入模板", "UTF-8").replaceAll(CommonConstants.TRANSFERRED_PLUS, CommonConstants.TRANSFERRED_BLANK);
@@ -89,13 +87,30 @@ public class PlanConfigController  {
     @PostMapping(value = "/importPlanMaterialParam")
     @ResponseBody
     @Operation(summary = "批量导入物料计划参数")
-        public SingleResponse<PlanMaterialParamImportResVO> importPlanMaterialParam(PlanMaterialParamImportReqDTO reqDTO, @RequestHeader(value = "ennUnifiedAuthorization", required = false) String token) throws Exception {
+        public SingleResponse<PlanMaterialParamImportResVO> importPlanMaterialParam(PlanMaterialParamImportReqDTO reqDTO) throws Exception {
 
         UserContext userInfo = UserContextHolder.get();
 
-        PlanMaterialParamImportReqBO reqBO = PlanConfigWebConverter.convertPlanMaterialParamImportReqDTO2BO(reqDTO, token);
+        PlanMaterialParamImportExcelListener listener = new PlanMaterialParamImportExcelListener(
+                UserContextHolder.getTenantId(),
+                userInfo != null ? userInfo.getUserId() : null,
+                userInfo != null ? userInfo.getUsername() : null);
 
-        return SingleResponse.buildSuccess();
+        EasyExcel.read(reqDTO.getFile().getInputStream(), PlanMaterialParamImportExcelBO.class, listener).sheet().doRead();
+
+        if (!listener.getSuccessList().isEmpty()) {
+            PlanMaterialParamBatchCreateReqBO reqBO = new PlanMaterialParamBatchCreateReqBO();
+            reqBO.setPlanMaterialParamList(listener.getSuccessList());
+            reqBO.setTenantId(UserContextHolder.getTenantId());
+            reqBO.setUserId(userInfo != null ? userInfo.getUserId() : null);
+            reqBO.setUserName(userInfo != null ? userInfo.getUsername() : null);
+            planConfigService.batchCreatePlanMaterialParam(reqBO);
+        }
+
+        PlanMaterialParamImportResVO resVO = new PlanMaterialParamImportResVO();
+        resVO.setTotalCount(listener.getSuccessList().size() + listener.getFailedReasons().size());
+        resVO.setFailedCount(listener.getFailedReasons().size());
+        return SingleResponse.buildSuccess(resVO);
     }
 
     /**
@@ -172,8 +187,7 @@ public class PlanConfigController  {
     @ResponseBody
     @Operation(summary = "查询计划方案")
         public SingleResponse<PlanQueryResVO> queryPlan(@RequestParam("planId") Long planId) {
-        UserContext userInfo = UserContextHolder.get();
-        return SingleResponse.buildSuccess(PlanConfigWebConverter.convertPlanQueryResBO2VO(planConfigService.queryPlanById(planId, userInfo.getTenantId())));
+        return SingleResponse.buildSuccess(PlanConfigWebConverter.convertPlanQueryResBO2VO(planConfigService.queryPlanById(planId, UserContextHolder.getTenantId())));
     }
 
     @PostMapping("/updatePlan")
@@ -217,7 +231,6 @@ public class PlanConfigController  {
     @Operation(summary = "下载计划物料清单导入模板")
     @GetMapping(value = "/downloadPlanMaterialTemplate")
         public void downloadPlanMaterialTemplate(HttpServletResponse response) throws Exception {
-        UserContextHolder.get();
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
         String fileName = URLEncoder.encode("计划物料清单导入模板", "UTF-8").replaceAll(CommonConstants.TRANSFERRED_PLUS, CommonConstants.TRANSFERRED_BLANK);
@@ -234,11 +247,39 @@ public class PlanConfigController  {
      */
     @Operation(summary = "批量导入计划物料清单")
     @RequestMapping(value = "/importPlanMaterial", method = {RequestMethod.POST})
-        public SingleResponse<PlanMaterialImportResVO> importPlanMaterial(PlanMaterialImportReqDTO reqDTO, @RequestHeader(value = "ennUnifiedAuthorization", required = false) String token) throws IOException {
+        public SingleResponse<PlanMaterialImportResVO> importPlanMaterial(PlanMaterialImportReqDTO reqDTO) throws IOException {
 
-        PlanMaterialImportReqBO reqBO = PlanConfigWebConverter.convertPlanMaterialImportReqDTO2BO(reqDTO, token);
+        UserContext userInfo = UserContextHolder.get();
+        String tenantId = UserContextHolder.getTenantId();
 
-        return SingleResponse.buildSuccess();
+        PlanMaterialImportExcelListener listener = new PlanMaterialImportExcelListener(
+                tenantId,
+                userInfo != null ? userInfo.getUserId() : null);
+
+        try {
+            EasyExcel.read(reqDTO.getFile().getInputStream(), PlanMaterialImportExcelBO.class, listener).sheet().doRead();
+        } catch (Exception e) {
+            log.error("importPlanMaterial read excel error", e);
+            return SingleResponse.buildFailure("EXCEL_ERROR", "Excel解析失败: " + e.getMessage());
+        }
+
+        if (!listener.getSuccessList().isEmpty()) {
+            PlanMaterialBatchCreateReqBO reqBO = new PlanMaterialBatchCreateReqBO();
+            reqBO.setPlanId(reqDTO.getPlanId());
+            reqBO.setTenantId(tenantId);
+            reqBO.setPlanMaterialList(listener.getSuccessList());
+            try {
+                planConfigService.batchCreatePlanMaterial(reqBO);
+            } catch (Exception e) {
+                log.error("importPlanMaterial batchCreate error", e);
+                return SingleResponse.buildFailure("IMPORT_ERROR", "导入失败: " + e.getMessage());
+            }
+        }
+
+        PlanMaterialImportResVO resVO = new PlanMaterialImportResVO();
+        resVO.setTotalCount(listener.getSuccessList().size() + listener.getFailedReasons().size());
+        resVO.setFailedCount(listener.getFailedReasons().size());
+        return SingleResponse.buildSuccess(resVO);
     }
 
     /**
@@ -249,20 +290,40 @@ public class PlanConfigController  {
      */
     @Operation(summary = "批量删除计划物料清单")
     @RequestMapping(value = "/deletePlanMaterial", method = {RequestMethod.POST})
-        public SingleResponse<PlanMaterialImportResVO> deletePlanMaterial(PlanMaterialImportReqDTO reqDTO, @RequestHeader(value = "ennUnifiedAuthorization", required = false) String token) throws IOException {
+        public SingleResponse<PlanMaterialImportResVO> deletePlanMaterial(PlanMaterialImportReqDTO reqDTO) throws IOException {
 
-        PlanMaterialImportReqBO reqBO = PlanConfigWebConverter.convertPlanMaterialImportReqDTO2BO(reqDTO, token);
+        UserContext userInfo = UserContextHolder.get();
+        String tenantId = UserContextHolder.getTenantId();
 
-        return SingleResponse.buildSuccess();
+        PlanMaterialImportExcelListener listener = new PlanMaterialImportExcelListener(
+                tenantId,
+                userInfo != null ? userInfo.getUserId() : null);
+
+        try {
+            EasyExcel.read(reqDTO.getFile().getInputStream(), PlanMaterialImportExcelBO.class, listener).sheet().doRead();
+        } catch (Exception e) {
+            log.error("deletePlanMaterial read excel error", e);
+            return SingleResponse.buildFailure("EXCEL_ERROR", "Excel解析失败: " + e.getMessage());
+        }
+
+        if (!listener.getSuccessList().isEmpty()) {
+            PlanMaterialBatchDeleteReqBO reqBO = new PlanMaterialBatchDeleteReqBO();
+            reqBO.setPlanId(reqDTO.getPlanId());
+            reqBO.setPlanMaterialList(listener.getSuccessList());
+            planConfigService.batchDeletePlanMaterial(reqBO);
+        }
+
+        PlanMaterialImportResVO resVO = new PlanMaterialImportResVO();
+        resVO.setTotalCount(listener.getSuccessList().size() + listener.getFailedReasons().size());
+        resVO.setFailedCount(listener.getFailedReasons().size());
+        return SingleResponse.buildSuccess(resVO);
     }
 
     @PostMapping("/queryPlanMaterial")
     @ResponseBody
     @Operation(summary = "查询计划物料清单")
         public void queryPlanMaterial(@RequestParam("planId") Long planId, HttpServletResponse response) throws IOException {
-        UserContext userInfo = UserContextHolder.get();
-
-        List<PlanMaterialBO> bos = planConfigService.queryPlanMaterialByPlanId(planId, userInfo.getTenantId());
+        List<PlanMaterialBO> bos = planConfigService.queryPlanMaterialByPlanId(planId, UserContextHolder.getTenantId());
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
         String fileName = URLEncoder.encode("计划物料清单", "UTF-8").replaceAll(CommonConstants.TRANSFERRED_PLUS, CommonConstants.TRANSFERRED_BLANK);
@@ -288,15 +349,13 @@ public class PlanConfigController  {
      */
     @Operation(summary = "执行计划")
     @RequestMapping(value = "/generate", method = {RequestMethod.POST})
-        public SingleResponse<PlanGenerateResultVO> generatePlan(@RequestParam("planId") Long planId,
-                                                         @RequestHeader(value = "ennUnifiedAuthorization", required = false) String token) {
-        UserContext userInfo = UserContextHolder.get();
+        public SingleResponse<PlanGenerateResultVO> generatePlan(@RequestParam("planId") Long planId) {
         PlanGenerateRequest request = new PlanGenerateRequest();
         request.setPlanId(planId);
-        request.setUserId(userInfo.getUserId());
-        request.setUserName(userInfo.getUsername());
-        request.setTenantId(userInfo.getTenantId());
-        request.setOperator(userInfo.getUsername());
+        request.setUserId(UserContextHolder.getUserId());
+        request.setUserName(UserContextHolder.getUsername());
+        request.setTenantId(UserContextHolder.getTenantId());
+        request.setOperator(UserContextHolder.getUsername());
         SingleResponse<PlanInstanceDTO> result = planGenerateApplicationService.generate(request);
         if (!result.isSuccess()) {
             return SingleResponse.buildFailure(result.getCode(), result.getMessage());
@@ -314,7 +373,6 @@ public class PlanConfigController  {
     @Operation(summary = "获取计划参数枚举类列表")
         public SingleResponse<PlanParamEnumResVO> queryPlanParamList() {
 
-        UserContextHolder.get();
         PlanParamEnumResBO resBO = planConfigService.getPlanParamEnumList();
         return SingleResponse.buildSuccess(PlanConfigWebConverter.convertPlanParamBO2VO(resBO));
     }
@@ -328,7 +386,6 @@ public class PlanConfigController  {
     @ResponseBody
     @Operation(summary = "获取计划物料参数枚举类列表")
         public SingleResponse<PlanMaterialParamEnumResVO> queryPlanMaterialParamList() {
-        UserContextHolder.get();
         PlanMaterialParamEnumResBO resBO = planConfigService.getPlanMaterialParamEnumList();
         return SingleResponse.buildSuccess(PlanConfigWebConverter.convertPlanMaterialParamBO2VO(resBO));
     }
@@ -345,9 +402,8 @@ public class PlanConfigController  {
             @RequestParam(value = "materialCode",required = false) String materialCode,
             @RequestParam(value = "externalMaterialCode",required = false) String externalMaterialCode,
             @RequestParam("logicalPlantNo") String logicalPlantNo) {
-        UserContext userInfo = UserContextHolder.get();
         String materialCodeToUse = Optional.ofNullable(materialCode).orElse(externalMaterialCode);
-        QueryPlanTransferLogicalPlantsReqBO bo = PlanConfigWebConverter.convertQueryPlanTransferLogicalPlantNoBO(materialCodeToUse, logicalPlantNo, userInfo.getTenantId());
+        QueryPlanTransferLogicalPlantsReqBO bo = PlanConfigWebConverter.convertQueryPlanTransferLogicalPlantNoBO(materialCodeToUse, logicalPlantNo, UserContextHolder.getTenantId());
         PlanTransferLogicalPlantsResBO resBO = planConfigService.queryPlanTransferLogicalPlants(bo);
         return SingleResponse.buildSuccess(PlanConfigWebConverter.convertPlanTransferLogicalPlantsResBO2VO(resBO));
     }

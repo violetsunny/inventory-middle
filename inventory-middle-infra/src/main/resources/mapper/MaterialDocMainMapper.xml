@@ -377,6 +377,7 @@
         unique_no
         FROM material_doc_main
         WHERE  deleted = 0
+        AND tenant_id = #{tenantId}
         <if test="null != uniqueNo and '' != uniqueNo">and unique_no = #{uniqueNo}</if>
         <if test="null != appKey and '' != appKey">and app_key = #{appKey}</if>
     </select>

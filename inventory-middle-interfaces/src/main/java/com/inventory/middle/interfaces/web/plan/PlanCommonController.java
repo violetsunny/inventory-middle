@@ -1,5 +1,6 @@
 package com.inventory.middle.interfaces.web.plan;
 
+import com.inventory.middle.application.plan.common.service.PlanCommonApplicationService;
 import com.inventory.middle.application.service.InventoryMaterialApplicationService;
 import com.inventory.middle.application.service.LogicalPlantQueryService;
 import com.inventory.middle.application.service.WarehouseQueryService;
@@ -9,7 +10,6 @@ import com.inventory.middle.client.dto.query.LogicalPlantPageQuery;
 import com.inventory.middle.client.dto.query.WarehousePageQuery;
 import com.inventory.middle.client.plan.dto.participant.ParticipantMenuDTO;
 import com.inventory.middle.client.plan.dto.participant.ParticipantUser;
-import com.inventory.middle.infra.plan.stub.PlanParticipantStub;
 import com.inventory.middle.interfaces.support.UserContextHolder;
 import com.inventory.middle.interfaces.web.plan.vo.MaterialInfoQueryResVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,10 +45,7 @@ public class PlanCommonController {
     private InventoryMaterialApplicationService inventoryMaterialApplicationService;
 
     @Resource
-    private PlanParticipantStub planParticipantStub;
-
-    @Resource
-    private com.inventory.middle.infra.plan.stub.PlanProductStub planProductStub;
+    private PlanCommonApplicationService planCommonApplicationService;
 
     @Operation(summary = "根据物料code查询物料信息")
     @PostMapping("/queryMaterialInfoByCode")
@@ -58,7 +55,7 @@ public class PlanCommonController {
         List<com.inventory.middle.client.plan.dto.inventory.LogicalPlant> logicalPlants = Collections.emptyList();
         String materialName = materialCode;
         String unit = "";
-        com.inventory.middle.domain.plan.common.bo.PlanProductBO product = planProductStub.queryMaterialByCode(materialCode, tenantId);
+        com.inventory.middle.domain.plan.common.bo.PlanProductBO product = planCommonApplicationService.queryMaterialByCode(materialCode, tenantId);
         if (product != null) {
             materialName = product.getName() != null ? product.getName() : materialCode;
             unit = product.getUnit() != null ? product.getUnit() : "";
@@ -99,7 +96,7 @@ public class PlanCommonController {
         if (StringUtils.isBlank(keywords)) {
             return SingleResponse.buildFailure("PARAM_ERROR", "关键字不能为空");
         }
-        List<ParticipantUser> users = planParticipantStub.fuzzyQueryUserInfo(keywords);
+        List<ParticipantUser> users = planCommonApplicationService.fuzzyQueryUserInfo(keywords);
         return SingleResponse.buildSuccess(users);
     }
 
@@ -122,7 +119,7 @@ public class PlanCommonController {
     @Operation(summary = "查询菜单权限")
     @PostMapping("/getMenuAndFunc")
     public SingleResponse<List<ParticipantMenuDTO>> getMenuAndFunc() {
-        List<ParticipantMenuDTO> menus = planParticipantStub.getMenuAndFunc(
+        List<ParticipantMenuDTO> menus = planCommonApplicationService.getMenuAndFunc(
                 UserContextHolder.getTenantId(), UserContextHolder.getUserId());
         return SingleResponse.buildSuccess(menus);
     }

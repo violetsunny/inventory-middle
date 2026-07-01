@@ -38,4 +38,7 @@ public interface InventorySnapshotRepository {
 
     /** 扣减库存数量，stockType 对应 StockTypeEnum.code：1=良品 2=残次品 3=质检品 */
     boolean adjustDown(Long id, BigDecimal number, Integer stockType);
+
+    /** 按物料编码、逻辑仓编码、库存地点查询批次列表（用于批次号查询接口） */
+    List<InventorySnapshot> queryBatchNoList(String materialCode, String logicalPlantNo, String storageLocationNo, String tenantId);
 }

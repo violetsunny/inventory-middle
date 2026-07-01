@@ -3,7 +3,7 @@ package com.inventory.middle.application.plan.config.rule.validator;
 import com.alibaba.fastjson.JSON;
 import com.inventory.middle.domain.plan.common.constants.CommonConstants;
 import com.inventory.middle.domain.plan.common.enums.DemandStrategyEnum;
-import com.inventory.middle.domain.plan.common.enums.ResponseCodeEnum;
+import com.inventory.middle.domain.common.constants.ResponseCodeEnum;
 import com.inventory.middle.domain.plan.common.rule.IValidator;
 import com.inventory.middle.domain.plan.common.rule.ValidateMessage;
 import com.inventory.middle.application.plan.config.bo.PlanMaterialParamBatchCreateDetailBO;
@@ -83,7 +83,7 @@ public class BatchCreatePlanMaterialParamFormatValidator implements IValidator {
         }
         // 校验租户Id
         if (StringUtils.isEmpty(parameter.getTenantId())) {
-            return ResponseCodeEnum.TENANT_ID_IS_NULL.getDesc();
+            return ResponseCodeEnum.PLAN_TENANT_ID_IS_NULL.getDesc();
         }
         // 校验物料需求类型
         if(Objects.isNull(parameter.getDemandType())){
@@ -115,7 +115,7 @@ public class BatchCreatePlanMaterialParamFormatValidator implements IValidator {
 
         // 校验操作人Id
         if (StringUtils.isEmpty(parameter.getUserId()) || StringUtils.isEmpty(parameter.getUserName())) {
-            return ResponseCodeEnum.USER_INFO_IS_NULL.getDesc();
+            return ResponseCodeEnum.PLAN_USER_INFO_IS_NULL.getDesc();
         }
         // 校验计划类型
         Integer planType = parameter.getPlanTypeCode();

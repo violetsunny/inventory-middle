@@ -1,7 +1,7 @@
 package com.inventory.middle.application.plan.config.rule.validator;
 
 import com.inventory.middle.domain.plan.common.enums.PlanStatusEnum;
-import com.inventory.middle.domain.plan.common.enums.ResponseCodeEnum;
+import com.inventory.middle.domain.common.constants.ResponseCodeEnum;
 import com.inventory.middle.domain.plan.common.ex.Ex;
 import com.inventory.middle.application.plan.config.bo.PlanBO;
 import com.inventory.middle.domain.plan.common.rule.IValidator;
@@ -33,11 +33,11 @@ public class PlanStatusValidator implements IValidator {
         PlanPO planPO = planConfigDao.queryPlanById(planBO.getId());
         // 计划方案不存在
         if (Objects.isNull(planPO)){
-            throw Ex.of(ResponseCodeEnum.DATA_IS_NULL);
+            throw Ex.of(ResponseCodeEnum.PLAN_DATA_IS_NULL);
         }
 
         if (!planPO.getTenantId().equals(planBO.getTenantId())){
-            throw Ex.of(ResponseCodeEnum.NO_AUTH);
+            throw Ex.of(ResponseCodeEnum.PLAN_NO_AUTH);
         }
         // 只有指定物料的计划才校验
         if (planPO.getStatus().equals(PlanStatusEnum.ON.getCode())){

@@ -635,3 +635,288 @@ CREATE TABLE `product_sku_batch` (
   UNIQUE KEY `uk_sku_batch_tenant` (`sku_code`, `batch_code`, `tenant_id`),
   KEY `idx_tenant_sku` (`tenant_id`, `sku_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='SKU 批次数据（product-center 本地沉淀）';
+
+-- -------------------------------------------------------
+-- 流转码：申请单
+-- -------------------------------------------------------
+CREATE TABLE `code_apply_order` (
+  `id`               bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tenant_id`        varchar(32)  NOT NULL DEFAULT '' COMMENT '租户 ID',
+  `channel`          tinyint(8)   NOT NULL DEFAULT '0' COMMENT '渠道',
+  `order_no`         varchar(64)  NOT NULL DEFAULT '' COMMENT '申请单号',
+  `owner_id`         varchar(32)  NOT NULL DEFAULT '' COMMENT '申请人',
+  `original_distributor_id` varchar(32) NOT NULL DEFAULT '' COMMENT '原经销商 ID',
+  `invitee_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '被邀请人 ID',
+  `invitee_logical_plant_no` varchar(64) NOT NULL DEFAULT '' COMMENT '被邀请人逻辑仓编码',
+  `apply_time`       datetime              DEFAULT NULL COMMENT '申请时间',
+  `apply_reason`     varchar(512) NOT NULL DEFAULT '' COMMENT '申请原因',
+  `approval_status`  tinyint(8)   NOT NULL DEFAULT '0' COMMENT '审批状态',
+  `approval_time`    datetime              DEFAULT NULL COMMENT '审批时间',
+  `extend_param`     varchar(1024) NOT NULL DEFAULT '' COMMENT '扩展参数',
+  `creator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '创建人',
+  `updator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '更新人',
+  `create_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted`          tinyint(1)   NOT NULL DEFAULT '0' COMMENT '删除标识',
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_orderNo` (`tenant_id`, `order_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流转码申请单';
+
+-- -------------------------------------------------------
+-- 流转码：申请单明细
+-- -------------------------------------------------------
+CREATE TABLE `code_apply_order_detail` (
+  `id`               bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `apply_order_id`   bigint(20)   NOT NULL DEFAULT '0' COMMENT '申请单 ID',
+  `code`             varchar(64)  NOT NULL DEFAULT '' COMMENT '流转码',
+  `inner_code`       varchar(64)  NOT NULL DEFAULT '' COMMENT '内码',
+  `material_code`    varchar(64)  NOT NULL DEFAULT '' COMMENT '物料编码',
+  `material_name`    varchar(256) NOT NULL DEFAULT '' COMMENT '物料名称',
+  `creator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '创建人',
+  `updator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '更新人',
+  `create_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted`          tinyint(1)   NOT NULL DEFAULT '0' COMMENT '删除标识',
+  PRIMARY KEY (`id`),
+  KEY `idx_applyOrderId` (`apply_order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流转码申请单明细';
+
+-- -------------------------------------------------------
+-- 流转码：审批记录
+-- -------------------------------------------------------
+CREATE TABLE `code_apply_approval_record` (
+  `id`               bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tenant_id`        varchar(32)  NOT NULL DEFAULT '' COMMENT '租户 ID',
+  `apply_order_id`   bigint(20)   NOT NULL DEFAULT '0' COMMENT '申请单 ID',
+  `approval_status`  tinyint(8)   NOT NULL DEFAULT '0' COMMENT '审批状态',
+  `approval_time`    datetime              DEFAULT NULL COMMENT '审批时间',
+  `approval_reason`  varchar(512) NOT NULL DEFAULT '' COMMENT '审批原因',
+  `creator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '创建人',
+  `updator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '更新人',
+  `create_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted`          tinyint(1)   NOT NULL DEFAULT '0' COMMENT '删除标识',
+  PRIMARY KEY (`id`),
+  KEY `idx_applyOrderId` (`apply_order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流转码审批记录';
+
+-- -------------------------------------------------------
+-- 流转码：码记录
+-- -------------------------------------------------------
+CREATE TABLE `code_record` (
+  `id`               bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `business_no`      varchar(64)  NOT NULL DEFAULT '' COMMENT '业务单号',
+  `source_no`        varchar(64)  NOT NULL DEFAULT '' COMMENT '来源单号',
+  `inner_code`       varchar(64)  NOT NULL DEFAULT '' COMMENT '内码',
+  `type`             varchar(32)  NOT NULL DEFAULT '' COMMENT '类型',
+  `code`             varchar(64)  NOT NULL DEFAULT '' COMMENT '流转码',
+  `publisher`        varchar(64)  NOT NULL DEFAULT '' COMMENT '发布者',
+  `pre_owner`        varchar(64)  NOT NULL DEFAULT '' COMMENT '前所有者',
+  `current_owner`    varchar(64)  NOT NULL DEFAULT '' COMMENT '当前所有者',
+  `status`           varchar(32)  NOT NULL DEFAULT '' COMMENT '状态',
+  `extend_field1`    varchar(256) NOT NULL DEFAULT '' COMMENT '扩展字段1',
+  `extend_field2`    varchar(256) NOT NULL DEFAULT '' COMMENT '扩展字段2',
+  `extend_param`     varchar(1024) NOT NULL DEFAULT '' COMMENT '扩展参数',
+  `active_time`      datetime              DEFAULT NULL COMMENT '激活时间',
+  `creator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '创建人',
+  `updator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '更新人',
+  `create_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted`          tinyint(1)   NOT NULL DEFAULT '0' COMMENT '删除标识',
+  PRIMARY KEY (`id`),
+  KEY `idx_businessNo` (`business_no`),
+  KEY `idx_code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流转码记录';
+
+-- -------------------------------------------------------
+-- 文件导入：主记录
+-- -------------------------------------------------------
+CREATE TABLE `file_import_record` (
+  `id`               bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tenant_id`        varchar(32)  NOT NULL DEFAULT '' COMMENT '租户 ID',
+  `business_type`    varchar(64)  NOT NULL DEFAULT '' COMMENT '业务类型',
+  `file_name`        varchar(256) NOT NULL DEFAULT '' COMMENT '文件名',
+  `file_url`         varchar(512) NOT NULL DEFAULT '' COMMENT '文件URL',
+  `result_url`       varchar(512) NOT NULL DEFAULT '' COMMENT '结果文件URL',
+  `process_status`   varchar(32)  NOT NULL DEFAULT '' COMMENT '处理状态',
+  `process_message`  varchar(1024) NOT NULL DEFAULT '' COMMENT '处理消息',
+  `ext_field`        varchar(512) NOT NULL DEFAULT '' COMMENT '扩展字段',
+  `ext_info`         text                  DEFAULT NULL COMMENT '扩展信息',
+  `creator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '创建人',
+  `creator`          varchar(64)  NOT NULL DEFAULT '' COMMENT '创建人名称',
+  `updator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '更新人',
+  `updator`          varchar(64)  NOT NULL DEFAULT '' COMMENT '更新人名称',
+  `create_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted`          tinyint(1)   NOT NULL DEFAULT '0' COMMENT '删除标识',
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_businessType` (`tenant_id`, `business_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文件导入记录';
+
+-- -------------------------------------------------------
+-- 文件导入：行记录
+-- -------------------------------------------------------
+CREATE TABLE `file_import_line_record` (
+  `id`               bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tenant_id`        varchar(32)  NOT NULL DEFAULT '' COMMENT '租户 ID',
+  `file_record_id`   bigint(20)   NOT NULL DEFAULT '0' COMMENT '文件记录 ID',
+  `process_status`   varchar(32)  NOT NULL DEFAULT '' COMMENT '处理状态',
+  `process_message`  varchar(1024) NOT NULL DEFAULT '' COMMENT '处理消息',
+  `line_detail`      text                  DEFAULT NULL COMMENT '行明细',
+  `creator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '创建人',
+  `creator`          varchar(64)  NOT NULL DEFAULT '' COMMENT '创建人名称',
+  `updator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '更新人',
+  `updator`          varchar(64)  NOT NULL DEFAULT '' COMMENT '更新人名称',
+  `create_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted`          tinyint(1)   NOT NULL DEFAULT '0' COMMENT '删除标识',
+  PRIMARY KEY (`id`),
+  KEY `idx_fileRecordId` (`file_record_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文件导入行记录';
+
+-- -------------------------------------------------------
+-- 库存日志
+-- -------------------------------------------------------
+CREATE TABLE `inventory_log` (
+  `id`               bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tenant_id`        varchar(32)  NOT NULL DEFAULT '' COMMENT '租户 ID',
+  `request_id`       varchar(64)  NOT NULL DEFAULT '' COMMENT '请求 ID',
+  `log_module`       tinyint(8)   NOT NULL DEFAULT '0' COMMENT '日志模块',
+  `action`           tinyint(8)   NOT NULL DEFAULT '0' COMMENT '操作动作',
+  `payload`          text                  DEFAULT NULL COMMENT '日志载荷',
+  `report_time`      datetime              DEFAULT NULL COMMENT '上报时间',
+  `creator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '创建人',
+  `create_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_requestId` (`tenant_id`, `request_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='库存日志';
+
+-- -------------------------------------------------------
+-- 库存物料
+-- -------------------------------------------------------
+CREATE TABLE `inventory_material` (
+  `id`               bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tenant_id`        varchar(32)  NOT NULL DEFAULT '' COMMENT '租户 ID',
+  `material_code`    varchar(64)  NOT NULL DEFAULT '' COMMENT '物料编码',
+  `material_name`    varchar(256) NOT NULL DEFAULT '' COMMENT '物料名称',
+  `out_material_code` varchar(64) NOT NULL DEFAULT '' COMMENT '外部物料编码',
+  `unit_id`          bigint(20)   NOT NULL DEFAULT '0' COMMENT '计量单位 ID',
+  `creator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '创建人',
+  `updator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '更新人',
+  `create_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted`          tinyint(1)   NOT NULL DEFAULT '0' COMMENT '删除标识',
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_materialCode` (`tenant_id`, `material_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='库存物料';
+
+-- -------------------------------------------------------
+-- 物料逻辑仓绑定关系
+-- -------------------------------------------------------
+CREATE TABLE `material_logical_plant_ref` (
+  `id`               bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tenant_id`        varchar(32)  NOT NULL DEFAULT '' COMMENT '租户 ID',
+  `material_code`    varchar(64)  NOT NULL DEFAULT '' COMMENT '物料编码',
+  `logical_plant_id` bigint(20)   NOT NULL DEFAULT '0' COMMENT '逻辑仓 ID',
+  `logical_plant_no` varchar(64)  NOT NULL DEFAULT '' COMMENT '逻辑仓编码',
+  `creator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '创建人',
+  `updator_id`       varchar(32)  NOT NULL DEFAULT '' COMMENT '更新人',
+  `create_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted`          tinyint(1)   NOT NULL DEFAULT '0' COMMENT '删除标识',
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_materialCode` (`tenant_id`, `material_code`),
+  KEY `idx_tenant_logicalPlantNo` (`tenant_id`, `logical_plant_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='物料逻辑仓绑定关系';
+
+-- -------------------------------------------------------
+-- 备件：交货单
+-- -------------------------------------------------------
+CREATE TABLE `sp_delivery_order` (
+  `id`                 bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tenant_id`          varchar(32)  NOT NULL DEFAULT '' COMMENT '租户 ID',
+  `delivery_order_no`  varchar(64)  NOT NULL DEFAULT '' COMMENT '交货单号',
+  `delivery_type`      varchar(32)  NOT NULL DEFAULT '' COMMENT '交货类型',
+  `crm_order_no`       varchar(64)  NOT NULL DEFAULT '' COMMENT 'CRM 订单号',
+  `out_order_no`       varchar(64)  NOT NULL DEFAULT '' COMMENT '外部订单号',
+  `delivery_time`      varchar(32)  NOT NULL DEFAULT '' COMMENT '交货时间',
+  `distributor_id`     varchar(32)  NOT NULL DEFAULT '' COMMENT '经销商 ID',
+  `distributor_tenant_id` varchar(32) NOT NULL DEFAULT '' COMMENT '经销商租户 ID',
+  `distributor_name`   varchar(128) NOT NULL DEFAULT '' COMMENT '经销商名称',
+  `distributor_type`   varchar(32)  NOT NULL DEFAULT '' COMMENT '经销商类型',
+  `origin_system`      varchar(32)  NOT NULL DEFAULT '' COMMENT '来源系统',
+  `state`              tinyint(8)   NOT NULL DEFAULT '0' COMMENT '状态',
+  `creator_id`         varchar(32)  NOT NULL DEFAULT '' COMMENT '创建人',
+  `updator_id`         varchar(32)  NOT NULL DEFAULT '' COMMENT '更新人',
+  `create_time`        datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time`        datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted`            tinyint(1)   NOT NULL DEFAULT '0' COMMENT '删除标识',
+  PRIMARY KEY (`id`),
+  KEY `idx_tenant_deliveryOrderNo` (`tenant_id`, `delivery_order_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='备件交货单';
+
+-- -------------------------------------------------------
+-- 备件：交货单明细
+-- -------------------------------------------------------
+CREATE TABLE `sp_delivery_order_detail` (
+  `id`                 bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `tenant_id`          varchar(32)  NOT NULL DEFAULT '' COMMENT '租户 ID',
+  `manufacturer_code`  varchar(64)  NOT NULL DEFAULT '' COMMENT '制造商编码',
+  `manufacturer_name`  varchar(128) NOT NULL DEFAULT '' COMMENT '制造商名称',
+  `delivery_order_id`  bigint(20)   NOT NULL DEFAULT '0' COMMENT '交货单 ID',
+  `item_no`            varchar(64)  NOT NULL DEFAULT '' COMMENT '行号',
+  `material_code`      varchar(64)  NOT NULL DEFAULT '' COMMENT '物料编码',
+  `material_name`      varchar(256) NOT NULL DEFAULT '' COMMENT '物料名称',
+  `out_material_code`  varchar(64)  NOT NULL DEFAULT '' COMMENT '外部物料编码',
+  `sn_code`            varchar(64)  NOT NULL DEFAULT '' COMMENT 'SN 编码',
+  `sn_name`            varchar(128) NOT NULL DEFAULT '' COMMENT 'SN 名称',
+  `category_code`      varchar(64)  NOT NULL DEFAULT '' COMMENT '类别编码',
+  `category_name`      varchar(128) NOT NULL DEFAULT '' COMMENT '类别名称',
+  `quantity`           decimal(18,4) NOT NULL DEFAULT '0.0000' COMMENT '数量',
+  `identify_code`      varchar(64)  NOT NULL DEFAULT '' COMMENT '认证码',
+  `unit_id`            bigint(20)   NOT NULL DEFAULT '0' COMMENT '计量单位 ID',
+  `unit`               varchar(32)  NOT NULL DEFAULT '' COMMENT '计量单位',
+  `out_unit`           varchar(32)  NOT NULL DEFAULT '' COMMENT '外部单位',
+  `stock_type`         tinyint(8)   NOT NULL DEFAULT '0' COMMENT '库存类型',
+  `price`              decimal(18,4) NOT NULL DEFAULT '0.0000' COMMENT '单价',
+  `total_price`        decimal(18,4) NOT NULL DEFAULT '0.0000' COMMENT '总价',
+  `currency`           varchar(16)  NOT NULL DEFAULT '' COMMENT '币种',
+  `total_price_tax`    decimal(18,4) NOT NULL DEFAULT '0.0000' COMMENT '含税总价',
+  `tax_code_name`      varchar(64)  NOT NULL DEFAULT '' COMMENT '税码名称',
+  `tax_code`           varchar(32)  NOT NULL DEFAULT '' COMMENT '税码',
+  `tax_rate`           decimal(18,4) NOT NULL DEFAULT '0.0000' COMMENT '税率',
+  `tax`                decimal(18,4) NOT NULL DEFAULT '0.0000' COMMENT '税额',
+  `exchange_rate`      decimal(18,4) NOT NULL DEFAULT '0.0000' COMMENT '汇率',
+  `supply_code`        varchar(64)  NOT NULL DEFAULT '' COMMENT '供应商编码',
+  `supply_name`        varchar(128) NOT NULL DEFAULT '' COMMENT '供应商名称',
+  `customer`           varchar(128) NOT NULL DEFAULT '' COMMENT '客户',
+  `customer_code`      varchar(64)  NOT NULL DEFAULT '' COMMENT '客户编码',
+  `state`              tinyint(8)   NOT NULL DEFAULT '0' COMMENT '状态',
+  `creator_id`         varchar(32)  NOT NULL DEFAULT '' COMMENT '创建人',
+  `updator_id`         varchar(32)  NOT NULL DEFAULT '' COMMENT '更新人',
+  `create_time`        datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time`        datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted`            tinyint(1)   NOT NULL DEFAULT '0' COMMENT '删除标识',
+  PRIMARY KEY (`id`),
+  KEY `idx_deliveryOrderId` (`delivery_order_id`),
+  KEY `idx_tenant_materialCode` (`tenant_id`, `material_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='备件交货单明细';
+
+-- -------------------------------------------------------
+-- 计量单位
+-- -------------------------------------------------------
+CREATE TABLE `unit` (
+  `id`               bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `unit`             varchar(32)  NOT NULL DEFAULT '' COMMENT '单位',
+  `unit_name`        varchar(64)  NOT NULL DEFAULT '' COMMENT '单位名称',
+  `description`      varchar(256) NOT NULL DEFAULT '' COMMENT '描述',
+  `biz_code`         varchar(64)  NOT NULL DEFAULT '' COMMENT '业务编码',
+  `creator`          varchar(64)  NOT NULL DEFAULT '' COMMENT '创建人',
+  `modifier`         varchar(64)  NOT NULL DEFAULT '' COMMENT '修改人',
+  `del`              tinyint(1)   NOT NULL DEFAULT '0' COMMENT '删除标识',
+  `create_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time`      datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `enable`           tinyint(1)   NOT NULL DEFAULT '1' COMMENT '启用标识',
+  `accuracy`         varchar(32)  NOT NULL DEFAULT '' COMMENT '精度',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='计量单位';

@@ -7,14 +7,16 @@ package com.inventory.middle.application.service.impl;
 import com.google.common.collect.Lists;
 import com.inventory.middle.application.service.MaterialDocQueryService;
 import com.inventory.middle.client.dto.material.BusinessTypeMappingDTO;
+import com.inventory.middle.client.dto.material.MaterialBatchNoDTO;
 import com.inventory.middle.client.dto.material.QueryMaterialBatchNoResDTO;
 import com.inventory.middle.client.dto.material.MaterialDocCategoryMappingDTO;
 import com.inventory.middle.client.dto.material.MaterialMappingDTO;
 import com.inventory.middle.client.dto.query.MaterialBatchNoQuery;
 import com.inventory.middle.client.dto.query.MaterialMappingQuery;
+import com.inventory.middle.domain.model.entity.InventorySnapshot;
 import com.inventory.middle.domain.model.enums.*;
+import com.inventory.middle.domain.repository.InventorySnapshotRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.sequence.CommandVisitor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import com.inventory.middle.client.dto.material.EnumMappingDTO;
@@ -36,6 +38,9 @@ public class MaterialDocQueryServiceImpl implements MaterialDocQueryService {
 
     @Resource
     private CommonValidator commonValidator;
+
+    @Resource
+    private InventorySnapshotRepository inventorySnapshotRepository;
 
     @Override
     public MaterialMappingDTO queryMaterialTypeMapping(MaterialMappingQuery req) {
@@ -114,7 +119,23 @@ public class MaterialDocQueryServiceImpl implements MaterialDocQueryService {
 
     @Override
     public QueryMaterialBatchNoResDTO queryMaterialBatchNo(MaterialBatchNoQuery query) {
-
-        return null;
+        List<InventorySnapshot> snapshots = inventorySnapshotRepository.queryBatchNoList(
+                query.getMaterialCode(), query.getLogicalPlantNo(), query.getStorageLocationNo(), query.getTenantId());
+        QueryMaterialBatchNoResDTO resDTO = new QueryMaterialBatchNoResDTO();
+        resDTO.setMaterialCode(query.getMaterialCode());
+        resDTO.setLogicalPlantNo(query.getLogicalPlantNo());
+        resDTO.setStorageLocationNo(query.getStorageLocationNo());
+        List<MaterialBatchNoDTO> batchNos = snapshots.stream()
+                .filter(s -> s.getBatchNo() != null)
+                .map(s -> {
+                    MaterialBatchNoDTO dto = new MaterialBatchNoDTO();
+                    dto.setMaterialCode(s.getMaterialCode());
+                    dto.setBatchNo(s.getBatchNo());
+                    dto.setBatchPrice(s.getBatchPrice());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+        resDTO.setMaterialBatchNos(batchNos);
+        return resDTO;
     }
 }

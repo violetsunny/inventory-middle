@@ -1,7 +1,7 @@
 package com.inventory.middle.application.plan.calculate.support.generate.validator;
 
 import com.inventory.middle.domain.plan.common.enums.InstanceStatusEnum;
-import com.inventory.middle.domain.plan.common.enums.ResponseCodeEnum;
+import com.inventory.middle.domain.common.constants.ResponseCodeEnum;
 import com.inventory.middle.application.plan.calculate.bo.PlanGenerateRequestBO;
 import com.inventory.middle.domain.plan.common.rule.IValidator;
 import com.inventory.middle.domain.plan.common.rule.ValidateMessage;

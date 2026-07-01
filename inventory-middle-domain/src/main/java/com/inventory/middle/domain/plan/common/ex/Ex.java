@@ -1,7 +1,7 @@
 package com.inventory.middle.domain.plan.common.ex;
 
 import com.inventory.middle.domain.common.exception.BusinessException;
-import com.inventory.middle.domain.plan.common.enums.ResponseCodeEnum;
+import com.inventory.middle.domain.common.constants.ResponseCodeEnum;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

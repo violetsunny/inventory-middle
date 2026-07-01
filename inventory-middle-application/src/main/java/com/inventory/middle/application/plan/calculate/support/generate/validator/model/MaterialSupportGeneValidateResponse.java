@@ -1,6 +1,6 @@
 package com.inventory.middle.application.plan.calculate.support.generate.validator.model;
 
-import com.inventory.middle.domain.plan.common.enums.ResponseCodeEnum;
+import com.inventory.middle.domain.common.constants.ResponseCodeEnum;
 import com.inventory.middle.application.plan.config.bo.PlanBO;
 import com.inventory.middle.application.plan.config.bo.PlanMaterialParameterBO;
 import lombok.Getter;

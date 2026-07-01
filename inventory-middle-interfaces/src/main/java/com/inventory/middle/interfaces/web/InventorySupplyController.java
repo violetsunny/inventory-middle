@@ -60,8 +60,7 @@ public class InventorySupplyController {
     @Operation(summary="库存-供给list查询")
     @PostMapping("/list")
             public MultiResponse<InventorySupplyDto> list() {
-        // 分页查询待实现
-        return MultiResponse.buildSuccess(null);
+        return MultiResponse.buildFailure("NOT_IMPLEMENTED", "分页查询待实现");
     }
 
     /**

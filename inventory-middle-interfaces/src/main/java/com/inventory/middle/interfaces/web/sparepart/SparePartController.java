@@ -35,9 +35,7 @@ public class SparePartController {
 
     @Operation(summary = "备品备件关联逻辑仓库")
     @PostMapping("/sku/save")
-    public SingleResponse<Boolean> sparePartSave(
-            @RequestBody List<CreateMaterialLogicalPlantRefReqDTO> reqDTOList,
-            @RequestHeader(value = "ennUnifiedAuthorization", required = false) String token) {
+    public SingleResponse<Boolean> sparePartSave(@RequestBody List<CreateMaterialLogicalPlantRefReqDTO> reqDTOList) {
         return SingleResponse.of(sparePartApplicationService.sparePartSave(
                 reqDTOList, UserContextHolder.getTenantId(), UserContextHolder.getUserId()));
     }

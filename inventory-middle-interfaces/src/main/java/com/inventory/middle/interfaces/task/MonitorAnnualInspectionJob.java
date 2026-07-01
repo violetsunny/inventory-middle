@@ -1,12 +1,14 @@
 package com.inventory.middle.interfaces.task;
 
 import com.inventory.middle.application.service.InventoryMonitorRuleApplicationService;
+import com.inventory.middle.infra.lock.RedissonDistributedLockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
 import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 库存中心 物料年检预警定时任务
@@ -23,6 +25,11 @@ public class MonitorAnnualInspectionJob {
     @Resource
     private InventoryMonitorRuleApplicationService inventoryMonitorRuleApplicationService;
 
+    @Resource
+    private RedissonDistributedLockService redissonDistributedLockService;
+
+    private static final String LOCK_KEY = "JOB:MONITOR_ANNUAL_INSPECTION";
+
     /**
      * 年检预警计算任务
      * 默认每天凌晨 2 点执行，可通过配置项覆盖
@@ -33,7 +40,10 @@ public class MonitorAnnualInspectionJob {
         stopWatch.start();
         log.info("MonitorAnnualInspectionJob.execute start");
         try {
-            inventoryMonitorRuleApplicationService.processAnnualInspection();
+            redissonDistributedLockService.executeWithLock(100L, TimeUnit.MILLISECONDS, LOCK_KEY, () -> {
+                inventoryMonitorRuleApplicationService.processAnnualInspection();
+                return null;
+            });
         } catch (Exception e) {
             log.error("MonitorAnnualInspectionJob.execute error", e);
         } finally {

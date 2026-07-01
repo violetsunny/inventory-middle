@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.stereotype.Component;
+import com.inventory.middle.domain.common.exception.BusinessException;
 import top.kdla.framework.common.aspect.mdc.MdcDot;
 
 import javax.annotation.Resource;
@@ -41,7 +42,7 @@ public class MonitorRuleInOutBoundConsumer implements RocketMQListener<String> {
             inventoryMonitorRuleApplicationService.processInOutBoundMessage(changeMessage);
         } catch (Exception e) {
             log.error("MonitorRuleInOutBoundConsumer.onMessage failed, message={}", message, e);
-            throw new RuntimeException(e);
+            throw new BusinessException("MQ消费失败", e);
         }
     }
 }

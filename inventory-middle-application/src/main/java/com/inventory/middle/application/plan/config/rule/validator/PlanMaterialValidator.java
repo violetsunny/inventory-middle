@@ -2,7 +2,7 @@ package com.inventory.middle.application.plan.config.rule.validator;
 
 import com.inventory.middle.domain.plan.common.constants.CommonConstants;
 import com.inventory.middle.domain.plan.common.enums.PlanCoverMaterialTypeEnum;
-import com.inventory.middle.domain.plan.common.enums.ResponseCodeEnum;
+import com.inventory.middle.domain.common.constants.ResponseCodeEnum;
 import com.inventory.middle.domain.plan.common.ex.SpmException;
 import com.inventory.middle.application.plan.config.bo.PlanBO;
 import com.inventory.middle.application.plan.config.bo.PlanMaterialBO;

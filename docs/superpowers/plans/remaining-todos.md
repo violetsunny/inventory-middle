@@ -18,7 +18,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
 
 ---
 
-## 剩余项（19 项 + 新增 8 项 + 代码审计新增 14 项，建议按 9+5+7 组理解）
+## 剩余项（19 项 + 新增 8 项 + 代码审计新增 14 项 + 本次修复引入 4 项，建议按 9+5+7+4 组理解）
 
 ### 建议执行顺序
 
@@ -156,15 +156,15 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
 
 **中优先级 — 功能静默损坏：**
 
-4. **N1（G14）：17 个 `list()` 方法返回 null**
+4. **N1（G14）：16 个 `list()` 方法返回 null** ✅
    - 包含所有自动生成 CRUD controller 的 list 查询
 5. **N5（G12）：所有 6 个 `@Scheduled` 任务无分布式锁**
 6. **N6（G12）：4 个 plan 定时任务为纯 stub**
 
 **低优先级 — 架构/代码质量：**
 
-7. **N7（G13）：`PlanCommonController` 直接注入 infra 层 stub**
-8. **N8（G14）：`InventoryMonitorRuleLineController` 与 `/monitorRule/ruleLine` 路由二义性**
+7. **N7（G13）：`PlanCommonController` 直接注入 infra 层 stub** ✅
+8. **N8（G14）：`InventoryMonitorRuleLineController` 与 `/monitorRule/ruleLine` 路由二义性** ✅
 
 #### 阶段 8：代码深度审计发现的新问题
 
@@ -172,7 +172,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
 
 1. **Q1（G15）：`MaterialDocOutboundService` 接口无任何实现类 → Spring 启动/注入失败**
 2. **Q2（G15）：`InventoryChangeMqConsumer` 反序列化到字段不全的类 → 移动均价计算丢失字段**
-3. **Q3（G16）：`UserContextHolder.get()` 无 null 检查 → 8 处 NPE 风险点**
+3. **Q3（G16）：`UserContextHolder.get()` 无 null 检查 → 8 处 NPE 风险点（M22/M23 本次修复后新增 4 处）**
 4. **Q4（G16）：`MaterialDocQueryServiceImpl.queryMaterialBatchNo` 返回 null → 已上线接口静默无数据**
 
 **高优先级 — 功能/数据正确性：**
@@ -286,7 +286,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
   - 包含缓存是否需要恢复的确认
   - 单独保留原因：这是性能/运行特征确认项，不应与功能兼容项混做
 
-- [ ] **G8：plan 子包迁移缺口补齐** `M22 + M23 + M24 + M25`
+- [x] **G8：plan 子包迁移缺口补齐** `M22 + M23 + M24 + M25` ✅（M22/M23/M25 已完成，M24 ProjectTask 完整本地化待完成）
   - 包含 PlanConfig 空壳实现、DemandSupplyStock VO 映射、ProjectTask 本地化、ennUnifiedAuthorization 残留
   - 适合合并原因：都属于 plan 子包迁移后遗留的功能缺口，且 M22-M24 可独立于 G4 的登录态治理先行推进
 
@@ -301,22 +301,25 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 适合合并原因：同属预警规则 MQ 消费链路的两个关键缺口，修复时需同步验证消费链路端到端
    - **优先级：最高** — topic 不匹配导致 `MonitorRuleConsumer` 永远空转；Consumer 缺失导致规则行事件静默丢弃
 
-- [ ] **G11：数据库 DDL 补全** `N4`
-   - 包含 13 张有 mapper XML 但无 DDL 的业务表
-   - 独立保留原因：DDL 补写属于文档/初始化工程类任务，与业务逻辑变更正交；修复后需重新验证全量数据库初始化流程
+- [x] **G11：数据库 DDL 补全** `N4` ✅
+    - 包含 13 张有 mapper XML 但无 DDL 的业务表
+    - `inventory.sql` 新增 12 表: code_apply_order, code_apply_order_detail, code_apply_approval_record, code_record, file_import_record, file_import_line_record, inventory_log, inventory_material, material_logical_plant_ref, sp_delivery_order, sp_delivery_order_detail, unit
+    - `plan.sql` 新增 1 表: pl_plan_demand_supply_stock
+    - 注: sp_delivery_order / sp_delivery_order_detail / unit 的 PO 类来自外部 JAR 依赖，DDL 按 XML 中出现的列推导
 
 - [ ] **G12：定时任务健壮化** `N5 + N6`
-   - 包含 6 个 `@Scheduled` 任务无分布式锁（N5）和 4 个 plan 定时任务为空 stub（N6）
-   - 适合合并原因：都属于 plan 定时任务的质量缺口；stub 任务补实现时应同步加锁
-   - 建议顺序：先补有业务逻辑的任务的分布式锁（`MonitorAnnualInspectionJob`、`DemandPlanDetailGenerateJob`），再补 stub 任务实现，最后统一加锁
+    - 包含 6 个 `@Scheduled` 任务无分布式锁（N5）和 4 个 plan 定时任务为空 stub（N6）
+    - 适合合并原因：都属于 plan 定时任务的质量缺口；stub 任务补实现时应同步加锁
+    - 建议顺序：先补有业务逻辑的任务的分布式锁（`MonitorAnnualInspectionJob`、`DemandPlanDetailGenerateJob`），再补 stub 任务实现，最后统一加锁
+    - **状态:** N5 ✅（分布式锁已添加），N6 [ ]（4 个 stub 任务实现待业务方确认逻辑）
 
-- [ ] **G13：分层架构收口补充** `N7`
-   - `PlanCommonController` 直接注入 infra 层 `PlanParticipantStub`/`PlanProductStub`（N7）
+- [x] **G13：分层架构收口补充** `N7` ✅
+   - `PlanCommonController` 直接注入 infra 层 `PlanParticipantStub`/`PlanProductStub`（N7）→ 已创建 `PlanCommonApplicationService` 封装
    - 与 G5（M15）合并处理原因：属于同一类 controller→infra 直接依赖问题，但 M15 未覆盖 plan common controller
 
-- [ ] **G14：自动生成 CRUD list() stub 批量实现** `N1 + N8`
-   - 包含 17 个 `list()` null stub controller（N1）和 `InventoryMonitorRuleLineController` 路由二义性（N8）
-   - 处理顺序：先清理 `InventoryMonitorRuleLineController` 重复路由（N8），再逐一实现 `list()` 方法
+- [x] **G14：自动生成 CRUD list() stub 批量实现** `N1 + N8` ✅
+   - 包含 16 个 `list()` null stub controller（N1）和 `InventoryMonitorRuleLineController` 路由二义性（N8）
+   - 处理顺序：先清理 `InventoryMonitorRuleLineController` 重复路由（N8）→ 已删除并迁移 detail/delete 到 BFF controller → 再统一将 16 个 list() stub 改为 NOT_IMPLEMENTED 错误
 
 - [x] **G15：运行时启动/数据损坏风险修复** `Q1 + Q2 + Q6` ✅
    - `MaterialDocOutboundService` 接口无实现 → Spring 注入失败（Q1）
@@ -324,23 +327,34 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 两个 `InventoryChangeMessage` 类字段不一致（Q6，与 Q2 强关联，需同步修复）
    - **优先级：最高** — Q1 可能导致 Spring 应用启动失败；Q2+Q6 导致已在运行的计算逻辑静默丢失关键字段
 
-- [ ] **G16：UserContext null 检查 + MaterialDocQueryService 空实现** `Q3 + Q4`
-   - 8 处 `UserContextHolder.get()` 无 null 检查（Q3）
-   - `MaterialDocQueryServiceImpl.queryMaterialBatchNo` 返回 null（Q4）
-   - 适合合并原因：都属于"方法返回 null/context 为 null 时未防御"的同类运行时崩溃模式
+- [x] **G16：UserContext null 检查 + MaterialDocQueryService 空实现** `Q3 + Q4 + Q15 + Q18` ✅
+   - 8 处 `UserContextHolder.get()` 无 null 检查（Q3，原有）→ 全部改为 `UserContextHolder.getTenantId()` 等安全方法或删除无用调用
+   - `MaterialDocQueryServiceImpl.queryMaterialBatchNo` 返回 null（Q4）→ 接入 `InventorySnapshotRepository.queryBatchNoList` 实现真实查询
+   - `PlanConfigController` 4 处直接解引用 `userInfo.getTenantId()` 等（Q15，本次修复引入）→ 改为 `UserContextHolder.getTenantId()` 等安全方法
+   - `PlanOrderController.currentUser()` 无 null 防御传入 convertor（Q18，本次修复引入）→ 增加 null guard 抛出 `BusinessException`
 
-- [ ] **G17：MyBatis XML 文件完整性修复** `Q5`
-   - 25 个 XML mapper 在 `/mybatis/mapper/` 目录未被加载（Q5）；另有两份 `DemandPlanMapper.xml` 同时存在，需确认 Java 接口是否都存在
-   - 注：Q6 已移入 G15 与 Q2 一并处理
+- [x] **G17：MyBatis XML 文件完整性修复** `Q5` ✅
+    - 25 个 XML mapper 在 `/mybatis/mapper/` 目录未被加载（Q5）→ 整目录删除（`rm -rf mybatis/mapper/`）
+    - `mapper/plan/demand/DemandPlanMapper.xml`（namespace `...demand.DemandPlanMapper`）无对应 Java 接口 → 删除
+    - 验证：`mapper/plan/DemandPlanMapper.xml`（namespace `...mapper.DemandPlanMapper`）有匹配的 Java 接口，保留
 
-- [ ] **G18：MQ 消费者健壮化** `Q7 + Q8`
-   - 21 个消费者无幂等保护 + `RuntimeException` 导致无限重试（Q7）
-   - 3 个 MyBatis 查询缺 `tenant_id` 过滤（Q8）
+- [x] **G18：MQ 消费者健壮化** `Q7 + Q8` ✅
+   - 22 个消费者 `RuntimeException` → `BusinessException`，3 个关键词费者添加 Redisson 幂等去重（Q7）
+   - 3 个 MyBatis 查询（5 处 XML）补 `tenant_id` + `deleted = 0` 过滤（Q8）
+   - 实现：SnMaterialDocInConsumer / SnMaterialDocCancelConsumer / InventoryChangeMqConsumer 添加 md5Hex 去重 + RBucket.trySet 24h TTL
    - 注：Q7 中的无幂等问题与 N6 中 stub 消费者是不同问题；N6 是 stub，Q7 是已实现但无幂等的消费者
 
-- [ ] **G19：DemandPlanServiceImpl 逻辑错误修复** `Q9 + Q10`
+- [x] **G19：DemandPlanServiceImpl 逻辑错误修复** `Q9 + Q10` ✅
    - 3 处业务逻辑 TODO + 2 处 ParseException 静默返回空（Q9）
+     - Line 315: `// TODO 逻辑仓不存在` 注释 → `ResponseCodeEnum.FAILED.getCode()` 替代空字符串
+     - Line 319: `// 租户id 用户id 公司编码 TODO` 注释 → 删除，逻辑已实现
+     - Line 346: `// 这里的先这样组装一下，621版本优化掉 TODO` → 删除，stale TODO
+     - Lines 539, 1123: `catch (ParseException e) { log.error(...) }` 静默返回空 → `throw new BusinessException("计划期日期解析失败", e)`
    - `@Transactional` self-invocation 事务失效（Q10）
+     - Line 72-74: 添加 `@Lazy @Autowired private DemandPlanServiceImpl self;` 自注入
+     - Line 432: `handleDemandPlanDetailByMaterial(...)` → `self.handleDemandPlanDetailByMaterial(...)` 通过代理触发 @Transactional
+   - 也修复了 `@Autowired` 重复导入（line 44）
+   - 构建: BUILD SUCCESS 7/7
    - 适合合并原因：都属于 `DemandPlanServiceImpl` 内部的逻辑/事务错误
 
 - [ ] **G20：架构分层违规收口（M15 补充）** `Q11 + Q12`
@@ -351,6 +365,10 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
 - [ ] **G21：代码洁癖 — 重复类和孤儿实体清理** `Q13 + Q14`
    - 11 个孤儿实体类（Q13）和两个 `ResponseCodeEnum`（Q14）
    - 低优先级，不影响运行时，属于代码可维护性清理
+
+- [x] **G22：本次修复引入的类型安全与字段注解问题** `Q16 + Q17` ✅
+   - `PlanDemandSupplyStockController.demandSupplyStockBoardDetail` 无类型保证的 Map 强转（Q16）→ 改用 `instanceof` 类型检查 + `Number.longValue()` 安全转换
+   - `PlanMaterialImportExcelBO.materialDesc` 缺 `@ExcelProperty` 导致导出列缺失（Q17）→ 补加 `@ExcelProperty(value = "物料描述", index = 2)`
 
 ### 原始编号映射
 
@@ -369,12 +387,13 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
 - `G13 = N7`
 - `G14 = N1 + N8`
 - `G15 = Q1 + Q2 + Q6`
-- `G16 = Q3 + Q4`
+- `G16 = Q3 + Q4 + Q15 + Q18`
 - `G17 = Q5`
 - `G18 = Q7 + Q8`
 - `G19 = Q9 + Q10`
 - `G20 = Q11 + Q12`
 - `G21 = Q13 + Q14`
+- `G22 = Q16 + Q17`  ← 本次修复引入的类型安全 / 字段注解问题
 
 - [ ] **M8：6 个外部 URL 默认值为空** ⏳ 部署配置
   - `application.yml` 中 `remote.*.url` 均为 `${ENV_VAR:}` 占位符
@@ -468,7 +487,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
   - P3 DTO 整理：对明显暴露内部字段的请求对象，评估拆分 web VO 与内部 DTO，减少后续再次漏收口
   - 处理建议：按“写接口优先、查接口次之”的顺序统一治理；对 BFF/对外入口一律在 web 层覆盖 `tenantId/userId/operatorId/creatorId/updatorId/sourceSystem`，对仅靠 `id/ids` 的详情/删除接口补租户约束或改为 tenant-aware 查询
 
-- [ ] **M22：PlanConfigController 导入/删除空壳实现接通 + ennUnifiedAuthorization 残留清理** 🚨 plan 迁移缺口
+- [x] **M22：PlanConfigController 导入/删除空壳实现接通 + ennUnifiedAuthorization 残留清理** ✅ plan 迁移缺口
   - `importPlanMaterialParam`（line 89-99）、`importPlanMaterial`（line 236-242）、`deletePlanMaterial`（line 251-257）均直接 `buildSuccess()` 无业务逻辑，保留 `ennUnifiedAuthorization` 形参
   - `generatePlan`（line 290-305）保留 `ennUnifiedAuthorization` 形参 **（注：generatePlan 已实现真实逻辑，不是 stub，仅需清理形参）**
   - 底层 `PlanConfigService` 已有 `batchCreatePlanMaterialParam`、`batchCreatePlanMaterial`、`batchDeletePlanMaterial` 方法，controller 未接通
@@ -480,7 +499,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
     3. 接通 controller 到 `PlanConfigService` 的 `batchCreatePlanMaterialParam`、`batchCreatePlanMaterial`、`batchDeletePlanMaterial`
     4. 清理 `ennUnifiedAuthorization` 形参（依赖 M17 登录态承接方案）
 
-- [ ] **M23：PlanDemandSupplyStockController detail/tree VO 映射补全** ⚠️ plan 迁移缺口
+- [x] **M23：PlanDemandSupplyStockController detail/tree VO 映射补全** ✅ plan 迁移缺口
   - `demandSupplyStockBoardDetail`（line 49-57）：application service 返回 `Map<String, Object>` 包含 `boardData`/`chartData`，但 controller 创建空 `DemandSupplyStockBoardDetailResVO` 未映射
   - `renderBomTree`（line 61-72）：application service 返回的 `children` 是空列表，未实际查 BOM 树
   - 底层 `PlanDemandSupplyStockApplicationServiceImpl` 的 `renderBomTree` 只返回物料基本信息，未调用 `BomCaseApplicationService.renderBomTree`
@@ -509,17 +528,18 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
     - `docs/sql/plan.sql` — 新增 `pl_project_task` 表 DDL
   - 处理建议：参考 BFF 源码 `ProjectTaskBizServiceImpl`、`ProjectTaskManageBizServiceImpl`、`ProjectTaskObjectConverter` 的业务逻辑，按 middle 现有 plan 包路径规范新建完整链路
 
-- [ ] **M25：PlanOrderController / SparePartController 的 ennUnifiedAuthorization 形参残留清理** ⚠️ plan 迁移缺口
+- [x] **M25：PlanOrderController / SparePartController 的 ennUnifiedAuthorization 形参残留清理** ✅ plan 迁移缺口
   - `PlanOrderController.issuePlanOrder`（line 70）：`@RequestHeader(value = "ennUnifiedAuthorization", required = false) String token`
   - `SparePartController`（line 40）：`@RequestHeader(value = "ennUnifiedAuthorization", required = false) String token`
   - 与 M17 登录态承接方案联动：M17 确认 `ennUnifiedAuthorization -> tenantId/userId/username` 的承接方案后，这两个 controller 的形参应统一清理
   - 处理建议：在 M17 完成后，统一清理 plan 子包中所有 `ennUnifiedAuthorization` 形参，改为从 `UserContextHolder` 获取上下文
 
-- [ ] **N1：17 个自动生成 CRUD Controller 的 `list()` 方法均为 null stub** ⚠️ 静默损坏查询
+- [x] **N1：16 个自动生成 CRUD Controller 的 `list()` 方法均为 null stub** ✅
    - 以下 controller 的 `list()` 全部返回 `MultiResponse.buildSuccess(null)`（注释 `// 分页查询待实现`）：
-     `MdocSubQuantityController`、`MdocSubMaterialController`、`InventoryAlertNotificationController`、`InventoryDemandController`、`InventoryAlertController`、`ShipmentLineController`、`MaterialDocMainController`、`MdocSubFinanceController`、`MdocSubInOutController`、`InventorySupplyController`、`MdocSubMapController`、`InventoryMapHisController`、`ShipmentController`、`MdocSubExtController`、`MaterialDocItemController`、`InventoryPlanController`、`InventoryMonitorRuleLineController`
+     `MdocSubQuantityController`、`MdocSubMaterialController`、`InventoryAlertNotificationController`、`InventoryDemandController`、`InventoryAlertController`、`ShipmentLineController`、`MaterialDocMainController`、`MdocSubFinanceController`、`MdocSubInOutController`、`InventorySupplyController`、`MdocSubMapController`、`InventoryMapHisController`、`ShipmentController`、`MdocSubExtController`、`MaterialDocItemController`、`InventoryPlanController`
+   - `InventoryMonitorRuleLineController` 已被 N8 删除（其 list() 是第 17 个 stub，现不单独计数）
    - 对比：`WarehouseController`、`LogicalPlantController`、`StorageLocationController` 的 `list()` 已正确实现
-   - 处理建议：对每个 stub，接入对应的 ApplicationService 查询方法，或改返回明确的 NOT_IMPLEMENTED 错误（避免调用方收到 `null` 数据误以为是空集合）
+   - **处理结果：** 16 个 `list()` 方法统一改为 `MultiResponse.buildFailure("NOT_IMPLEMENTED", "分页查询待实现")`，避免调用方收到 null 误判为空集合
 
 - [x] **N2：`MonitorRuleLineConsumer` 缺失 — 预警规则行消息被静默丢弃** ✅ 运行时事件缺口
    - `InventoryTagEnum` 中定义了 `monitorRuleLineUpdateTag` 和 `monitorRuleLineCreateTag` 两个枚举值，说明消息标签已规划
@@ -564,20 +584,20 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 源 `scm-plan-management` 中对应的调度任务均有真实业务逻辑（计划生成、库存计算、Redis 预热、订单逾期检查）
    - 处理建议：按源系统调度逻辑逐一补齐，优先顺序：`PlanOrderOverdueCheckJob`（已有 dao 注入）→ `PlanGenerateJob`（核心计划生成）→ 其余两个
 
-- [ ] **N7：`PlanCommonController` 直接注入 infra 层 stub，违反 DDD 分层约束** ⚠️ 架构越权
+- [x] **N7：`PlanCommonController` 直接注入 infra 层 stub，违反 DDD 分层约束** ✅
    - `PlanCommonController` 在 interfaces 层直接注入：
      - `com.inventory.middle.infra.plan.stub.PlanParticipantStub`（line 48）
      - `com.inventory.middle.infra.plan.stub.PlanProductStub`（line 51，使用全限定名内联注入）
    - interfaces 层（controller）应只依赖 application 层，不得直接调用 infra 层实现
    - 对比：M15 已列出其他 controller 的相同问题（`MaterialDocController`、`InventoryTransitController` 等），但 `PlanCommonController` 未包含在内
-   - 处理建议：将 `PlanParticipantStub` 和 `PlanProductStub` 的调用封装到 plan application service 中，controller 改为依赖 application service
+   - **处理结果：** 已创建 `PlanCommonApplicationService`（接口 + impl）封装 stub 调用，controller 改为注入应用服务
 
-- [ ] **N8：`InventoryMonitorRuleLineController`（`/inventorymonitorruleline`）与 `InventoryMonitorRuleController`（`/monitorRule/ruleLine`）形成路由二义性** ℹ️ 代码冗余
+- [x] **N8：`InventoryMonitorRuleLineController`（`/inventorymonitorruleline`）与 `InventoryMonitorRuleController`（`/monitorRule/ruleLine`）形成路由二义性** ✅
    - `/inventorymonitorruleline/**`：自动生成，基础 CRUD stub（含 list() null stub）
    - `/monitorRule/ruleLine/**`：BFF 迁移版，实现 `save`、`page`、`import`、`template`（功能完整）
    - 两个 controller 操作同一张 `inventory_monitor_rule_line` 表，路径不同、实现深度不同
    - 影响：前端若按 BFF 路径调用 `/monitorRule/ruleLine` 可正常使用；若误用 `/inventorymonitorruleline` 会得到 stub 响应
-   - 处理建议：评估是否删除或明确废弃 `InventoryMonitorRuleLineController`（自动生成版）
+   - **处理结果：** 删除自动生成版 `InventoryMonitorRuleLineController`；将缺失的 `detail/{id}` 和 `delete` 端点补入 BFF 版 `InventoryMonitorRuleController` 的 `/monitorRule/ruleLine/` 路径下
 
 - [ ] **M26：RDFA/Nacos/Dubbo 代码级残留全量清理** ⚠️ 代码洁癖收尾
   - **变量名（11 处，3 个文件）：**
@@ -615,7 +635,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 结果：消费者收到的 message 对象中 `price = null`、`adjustQuantity = null`，传给 `inventoryMapDomainService.cal(message)` 的移动均价计算将产生错误结果或 NPE
    - 处理建议：统一两个 `InventoryChangeMessage` 类，或让消费者使用 infra 层的完整版本（需评估 domain 层是否应依赖 infra DTO）
 
-- [ ] **Q3：`UserContextHolder.get()` 无 null 检查直接链式调用 → 8 处 NPE 风险** 🚨 运行时崩溃
+- [x] **Q3：`UserContextHolder.get()` 无 null 检查直接链式调用 → 8 处 NPE 风险** ✅ 🚨 运行时崩溃
    - 以下位置使用 `UserContext userInfo = UserContextHolder.get()` 后直接 `.getTenantId()` / `.getUserId()` 等，当 UserContextInterceptor 未设置上下文时（M17 描述的场景）将 NPE：
      - `PlanConfigController.java` line 175、210、263、293、348
      - `PlanReportController.java` line 50、75、90
@@ -623,7 +643,7 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 对比：`UserContextHolder.getTenantId()`/`.getUserId()` 有 null guard（先检查 ctx != null）；但直接 `.get()` 返回的对象未检查就使用是不安全的
    - 处理建议：将 `UserContext userInfo = UserContextHolder.get()` 后的使用改为 `UserContextHolder.getTenantId()` 等安全方法，或在 `.get()` 后添加 Objects.requireNonNull 抛出明确异常
 
-- [ ] **Q4：`MaterialDocQueryServiceImpl.queryMaterialBatchNo` 返回 null → 已上线接口静默无数据** 🚨 空实现上线
+- [x] **Q4：`MaterialDocQueryServiceImpl.queryMaterialBatchNo` 返回 null → 已上线接口静默无数据** ✅ 🚨 空实现上线
    - `application/service/impl/MaterialDocQueryServiceImpl.java` line 118：`public QueryMaterialBatchNoResDTO queryMaterialBatchNo(MaterialBatchNoQuery query) { return null; }`
    - 对应 controller 入口：`MaterialDocController.java` 调用后直接 `buildSuccess(null)` 返回给前端
    - 不在 N1 覆盖范围（N1 针对自动生成 CRUD controller 的 list 方法），也未在 M22-M24 中记录
@@ -641,19 +661,16 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 两个类同名不同包，极易误用；若其他地方引入了 domain 版本的 `InventoryChangeMessage` 来处理 infra 发出的消息，同样会丢失字段
    - 处理建议：与 Q2 一并处理——统一为一个类，确定规范的包路径（建议 domain 层，infra 层引用 domain 版本）
 
-- [ ] **Q7：21 个 RocketMQ 消费者抛原始 `RuntimeException` + 无幂等保护** ⚠️ 无限重试与重复处理风险
-   - **无限重试**：所有消费者 catch 块 `throw new RuntimeException(e)`，RocketMQ 默认对 RuntimeException 触发重试（最多 16 次，默认每次间隔递增），若业务逻辑持续失败（如数据库约束冲突），将陷入无限重试死循环
-   - **无幂等保护**：无任何消费者在处理前检查 messageId / Redis 去重键 / 数据库唯一约束，RocketMQ 至少一次投递保证意味着重复消息会导致重复业务处理
-   - 高危消费者：`InventoryChangeMqConsumer`（移动均价更新）、`InventoryBffMqConsumer`（流转码创建）、`SnMaterialDocCancelConsumer`（取消单冲销）
-   - 注：N6 条目记录的是 stub 定时任务，Q7 记录的是已有业务逻辑但无健壮性保护的消费者，是不同问题
-   - 处理建议：优先为高危消费者（移动均价、流转码、取消单）添加 Redis 幂等去重；将 `throw new RuntimeException(e)` 替换为 BizException/SysException 或配置消息消费失败策略
+- [x] **Q7：22 个 RocketMQ 消费者抛原始 `RuntimeException` + 无幂等保护** ✅ 已修复
+    - **RuntimeException → BusinessException**：全部 22 个消费者 catch 块替换为 `throw new BusinessException("MQ消费失败", e)`，BusinessException 继承 KDLA BizException，@CatchAndLog 以 WARN 级别记录，不再触发 RocketMQ 无限重试
+    - **幂等去重**：SnMaterialDocInConsumer、SnMaterialDocCancelConsumer、InventoryChangeMqConsumer 三个关键词费者添加 Redisson RBucket.trySet 去重（md5Hex 消息体 → 24h TTL），重复消息直接 skip
+    - 注：N6 条目记录的是 stub 定时任务，Q7 记录的是已有业务逻辑但无健壮性保护的消费者，是不同问题
 
-- [ ] **Q8：3 处 MyBatis 查询缺 `tenant_id` 过滤 → 跨租户数据泄露** ⚠️ 多租户安全漏洞
-   - `mapper/InventorySnapshotMapper.xml` 的 `pageList`（line 386）和 `pageListCount`（line 393）：`SELECT ... FROM inventory_snapshot LIMIT ...`，无 `tenant_id` 过滤，无 `deleted = 0` 过滤
-   - `mapper/InvetoryAlertMapper.xml` 的 `pageList`（line 282）和 `pageListCount`（line 288）：同上
-   - `mapper/MaterialDocMainMapper.xml` 的 `queryByUniqueNo`（line 382）：无 `tenant_id` 过滤，`uniqueNo` 跨租户唯一性验证失效
-   - 影响：分页查询会返回所有租户的已删除数据；单据号唯一性校验可能匹配到其他租户的单据
-   - 处理建议：为三处查询补 `AND tenant_id = #{tenantId}` 和 `AND deleted = 0` 约束
+- [x] **Q8：3 处 MyBatis 查询缺 `tenant_id` 过滤 → 跨租户数据泄露** ✅ 已修复
+    - `mapper/InventorySnapshotMapper.xml` 的 `pageList`（line 386）和 `pageListCount`（line 393）：已添加 `WHERE tenant_id = #{tenantId} AND deleted = 0`
+    - `mapper/InvetoryAlertMapper.xml` 的 `pageList`（line 282）和 `pageListCount`（line 288）：已添加 `WHERE tenant_id = #{tenantId} AND deleted = 0`
+    - `mapper/MaterialDocMainMapper.xml` 的 `queryByUniqueNo`（line 382）：已添加 `AND tenant_id = #{tenantId}`（原有 `deleted = 0`）
+    - `MaterialDocMainMapper.java` 接口：`queryByUniqueNo` 方法签名添加 `@Param("tenantId") String tenantId` 参数
 
 - [ ] **Q9：`DemandPlanServiceImpl` 内 3 处业务逻辑 TODO + 2 处 `ParseException` 被静默吞掉** ⚠️ 逻辑不完整
    - **TODO 标记（未完成业务逻辑）：**
@@ -672,11 +689,11 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 影响：外部调用该方法时事务正常；当通过 `generateData()` 内部路径调用时，如果 `handleDemandPlanDetailByMaterial` 内部发生异常，外层事务不会因为此方法的失败被感知，数据可能部分写入
    - 处理建议：将 `handleDemandPlanDetailByMaterial` 提取到单独的 Spring Bean，或改用 `ApplicationContext` 自注入调用（后者是 workaround，不推荐）
 
-- [ ] **Q11：`FileController` 直接注入 `infra.integration.oss.OssFileService` → M15 分层修复遗漏** ⚠️ 架构分层违规
+- [x] **Q11：`FileController` 直接注入 `infra.integration.oss.OssFileService` → M15 分层修复遗漏** ✅
    - `interfaces/web/file/FileController.java` line 4：`import com.inventory.middle.infra.integration.oss.OssFileService`
    - interfaces 层 controller 直接注入 infra 层服务，未通过 application service 封装
    - M15 列出的 5 个 controller 均为 external remote service 注入问题，`FileController` 注入的是 infra integration service，场景相同但未覆盖
-   - 处理建议：在 G20 与 M15 修复时一并处理，增加 `FileApplicationService` 封装 `OssFileService` 调用
+   - **处理结果：** 创建 `FileApplicationService` 接口 + `FileApplicationServiceImpl` 封装 `OssFileService`，controller 改为注入应用服务
 
 - [ ] **Q12：20 个 application 层 convertor 直接 import `infra.persistence.*Do` → 分层边界渗透** ⚠️ 架构分层违规
    - `application/convertor/` 目录下所有 convertor 类（20+）直接 import 并使用 `com.inventory.middle.infra.persistence.entity.*Do` 类
@@ -697,6 +714,31 @@ JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home \
    - 两个 enum 都定义了 `SUCCESS("0","成功")`、`FAILED("1","失败")`、`SYSTEM_ERROR(...)`、`REMOTE_SERVICE_FAILED(...)`，值不同
    - `Ex` 工具类使用 plan 版本；业务异常、domain service 使用库存核心版本；两套并存导致新代码选择混乱
    - 处理建议：保留 `domain/common/constants/ResponseCodeEnum`，将 plan 特有的错误码（C_*/D_*）并入该 enum，删除 `domain/plan/common/enums/ResponseCodeEnum`；或明确文档约定各自用途范围
+
+- [x] **Q15：`PlanConfigController` 4 处 `userInfo.getTenantId()` 直接解引用无 null 检查 → NPE** ✅ 🚨 本次修复引入
+   - `queryPlan`（line 193）：`userInfo.getTenantId()` — `UserContextHolder.get()` 返回 null 时崩溃
+   - `queryPlanMaterial`（line 332）：`userInfo.getTenantId()` — 同上
+   - `generatePlan`（line 362-365）：`userInfo.getUserId()/getUsername()/getTenantId()/getOperator()` 四连调用 — 同上
+   - `queryPlanTransferLogicalPlants`（line 416）：`userInfo.getTenantId()` — 同上
+   - 对比：同文件 `importPlanMaterialParam`（line 94-99）和 `importPlanMaterial`（line 256）已做 null 检查，模式不一致
+   - 修复建议：将 `UserContextHolder.get()` 后直接解引用改为 `UserContextHolder.getTenantId()` 等安全方法，与 Q3 同类问题一并处理（归入 G16）
+
+- [x] **Q16：`PlanDemandSupplyStockController.demandSupplyStockBoardDetail` 无类型安全保证 → 运行时 ClassCastException** ✅ ⚠️ 本次修复引入
+   - `demandSupplyStockBoardDetail`（line 71-99）将 `Map<String, Object>` 中的字段强转为 `Long`（`demandAmount`、`supplyAmount`、`availableAmount`）、`Integer`（`planElementType`）、`Date`（`planDate`）、`String`
+   - `PlanDemandSupplyStockApplicationService.demandSupplyStockBoardDetail` 返回的 `Map<String, Object>` 实际值类型由实现决定，当前 controller 完全信任类型断言
+   - 若 service 返回 `Integer` 而 controller 强转 `Long`，或 `planDate` 实际为 `String`，则运行时抛出 `ClassCastException`，`@CatchAndLog` 只会记录日志不会给调用方有用信息
+   - 修复建议：在 service 层定义强类型 DTO（如 `DemandSupplyStockBoardDetailBO`）代替 `Map`，消除强转；或在每次强转前做 `instanceof` 检查
+
+- [x] **Q17：`PlanMaterialImportExcelBO.materialDesc` 字段无 `@ExcelProperty` 注解 → 导出模板列缺失** ✅ ⚠️ 本次修复引入
+   - `PlanMaterialImportExcelBO`（line 19）：`materialDesc` 字段无 `@ExcelProperty`，但 `queryPlanMaterial` 方法用该 BO 写 Excel 导出
+   - EasyExcel 导出时跳过无 `@ExcelProperty` 的字段，物料名称列将从导出结果中消失
+   - 修复建议：为 `materialDesc` 补加 `@ExcelProperty(value = "物料描述", index = 2)`
+
+- [x] **Q18：`PlanOrderController.currentUser()` 返回的 `UserContext` 直接传入 convertor 未做 null 防御** ✅ ⚠️ 本次修复引入
+   - `currentUser()` 返回 `UserContextHolder.get()`，可能为 null（与 Q3/Q15 同类）
+   - `createManualPlanOrder`/`updatePlanOrder`/`issuePlanOrder` 均通过 `PlanOrderWebConvertor.fillUserInfo(dto, userContext)` 消费该值
+   - 需确认 `fillUserInfo` 是否对 null userContext 做了防御；若未防御则三个接口在无登录态时均 NPE
+   - 修复建议：在 `currentUser()` 中增加 null guard，或在 `fillUserInfo` 中做防御处理（归入 G16）
 
 ---
 

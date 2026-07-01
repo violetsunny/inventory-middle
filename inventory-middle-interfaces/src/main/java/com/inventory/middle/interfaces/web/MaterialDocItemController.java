@@ -60,8 +60,7 @@ public class MaterialDocItemController {
     @Operation(summary="物料凭证-itemlist查询")
     @PostMapping("/list")
             public MultiResponse<MaterialDocItemDto> list() {
-        // 分页查询待实现
-        return MultiResponse.buildSuccess(null);
+        return MultiResponse.buildFailure("NOT_IMPLEMENTED", "分页查询待实现");
     }
 
     /**
