@@ -15,6 +15,7 @@ import com.inventory.middle.domain.plan.common.ex.Ex;
 import com.inventory.middle.domain.plan.common.rule.ValidateMessage;
 import com.inventory.middle.infra.plan.util.DateUtils;
 import com.inventory.middle.domain.plan.common.bo.MaterialBO;
+import com.inventory.middle.application.convertor.DemandPlanConvertor;
 import com.inventory.middle.application.plan.demand.bo.*;
 import com.inventory.middle.application.plan.demand.convertor.*;
 import com.inventory.middle.application.plan.demand.handler.*;
@@ -45,7 +46,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.factory.annotation.Value;
@@ -119,6 +119,9 @@ public class DemandPlanServiceImpl implements DemandPlanService {
     @Resource
     private SequenceFactory sequenceFactory;
 
+    @Resource
+    private DemandPlanConvertor demandPlanConvertor;
+
     public static final String DEMAND_PLAN_VERSION_NAME = "demandPlanVersion";
 
     int corePoolSize = Runtime.getRuntime().availableProcessors();
@@ -136,9 +139,7 @@ public class DemandPlanServiceImpl implements DemandPlanService {
     public PageResponse<DemandPlanSelectResBO> selectDemandPlanByPage(DemandPlanSelectReqBO reqBO,
                                                                          int pageNum, int pageSize) {
         //bo转condition
-        DemandPlanSelectReqCondition reqCondition = new DemandPlanSelectReqCondition();
-        BeanUtils.copyProperties(reqBO, reqCondition);
-        //查询
+        DemandPlanSelectReqCondition reqCondition = demandPlanConvertor.toCondition(reqBO);
         Page<DemandPlanDao> page = PageHelper.startPage(pageNum, pageSize);
         List<DemandPlanPO> poList = demandPlanDao.selectByPage(reqCondition);
         //po转bo

@@ -1,12 +1,14 @@
 package com.inventory.middle.infra.persistence.repository.impl;
 
 import com.inventory.middle.domain.model.entity.InventoryMaterial;
+import com.inventory.middle.domain.repository.InventoryMaterialQueryParam;
 import com.inventory.middle.domain.repository.InventoryMaterialRepository;
+import com.inventory.middle.domain.repository.ListMaterialCodeQueryParam;
+import com.inventory.middle.infra.persistence.convertor.InventoryMaterialConvertor;
 import com.inventory.middle.infra.persistence.entity.InventoryMaterialDo;
 import com.inventory.middle.infra.persistence.entity.InventoryMaterialQueryPO;
 import com.inventory.middle.infra.persistence.entity.ListMaterialCodeParamPO;
 import com.inventory.middle.infra.persistence.mapper.InventoryMaterialMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -22,6 +24,9 @@ public class InventoryMaterialRepositoryImpl implements InventoryMaterialReposit
 
     @Resource
     private InventoryMaterialMapper inventoryMaterialMapper;
+
+    @Resource
+    private InventoryMaterialConvertor inventoryMaterialConvertor;
 
     @Override
     public InventoryMaterial findById(Long id) {
@@ -45,33 +50,34 @@ public class InventoryMaterialRepositoryImpl implements InventoryMaterialReposit
         return Collections.emptyList();
     }
 
-    public List<InventoryMaterial> listByCondition(InventoryMaterialQueryPO queryPO) {
+    @Override
+    public List<InventoryMaterial> listByCondition(InventoryMaterialQueryParam queryParam) {
+        InventoryMaterialQueryPO queryPO = toQueryPO(queryParam);
         return inventoryMaterialMapper.listByCondition(queryPO)
             .stream().map(this::toEntity).collect(Collectors.toList());
     }
 
-    public List<InventoryMaterial> listByMaterialCodes(ListMaterialCodeParamPO param) {
+    @Override
+    public List<InventoryMaterial> listByMaterialCodes(ListMaterialCodeQueryParam queryParam) {
+        ListMaterialCodeParamPO param = toListMaterialCodeParamPO(queryParam);
         return inventoryMaterialMapper.listByMaterialCodeList(param)
             .stream().map(this::toEntity).collect(Collectors.toList());
     }
 
-    /**
-     * 按物料编码列表查询，返回原始 Do 对象（保留 outMaterialCode 字段，供 plan 迁移使用）
-     */
-    public List<InventoryMaterialDo> listByMaterialCodesRaw(ListMaterialCodeParamPO param) {
-        return inventoryMaterialMapper.listByMaterialCodeList(param);
+    private InventoryMaterialQueryPO toQueryPO(InventoryMaterialQueryParam queryParam) {
+        return inventoryMaterialConvertor.toQueryPO(queryParam);
+    }
+
+    private ListMaterialCodeParamPO toListMaterialCodeParamPO(ListMaterialCodeQueryParam queryParam) {
+        return inventoryMaterialConvertor.toListMaterialCodeParamPO(queryParam);
     }
 
     private InventoryMaterialDo toDoObject(InventoryMaterial entity) {
-        InventoryMaterialDo doObj = new InventoryMaterialDo();
-        BeanUtils.copyProperties(entity, doObj);
-        return doObj;
+        return inventoryMaterialConvertor.toDo(entity);
     }
 
     private InventoryMaterial toEntity(InventoryMaterialDo doObj) {
         if (doObj == null) return null;
-        InventoryMaterial entity = new InventoryMaterial();
-        BeanUtils.copyProperties(doObj, entity);
-        return entity;
+        return inventoryMaterialConvertor.toEntity(doObj);
     }
 }

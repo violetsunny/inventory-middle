@@ -1,7 +1,7 @@
 package com.inventory.middle.interfaces.schedule;
 
 import com.inventory.middle.application.plan.order.service.PlanOrderApplicationService;
-import com.inventory.middle.infra.lock.RedissonDistributedLockService;
+import com.inventory.middle.domain.service.lock.DistributedLockService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,7 +19,7 @@ public class PlanOrderOverdueCheckJob {
     private PlanOrderApplicationService planOrderApplicationService;
 
     @Resource
-    private RedissonDistributedLockService redissonDistributedLockService;
+    private DistributedLockService distributedLockService;
 
     private static final String LOCK_KEY = "JOB:PLAN_ORDER_OVERDUE_CHECK";
 
@@ -27,7 +27,7 @@ public class PlanOrderOverdueCheckJob {
     public void execute() {
         log.info("PlanOrderOverdueCheckJob start");
         try {
-            redissonDistributedLockService.executeWithLock(100L, TimeUnit.MILLISECONDS, LOCK_KEY, () -> {
+            distributedLockService.executeWithLock(100L, TimeUnit.MILLISECONDS, LOCK_KEY, () -> {
                 List<Long> overdueOrderIds = planOrderApplicationService.queryOverduePlanOrderIds();
                 if (CollectionUtils.isNotEmpty(overdueOrderIds)) {
                     log.info("PlanOrderOverdueCheckJob found {} overdue orders", overdueOrderIds.size());

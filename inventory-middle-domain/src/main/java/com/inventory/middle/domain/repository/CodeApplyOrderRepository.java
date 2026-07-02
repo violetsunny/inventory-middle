@@ -27,4 +27,9 @@ public interface CodeApplyOrderRepository {
      * 根据ID列表查询
      */
     List<CodeApplyOrder> findByIds(List<Long> ids);
+
+    /**
+     * 按条件查询
+     */
+    List<CodeApplyOrder> listByCondition(CodeApplyOrderQueryParam queryParam);
 }

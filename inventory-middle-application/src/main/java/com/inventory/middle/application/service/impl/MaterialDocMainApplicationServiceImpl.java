@@ -1,34 +1,33 @@
 package com.inventory.middle.application.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import com.inventory.middle.application.convertor.MaterialDocMainDtoConvertor;
+import com.inventory.middle.application.convertor.MaterialDocumentConvertor;
+import com.inventory.middle.application.service.MaterialDocMainApplicationService;
+import com.inventory.middle.client.dto.command.MaterialDocMainCommand;
+import com.inventory.middle.client.dto.material.MaterialDocumentDTO;
+import com.inventory.middle.domain.model.bo.material.MaterialDocumentBO;
+import com.inventory.middle.domain.model.bo.mq.sub.MaterialDocCancelMessage;
+import com.inventory.middle.domain.model.bo.mq.sub.MaterialDocInMessage;
+import com.inventory.middle.domain.repository.MaterialDocMainRepository;
+import com.inventory.middle.domain.repository.MdocSubExtRepository;
+import com.inventory.middle.domain.service.MaterialDocDomainService;
+import com.inventory.middle.domain.service.material.model.MaterialDocInvRes;
+import com.inventory.middle.domain.specification.MaterialDocMainUpdateSpecification;
 import com.inventory.middle.domain.model.entity.MaterialDocMain;
 import com.inventory.middle.domain.handles.HandleMessage;
 import com.inventory.middle.domain.handles.IHandleChain;
-import com.inventory.middle.client.dto.material.MaterialDocumentDTO;
-import com.inventory.middle.domain.model.bo.material.MaterialDocumentBO;
-import org.springframework.beans.BeanUtils;
-
-import com.inventory.middle.domain.model.bo.mq.sub.MaterialDocCancelMessage;
-import com.inventory.middle.domain.model.bo.mq.sub.MaterialDocInMessage;
-import com.inventory.middle.domain.repository.MdocSubExtRepository;
-import top.kdla.framework.domain.ApplicationContextHelp;
-import com.inventory.middle.domain.service.MaterialDocDomainService;
-import com.inventory.middle.domain.service.material.model.MaterialDocInvRes;
-import top.kdla.framework.dto.SingleResponse;
 import com.inventory.middle.domain.model.types.MaterialDocMainId;
-import com.inventory.middle.domain.repository.MaterialDocMainRepository;
-import com.inventory.middle.domain.specification.MaterialDocMainUpdateSpecification;
-import com.inventory.middle.application.service.MaterialDocMainApplicationService;
-import com.inventory.middle.application.convertor.MaterialDocMainDtoConvertor;
-import com.inventory.middle.client.dto.command.MaterialDocMainCommand;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import lombok.extern.slf4j.Slf4j;
-
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import javax.annotation.Resource;
 import top.kdla.framework.common.aspect.watch.StopWatchWrapper;
+import top.kdla.framework.domain.ApplicationContextHelp;
+import top.kdla.framework.dto.SingleResponse;
 
 /**
  * 物料凭证主表ApplicationServiceImpl
@@ -50,6 +49,8 @@ public class MaterialDocMainApplicationServiceImpl implements MaterialDocMainApp
 	private MaterialDocDomainService materialDocDomainService;
 	@Resource
 	private com.inventory.middle.domain.repository.MdocSubExtRepository mdocSubExtRepository;
+	@Resource
+	private MaterialDocumentConvertor materialDocumentConvertor;
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -116,8 +117,7 @@ public class MaterialDocMainApplicationServiceImpl implements MaterialDocMainApp
                         msg.setT(message);
                         handleChain.doProcess(msg);
                         MaterialDocumentDTO documentDTO = (MaterialDocumentDTO) msg.getE();
-                        MaterialDocumentBO documentBO = new MaterialDocumentBO();
-                        BeanUtils.copyProperties(documentDTO, documentBO);
+                        MaterialDocumentBO documentBO = materialDocumentConvertor.toBO(documentDTO);
                         MaterialDocInvRes res = materialDocDomainService.createMaterialDoc(documentBO);
                         return SingleResponse.of(res);
                 } catch (Exception e) {
@@ -135,8 +135,7 @@ public class MaterialDocMainApplicationServiceImpl implements MaterialDocMainApp
                         msg.setT(message);
                         handleChain.doProcess(msg);
                         MaterialDocumentDTO documentDTO = (MaterialDocumentDTO) msg.getE();
-                        MaterialDocumentBO documentBO = new MaterialDocumentBO();
-                        BeanUtils.copyProperties(documentDTO, documentBO);
+                        MaterialDocumentBO documentBO = materialDocumentConvertor.toBO(documentDTO);
                         MaterialDocInvRes res = materialDocDomainService.reverseMaterialDoc(documentBO);
                         return SingleResponse.of(res);
                 } catch (Exception e) {

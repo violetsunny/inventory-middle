@@ -5,8 +5,8 @@ import com.inventory.middle.client.dto.map.QueryInventoryMapDTO;
 import com.inventory.middle.domain.model.entity.InventoryMap;
 import com.inventory.middle.domain.repository.InventoryMapRepository;
 import com.inventory.middle.domain.service.external.RemoteInventoryMapService;
+import com.inventory.middle.infra.persistence.convertor.InventoryMapExternalConvertor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import top.kdla.framework.dto.SingleResponse;
 
@@ -22,6 +22,9 @@ public class InventoryMapExternalServiceImpl implements RemoteInventoryMapServic
     @Resource
     private InventoryMapRepository inventoryMapRepository;
 
+    @Resource
+    private InventoryMapExternalConvertor inventoryMapExternalConvertor;
+
     @Override
     public SingleResponse<InventoryMapDTO> queryInventoryMap(QueryInventoryMapDTO query) {
         if (query == null) {
@@ -34,8 +37,7 @@ public class InventoryMapExternalServiceImpl implements RemoteInventoryMapServic
         if (entity == null) {
             return SingleResponse.buildSuccess(null);
         }
-        InventoryMapDTO dto = new InventoryMapDTO();
-        BeanUtils.copyProperties(entity, dto);
+        InventoryMapDTO dto = inventoryMapExternalConvertor.toDTO(entity);
         return SingleResponse.buildSuccess(dto);
     }
 }

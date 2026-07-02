@@ -10,8 +10,10 @@ import com.inventory.middle.domain.model.entity.InventorySupply;
 import com.inventory.middle.domain.repository.InventorySnapshotRepository;
 import com.inventory.middle.domain.repository.InventorySupplyRepository;
 import com.inventory.middle.domain.service.InventoryDomainService;
+import com.inventory.middle.domain.service.convertor.CreateInTransitStockRequestConvertor;
+import com.inventory.middle.domain.service.convertor.InventorySnapshotConvertor;
+import com.inventory.middle.domain.service.convertor.InventorySupplyConvertor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -58,8 +60,7 @@ public class InventoryDomainServiceImpl implements InventoryDomainService {
             return Collections.emptyList();
         }
         return list.stream().map(e -> {
-            InventorySnapshotBO bo = new InventorySnapshotBO();
-            BeanUtils.copyProperties(e, bo);
+            InventorySnapshotBO bo = InventorySnapshotConvertor.INSTANCE.toBO(e);
             if (e.getId() != null) {
                 bo.setId(e.getId().get());
             }
@@ -83,8 +84,7 @@ public class InventoryDomainServiceImpl implements InventoryDomainService {
             return false;
         }
         List<InventorySupply> entities = supplyBOList.stream().map(bo -> {
-            InventorySupply e = new InventorySupply();
-            BeanUtils.copyProperties(bo, e);
+            InventorySupply e = InventorySupplyConvertor.INSTANCE.toEntity(bo);
             return e;
         }).collect(Collectors.toList());
         return inventorySupplyRepository.batchUpdateBySourceOrderNo(entities);
@@ -96,8 +96,7 @@ public class InventoryDomainServiceImpl implements InventoryDomainService {
             return false;
         }
         List<InventorySupply> entities = requestList.stream().map(req -> {
-            InventorySupply e = new InventorySupply();
-            BeanUtils.copyProperties(req, e);
+            InventorySupply e = CreateInTransitStockRequestConvertor.INSTANCE.toEntity(req);
             return e;
         }).collect(Collectors.toList());
         return inventorySupplyRepository.batchStore(entities);

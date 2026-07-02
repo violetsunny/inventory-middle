@@ -28,5 +28,14 @@ public interface InventoryMaterialRepository {
      */
     List<InventoryMaterial> findByIds(List<Long> ids);
 
+    /**
+     * 按条件查询
+     */
+    List<InventoryMaterial> listByCondition(InventoryMaterialQueryParam queryParam);
+
+    /**
+     * 按物料编码列表查询
+     */
+    List<InventoryMaterial> listByMaterialCodes(ListMaterialCodeQueryParam queryParam);
 
 }

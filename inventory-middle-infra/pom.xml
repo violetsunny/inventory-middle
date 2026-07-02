@@ -104,6 +104,16 @@
             <artifactId>commons-collections4</artifactId>
         </dependency>
 
+        <!-- MapStruct（Do ↔ Entity 转换） -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

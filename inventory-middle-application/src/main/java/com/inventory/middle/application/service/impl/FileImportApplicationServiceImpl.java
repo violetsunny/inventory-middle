@@ -1,6 +1,7 @@
 package com.inventory.middle.application.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.inventory.middle.application.convertor.FileImportRecordConvertor;
 import com.inventory.middle.application.service.FileImportApplicationService;
 import com.inventory.middle.client.file.dto.request.CreateFileImportLineRecordsRequest;
 import com.inventory.middle.client.file.dto.request.CreateFileImportRecordRequest;
@@ -10,11 +11,9 @@ import com.inventory.middle.client.file.dto.response.FileImportRecord;
 import com.inventory.middle.client.file.enums.FileImportBusinessTypeEnum;
 import com.inventory.middle.client.file.enums.FileImportProcessStatusEnum;
 import com.inventory.middle.client.file.enums.ImplTypeEnum;
+import com.inventory.middle.domain.repository.FileImportRecordQueryParam;
 import com.inventory.middle.domain.repository.FileImportRecordRepository;
-import com.inventory.middle.infra.persistence.entity.ListFileImportRecordParam;
-import com.inventory.middle.infra.persistence.repository.impl.FileImportRecordRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import top.kdla.framework.dto.PageResponse;
@@ -36,15 +35,16 @@ public class FileImportApplicationServiceImpl implements FileImportApplicationSe
     @Resource
     private FileImportRecordRepository fileImportRecordRepository;
 
+    @Resource
+    private FileImportRecordConvertor fileImportRecordConvertor;
+
     @Override
     public SingleResponse<FileImportRecord> createFileImportRecord(CreateFileImportRecordRequest request) {
         log.info("FileImportApplicationServiceImpl.createFileImportRecord request={}", JSON.toJSONString(request));
         com.inventory.middle.domain.model.entity.FileImportRecord entity =
-                new com.inventory.middle.domain.model.entity.FileImportRecord();
-        BeanUtils.copyProperties(request, entity);
+                fileImportRecordConvertor.toEntity(request);
         fileImportRecordRepository.store(entity);
-        FileImportRecord resp = new FileImportRecord();
-        BeanUtils.copyProperties(entity, resp);
+        FileImportRecord resp = fileImportRecordConvertor.toResponse(entity);
         return SingleResponse.of(resp);
     }
 
@@ -52,8 +52,7 @@ public class FileImportApplicationServiceImpl implements FileImportApplicationSe
     public SingleResponse<Boolean> updateFileImportRecord(UpdateFileImportRecordRequest request) {
         log.info("FileImportApplicationServiceImpl.updateFileImportRecord request={}", JSON.toJSONString(request));
         com.inventory.middle.domain.model.entity.FileImportRecord entity =
-                new com.inventory.middle.domain.model.entity.FileImportRecord();
-        BeanUtils.copyProperties(request, entity);
+                fileImportRecordConvertor.toEntity(request);
         boolean result = fileImportRecordRepository.update(entity);
         return SingleResponse.of(result);
     }
@@ -61,15 +60,12 @@ public class FileImportApplicationServiceImpl implements FileImportApplicationSe
     @Override
     public PageResponse<FileImportRecord> pageQuery(PageQueryFileImportRecordRequest request) {
         log.info("FileImportApplicationServiceImpl.pageQuery request={}", JSON.toJSONString(request));
-        ListFileImportRecordParam param = new ListFileImportRecordParam();
-        BeanUtils.copyProperties(request, param);
+        FileImportRecordQueryParam queryParam = fileImportRecordConvertor.toQueryParam(request);
         List<com.inventory.middle.domain.model.entity.FileImportRecord> list =
-                ((FileImportRecordRepositoryImpl) fileImportRecordRepository).listWithNoBlob(param);
-        List<FileImportRecord> respList = list.stream().map(e -> {
-            FileImportRecord dto = new FileImportRecord();
-            BeanUtils.copyProperties(e, dto);
-            return dto;
-        }).collect(Collectors.toList());
+                fileImportRecordRepository.listWithNoBlob(queryParam);
+        List<FileImportRecord> respList = list.stream()
+                .map(fileImportRecordConvertor::toResponse)
+                .collect(Collectors.toList());
         return PageResponse.of(respList, (long) respList.size(),
                 (long) request.getPageSize(), (long) request.getPageNum());
     }

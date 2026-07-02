@@ -6,8 +6,8 @@ import com.inventory.middle.domain.model.entity.LogicalPlant;
 import com.inventory.middle.domain.model.types.LogicalPlantId;
 import com.inventory.middle.domain.repository.LogicalPlantRepository;
 import com.inventory.middle.domain.service.LogicalPlantDomainService;
+import com.inventory.middle.domain.service.convertor.LogicalPlantConvertor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -51,8 +51,7 @@ public class LogicalPlantCoreService implements LogicalPlantDomainService {
         if (entity == null) {
             return null;
         }
-        LogicalPlantBO bo = new LogicalPlantBO();
-        BeanUtils.copyProperties(entity, bo);
+        LogicalPlantBO bo = LogicalPlantConvertor.INSTANCE.toBO(entity);
         if (entity.getId() != null) {
             bo.setId(entity.getId().get());
         }

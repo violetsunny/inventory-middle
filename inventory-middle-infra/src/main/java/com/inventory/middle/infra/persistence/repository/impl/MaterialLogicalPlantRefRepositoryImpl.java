@@ -2,10 +2,10 @@ package com.inventory.middle.infra.persistence.repository.impl;
 
 import com.inventory.middle.domain.model.entity.MaterialLogicalPlantRef;
 import com.inventory.middle.domain.repository.MaterialLogicalPlantRefRepository;
+import com.inventory.middle.infra.persistence.convertor.MaterialLogicalPlantRefConvertor;
 import com.inventory.middle.infra.persistence.entity.MaterialLogicalPlantRefDo;
 import com.inventory.middle.infra.persistence.entity.QueryMaterialLogicalPlantRefPO;
 import com.inventory.middle.infra.persistence.mapper.MaterialLogicalPlantRefMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -21,6 +21,9 @@ public class MaterialLogicalPlantRefRepositoryImpl implements MaterialLogicalPla
 
     @Resource
     private MaterialLogicalPlantRefMapper materialLogicalPlantRefMapper;
+
+    @Resource
+    private MaterialLogicalPlantRefConvertor materialLogicalPlantRefConvertor;
 
     @Override
     public MaterialLogicalPlantRef findById(Long id) {
@@ -56,15 +59,11 @@ public class MaterialLogicalPlantRefRepositoryImpl implements MaterialLogicalPla
     }
 
     private MaterialLogicalPlantRefDo toDoObject(MaterialLogicalPlantRef entity) {
-        MaterialLogicalPlantRefDo doObj = new MaterialLogicalPlantRefDo();
-        BeanUtils.copyProperties(entity, doObj);
-        return doObj;
+        return materialLogicalPlantRefConvertor.toDo(entity);
     }
 
     private MaterialLogicalPlantRef toEntity(MaterialLogicalPlantRefDo doObj) {
         if (doObj == null) return null;
-        MaterialLogicalPlantRef entity = new MaterialLogicalPlantRef();
-        BeanUtils.copyProperties(doObj, entity);
-        return entity;
+        return materialLogicalPlantRefConvertor.toEntity(doObj);
     }
 }

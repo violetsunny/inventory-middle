@@ -13,7 +13,12 @@ import com.inventory.middle.domain.model.bo.material.MaterialDocumentBO;
 import com.inventory.middle.domain.model.bo.material.MaterialDocumentItemBO;
 import com.inventory.middle.domain.model.bo.mq.sub.MaterialDocCancelMessage;
 import com.inventory.middle.domain.service.MaterialDocCoreService;
-import org.springframework.beans.BeanUtils;
+import com.inventory.middle.domain.service.material.convertor.FinancialDataCancelConvertor;
+import com.inventory.middle.domain.service.material.convertor.MaterialDataCancelConvertor;
+import com.inventory.middle.domain.service.material.convertor.MaterialDocumentCancelConvertor;
+import com.inventory.middle.domain.service.material.convertor.MaterialExtDataCancelConvertor;
+import com.inventory.middle.domain.service.material.convertor.QuantityAndAmountDataCancelConvertor;
+import com.inventory.middle.domain.service.material.convertor.WarehouseDataCancelConvertor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -45,10 +50,7 @@ public class SnMaterialDocCancelBuilderHandleChain implements IHandleChain<Mater
             throw new BusinessException(ResponseCodeEnum.MDOC_NOT_EXIST, message.getMaterialDocNo());
         }
         Long materialDocId = snowflakeGenerator.next();
-        MaterialDocumentDTO documentDTO = new MaterialDocumentDTO();
-        // Exclude materialDocumentItems to avoid ClassCastException from generics erasure
-        // (List<MaterialDocumentItemBO> would be blindly assigned to List<MaterialDocumentItemDTO>)
-        BeanUtils.copyProperties(documentBO, documentDTO, "materialDocumentItems");
+        MaterialDocumentDTO documentDTO = MaterialDocumentCancelConvertor.INSTANCE.toDTO(documentBO);
         documentDTO.setUniqueNo(materialDocId.toString());
         documentDTO.setMaterialDocCategory(message.getMaterialDocCategory());
         documentDTO.setOriginalNo(message.getMaterialDocNo());
@@ -67,40 +69,32 @@ public class SnMaterialDocCancelBuilderHandleChain implements IHandleChain<Mater
                 itemDTO.setMapJournalData(null);
 
                 if (itemBO.getMaterialData() != null) {
-                    MaterialDataDTO materialDataDTO = new MaterialDataDTO();
-                    BeanUtils.copyProperties(itemBO.getMaterialData(), materialDataDTO);
-                    // materialDocItemId cleared for cancel reversal (new line item)
+                    MaterialDataDTO materialDataDTO =
+                            MaterialDataCancelConvertor.INSTANCE.toDTO(itemBO.getMaterialData());
                     materialDataDTO.setMaterialDocItemId(null);
                     itemDTO.setMaterialData(materialDataDTO);
                 }
 
                 if (itemBO.getWarehouseData() != null) {
-                    WarehouseDataDTO warehouseDataDTO = new WarehouseDataDTO();
-                    BeanUtils.copyProperties(itemBO.getWarehouseData(), warehouseDataDTO);
-                    // adjustType cleared for cancel reversal
+                    WarehouseDataDTO warehouseDataDTO =
+                            WarehouseDataCancelConvertor.INSTANCE.toDTO(itemBO.getWarehouseData());
                     warehouseDataDTO.setAdjustType(null);
                     itemDTO.setWarehouseData(warehouseDataDTO);
                 }
 
                 if (itemBO.getQuantityData() != null) {
-                    com.inventory.middle.client.dto.material.QuantityAndAmountDataDTO quantityDTO =
-                            new com.inventory.middle.client.dto.material.QuantityAndAmountDataDTO();
-                    BeanUtils.copyProperties(itemBO.getQuantityData(), quantityDTO);
-                    itemDTO.setQuantityData(quantityDTO);
+                    itemDTO.setQuantityData(
+                            QuantityAndAmountDataCancelConvertor.INSTANCE.toDTO(itemBO.getQuantityData()));
                 }
 
                 if (itemBO.getFinanceData() != null) {
-                    com.inventory.middle.client.dto.material.FinancialDataDTO financeDTO =
-                            new com.inventory.middle.client.dto.material.FinancialDataDTO();
-                    BeanUtils.copyProperties(itemBO.getFinanceData(), financeDTO);
-                    itemDTO.setFinanceData(financeDTO);
+                    itemDTO.setFinanceData(
+                            FinancialDataCancelConvertor.INSTANCE.toDTO(itemBO.getFinanceData()));
                 }
 
                 if (itemBO.getMaterialExtData() != null) {
-                    com.inventory.middle.client.dto.material.MaterialExtDataDTO extDTO =
-                            new com.inventory.middle.client.dto.material.MaterialExtDataDTO();
-                    BeanUtils.copyProperties(itemBO.getMaterialExtData(), extDTO);
-                    itemDTO.setMaterialExtData(extDTO);
+                    itemDTO.setMaterialExtData(
+                            MaterialExtDataCancelConvertor.INSTANCE.toDTO(itemBO.getMaterialExtData()));
                 }
 
                 itemDTOs.add(itemDTO);

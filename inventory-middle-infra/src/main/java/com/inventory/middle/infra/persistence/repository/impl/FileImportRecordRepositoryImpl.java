@@ -1,11 +1,12 @@
 package com.inventory.middle.infra.persistence.repository.impl;
 
 import com.inventory.middle.domain.model.entity.FileImportRecord;
+import com.inventory.middle.domain.repository.FileImportRecordQueryParam;
 import com.inventory.middle.domain.repository.FileImportRecordRepository;
+import com.inventory.middle.infra.persistence.convertor.FileImportRecordConvertor;
 import com.inventory.middle.infra.persistence.entity.FileImportRecordDo;
 import com.inventory.middle.infra.persistence.entity.ListFileImportRecordParam;
 import com.inventory.middle.infra.persistence.mapper.FileImportRecordMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -21,6 +22,9 @@ public class FileImportRecordRepositoryImpl implements FileImportRecordRepositor
 
     @Resource
     private FileImportRecordMapper fileImportRecordMapper;
+
+    @Resource
+    private FileImportRecordConvertor fileImportRecordConvertor;
 
     @Override
     public FileImportRecord findById(Long id) {
@@ -45,21 +49,23 @@ public class FileImportRecordRepositoryImpl implements FileImportRecordRepositor
         return Collections.emptyList();
     }
 
-    public List<FileImportRecord> listWithNoBlob(ListFileImportRecordParam param) {
+    @Override
+    public List<FileImportRecord> listWithNoBlob(FileImportRecordQueryParam queryParam) {
+        ListFileImportRecordParam param = toParam(queryParam);
         return fileImportRecordMapper.listWithNoBlob(param)
             .stream().map(this::toEntity).collect(Collectors.toList());
     }
 
+    private ListFileImportRecordParam toParam(FileImportRecordQueryParam queryParam) {
+        return fileImportRecordConvertor.toParam(queryParam);
+    }
+
     private FileImportRecordDo toDoObject(FileImportRecord entity) {
-        FileImportRecordDo doObj = new FileImportRecordDo();
-        BeanUtils.copyProperties(entity, doObj);
-        return doObj;
+        return fileImportRecordConvertor.toDo(entity);
     }
 
     private FileImportRecord toEntity(FileImportRecordDo doObj) {
         if (doObj == null) return null;
-        FileImportRecord entity = new FileImportRecord();
-        BeanUtils.copyProperties(doObj, entity);
-        return entity;
+        return fileImportRecordConvertor.toEntity(doObj);
     }
 }

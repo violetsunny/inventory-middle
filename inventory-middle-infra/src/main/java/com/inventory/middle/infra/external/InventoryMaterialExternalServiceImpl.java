@@ -2,11 +2,11 @@ package com.inventory.middle.infra.external;
 
 import com.inventory.middle.client.material.dto.InventoryMaterialDTO;
 import com.inventory.middle.domain.service.external.RemoteInventoryMaterialService;
+import com.inventory.middle.infra.persistence.convertor.InventoryMaterialExternalConvertor;
 import com.inventory.middle.infra.persistence.entity.InventoryMaterialDo;
 import com.inventory.middle.infra.persistence.entity.ListMaterialCodeParamPO;
 import com.inventory.middle.infra.persistence.mapper.InventoryMaterialMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -26,6 +26,9 @@ public class InventoryMaterialExternalServiceImpl implements RemoteInventoryMate
     @Resource
     private InventoryMaterialMapper inventoryMaterialMapper;
 
+    @Resource
+    private InventoryMaterialExternalConvertor inventoryMaterialExternalConvertor;
+
     @Override
     public ArrayList<InventoryMaterialDTO> listByMaterialCodeList(
             String tenantId, List<String> materialCodeList, List<String> outMaterialCodeList) {
@@ -38,10 +41,8 @@ public class InventoryMaterialExternalServiceImpl implements RemoteInventoryMate
         param.setOutMaterialCodeList(outMaterialCodeList);
         List<InventoryMaterialDo> doList = inventoryMaterialMapper.listByMaterialCodeList(param);
         log.info("InventoryMaterialExternalServiceImpl.listByMaterialCodeList tenantId={} size={}", tenantId, doList.size());
-        return doList.stream().map(d -> {
-            InventoryMaterialDTO dto = new InventoryMaterialDTO();
-            BeanUtils.copyProperties(d, dto);
-            return dto;
-        }).collect(Collectors.toCollection(ArrayList::new));
+        return doList.stream()
+                .map(inventoryMaterialExternalConvertor::toDTO)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

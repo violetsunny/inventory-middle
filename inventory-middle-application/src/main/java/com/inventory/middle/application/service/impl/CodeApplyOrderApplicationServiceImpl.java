@@ -11,11 +11,10 @@ import com.inventory.middle.client.code.dto.response.CodeApplyOrderCreateRespons
 import com.inventory.middle.client.code.dto.response.CodeApplyOrderInfoResponse;
 import com.inventory.middle.domain.model.entity.CodeApplyOrder;
 import com.inventory.middle.domain.model.enums.CodeApprovalStatusEnum;
+import com.inventory.middle.application.convertor.CodeApplyOrderConvertor;
+import com.inventory.middle.domain.repository.CodeApplyOrderQueryParam;
 import com.inventory.middle.domain.repository.CodeApplyOrderRepository;
-import com.inventory.middle.infra.persistence.entity.CodeApplyOrderParamPO;
-import com.inventory.middle.infra.persistence.repository.impl.CodeApplyOrderRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import top.kdla.framework.dto.PageResponse;
 import top.kdla.framework.dto.SingleResponse;
@@ -35,14 +34,15 @@ public class CodeApplyOrderApplicationServiceImpl implements CodeApplyOrderAppli
     @Resource
     private CodeApplyOrderRepository codeApplyOrderRepository;
 
+    @Resource
+    private CodeApplyOrderConvertor codeApplyOrderConvertor;
+
     @Override
     public SingleResponse<CodeApplyOrderCreateResponse> create(CodeApplyOrderCreateRequest createRequest) {
         log.info("CodeApplyOrderApplicationServiceImpl.create request={}", JSON.toJSONString(createRequest));
-        CodeApplyOrder entity = new CodeApplyOrder();
-        BeanUtils.copyProperties(createRequest, entity);
+        CodeApplyOrder entity = codeApplyOrderConvertor.toEntity(createRequest);
         codeApplyOrderRepository.store(entity);
-        CodeApplyOrderCreateResponse resp = new CodeApplyOrderCreateResponse();
-        BeanUtils.copyProperties(entity, resp);
+        CodeApplyOrderCreateResponse resp = codeApplyOrderConvertor.toCreateResponse(entity);
         return SingleResponse.of(resp);
     }
 
@@ -77,22 +77,18 @@ public class CodeApplyOrderApplicationServiceImpl implements CodeApplyOrderAppli
         if (entity == null) {
             return SingleResponse.of(null);
         }
-        CodeApplyOrderInfoResponse resp = new CodeApplyOrderInfoResponse();
-        BeanUtils.copyProperties(entity, resp);
+        CodeApplyOrderInfoResponse resp = codeApplyOrderConvertor.toInfoResponse(entity);
         return SingleResponse.of(resp);
     }
 
     @Override
     public PageResponse<CodeApplyOrderDTO> pageList(CodeApplyOrderPageRequest pageRequest) {
         log.info("CodeApplyOrderApplicationServiceImpl.pageList request={}", JSON.toJSONString(pageRequest));
-        CodeApplyOrderParamPO param = new CodeApplyOrderParamPO();
-        BeanUtils.copyProperties(pageRequest, param);
-        List<CodeApplyOrder> list = ((CodeApplyOrderRepositoryImpl) codeApplyOrderRepository).listByCondition(param);
-        List<CodeApplyOrderDTO> respList = list.stream().map(e -> {
-            CodeApplyOrderDTO dto = new CodeApplyOrderDTO();
-            BeanUtils.copyProperties(e, dto);
-            return dto;
-        }).collect(Collectors.toList());
+        CodeApplyOrderQueryParam queryParam = codeApplyOrderConvertor.toQueryParam(pageRequest);
+        List<CodeApplyOrder> list = codeApplyOrderRepository.listByCondition(queryParam);
+        List<CodeApplyOrderDTO> respList = list.stream()
+                .map(codeApplyOrderConvertor::toDTO)
+                .collect(Collectors.toList());
         return PageResponse.of(respList, (long) respList.size(),
                 pageRequest.getPageSize().longValue(), pageRequest.getPageNum().longValue());
     }

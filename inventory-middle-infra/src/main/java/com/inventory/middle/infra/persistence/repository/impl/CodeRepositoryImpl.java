@@ -3,12 +3,12 @@ package com.inventory.middle.infra.persistence.repository.impl;
 import com.inventory.middle.domain.model.entity.Code;
 import com.inventory.middle.domain.repository.CodeQueryParam;
 import com.inventory.middle.domain.repository.CodeRepository;
+import com.inventory.middle.infra.persistence.convertor.CodeConvertor;
 import com.inventory.middle.infra.persistence.entity.CodeDo;
 import com.inventory.middle.infra.persistence.entity.ListCodeParamPO;
 import com.inventory.middle.infra.persistence.entity.SelectOneCodeParam2PO;
 import com.inventory.middle.infra.persistence.entity.SelectOneCodeParamPO;
 import com.inventory.middle.infra.persistence.mapper.CodeMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -24,6 +24,9 @@ public class CodeRepositoryImpl implements CodeRepository {
 
     @Resource
     private CodeMapper codeMapper;
+
+    @Resource
+    private CodeConvertor codeConvertor;
 
     @Override
     public Code findById(Long id) {
@@ -109,21 +112,15 @@ public class CodeRepositoryImpl implements CodeRepository {
     }
 
     private CodeDo toDoObject(Code entity) {
-        CodeDo doObj = new CodeDo();
-        BeanUtils.copyProperties(entity, doObj);
-        return doObj;
+        return codeConvertor.toDo(entity);
     }
 
     private Code toEntity(CodeDo doObj) {
         if (doObj == null) return null;
-        Code entity = new Code();
-        BeanUtils.copyProperties(doObj, entity);
-        return entity;
+        return codeConvertor.toEntity(doObj);
     }
 
     private ListCodeParamPO toListCodeParamPO(CodeQueryParam param) {
-        ListCodeParamPO po = new ListCodeParamPO();
-        BeanUtils.copyProperties(param, po);
-        return po;
+        return codeConvertor.toListCodeParamPO(param);
     }
 }

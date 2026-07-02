@@ -13,7 +13,7 @@ import com.inventory.middle.application.plan.config.enums.PlanExecuteTypeEnum;
 import com.inventory.middle.application.plan.config.service.PlanConfigService;
 import com.inventory.middle.domain.plan.common.bo.MaterialBO;
 import com.inventory.middle.domain.plan.common.enums.PlanStatusEnum;
-import com.inventory.middle.infra.lock.RedissonDistributedLockService;
+import com.inventory.middle.domain.service.lock.DistributedLockService;
 import com.inventory.middle.infra.plan.persistence.dao.MaterialPlanInstanceDao;
 import com.inventory.middle.infra.plan.persistence.entity.MaterialPlanInstancePO;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +42,7 @@ public class PlanGenerateJob {
     private MaterialPlanInstanceDao materialPlanInstanceDao;
 
     @Resource
-    private RedissonDistributedLockService redissonDistributedLockService;
+    private DistributedLockService distributedLockService;
 
     private static final String LOCK_KEY = "JOB:PLAN_GENERATE";
 
@@ -50,7 +50,7 @@ public class PlanGenerateJob {
     public void execute() {
         log.info("PlanGenerateJob start");
         try {
-            redissonDistributedLockService.executeWithLock(100L, TimeUnit.MILLISECONDS, LOCK_KEY, () -> {
+            distributedLockService.executeWithLock(100L, TimeUnit.MILLISECONDS, LOCK_KEY, () -> {
                 List<PlanBO> plans = findSchedulingPlans();
                 for (PlanBO plan : plans) {
                     List<MaterialBO> materials = findSchedulingMaterials(plan);

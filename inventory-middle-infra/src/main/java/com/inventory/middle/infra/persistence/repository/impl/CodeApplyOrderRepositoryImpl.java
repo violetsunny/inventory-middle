@@ -1,11 +1,12 @@
 package com.inventory.middle.infra.persistence.repository.impl;
 
 import com.inventory.middle.domain.model.entity.CodeApplyOrder;
+import com.inventory.middle.domain.repository.CodeApplyOrderQueryParam;
 import com.inventory.middle.domain.repository.CodeApplyOrderRepository;
+import com.inventory.middle.infra.persistence.convertor.CodeApplyOrderConvertor;
 import com.inventory.middle.infra.persistence.entity.CodeApplyOrderDo;
 import com.inventory.middle.infra.persistence.entity.CodeApplyOrderParamPO;
 import com.inventory.middle.infra.persistence.mapper.CodeApplyOrderMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -21,6 +22,9 @@ public class CodeApplyOrderRepositoryImpl implements CodeApplyOrderRepository {
 
     @Resource
     private CodeApplyOrderMapper codeApplyOrderMapper;
+
+    @Resource
+    private CodeApplyOrderConvertor codeApplyOrderConvertor;
 
     @Override
     public CodeApplyOrder findById(Long id) {
@@ -45,21 +49,23 @@ public class CodeApplyOrderRepositoryImpl implements CodeApplyOrderRepository {
         return Collections.emptyList();
     }
 
-    public List<CodeApplyOrder> listByCondition(CodeApplyOrderParamPO param) {
+    @Override
+    public List<CodeApplyOrder> listByCondition(CodeApplyOrderQueryParam queryParam) {
+        CodeApplyOrderParamPO param = toParamPO(queryParam);
         List<CodeApplyOrderDo> doList = codeApplyOrderMapper.listByCondition(param);
         return doList.stream().map(this::toEntity).collect(Collectors.toList());
     }
 
+    private CodeApplyOrderParamPO toParamPO(CodeApplyOrderQueryParam queryParam) {
+        return codeApplyOrderConvertor.toParamPO(queryParam);
+    }
+
     private CodeApplyOrderDo toDoObject(CodeApplyOrder entity) {
-        CodeApplyOrderDo doObj = new CodeApplyOrderDo();
-        BeanUtils.copyProperties(entity, doObj);
-        return doObj;
+        return codeApplyOrderConvertor.toDo(entity);
     }
 
     private CodeApplyOrder toEntity(CodeApplyOrderDo doObj) {
         if (doObj == null) return null;
-        CodeApplyOrder entity = new CodeApplyOrder();
-        BeanUtils.copyProperties(doObj, entity);
-        return entity;
+        return codeApplyOrderConvertor.toEntity(doObj);
     }
 }

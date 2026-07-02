@@ -1,12 +1,12 @@
 package com.inventory.middle.application.plan.task.service.impl;
 
+import com.inventory.middle.application.convertor.ProjectTaskConvertor;
 import com.inventory.middle.domain.plan.task.service.ProjectTaskBO;
 import com.inventory.middle.domain.plan.task.service.ProjectTaskService;
 import com.inventory.middle.infra.plan.persistence.dao.ProjectTaskDao;
 import com.inventory.middle.infra.plan.persistence.entity.ProjectTaskPO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +23,9 @@ public class ProjectTaskServiceImpl implements com.inventory.middle.application.
     @Resource
     private ProjectTaskService projectTaskDomainService;
 
+    @Resource
+    private ProjectTaskConvertor projectTaskConvertor;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ProjectTaskBO apply(String requestId, Long projectId, String projectType,
@@ -35,8 +38,7 @@ public class ProjectTaskServiceImpl implements com.inventory.middle.application.
         bo.setRequestStatus(0);
         ProjectTaskBO created = projectTaskDomainService.apply(bo);
 
-        ProjectTaskPO po = new ProjectTaskPO();
-        BeanUtils.copyProperties(created, po);
+        ProjectTaskPO po = projectTaskConvertor.toPO(created);
         po.setCreateTime(LocalDateTime.now());
         po.setUpdateTime(LocalDateTime.now());
         po.setIsDelete(0);

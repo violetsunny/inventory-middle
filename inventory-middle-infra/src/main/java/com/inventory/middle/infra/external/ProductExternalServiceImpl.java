@@ -5,11 +5,11 @@ import com.inventory.middle.client.dto.sku.SkuBatchResponse;
 import com.inventory.middle.domain.service.external.RemoteProductCenterRestService;
 import com.inventory.middle.domain.service.external.dto.SkuBatchRequest;
 import com.inventory.middle.domain.service.external.dto.SkuResponse;
+import com.inventory.middle.infra.persistence.convertor.ProductSkuBatchConvertor;
 import com.inventory.middle.infra.persistence.entity.SkuBatchDo;
 import com.inventory.middle.infra.persistence.entity.SkuBatchQueryPO;
 import com.inventory.middle.infra.persistence.mapper.SkuBatchMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -32,6 +32,9 @@ public class ProductExternalServiceImpl implements RemoteProductCenterRestServic
 
     @Resource
     private SkuBatchMapper skuBatchMapper;
+
+    @Resource
+    private ProductSkuBatchConvertor productSkuBatchConvertor;
 
     @Override
     public SingleResponse<Object> skuBatchSys(List<SkuBatchRequest> reqs, String token, String tenantId) {
@@ -59,12 +62,9 @@ public class ProductExternalServiceImpl implements RemoteProductCenterRestServic
         param.setSkuCode(request.getSkuCode());
         param.setTenantId(tenantId);
         List<SkuBatchDo> doList = skuBatchMapper.list(param);
-        return doList.stream().map(d -> {
-            com.inventory.middle.domain.service.external.dto.SkuBatchResponse resp =
-                    new com.inventory.middle.domain.service.external.dto.SkuBatchResponse();
-            BeanUtils.copyProperties(d, resp);
-            return resp;
-        }).collect(Collectors.toList());
+        return doList.stream()
+                .map(productSkuBatchConvertor::toSkuBatchResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -74,11 +74,9 @@ public class ProductExternalServiceImpl implements RemoteProductCenterRestServic
         param.setSkuCodeList(skuCodes);
         param.setTenantId(tenantId);
         List<SkuBatchDo> doList = skuBatchMapper.list(param);
-        return doList.stream().map(d -> {
-            SkuResponse resp = new SkuResponse();
-            BeanUtils.copyProperties(d, resp);
-            return resp;
-        }).collect(Collectors.toList());
+        return doList.stream()
+                .map(productSkuBatchConvertor::toSkuResponse)
+                .collect(Collectors.toList());
     }
 
     @Override

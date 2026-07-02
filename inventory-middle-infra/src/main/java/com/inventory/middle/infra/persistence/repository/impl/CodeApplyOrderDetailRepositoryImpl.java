@@ -2,10 +2,10 @@ package com.inventory.middle.infra.persistence.repository.impl;
 
 import com.inventory.middle.domain.model.entity.CodeApplyOrderDetail;
 import com.inventory.middle.domain.repository.CodeApplyOrderDetailRepository;
+import com.inventory.middle.infra.persistence.convertor.CodeApplyOrderDetailConvertor;
 import com.inventory.middle.infra.persistence.entity.CodeApplyOrderDetailDo;
 import com.inventory.middle.infra.persistence.entity.CodeApplyOrderDetailParamPO;
 import com.inventory.middle.infra.persistence.mapper.CodeApplyOrderDetailMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -21,6 +21,9 @@ public class CodeApplyOrderDetailRepositoryImpl implements CodeApplyOrderDetailR
 
     @Resource
     private CodeApplyOrderDetailMapper codeApplyOrderDetailMapper;
+
+    @Resource
+    private CodeApplyOrderDetailConvertor codeApplyOrderDetailConvertor;
 
     @Override
     public CodeApplyOrderDetail findById(Long id) {
@@ -54,15 +57,11 @@ public class CodeApplyOrderDetailRepositoryImpl implements CodeApplyOrderDetailR
     }
 
     private CodeApplyOrderDetailDo toDoObject(CodeApplyOrderDetail entity) {
-        CodeApplyOrderDetailDo doObj = new CodeApplyOrderDetailDo();
-        BeanUtils.copyProperties(entity, doObj);
-        return doObj;
+        return codeApplyOrderDetailConvertor.toDo(entity);
     }
 
     private CodeApplyOrderDetail toEntity(CodeApplyOrderDetailDo doObj) {
         if (doObj == null) return null;
-        CodeApplyOrderDetail entity = new CodeApplyOrderDetail();
-        BeanUtils.copyProperties(doObj, entity);
-        return entity;
+        return codeApplyOrderDetailConvertor.toEntity(doObj);
     }
 }

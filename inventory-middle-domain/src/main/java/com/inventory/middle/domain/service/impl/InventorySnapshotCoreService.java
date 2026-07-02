@@ -10,8 +10,9 @@ import com.inventory.middle.domain.model.types.InventorySnapshotId;
 import com.inventory.middle.domain.repository.InventoryAlertRepository;
 import com.inventory.middle.domain.repository.InventorySnapshotRepository;
 import com.inventory.middle.domain.service.InventorySnapshotDomainService;
+import com.inventory.middle.domain.service.convertor.InventoryAlertConvertor;
+import com.inventory.middle.domain.service.convertor.InventorySnapshotConvertor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -144,8 +145,7 @@ public class InventorySnapshotCoreService implements InventorySnapshotDomainServ
             return;
         }
         List<InventoryAlert> entities = alertList.stream().map(bo -> {
-            InventoryAlert e = new InventoryAlert();
-            BeanUtils.copyProperties(bo, e);
+            InventoryAlert e = InventoryAlertConvertor.INSTANCE.toEntity(bo);
             return e;
         }).collect(Collectors.toList());
         inventoryAlertRepository.batchStore(entities);
@@ -187,8 +187,7 @@ public class InventorySnapshotCoreService implements InventorySnapshotDomainServ
         if (entity == null) {
             return null;
         }
-        InventorySnapshotBO bo = new InventorySnapshotBO();
-        BeanUtils.copyProperties(entity, bo);
+        InventorySnapshotBO bo = InventorySnapshotConvertor.INSTANCE.toBO(entity);
         if (entity.getId() != null) {
             bo.setId(entity.getId().get());
         }

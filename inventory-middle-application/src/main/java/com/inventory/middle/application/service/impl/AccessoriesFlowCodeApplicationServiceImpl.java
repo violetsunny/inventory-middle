@@ -1,6 +1,7 @@
 package com.inventory.middle.application.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.inventory.middle.application.convertor.AccessoriesFlowCodeConvertor;
 import com.inventory.middle.application.service.AccessoriesFlowCodeApplicationService;
 import com.inventory.middle.client.code.dto.EnumResponse;
 import com.inventory.middle.client.code.dto.request.*;
@@ -13,7 +14,6 @@ import com.inventory.middle.domain.repository.CodeRepository;
 import com.inventory.middle.domain.service.CodeDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import top.kdla.framework.dto.MultiResponse;
 import top.kdla.framework.dto.PageResponse;
@@ -37,6 +37,9 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
 
     @Resource
     private CodeDomainService codeDomainService;
+
+    @Resource
+    private AccessoriesFlowCodeConvertor accessoriesFlowCodeConvertor;
 
     @Override
     public void manufacturerInStock(ManufacturerInStockRequest request) {
@@ -101,8 +104,7 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
         if (newCode == null) {
             return SingleResponse.buildFailure("NOT_FOUND", "内部码不存在: " + request.getInnerCode());
         }
-        AccessoriesFlowCodeResponse resp = new AccessoriesFlowCodeResponse();
-        BeanUtils.copyProperties(newCode, resp);
+        AccessoriesFlowCodeResponse resp = accessoriesFlowCodeConvertor.toResponse(newCode);
         log.info("regenerateCode success, oldInnerCode={} newInnerCode={}", request.getInnerCode(), newCode.getInnerCode());
         return SingleResponse.of(resp);
     }
@@ -171,11 +173,9 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
         if (request.getCurrentOwner() != null) {
             param.setCurrentOwner(request.getCurrentOwner());
         }
-        List<AccessoriesFlowCodeResponse> respList = codeRepository.list(param).stream().map(entity -> {
-            AccessoriesFlowCodeResponse resp = new AccessoriesFlowCodeResponse();
-            BeanUtils.copyProperties(entity, resp);
-            return resp;
-        }).collect(Collectors.toList());
+        List<AccessoriesFlowCodeResponse> respList = codeRepository.list(param).stream()
+                .map(accessoriesFlowCodeConvertor::toResponse)
+                .collect(Collectors.toList());
         return PageResponse.of(respList, (long) respList.size(),
                 request.getPageSize().longValue(), request.getPageNum().longValue());
     }
@@ -183,27 +183,21 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
     @Override
     public MultiResponse<AccessoriesFlowCodeResponse> listCode(ListAccessoriesFlowCodeRequest request) {
         log.info("AccessoriesFlowCodeApplicationServiceImpl.listCode request={}", JSON.toJSONString(request));
-        CodeQueryParam param = CodeQueryParam.of();
-        BeanUtils.copyProperties(request, param);
-        List<AccessoriesFlowCodeResponse> respList = codeRepository.list(param).stream().map(entity -> {
-            AccessoriesFlowCodeResponse resp = new AccessoriesFlowCodeResponse();
-            BeanUtils.copyProperties(entity, resp);
-            return resp;
-        }).collect(Collectors.toList());
+        CodeQueryParam param = accessoriesFlowCodeConvertor.toQueryParam(request);
+        List<AccessoriesFlowCodeResponse> respList = codeRepository.list(param).stream()
+                .map(accessoriesFlowCodeConvertor::toResponse)
+                .collect(Collectors.toList());
         return MultiResponse.of(respList);
     }
 
     @Override
     public MultiResponse<AccessoriesFlowCodeResponse> listUnUsedCode(ListUnUsedAccessoriesFlowCodeRequest request) {
         log.info("AccessoriesFlowCodeApplicationServiceImpl.listUnUsedCode request={}", JSON.toJSONString(request));
-        CodeQueryParam param = CodeQueryParam.of();
-        BeanUtils.copyProperties(request, param);
+        CodeQueryParam param = accessoriesFlowCodeConvertor.toQueryParam(request);
         param.setStatus("UNUSED");
-        List<AccessoriesFlowCodeResponse> respList = codeRepository.list(param).stream().map(entity -> {
-            AccessoriesFlowCodeResponse resp = new AccessoriesFlowCodeResponse();
-            BeanUtils.copyProperties(entity, resp);
-            return resp;
-        }).collect(Collectors.toList());
+        List<AccessoriesFlowCodeResponse> respList = codeRepository.list(param).stream()
+                .map(accessoriesFlowCodeConvertor::toResponse)
+                .collect(Collectors.toList());
         return MultiResponse.of(respList);
     }
 
@@ -217,8 +211,7 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
         if (entity == null) {
             return SingleResponse.of(null);
         }
-        AccessoriesFlowCodeResponse resp = new AccessoriesFlowCodeResponse();
-        BeanUtils.copyProperties(entity, resp);
+        AccessoriesFlowCodeResponse resp = accessoriesFlowCodeConvertor.toResponse(entity);
         return SingleResponse.of(resp);
     }
 
@@ -232,8 +225,7 @@ public class AccessoriesFlowCodeApplicationServiceImpl implements AccessoriesFlo
         if (entity == null) {
             return SingleResponse.of(null);
         }
-        AccessoriesFlowCodeResponse resp = new AccessoriesFlowCodeResponse();
-        BeanUtils.copyProperties(entity, resp);
+        AccessoriesFlowCodeResponse resp = accessoriesFlowCodeConvertor.toResponse(entity);
         return SingleResponse.of(resp);
     }
 

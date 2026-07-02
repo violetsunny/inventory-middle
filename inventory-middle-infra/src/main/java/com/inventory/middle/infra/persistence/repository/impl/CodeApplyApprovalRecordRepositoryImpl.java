@@ -2,9 +2,9 @@ package com.inventory.middle.infra.persistence.repository.impl;
 
 import com.inventory.middle.domain.model.entity.CodeApplyApprovalRecord;
 import com.inventory.middle.domain.repository.CodeApplyApprovalRecordRepository;
+import com.inventory.middle.infra.persistence.convertor.CodeApplyApprovalRecordConvertor;
 import com.inventory.middle.infra.persistence.entity.CodeApplyApprovalRecordDo;
 import com.inventory.middle.infra.persistence.mapper.CodeApplyApprovalRecordMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -19,6 +19,9 @@ public class CodeApplyApprovalRecordRepositoryImpl implements CodeApplyApprovalR
 
     @Resource
     private CodeApplyApprovalRecordMapper codeApplyApprovalRecordMapper;
+
+    @Resource
+    private CodeApplyApprovalRecordConvertor codeApplyApprovalRecordConvertor;
 
     @Override
     public CodeApplyApprovalRecord findById(Long id) {
@@ -43,15 +46,11 @@ public class CodeApplyApprovalRecordRepositoryImpl implements CodeApplyApprovalR
     }
 
     private CodeApplyApprovalRecordDo toDoObject(CodeApplyApprovalRecord entity) {
-        CodeApplyApprovalRecordDo doObj = new CodeApplyApprovalRecordDo();
-        BeanUtils.copyProperties(entity, doObj);
-        return doObj;
+        return codeApplyApprovalRecordConvertor.toDo(entity);
     }
 
     private CodeApplyApprovalRecord toEntity(CodeApplyApprovalRecordDo doObj) {
         if (doObj == null) return null;
-        CodeApplyApprovalRecord entity = new CodeApplyApprovalRecord();
-        BeanUtils.copyProperties(doObj, entity);
-        return entity;
+        return codeApplyApprovalRecordConvertor.toEntity(doObj);
     }
 }

@@ -1,7 +1,7 @@
 package com.inventory.middle.interfaces.schedule;
 
 import com.inventory.middle.application.plan.demand.service.DemandPlanService;
-import com.inventory.middle.infra.lock.RedissonDistributedLockService;
+import com.inventory.middle.domain.service.lock.DistributedLockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ public class DemandPlanDetailGenerateJob {
     private DemandPlanService demandPlanService;
 
     @Resource
-    private RedissonDistributedLockService redissonDistributedLockService;
+    private DistributedLockService distributedLockService;
 
     private static final String LOCK_KEY = "JOB:DEMAND_PLAN_DETAIL_GENERATE";
 
@@ -25,7 +25,7 @@ public class DemandPlanDetailGenerateJob {
     public void execute() {
         log.info("DemandPlanDetailGenerateJob start");
         try {
-            redissonDistributedLockService.executeWithLock(100L, TimeUnit.MILLISECONDS, LOCK_KEY, () -> {
+            distributedLockService.executeWithLock(100L, TimeUnit.MILLISECONDS, LOCK_KEY, () -> {
                 demandPlanService.generateData(null);
                 return null;
             });

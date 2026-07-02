@@ -27,4 +27,9 @@ public interface FileImportRecordRepository {
      * 根据ID列表查询
      */
     List<FileImportRecord> findByIds(List<Long> ids);
+
+    /**
+     * 按条件查询（不含大字段）
+     */
+    List<FileImportRecord> listWithNoBlob(FileImportRecordQueryParam queryParam);
 }

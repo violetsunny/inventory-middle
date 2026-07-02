@@ -4,8 +4,8 @@ import com.inventory.middle.domain.model.bo.storageLocation.StorageLocationBO;
 import com.inventory.middle.domain.model.entity.StorageLocation;
 import com.inventory.middle.domain.model.types.StorageLocationId;
 import com.inventory.middle.domain.repository.StorageLocationRepository;
+import com.inventory.middle.domain.service.convertor.StorageLocationConvertor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -49,8 +49,7 @@ public class StorageLocationCoreService {
         if (entity == null) {
             return null;
         }
-        StorageLocationBO bo = new StorageLocationBO();
-        BeanUtils.copyProperties(entity, bo);
+        StorageLocationBO bo = StorageLocationConvertor.INSTANCE.toBO(entity);
         if (entity.getId() != null) {
             bo.setId(entity.getId().get());
         }

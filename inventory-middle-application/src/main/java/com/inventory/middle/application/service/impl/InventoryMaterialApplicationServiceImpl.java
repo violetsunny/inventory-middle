@@ -1,6 +1,7 @@
 package com.inventory.middle.application.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.inventory.middle.application.convertor.InventoryMaterialConvertor;
 import com.inventory.middle.application.service.InventoryMaterialApplicationService;
 import com.inventory.middle.client.material.dto.InventoryMaterialDTO;
 import com.inventory.middle.client.material.dto.request.InventoryMaterialCreateRequest;
@@ -8,15 +9,13 @@ import com.inventory.middle.client.material.dto.request.InventoryMaterialPageReq
 import com.inventory.middle.client.material.dto.request.InventoryMaterialUpdateRequest;
 import com.inventory.middle.client.material.dto.request.ListMaterialCodeRequest;
 import com.inventory.middle.domain.model.entity.InventoryMaterial;
+import com.inventory.middle.domain.repository.InventoryMaterialQueryParam;
 import com.inventory.middle.domain.repository.InventoryMaterialRepository;
-import com.inventory.middle.infra.persistence.entity.InventoryMaterialQueryPO;
-import com.inventory.middle.infra.persistence.entity.ListMaterialCodeParamPO;
+import com.inventory.middle.domain.repository.ListMaterialCodeQueryParam;
 import com.inventory.middle.infra.persistence.entity.PageQueryMaterialPlantRefRequestPO;
 import com.inventory.middle.infra.persistence.mapper.MaterialLogicalPlantRefMapper;
-import com.inventory.middle.infra.persistence.repository.impl.InventoryMaterialRepositoryImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import top.kdla.framework.dto.MultiResponse;
@@ -24,7 +23,6 @@ import top.kdla.framework.dto.PageResponse;
 import top.kdla.framework.dto.SingleResponse;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +44,9 @@ public class InventoryMaterialApplicationServiceImpl implements InventoryMateria
     @Resource
     private MaterialLogicalPlantRefMapper materialLogicalPlantRefMapper;
 
+    @Resource
+    private InventoryMaterialConvertor inventoryMaterialConvertor;
+
     @Override
     public SingleResponse<Boolean> batchCreate(List<InventoryMaterialCreateRequest> createRequestList) {
         log.info("InventoryMaterialApplicationServiceImpl.batchCreate size={}",
@@ -54,8 +55,7 @@ public class InventoryMaterialApplicationServiceImpl implements InventoryMateria
             return SingleResponse.of(false);
         }
         for (InventoryMaterialCreateRequest r : createRequestList) {
-            InventoryMaterial entity = new InventoryMaterial();
-            BeanUtils.copyProperties(r, entity);
+            InventoryMaterial entity = inventoryMaterialConvertor.toEntity(r);
             inventoryMaterialRepository.store(entity);
         }
         return SingleResponse.of(true);
@@ -64,36 +64,29 @@ public class InventoryMaterialApplicationServiceImpl implements InventoryMateria
     @Override
     public SingleResponse<Boolean> updateByMaterialCode(InventoryMaterialUpdateRequest updateRequest) {
         log.info("InventoryMaterialApplicationServiceImpl.updateByMaterialCode request={}", JSON.toJSONString(updateRequest));
-        InventoryMaterial entity = new InventoryMaterial();
-        BeanUtils.copyProperties(updateRequest, entity);
+        InventoryMaterial entity = inventoryMaterialConvertor.toEntity(updateRequest);
         boolean result = inventoryMaterialRepository.update(entity);
         return SingleResponse.of(result);
     }
 
     @Override
     public MultiResponse<InventoryMaterialDTO> listByMaterialCodeList(ListMaterialCodeRequest request) {
-        ListMaterialCodeParamPO param = new ListMaterialCodeParamPO();
-        BeanUtils.copyProperties(request, param);
-        List<InventoryMaterialDTO> list = ((InventoryMaterialRepositoryImpl) inventoryMaterialRepository).listByMaterialCodes(param)
-                .stream().map(e -> {
-                    InventoryMaterialDTO dto = new InventoryMaterialDTO();
-                    BeanUtils.copyProperties(e, dto);
-                    return dto;
-                }).collect(Collectors.toList());
+        ListMaterialCodeQueryParam queryParam = inventoryMaterialConvertor.toQueryParam(request);
+        List<InventoryMaterialDTO> list = inventoryMaterialRepository.listByMaterialCodes(queryParam)
+                .stream()
+                .map(inventoryMaterialConvertor::toDTO)
+                .collect(Collectors.toList());
         return MultiResponse.of(list);
     }
 
     @Override
     public PageResponse<InventoryMaterialDTO> pageList(InventoryMaterialPageRequest pageRequest) {
         log.info("InventoryMaterialApplicationServiceImpl.pageList request={}", JSON.toJSONString(pageRequest));
-        InventoryMaterialQueryPO queryPO = new InventoryMaterialQueryPO();
-        BeanUtils.copyProperties(pageRequest, queryPO);
-        List<InventoryMaterial> list = ((InventoryMaterialRepositoryImpl) inventoryMaterialRepository).listByCondition(queryPO);
-        List<InventoryMaterialDTO> respList = list.stream().map(e -> {
-            InventoryMaterialDTO dto = new InventoryMaterialDTO();
-            BeanUtils.copyProperties(e, dto);
-            return dto;
-        }).collect(Collectors.toList());
+        InventoryMaterialQueryParam queryParam = inventoryMaterialConvertor.toQueryParam(pageRequest);
+        List<InventoryMaterial> list = inventoryMaterialRepository.listByCondition(queryParam);
+        List<InventoryMaterialDTO> respList = list.stream()
+                .map(inventoryMaterialConvertor::toDTO)
+                .collect(Collectors.toList());
         return PageResponse.of(respList, (long) respList.size(),
                 pageRequest.getPageSize().longValue(), pageRequest.getPageNum().longValue());
     }
@@ -124,16 +117,15 @@ public class InventoryMaterialApplicationServiceImpl implements InventoryMateria
                         .collect(Collectors.toList());
 
                 // 查询 outMaterialCode
-                ListMaterialCodeParamPO param = new ListMaterialCodeParamPO();
-                param.setTenantId(tenantId);
-                param.setMaterialCodeList(materialCodes);
-                List<com.inventory.middle.infra.persistence.entity.InventoryMaterialDo> materialDos =
-                        ((InventoryMaterialRepositoryImpl) inventoryMaterialRepository).listByMaterialCodesRaw(param);
+                ListMaterialCodeQueryParam codeQueryParam = new ListMaterialCodeQueryParam();
+                codeQueryParam.setTenantId(tenantId);
+                codeQueryParam.setMaterialCodeList(materialCodes);
+                List<InventoryMaterial> materials = inventoryMaterialRepository.listByMaterialCodes(codeQueryParam);
 
                 // 构建 materialCode -> outMaterialCode 映射
                 Map<String, String> codeMapping = new HashMap<>();
-                if (!CollectionUtils.isEmpty(materialDos)) {
-                    for (com.inventory.middle.infra.persistence.entity.InventoryMaterialDo m : materialDos) {
+                if (!CollectionUtils.isEmpty(materials)) {
+                    for (InventoryMaterial m : materials) {
                         codeMapping.put(m.getMaterialCode(), m.getOutMaterialCode());
                     }
                 }
@@ -182,14 +174,12 @@ public class InventoryMaterialApplicationServiceImpl implements InventoryMateria
                 .distinct()
                 .collect(Collectors.toList());
 
-        ListMaterialCodeParamPO param = new ListMaterialCodeParamPO();
-        param.setTenantId(tenantId);
-        param.setMaterialCodeList(materialCodes);
-        return ((InventoryMaterialRepositoryImpl) inventoryMaterialRepository).listByMaterialCodesRaw(param)
-                .stream().map(e -> {
-                    InventoryMaterialDTO dto = new InventoryMaterialDTO();
-                    BeanUtils.copyProperties(e, dto);
-                    return dto;
-                }).collect(Collectors.toList());
+        ListMaterialCodeQueryParam codeQueryParam = new ListMaterialCodeQueryParam();
+        codeQueryParam.setTenantId(tenantId);
+        codeQueryParam.setMaterialCodeList(materialCodes);
+        return inventoryMaterialRepository.listByMaterialCodes(codeQueryParam)
+                .stream()
+                .map(inventoryMaterialConvertor::toDTO)
+                .collect(Collectors.toList());
     }
 }

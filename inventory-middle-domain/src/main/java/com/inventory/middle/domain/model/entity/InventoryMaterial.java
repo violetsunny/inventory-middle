@@ -37,6 +37,26 @@ public class InventoryMaterial implements Entity<InventoryMaterial> {
     private String skuName;
 
     /**
+     * 物料编码（标准字段名，对应DB material_code）
+     */
+    private String materialCode;
+
+    /**
+     * 物料名称（标准字段名，对应DB material_name）
+     */
+    private String materialName;
+
+    /**
+     * 外部物料编码
+     */
+    private String outMaterialCode;
+
+    /**
+     * 单位ID
+     */
+    private Long unitId;
+
+    /**
      * 单位编码
      */
     private String unitCode;

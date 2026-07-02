@@ -2,10 +2,10 @@ package com.inventory.middle.infra.persistence.repository.impl;
 
 import com.inventory.middle.domain.model.entity.InventoryLog;
 import com.inventory.middle.domain.repository.InventoryLogRepository;
+import com.inventory.middle.infra.persistence.convertor.InventoryLogConvertor;
 import com.inventory.middle.infra.persistence.entity.InventoryLogDo;
 import com.inventory.middle.infra.persistence.entity.InventoryLogQueryDo;
 import com.inventory.middle.infra.persistence.mapper.InventoryLogMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -21,6 +21,9 @@ public class InventoryLogRepositoryImpl implements InventoryLogRepository {
 
     @Resource
     private InventoryLogMapper inventoryLogMapper;
+
+    @Resource
+    private InventoryLogConvertor inventoryLogConvertor;
 
     @Override
     public InventoryLog findById(Long id) {
@@ -54,15 +57,11 @@ public class InventoryLogRepositoryImpl implements InventoryLogRepository {
     }
 
     private InventoryLogDo toDoObject(InventoryLog entity) {
-        InventoryLogDo doObj = new InventoryLogDo();
-        BeanUtils.copyProperties(entity, doObj);
-        return doObj;
+        return inventoryLogConvertor.toDo(entity);
     }
 
     private InventoryLog toEntity(InventoryLogDo doObj) {
         if (doObj == null) return null;
-        InventoryLog entity = new InventoryLog();
-        BeanUtils.copyProperties(doObj, entity);
-        return entity;
+        return inventoryLogConvertor.toEntity(doObj);
     }
 }

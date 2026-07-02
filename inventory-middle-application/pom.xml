@@ -59,6 +59,16 @@
             <artifactId>kdla-component-supplement</artifactId>
         </dependency>
 
+        <!-- MapStruct（Request ↔ Entity/DTO 转换） -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
     </dependencies>
 
 

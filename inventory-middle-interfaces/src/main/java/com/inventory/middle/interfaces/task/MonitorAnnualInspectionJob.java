@@ -1,7 +1,7 @@
 package com.inventory.middle.interfaces.task;
 
 import com.inventory.middle.application.service.InventoryMonitorRuleApplicationService;
-import com.inventory.middle.infra.lock.RedissonDistributedLockService;
+import com.inventory.middle.domain.service.lock.DistributedLockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class MonitorAnnualInspectionJob {
     private InventoryMonitorRuleApplicationService inventoryMonitorRuleApplicationService;
 
     @Resource
-    private RedissonDistributedLockService redissonDistributedLockService;
+    private DistributedLockService distributedLockService;
 
     private static final String LOCK_KEY = "JOB:MONITOR_ANNUAL_INSPECTION";
 
@@ -39,7 +39,7 @@ public class MonitorAnnualInspectionJob {
         stopWatch.start();
         log.info("MonitorAnnualInspectionJob.execute start");
         try {
-            redissonDistributedLockService.executeWithLock(100L, TimeUnit.MILLISECONDS, LOCK_KEY, () -> {
+            distributedLockService.executeWithLock(100L, TimeUnit.MILLISECONDS, LOCK_KEY, () -> {
                 inventoryMonitorRuleApplicationService.processAnnualInspection();
                 return null;
             });
