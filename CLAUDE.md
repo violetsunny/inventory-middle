@@ -1,10 +1,12 @@
-# CLAUDE.md — inventory-middle
+---
+trigger: model_decision
+description: 操作代码时，可以选择性引入
+---
+# CLAUDE.md
 
-Behavioral guidelines to reduce common LLM coding mistakes. Merges Karpathy-style rules with project-specific context.
+Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
-
----
 
 ## 1. Think Before Coding
 
@@ -12,7 +14,7 @@ Behavioral guidelines to reduce common LLM coding mistakes. Merges Karpathy-styl
 
 Before implementing:
 - State your assumptions explicitly. If uncertain, ask.
-- If multiple interpretations exist, present them — don't pick silently.
+- If multiple interpretations exist, present them - don't pick silently.
 - If a simpler approach exists, say so. Push back when warranted.
 - If something is unclear, stop. Name what's confusing. Ask.
 
@@ -36,7 +38,7 @@ When editing existing code:
 - Don't "improve" adjacent code, comments, or formatting.
 - Don't refactor things that aren't broken.
 - Match existing style, even if you'd do it differently.
-- If you notice unrelated dead code, mention it — don't delete it.
+- If you notice unrelated dead code, mention it - don't delete it.
 
 When your changes create orphans:
 - Remove imports/variables/functions that YOUR changes made unused.
@@ -64,15 +66,4 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ---
 
-## Project Quick Reference
-
-- **Build:** `JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-1.8.jdk/Contents/Home mvn clean compile -DskipTests -Dmaven.repo.local=/Users/kangll13/aiot/java-code/respository`
-- **Must pass:** BUILD SUCCESS 7/7
-- **Coding rules & architecture:** see `.agents/AGENTS.md`
-- **Task backlog:** see `docs/superpowers/plans/remaining-todos.md`
-
----
-
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
-
-*Last updated: 2026-07-02*

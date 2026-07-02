@@ -246,8 +246,25 @@ When adding new message handlers, register `@RocketMQMessageListener` with topic
 
 ---
 
+## Module INDEX 文件（优先读取，减少全局 grep）
+
+每个模块根目录有 `INDEX.md`，包含包结构、类清单、MapStruct Convertor 映射表、聚合-仓库-实现对照表等：
+
+- **[INDEX.md](INDEX.md)** — 项目总览、全量聚合对照表（33 个聚合的 Entity↔Repository↔RepositoryImpl↔Do↔Mapper↔Convertor）
+- **[inventory-middle-domain/INDEX.md](inventory-middle-domain/INDEX.md)** — 领域服务、值对象 ID 类型、Entity↔BO Convertor、Cancel Convertor
+- **[inventory-middle-infra/INDEX.md](inventory-middle-infra/INDEX.md)** — PO/Do 清单、MyBatis Mapper、RepositoryImpl 对照表、Infra Convertor
+- **[inventory-middle-application/INDEX.md](inventory-middle-application/INDEX.md)** — Application Service（Command/Query）、DTO Convertor
+- **[inventory-middle-interfaces/INDEX.md](inventory-middle-interfaces/INDEX.md)** — Controller、FacadeImpl、MQ Consumer、定时任务
+- **[inventory-middle-client/INDEX.md](inventory-middle-client/INDEX.md)** — DTO、Facade 接口、Feign Service、枚举
+- **[inventory-middle-starter/INDEX.md](inventory-middle-starter/INDEX.md)** — 启动类、配置速查
+
+> **使用方式：** 定位某个聚合的完整链路时，先读根 `INDEX.md` 的聚合对照表，再按需进入模块 `INDEX.md` 查细节。避免 `find` / `grep` 全项目搜索。
+
+---
+
 ## Useful Files to Read First
 
+- `INDEX.md` — **先读此文件**，项目总索引（聚合对照表、模块导航）
 - `pom.xml` — Dependency versions, module list, compiler settings
 - `inventory-middle-starter/src/main/resources/application.yml` — All config: DB, Redis, RocketMQ, KDLA settings
 - `inventory-middle-starter/src/main/java/.../ProviderApplication.java` — Entry point, feature flags
